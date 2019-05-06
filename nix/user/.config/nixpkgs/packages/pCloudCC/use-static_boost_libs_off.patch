@@ -1,0 +1,13 @@
+diff --git a/pCloudCC/CMakeLists.txt b/pCloudCC/CMakeLists.txt
+index 0d6b5c3..9879733 100644
+--- a/pCloudCC/CMakeLists.txt
++++ b/pCloudCC/CMakeLists.txt
+@@ -3,7 +3,7 @@ project(pcloudcc)
+ 
+ #INCLUDE(CPack)
+ 
+-set(Boost_USE_STATIC_LIBS ON)
++set(Boost_USE_STATIC_LIBS OFF)
+ set(Boost_USE_MULTITHREADED ON)
+ unset(Boost_INCLUDE_DIR CACHE)
+ unset(Boost_LIBRARY_DIRS CACHE)

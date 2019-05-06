@@ -1,0 +1,12 @@
+[
+  { "appName" : "Gitter", "url" : "https://gitter.im" },
+  { "appName" : "GoogleHangouts", "url" : "https://hangouts.google.com" },
+  { "appName" : "GoogleMusic", "url" : "https://play.google.com/music" },
+  { "appName" : "JuspayHangouts", "url" : "https://hangouts.google.com" },
+  { "appName" : "JuspaySlack", "url" : "https://juspay.slack.com/" },
+  { "appName" : "FPSlack", "url" : "https://functionalprogramming.slack.com" },
+  { "appName" : "Brain.fm", "url" : "https://brain.fm/app" },
+  { "appName" : "Twitter", "url": "https://twitter.com" },
+  { "appName" : "Whatsapp", "url" : "https://web.whatsapp.com" },
+  { "appName" : "Youtube", "url": "https://youtube.com" }
+]
