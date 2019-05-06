@@ -2,7 +2,7 @@
 
 with pkgs;
 writeText "kitty.conf" ''
-  font_family      FuraCode Nerd Font
+  font_family      VictorMono Nerd Font Mono SemiBold 12
   #font_family      Fira Code
   bold_font        auto
   italic_font      auto

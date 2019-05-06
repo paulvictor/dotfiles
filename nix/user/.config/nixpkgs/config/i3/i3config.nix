@@ -19,49 +19,57 @@ in
     ];
     assigns = {
       "number \"${lib.elemAt workspaceNumbers 4}\"" = [{ class = "qutebrowser"; }];
-      "number \"${lib.elemAt workspaceNumbers 1}\"" = [{ class = "Vivaldi-stable"; }];
+      #"number \"${lib.elemAt workspaceNumbers 1}\"" = [{ class = "Vivaldi-stable"; }];
       "number \"${lib.elemAt workspaceNumbers 5}\"" = [{ class = "Surf"; }];
     };
     modifier = "Mod4";
     keybindings = useWithModifier modifier ({
-      "Return" = "exec ${termite}/bin/termite";
-      "Shift+Return" = "exec ${termite}/bin/termite -e tmux";
+      "Return" = "exec ${alacritty}/bin/alacritty";
+      "Shift+Return" = "exec ${alacritty}/bin/alacritty -e tmux";
 # kill focused window
-      "q" = "kill";
+      "a" = "focus child";
+      #"asciitilde" = "move container to workspace back_and_forth";
+      "BackSpace" = "mode $leave";
+      "bar" = "split horizontal";
+      "braceleft" = "move workspace to output down";
+      "braceright" = "move workspace to output up";
+      "b" = "move workspace to output left";
+      "Shift+b" = "move workspace to output right";
+      "less" = "move workspace to output left";
+      "greater" = "move workspace to output right";
+      "c" = "reload";
+      "d" = "exec rofi -show drun";
+      "e" = "layout toggle stacking tabbed splith splitv";
+      "equal" = "scratchpad show";
+      "f" = "fullscreen toggle";
+      "g" = ''exec ${wmfocus}/bin/wmfocus --fill -c asdf --textcolor red'';
+      "grave" = "workspace back_and_forth";
       "h" = "focus left";
       "j" = "focus down";
       "k" = "focus up";
       "l" = "focus right";
-      #"g" = ''exec ${wmfocus}/bin/wmfocus --fill --bgcolor "rgba(30, 30, 30, 0.5)"  -c asdf --textcolor red'';
-      "t" = "split toggle";
-      "f" = "fullscreen toggle";
-      "s" = "layout stacking";
-      "w" = "layout tabbed";
-      "e" = "layout toggle stacking tabbed splith splitv";
-# change focus between tiling / floating windows
-      "space" = "focus mode_toggle";
-      "Shift+space" = "floating toggle";
-      "a" = "focus child";
-      "Shift+a" = "focus parent";
-# reload the configuration file
-      "c" = "reload";
-# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-      "Shift+c" = "restart";
-      "r" = "mode resize";
-      "BackSpace" = "mode $leave";
       "minus" = "split vertical";
-      "bar" = "split horizontal";
+      "n" = "exec passdo --notify";
+      "p" = "exec passdo --copy";
+      "q" = "kill";
+      "r" = "mode resize";
+      "Shift+a" = "focus parent";
+      "Shift+c" = "restart";
+      "Shift+d" = "exec ${rofiElectronAppsRunner}/bin/rofiElectronAppsRunner";
+      "Shift+equal" = "move scratchpad";
       "Shift+h" = "move left";
       "Shift+j" = "move down";
       "Shift+k" = "move up";
       "Shift+l" = "move right";
-      "grave" = "workspace back_and_forth";
-      #"asciitilde" = "move container to workspace back_and_forth";
-      "d" = "exec rofi -show drun";
-      "Shift+d" = "exec ${rofiElectronAppsRunner}/bin/rofiElectronAppsRunner";
-      "slash" = ''exec quickswitch.py -d "rofi -i -dmenu"'';
+      "Shift+p" = "exec passdo --type";
       "Shift+slash" = ''exec menu-surfraw'';
+      "Shift+space" = "floating toggle";
+      "slash" = ''exec quickswitch.py -d "rofi -i -dmenu"'';
+      "s" = "layout stacking";
+      "space" = "focus mode_toggle";
+      "t" = "split toggle";
       "v" = "exec ${shareLink}/bin/shareLink";
+      "w" = "layout tabbed";
     } //
     lib.foldl (x: y: x // y) {}
       (lib.zipListsWith
@@ -105,13 +113,13 @@ in
         always = true;
         notification = false;
       }
-      {
-        command = ''
-          i3-msg 'rename workspace 1 to "1: code"'
-        '';
-        always = true;
-        notification = false;
-      }
+#      {
+#        command = ''
+#          i3-msg 'rename workspace 1 to "1: code"'
+#        '';
+#        always = true;
+#        notification = false;
+#      }
     ];
     colors = {
       focused = {
@@ -160,6 +168,7 @@ in
     };
     floating = {
       border = 0;
+      modifier = "Mod1";
       criteria = [
         { class = "Electron"; }
         { class = "Pavucontrol"; }

@@ -1,0 +1,13 @@
+diff --git a/pCloudCC/pclsync_lib.cpp b/pCloudCC/pclsync_lib.cpp
+index e4a4809..3e33ae7 100644
+--- a/pCloudCC/pclsync_lib.cpp
++++ b/pCloudCC/pclsync_lib.cpp
+@@ -257,7 +257,7 @@ static const char *software_string = "CC 2.1.0";
+ int clib::pclsync_lib::init() //std::string& username, std::string& password, std::string* crypto_pass, int setup_crypto, int usesrypto_userpass)
+ {
+ #ifdef P_CONSOLE_CLIENT
+-  std::string os_string_tmp=exec("lsb_release -ds").substr(0, 20);
++  std::string os_string_tmp="nixos-20";
+   static const char *os_string = strndup(os_string_tmp.c_str(), os_string_tmp.size());
+   psync_set_software_string(software_string);
+   psync_set_os_string(os_string);

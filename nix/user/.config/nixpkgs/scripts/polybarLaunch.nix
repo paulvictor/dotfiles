@@ -12,7 +12,8 @@ writeShellScriptBin "launchPolybar" ''
   echo $WLIF
 
   for m in $(${xorg.xrandr}/bin/xrandr --query | ${gnugrep}/bin/grep " connected" | ${coreutils}/bin/cut -d" " -f1); do
-    MONITOR=$m polybar -l info --reload top &
+    #MONITOR=$m polybar -l info --reload top &
+    MONITOR=$m polybar top &
   done
 
 ''

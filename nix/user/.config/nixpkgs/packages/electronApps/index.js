@@ -24,7 +24,7 @@ app.on('ready', () => {
   });
   mainWindow.loadURL(appUrl,
     {
-      userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36"
+      userAgent: "Mozilla/5.0 (X11; Linux x86_64; rv:85.0) Gecko/20100101 Firefox/85.0"
     });
   mainWindow.on('closed', () => { mainWindow = null; });
 });

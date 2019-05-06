@@ -1,0 +1,32 @@
+From 6e30d7914c2363d8dea1560132393e4d893b77a1 Mon Sep 17 00:00:00 2001
+From: Jonas Witschel <diabonas@archlinux.org>
+Date: Mon, 23 Mar 2020 11:25:53 +0100
+Subject: [PATCH] LibGit2: add resolve_url to RemoteCallbacksStruct for LibGit2
+ 0.99.0
+
+Upstream commit
+https://github.com/libgit2/libgit2/commit/59647e1ad095f80112918971b7bbe05adfaf8c3c
+("remote: add callback to resolve URLs before connecting") introduced a
+new callback "resolve_url" in LibGit2 0.99.0. Even though it is not
+currently used in Julia, it needs to be accounted for to get the correct
+size for FetchOptionsStruct. An incorrectly aligned FetchOptionsStruct
+leads to error messages like "invalid version 0 on git_proxy_options"
+when trying to use the latest LibGit2 version.
+---
+ stdlib/LibGit2/src/types.jl | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/stdlib/LibGit2/src/types.jl b/stdlib/LibGit2/src/types.jl
+index 6ffbe67ea277..e00a0f161e79 100644
+--- a/stdlib/LibGit2/src/types.jl
++++ b/stdlib/LibGit2/src/types.jl
+@@ -223,6 +223,9 @@ end
+     push_negotiation::Ptr{Cvoid}       = C_NULL
+     transport::Ptr{Cvoid}              = C_NULL
+     payload::Ptr{Cvoid}                = C_NULL
++    @static if LibGit2.VERSION >= v"0.99.0"
++        resolve_url::Ptr{Cvoid}        = C_NULL
++    end
+ end
+ 
+ """

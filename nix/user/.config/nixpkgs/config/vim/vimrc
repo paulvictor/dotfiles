@@ -2,9 +2,10 @@ let g:project_enable_welcome = 0
 let g:Powerline_symbols = 'fancy'
 
 let g:hardtime_default_on = 0
-syntax on
+set nocompatible
 filetype plugin indent on     " required!
 filetype plugin on
+syntax on
 
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -12,7 +13,7 @@ let g:airline#extensions#tabline#enabled = 1
 "set omnifunc=syntaxcomplete#Complete
 
 set winminheight=0      " Allow windows to get fully squashed
-let g:tex_flavor = "latex"
+"let g:tex_flavor = "latex"
 "let g:solarized_termcolors=256
 let g:solarized_termtrans=1
 set t_Co=256
@@ -34,7 +35,7 @@ set showmatch
 let mapleader = ","
 nnoremap <silent> <leader><space> :noh<cr>
 inoremap jk 
-inoremap <esc> <nop>
+"inoremap <esc> <nop>
 set scrolloff=3
 syntax on
 syntax enable
@@ -48,8 +49,8 @@ set shiftround
 set vb
 noremap <silent> <f1> :bprev<CR>
 noremap <silent> <f2> :bnext<CR>
-inoremap <Esc>OP <esc>:w:bprev<CR>
-inoremap <Esc>OQ <esc>:w:bprev<CR>
+"inoremap <Esc>OP <esc>:w:bprev<CR>
+"inoremap <Esc>OQ <esc>:w:bprev<CR>
 set hlsearch                " highlight all results
 set incsearch               " but do highlight as you type your search.
 set ignorecase              " make searches case-insensitive...
@@ -260,7 +261,8 @@ let g:purescript_indent_do = 3
 let g:psc_ide_syntastic_mode = 1
 let g:latex_to_unicode_tab = 1
 let g:latex_to_unicode_auto = 0
-let g:latex_to_unicode_file_types = ["*.purs", "*.hs"]
+let g:latex_to_unicode_keymap = 1
+let g:latex_to_unicode_file_types = ["julia", "markdown"]
 
 autocmd FileType purescript inoremap -> →
 autocmd FileType purescript inoremap => ⇒
@@ -354,6 +356,30 @@ nnoremap <silent> <C-f2> :tabnext<CR>
 nnoremap H gT
 nnoremap L gt
 
+autocmd FileType denite call s:denite_my_settings()
+autocmd FileType denite call deoplete#custom#buffer_option('auto_complete', v:false)
+function! s:denite_my_settings() abort
+  nnoremap <silent><buffer><expr> <CR>
+  \ denite#do_map('do_action')
+  nnoremap <silent><buffer><expr> d
+  \ denite#do_map('do_action', 'delete')
+  nnoremap <silent><buffer><expr> p
+  \ denite#do_map('do_action', 'preview')
+  nnoremap <silent><buffer><expr> q
+  \ denite#do_map('quit')
+  nnoremap <silent><buffer><expr> i
+  \ denite#do_map('open_filter_buffer')
+  nnoremap <silent><buffer><expr> <Space>
+  \ denite#do_map('toggle_select').'j'
+endfunction
+
+autocmd FileType denite-filter call s:denite_filter_settings()
+autocmd FileType denite-filter call deoplete#custom#buffer_option('auto_complete', v:false)
+function! s:denite_filter_settings() abort
+  inoremap <silent><buffer><expr>  denite#do_map('quit')
+  nnoremap <silent><buffer><expr>  denite#do_map('quit')
+endfunction
+
 call denite#custom#var('file/rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
 call denite#custom#var('grep', 'command', ['ag'])
 call denite#custom#var('grep', 'default_opts',
@@ -400,15 +426,15 @@ call denite#custom#map(
   \)
 call denite#custom#map('insert', '<C-a>', '<Home>')
 call denite#custom#map('insert', '<C-e>', '<End>')
-nnoremap <silent> ; :Denite buffer
-nnoremap <silent> <leader>' :Denite file/rec buffer
+nnoremap <silent> ; :Denite -start-filter buffer
+nnoremap <silent> <leader>' :Denite -start-filter file/rec buffer
 call denite#custom#alias('source', 'file/rec/git', 'file/rec')
 call denite#custom#var('file/rec/git', 'command',
   \ ['git', 'ls-files', '-co', '--exclude-standard'])
-nnoremap <silent> ' :Denite file/rec/git buffer
-nnoremap <silent> : :Denite command_history
-nnoremap <silent> \ :Denite grep
-nnoremap <silent>  :Denite line
+nnoremap <silent> ' :Denite -start-filter file/rec/git buffer
+nnoremap <silent> : :Denite -start-filter command_history
+nnoremap <silent> \ :Denite -start-filter grep
+nnoremap <silent>  :Denite -start-filter line
 nnoremap <silent> <leader>r :call denite#custom#source('_', 'matchers',
   \ [ 'matcher/fuzzy', 'matcher/ignore_current_buffer' ])
 nnoremap <silent> <leader>R :call denite#custom#source('_', 'matchers',
@@ -441,9 +467,9 @@ let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['nix'] = ''
 let g:slime_target = "tmux"
 let g:slime_paste_file = tempname()
 let g:slime_no_mappings = 1
-let g:slime_dont_ask_default = 1
+"let g:slime_dont_ask_default = 1
 
-let g:slime_default_config = {"socket_name": "/tmp/default", "target_pane": "{down-of}"}
+let g:slime_default_config = {"socket_name": "/tmp/mux-1000/default", "target_pane": "{down-of}"}
 vnoremap <silent> <Leader>e :SlimeSend<CR>
 nnoremap <silent> <Leader>e :SlimeSendCurrentLine<CR>
 
@@ -460,10 +486,10 @@ hi link ALEError Error
 hi Warning term=underline cterm=underline ctermfg=Yellow gui=undercurl guisp=Gold
 hi link ALEWarning Warning
 hi link ALEInfo SpellCap
-"let g:LanguageClient_rootMarkers = ['*.cabal', 'stack.yaml']
+"let g:LanguageClient_rootMarkers = ['*.cabal']
 
 call deoplete#custom#var('buffer', 'require_same_filetype', v:false)    " otherbuffer complete
-call deoplete#custom#source('LanguageClient','mark', 'ℰ')
+"call deoplete#custom#source('LanguageClient','mark', 'ℰ')
 call deoplete#custom#source('omni',          'mark', '⌾')
 call deoplete#custom#source('ale',          'mark', '⌁')
 "call deoplete#custom#source('flow',          'mark', '⌁')
@@ -477,7 +503,7 @@ call deoplete#custom#source('ale',          'mark', '⌁')
 "call deoplete#custom#source('tmux-complete', 'mark', '⊶')
 "call deoplete#custom#source('syntax',        'mark', '♯')
 "call deoplete#custom#source('member',        'mark', '.')
-call deoplete#custom#source('LanguageClient', 'rank', 1000)    " change the languageclient ranking
+"call deoplete#custom#source('LanguageClient', 'rank', 1000)    " change the languageclient ranking
 call deoplete#custom#source('ale', 'rank', 500)    " change the ale ranking
 
 let g:hdevtools_options = '-g-isrc -g-Wall --nostack'
@@ -485,10 +511,36 @@ let g:ale_haskell_hdevtools_options = '-g-isrc -g-Wall --nostack'
 let g:hdevtools_stack = 0
 
 let g:ale_completion_enabled = 1
+let g:ale_linters = { 'haskell': [ 'cabal_ghc' ] }
+"let g:ale_linters_explicit = 1
+let g:ale_list_vertical = 1
+let g:ale_haskell_cabal_ghc_options = '-v0 -fno-code -isrc'
+let g:ale_haskell_ghc_options = '-v0 -fno-code -isrc'
 
 autocmd FileType haskell nnoremap <silent> <leader>i :HoogleInfo<CR>
 autocmd FileType haskell nnoremap <silent> <leader>I :HoogleClose<CR>
 autocmd FileType haskell nnoremap <silent> <leader><leader> :Unite haskellimport<CR>i
 
 
-colorscheme solarized
+if (has("termguicolors"))
+  set termguicolors
+  set t_8f=[38;2;%lu;%lu;%lum
+  set t_8b=[48;2;%lu;%lu;%lum
+endif
+colorscheme solarized8_high
+noremap  <leader>t  :FloatermToggle<CR>
+noremap! <leader>t  <Esc>:FloatermToggle<CR>
+tnoremap <leader>t  <C-\><C-n>:FloatermToggle<CR>
+let g:floaterm_width = 100
+let g:floaterm_winblend = 0
+
+" Color name (:help cterm-colors) or ANSI code
+let g:limelight_conceal_ctermfg = 'gray'
+let g:limelight_conceal_ctermfg = 240
+"
+" Color name (:help gui-colors) or RGB color
+let g:limelight_conceal_guifg = 'DarkGray'
+let g:limelight_conceal_guifg = '#777777'
+" Default: 0.5
+let g:limelight_default_coefficient = 0.7
+let g:limelight_priority = -1

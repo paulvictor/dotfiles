@@ -34,20 +34,13 @@ bindsym XF86MonBrightnessDown exec --no-startup-id light -U 5
 #bindsym XF86TouchpadToggle exec /some/path/toggletouchpad.sh # toggle touchpad
 
 # Media player controls
-bindsym XF86AudioPlay exec mpc toggle
-bindsym $mod+XF86AudioNext exec mpc seek +00:00:30
-bindsym $mod+XF86AudioPrev exec mpc seek -00:00:30
-bindsym XF86AudioNext exec mpc next
-bindsym XF86AudioPrev exec mpc prev
-bindcode $mod+60 exec (mpc -f "%file%" | head -1 >> ~/Music/good_songs.m3u) && mpc del 0
-bindcode $mod+59 exec mpc del 0 #&& mpc next
-bindsym $mod+0 exec /home/viktor/bin/external_monitor.sh
-bindsym $mod+Shift+0 exec /home/viktor/bin/first_monitor_only.sh
+#bindsym XF86AudioPlay exec mpc toggle
+#bindsym $mod+XF86AudioNext exec mpc seek +00:00:30
+#bindsym $mod+XF86AudioPrev exec mpc seek -00:00:30
+#bindsym XF86AudioNext exec mpc next
+#bindsym XF86AudioPrev exec mpc prev
 bindsym $mod+m exec quickswitch.py -m -d "rofi -i -dmenu"
 bindsym $mod+Shift+m exec quickswitch.py -m -f -d "rofi -i -dmenu"
-bindsym $mod+p exec passdo --copy
-bindsym $mod+Shift+p exec passdo --type
-bindsym $mod+n exec passdo --notify
 ################################################################
 
 #::::::::::::::::::: Settings for i3-gaps :::::::::::::::::::::#
@@ -119,15 +112,5 @@ mode "$mode_gaps_outer" {
 bindsym $mod+Shift+t	gaps inner all set 15; gaps outer all set 15
 
 #bindsym $mod+Shift+d exec rofi -show window
-bindsym $mod+bracketright move workspace to output right
-bindsym $mod+bracketleft move workspace to output right
-bindsym $mod+braceright move workspace to output up
-bindsym $mod+braceleft move workspace to output down
-
-# Make the currently focused window a scratchpad
-#bindsym $mod+Shift+minus move scratchpad
-
-# Show the first scratchpad window
-#bindsym $mod+minus scratchpad show
 
 show_marks yes
