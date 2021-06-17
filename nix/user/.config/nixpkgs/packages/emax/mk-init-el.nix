@@ -49,16 +49,32 @@ pkgs.writeText "init.el" ''
   (setq ivy-count-format "(%d/%d) ")
   (setq ivy-initial-inputs-alist nil)
   (which-key-mode)
+  (column-number-mode)
+  (global-display-line-numbers-mode t)
+  (dolist (mode '(org-mode-hook
+                  vterm-mode-hook
+                  term-mode-hook
+                  shell-mode-hook
+                  eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  ;; Do we need the following code then ?
   (add-hook
     'prog-mode-hook
     'display-line-numbers-mode)
-  (linum-relative-mode)
+  ;; (linum-relative-mode)
   (projectile-mode 1)
   (key-chord-mode 1)
   (persp-mode)
   (company-mode)
   (recentf-mode 1)
   (evil-collection-init)
+  (add-hook
+    'prog-mode-hook
+    'rainbow-delimiters-mode)
+  (global-company-mode)
+  (ivy-rich-mode 1)
+  
+  (setq which-key-idle-delay 0.2)
 
   ;;  ;; Enable fancy-dabbrev previews everywhere:
   ;;  (global-fancy-dabbrev-mode)
@@ -97,7 +113,10 @@ pkgs.writeText "init.el" ''
   (define-key ivy-switch-buffer-map (kbd "C-l") 'ivy-done)
   (define-key ivy-switch-buffer-map (kbd "C-d") 'ivy-switch-buffer-kill)
 
-  (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+
+  (global-set-key (kbd "C-x b") 'counsel-ibuffer)
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
   (global-set-key (kbd "C-x /") 'swiper-isearch)
   (global-set-key (kbd "C-x *") 'swiper-thing-at-point)
   (global-set-key (kbd "C-x 8") 'swiper-all-thing-at-point)
@@ -186,14 +205,14 @@ pkgs.writeText "init.el" ''
   ; (linum-relative-on)
 
   ;(global-set-key [remap goto-line] 'goto-line-with-feedback)
-  (defun goto-line-with-feedback ()
-    "Show line numbers temporarily, while prompting for the line number input"
-    (interactive)
-    (unwind-protect
-        (progn
-          (linum-mode 1)
-          (goto-line (read-number "Goto line: ")))
-      (linum-mode -1)))
+  ;(defun goto-line-with-feedback ()
+  ;  "Show line numbers temporarily, while prompting for the line number input"
+  ;  (interactive)
+  ;  (unwind-protect
+  ;      (progn
+  ;        (linum-mode 1)
+  ;        (goto-line (read-number "Goto line: ")))
+  ;    (linum-mode -1)))
 
   (setq ivy-re-builders-alist
       '((read-file-name-internal . ivy--regex-fuzzy)

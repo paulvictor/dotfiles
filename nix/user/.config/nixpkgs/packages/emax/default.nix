@@ -47,6 +47,8 @@ let
         vterm
         haskell-mode
         evil-org
+        rainbow-delimiters
+        ivy-rich
         # elscreen
         # elscreen-separate-buffer-list
       ])
