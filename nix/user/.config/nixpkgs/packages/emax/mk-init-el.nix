@@ -123,15 +123,24 @@ pkgs.writeText "init.el" ''
   (setq auto-save-default nil)
 
   (setq doom-modeline-window-width-limit fill-column)
-  (setq doom-modeline-project-detection 'project)
-  (setq doom-modeline-buffer-file-name-style 'auto)
+  (setq doom-modeline-project-detection 'projectile)
+  (setq doom-modeline-buffer-file-name-style 'truncate-with-project)
   (setq doom-modeline-icon (display-graphic-p))
   (setq doom-modeline-buffer-encoding t)
+  (setq doom-modeline-modal-icon t)
+  (setq doom-modeline-major-mode-icon t)
+  (setq doom-modeline-major-mode-color-icon t)
+  (setq doom-modeline-buffer-state-icon t)
+  (setq doom-modeline-buffer-modification-icon t)
+  (setq doom-modeline-persp-name t)
+  (setq doom-modeline-display-default-persp-name nil)
+  (setq doom-modeline-persp-icon t)
+  (setq doom-modeline-lsp t)
   (setq doom-modeline-modal-icon t)
 
   (global-set-key (kbd "C-?") 'help-command)
   (global-set-key (kbd "M-?") 'mark-paragraph)
-  ; Kill current buffer instead of prompting
+  ; kill current buffer instead of prompting
   (global-set-key (kbd "C-x k") 'kill-this-buffer)
 
   (define-key evil-normal-state-map "u" 'undo-fu-only-undo)
