@@ -95,6 +95,14 @@ let
     sha256 = "1d9h24gyi16gjp4kvvmmdqnbfw3b0zy41z233gnrd20i64flqdl2";
   };
   nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") { inherit pkgs; };
+  darkreader-extension = nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {
+    pname = "dark-reader";
+    version = "4.9.33";
+    addonId = "addon@darkreader.org";
+    url = "https://addons.mozilla.org/firefox/downloads/file/3783471/dark_reader-4.9.33-an+fx.xpi";
+    sha256 = "0n9i5vdmjbzhvyvx0mircajrbs484xc4492sg3xkv5fvrw9yrrs9";
+    meta = {};
+  };
   brotab-extension = nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {
     pname = "brotab";
     version = "1.3.0";
@@ -228,7 +236,8 @@ rec {
     cantarell-fonts
     #cachix
     comma
-    emax
+    emax.desktopApp
+    emax.cliApp
     ungoogled-chromium
     ddgr
     deluge

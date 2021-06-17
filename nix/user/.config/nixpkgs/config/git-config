@@ -1,12 +1,9 @@
 [user]
-	name = Paul Victor Raj
-	email = paulvictor@gmail.com
+  name = Paul Victor Raj
+  email = paulvictor@gmail.com
   signingkey = 3264D1648F8FB1A4A3F74C9318497AC961BB2FB6
 [core]
   editor = nvim
-  ;pager = /usr/local/bin/vimpager
-[merge]
-	;tool = /usr/local/bin/vimdiff
 [alias]
   st = status
   ci = commit
@@ -18,23 +15,23 @@
   lol = log --graph --decorate --pretty=oneline --abbrev-commit
   lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
   ls = ls-files
-	unstage = reset HEAD --
-	ctags = !.git/hooks/ctags
+  unstage = reset HEAD --
+  ctags = !.git/hooks/ctags
   lg = log --graph --pretty=format:'%Cred%h%Creset %C(yellow)%an%d%Creset %s %Cgreen(%cr)%Creset' --date=relative
   cb = "!echo \"$(git rev-parse --abbrev-ref HEAD 2>/dev/null)\""
   pb = "!git push origin \"$(git rev-parse --abbrev-ref HEAD)\""
   up = "!git pull origin \"$(git rev-parse --abbrev-ref HEAD)\""
   pr = "!open \"$(git remote -v | grep origin | grep push | cut -f 2 | cut -d \" \" -f 1 | sed -e \"s|git@\\(.*\\):\\(.*\\).git|https://\\1/\\2|\")/pull/new/$(git rev-parse --abbrev-ref HEAD)\""
   gh = "!open \"$(git remote -v | grep origin | grep push | cut -f 2 | cut -d \" \" -f 1 | sed -e \"s|git@\\(.*\\):\\(.*\\).git|https://\\1/\\2|\")/tree/$(git rev-parse --abbrev-ref HEAD)\""
-	branches = !legit branches
-	graft = !legit graft
-	harvest = !legit harvest
-	publish = !legit publish
-	unpublish = !legit unpublish
-	sprout = !legit sprout
-	sync = !legit sync
-	switch = !legit switch
-	resync = !legit resync
+  branches = !legit branches
+  graft = !legit graft
+  harvest = !legit harvest
+  publish = !legit publish
+  unpublish = !legit unpublish
+  sprout = !legit sprout
+  sync = !legit sync
+  switch = !legit switch
+  resync = !legit resync
 [color]
 	ui = true
     [color "branch"]

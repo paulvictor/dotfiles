@@ -1,6 +1,7 @@
 { pkgs }:
 
 pkgs.writeText "init.el" ''
+  ;;; config.el -*- lexical-binding: t; -*-
   (require 'package)
 
   ;; optional. makes unpure packages archives unavailable
@@ -20,8 +21,6 @@ pkgs.writeText "init.el" ''
 
   (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
   (setq evil-want-keybinding nil)
-  (evil-collection-init)
-
   ; evil mode overrides
   (setq evil-want-C-u-scroll t)
   (setq evil-disable-insert-state-bindings t)
@@ -34,13 +33,17 @@ pkgs.writeText "init.el" ''
   ;No menu bar
   (menu-bar-mode -1)
   (tool-bar-mode -1)
+  (tooltip-mode -1)
+  (set-fringe-mode 10)
   (scroll-bar-mode -1)
+  (setq visual-bell t)
 
   ;Show matching parens
   (show-paren-mode)
   ; Darkside
   (evil-mode 1)
   (doom-modeline-mode 1)
+  ;; Sets up keybindings and stuff from default to ivy mode
   (ivy-mode 1)
   ;; (setq ivy-use-virtual-buffers t)
   (setq ivy-count-format "(%d/%d) ")
@@ -53,19 +56,23 @@ pkgs.writeText "init.el" ''
   (projectile-mode 1)
   (key-chord-mode 1)
   (persp-mode)
+  (company-mode)
+  (recentf-mode 1)
+  (evil-collection-init)
 
-  ;; Enable fancy-dabbrev previews everywhere:
-  (global-fancy-dabbrev-mode)
+  ;;  ;; Enable fancy-dabbrev previews everywhere:
+  ;;  (global-fancy-dabbrev-mode)
+  ;;
+  ;;  ;; Bind fancy-dabbrev-expand and fancy-dabbrev-backward to your keys of
+  ;;  ;; choice, here "TAB" and "Shift+TAB":
+  ;;  (global-set-key (kbd "<tab>") 'fancy-dabbrev-expand)
+  ;;  (global-set-key (kbd "<backtab>") 'fancy-dabbrev-backward)
+  ;;
+  ;;  ;; Let dabbrev searches ignore case and expansions preserve case:
+  ;;  (setq dabbrev-case-distinction nil)
+  ;;  (setq dabbrev-case-fold-search t)
+  ;;  (setq dabbrev-case-replace nil)
 
-  ;; Bind fancy-dabbrev-expand and fancy-dabbrev-backward to your keys of
-  ;; choice, here "TAB" and "Shift+TAB":
-  (global-set-key (kbd "<tab>") 'fancy-dabbrev-expand)
-  (global-set-key (kbd "<backtab>") 'fancy-dabbrev-backward)
-
-  ;; Let dabbrev searches ignore case and expansions preserve case:
-  (setq dabbrev-case-distinction nil)
-  (setq dabbrev-case-fold-search t)
-  (setq dabbrev-case-replace nil)
   ;; Max time delay between two key presses to be considered a key chord
   (setq key-chord-two-keys-delay 0.2) ; default 0.1
 
@@ -79,6 +86,17 @@ pkgs.writeText "init.el" ''
   (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
   (global-set-key (kbd "<f1> l") 'counsel-find-library)
   (global-set-key (kbd "<f1> b") 'counsel-descbinds)
+
+  (define-key ivy-minibuffer-map (kbd "TAB") 'ivy-alt-done)
+  (define-key ivy-minibuffer-map (kbd "C-l") 'ivy-alt-done)
+  (define-key ivy-minibuffer-map (kbd "C-j") 'ivy-next-line)
+  (define-key ivy-minibuffer-map (kbd "C-k") 'ivy-previous-line)
+
+  (define-key ivy-switch-buffer-map (kbd "C-k") 'ivy-previous-line)
+  (define-key ivy-switch-buffer-map (kbd "C-j") 'ivy-next-line)
+  (define-key ivy-switch-buffer-map (kbd "C-l") 'ivy-done)
+  (define-key ivy-switch-buffer-map (kbd "C-d") 'ivy-switch-buffer-kill)
+
   (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
   (global-set-key (kbd "C-x /") 'swiper-isearch)
   (global-set-key (kbd "C-x *") 'swiper-thing-at-point)
@@ -129,6 +147,7 @@ pkgs.writeText "init.el" ''
   ; In term mode turn off all related to evil mode
   (evil-set-initial-state 'term-mode 'emacs)
 
+  ;; (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
   (define-key minibuffer-local-map (kbd "ESC") 'keyboard-escape-quit)
   (define-key ivy-minibuffer-map (kbd "<ESC>") 'minibuffer-keyboard-quit)
   ; (define-key swiper-map (kbd "<ESC>") 'minibuffer-keyboard-quit)
@@ -170,15 +189,19 @@ pkgs.writeText "init.el" ''
   (setq ivy-re-builders-alist
       '((read-file-name-internal . ivy--regex-fuzzy)
         (read-file-name . ivy--regex-fuzzy)
+        (persp-ivy-switch-buffer . ivy--regex-fuzzy)
+        (find-file-in-project . ivy--regex-fuzzy)
         (t . ivy--regex-plus)))
 
   (add-hook 'after-init-hook 'global-company-mode)
+  (add-hook 'after-init-hook 'company-tng-mode)
+  (setq company-dabbrev-char-regexp "\\(\\sw\\|\\s_\\|_\\|-\\)")
 
   (which-key-setup-side-window-right-bottom)
   ;; max width of which-key frame: number of columns (an integer)
   (setq which-key-frame-max-width 60)
 
-  ;; Keep this as last as possible after all the minor modes
+  ;; keep this as last as possible after all the minor modes
   (envrc-global-mode)
 
   ;; max height of which-key frame: number of lines (an integer)
@@ -190,25 +213,20 @@ pkgs.writeText "init.el" ''
   (setq show-trailing-whitespace t)
   (setq evil-shift-width 2)
 
-  ;;  (setq elscreen-prefix-key (kbd "C-."))
-  ;;
-  ;;  (elscreen-start)
-  ;;  (elscreen-separate-buffer-list-mode)
-  ;;  (define-key elscreen-map "h" 'elscreen-previous)
-  ;;  (define-key elscreen-map "l" 'elscreen-next)
-  ;;  (define-key elscreen-map "x" 'elscreen-kill)
-  ;;  (define-key elscreen-map "r" 'elscreen-screen-nickname)
-
   (global-set-key (kbd "M-h") 'windmove-left)
   (global-set-key (kbd "M-j") 'windmove-down)
   (global-set-key (kbd "M-k") 'windmove-up)
   (global-set-key (kbd "M-l") 'windmove-right)
+  (global-set-key (kbd "C-+") 'text-scale-increase)
+  (global-set-key (kbd "C-=") 'text-scale-decrease)
+  (global-set-key (kbd "C-x C-r") 'projectile-recentf)
 
   (defun split-term-below ()
-     "Split term below and switch to it"
-     (interactive)
-        (let ((w (split-window-below)))
-          (select-window w)
-          (vterm)
-          (windmove-down)))
+    "Split term below and switch to it"
+    (interactive)
+    (split-window-below)
+    (projectile-run-vterm))
+  (global-set-key (kbd "C-x t") 'split-term-below)
+  (setq evil-vsplit-window-right t
+    evil-split-window-below t)
 ''
