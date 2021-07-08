@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ stdenv, fetchzip, lib }:
 
 stdenv.mkDerivation rec {
   name = "fira-code-nerdfonts-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     rm -Rf $out/share/fonts/opentype/*Windows\ Compatible.otf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Nerdfont version of Fira Code";
     homepage = https://github.com/ryanoasis/nerd-fonts;
     license = licenses.mit;

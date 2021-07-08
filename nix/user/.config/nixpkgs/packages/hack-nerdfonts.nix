@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ stdenv, fetchzip, lib }:
 
 stdenv.mkDerivation rec {
   name = "hack-nerdfonts-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     install --target $out/share/fonts/opentype -D $src/*Mono.ttf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Nerdfont version of Hack";
     homepage = https://github.com/ryanoasis/nerd-fonts;
     license = licenses.mit;

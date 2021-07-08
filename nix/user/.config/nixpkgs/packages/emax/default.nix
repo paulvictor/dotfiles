@@ -4,57 +4,70 @@ with pkgs;
 let
   customizedEmacs =
   (emacsPackagesGen emacs).emacsWithPackages(epkgs:
-  [ (with epkgs.melpaStablePackages;
+  [ (with epkgs.melpaPackages;
       [
-        evil
-        centaur-tabs
-        counsel
-        find-file-in-project
-        doom-themes
-        doom-modeline
-        all-the-icons
-        linum-relative
-        keyfreq
-        ivy
-        swiper
-        projectile
-        key-chord
-        # avy
-        ace-window
-        envrc
-        popup
-        perspective
         # ace-jump-mode
+        ace-window
+        all-the-icons
+        # avy
+        centaur-tabs
+        company
+        company-prescient
+        counsel
+        counsel-projectile
+        dash
+        dashboard
+        doom-modeline
+        doom-themes
+        # elscreen
+        # elscreen-separate-buffer-list
+        envrc
+        ess
+        ess-R-data-view
+        ess-smart-underscore
+        evil
+        evil-collection
+        evil-org
+        f
+        # fancy-dabbrev
+        haskell-mode
+        helpful
+        ivy
+        ivy-prescient
+        ivy-rich
+        key-chord
+        keyfreq
+        linum-relative
+        lsp-mode
+        magit
+        nix-mode
+        nix-modeline
+        page-break-lines
+        perspective
+        persp-projectile
+        popup
+        prescient
+        projectile
+        rainbow-delimiters
+        s
+        swiper
+        transient
+        use-package
+        use-package-chords
+        vterm
+        which-key
       ])
     ]
     ++
     [ (with epkgs.orgPackages; [ org ]) ]
     ++
-    [ (with epkgs.melpaPackages;
-      [
-        transient
-        magit
-        evil-collection
-        undo-fu
-        nix-mode
-        nix-modeline
-        which-key
-        # fancy-dabbrev
-        company
-        ess
-        ess-R-data-view
-        ess-smart-underscore
-        vterm
-        haskell-mode
-        evil-org
-        rainbow-delimiters
-        ivy-rich
-        # elscreen
-        # elscreen-separate-buffer-list
-      ])
-    ]);
-    #++ [ (with epkgs.elpaPackages; [ undo-tree ]) ]);
-  custom-init = import ./mk-init-el.nix { inherit pkgs; };
+    [ (with epkgs.elpaPackages; [ undo-tree ]) ]);
+  custom-init =
+    pkgs.writeText "init.el"
+      (builtins.replaceStrings
+        [ "zsh" ]
+        [ "${pkgs.zsh}/bin/zsh" ]
+        (lib.readFile ./mk-init-el.el));
   myemacs = runCommand "myemacs" { buildInputs = [ makeWrapper ripgrep fd R ]; } ''
     mkdir -pv $out/bin
     makeWrapper ${customizedEmacs}/bin/emacs $out/bin/emax \

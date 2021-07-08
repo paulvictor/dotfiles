@@ -50,7 +50,7 @@ let
   obelisk =
     import (fetchTarball https://github.com/obsidiansystems/obelisk/archive/master.tar.gz) {};
   easy-purs =
-    import (fetchTarball https://github.com/justinwoo/easy-purescript-nix/tarball/93b47add383c6cf51f4abcd26e5c663a344e5212) { inherit pkgs; };
+    import (fetchTarball https://github.com/justinwoo/easy-purescript-nix/tarball/47bdc016c7d56e987ca1aca690b1d6c9816a8584) { inherit pkgs; };
   #pscid =
     #callPackage ./packages/pscid/default.nix {
       #inherit pkgs system;
@@ -182,41 +182,41 @@ rec {
     windowManager.i3 = import ./config/i3/i3config.nix { inherit pkgs rofiElectronAppsRunner shareLink ; };
   };
   imports = [
-    ./services/pCloudCC.nix
+    # ./services/pCloudCC.nix
     ./services/mpd.nix
   ];
   # Let Home Manager install and manage itself.
   #programs.home-manager.enable = true;
   programs.zsh = import ./config/zsh.nix { inherit pkgs config tmuxWithConfig; };
   fonts.fontconfig.enable = true;
-  services.pCloudCC = {
-    enable = true;
-    loginId = "paulvictor@gmail.com";
-    mountPoint = "${config.home.homeDirectory}/pcloud";
-    package = pCloudCC;
-  };
-  systemd.user.paths.MountMusic = {
-    Unit = {
-      Description = "Bind mount Music from pCloud";
-      After = [ "pCloudCC.service" ];
-    };
-    Path = {
-      PathExists = "${config.home.homeDirectory}/pcloud/Music";
-    };
-  };
-  systemd.user.services.MountMusic = {
-    Install = {
-        WantedBy = [ "default.target" ];
-    };
-    Unit = {
-      Description = "Mount Music Directory";
-      After = [ "pCloudCC.service" ];
-    };
-    Service = {
-      ExecStart = "${bindfs}/bin/bindfs -d ${config.home.homeDirectory}/pcloud/Music ${config.home.homeDirectory}/Music";
-      Type = "simple";
-    };
-  };
+#  services.pCloudCC = {
+#    enable = true;
+#    loginId = "paulvictor@gmail.com";
+#    mountPoint = "${config.home.homeDirectory}/pcloud";
+#    package = pCloudCC;
+#  };
+#  systemd.user.paths.MountMusic = {
+#    Unit = {
+#      Description = "Bind mount Music from pCloud";
+#      After = [ "pCloudCC.service" ];
+#    };
+#    Path = {
+#      PathExists = "${config.home.homeDirectory}/pcloud/Music";
+#    };
+#  };
+#  systemd.user.services.MountMusic = {
+#    Install = {
+#        WantedBy = [ "default.target" ];
+#    };
+#    Unit = {
+#      Description = "Mount Music Directory";
+#      After = [ "pCloudCC.service" ];
+#    };
+#    Service = {
+#      ExecStart = "${bindfs}/bin/bindfs -d ${config.home.homeDirectory}/pcloud/Music ${config.home.homeDirectory}/Music";
+#      Type = "simple";
+#    };
+#  };
   home.packages = [
     acpi # TODO : Install only on laptops
     afuse
@@ -270,7 +270,7 @@ rec {
     haskellPackages.niv
     hicolor_icon_theme
     i3exit
-    jailed-firefox
+    # jailed-firefox
     jq
     keybase
     kubectl
@@ -303,7 +303,7 @@ rec {
     passdo
     pasystray
     pavucontrol
-    pCloudCC
+    #pCloudCC
     pdftk
     ((pinentry.override({ enabledFlavors = ["curses"];})).overrideAttrs(oldAttrs: {
       buildInputs = oldAttrs.buildInputs ++ [ git ];
@@ -367,7 +367,7 @@ rec {
     zoom-us
     z-lua
   ] ++
-  (with easy-purs; [ psc-package purescript spago purp pscid ]) ++
+  (with easy-purs; [ psc-package purescript spago purp ]) ++
   (with nixpkgs-unstable; [ pbgopy ]);
   xresources.extraConfig = builtins.readFile (
     builtins.fetchurl {
@@ -550,8 +550,6 @@ rec {
     enable = true;
     #package = firefox-beta-bin ; # wrapFirefox (latest.firefox-beta-bin) { browserName = "firefox"; };
     extensions = [
-      #nur.repos.rycee.firefox-addons.vimium
-      #nur.repos.rycee.firefox-addons.vim-vixen
       #nur.repos.rycee.firefox-addons.violentmonkey
       #nur.repos.rycee.firefox-addons.tree-style-tab
       #nur.repos.rycee.firefox-addons.temporary-containers
@@ -561,6 +559,7 @@ rec {
       #nur.repos.rycee.firefox-addons.google-search-link-fix
       nur.repos.rycee.firefox-addons.tridactyl
       brotab-extension
+      darkreader-extension
       #nur.repos.rycee.firefox-addons.dark-night-mode
     ];
     profiles = {
