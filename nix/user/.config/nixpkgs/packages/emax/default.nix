@@ -29,6 +29,7 @@ let
         evil-collection
         evil-org
         f
+        git-gutter
         # fancy-dabbrev
         haskell-mode
         helpful
@@ -43,6 +44,7 @@ let
         nix-mode
         nix-modeline
         page-break-lines
+        paredit
         perspective
         persp-projectile
         popup
@@ -50,6 +52,8 @@ let
         projectile
         rainbow-delimiters
         s
+        slime
+        slime-company
         swiper
         transient
         use-package

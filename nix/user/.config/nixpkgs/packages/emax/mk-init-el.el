@@ -29,7 +29,7 @@
 (setq bookmark-size-search 100)
 (setq whitespace-style '(trailing tabs))
 (column-number-mode)
-(global-display-line-numbers-mode t)
+;; (global-display-line-numbers-mode t)
 (setq inhibit-startup-screen t)
 (setq comment-style "aligned")
 ;; TODO : Save it in a proper sync'able place
@@ -40,7 +40,10 @@
 (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
 
 ;; enable paredit for minibuffer evaluations use this snippet
-(add-hook 'eval-expression-minibuffer-setup-hook #'paredit-mode)
+;; (add-hook 'eval-expression-minibuffer-setup-hook #'paredit-mode)
+
+;; Add _ as part of a word
+(modify-syntax-entry ?_ "w")
 
 ;; Change "yes or no" to "y or n"
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -53,6 +56,10 @@
   (setq key-chord-two-keys-delay 0.2) ; default 0.1
   :ensure t
   :config (key-chord-mode 1))
+
+(use-package git-gutter
+  :config
+    (global-git-gutter-mode t))
 
 (use-package doom-themes
   :init
@@ -138,6 +145,10 @@
         ("C-d" . ivy-switch-buffer-kill)))
 
 (use-package counsel
+  :config
+    (global-set-key [remap describe-function] 'counsel-describe-function)
+    (global-set-key [remap describe-variable] 'counsel-describe-variable)
+    (counsel-mode 1)
   :bind
     (("M-x" . counsel-M-x)
      ("C-x '" . counsel-recentf)
@@ -152,6 +163,7 @@
      ("C-r" . counsel-minibuffer-history)))
 
 (use-package prescient
+  :after (company)
   :commands prescient-persist-mode
   :init
     (setq prescient-history-length 30))
@@ -161,19 +173,21 @@
   :config
     (ivy-prescient-mode 1))
 
+(use-package company-prescient
+  :after (company prescient))
+
 (use-package company
-  :after (prescient company-prescient)
-  ;; :commands (global-company-mode company-prescient-mode company-tng-mode)
-  :hook
-    ((prog-mode . company-mode)
-     (prog-mode . company-prescient-mode)
-     (prog-mode . company-tng-mode))
+  :demand t
   :config
     (unless (eq 'company-dabbrev (car company-backends))
       (push 'company-dabbrev company-backends))
+    (company-prescient-mode 1)
+    (company-tng-mode 1)
+    (global-company-mode 1)
   :init
     (setq tab-always-indent 'complete)
   :custom
+    (company-require-match nil)
     (company-idle-delay nil)
     (company-dabbrev-other-buffers t)
     (company-dabbrev-time-limit 0.2)
@@ -183,15 +197,13 @@
     (company-minimum-prefix-length 3)
   :bind
     (:map company-mode-map
-      ("<tab>" . 'company-indent-or-complete-common)
+      ("<tab>" . company-indent-or-complete-common)
     :map company-active-map
-      ("C-n" . 'company-select-next-or-abort)
-      ("C-j" . 'company-select-next-or-abort)
-      ("C-p" . 'company-select-previous-or-abort)
-      ("C-k" . 'company-select-previous-or-abort)))
-
-(use-package company-prescient
-  :after company)
+      ("TAB" . company-select-next)
+      ("<backtab>" . company-select-previous)
+      ("RET" . nil)
+      ("C-j" . company-select-next-or-abort)
+      ("C-k" . company-select-previous-or-abort)))
 
 (use-package which-key
   :custom
@@ -203,20 +215,6 @@
  :config
  (which-key-setup-side-window-right-bottom)
  (which-key-mode 1))
-
-(use-package perspective
-  :demand t
-  :custom
-  (persp-initial-frame-name "Main")
-  :config
-  ;; Running `persp-mode' multiple times resets the perspective list...
-  (unless (equal persp-mode t)
-    (persp-mode)))
-
-(use-package perspective
-  :after (ivy projectile)
-  :chords
-    ((",," . persp-ivy-switch-buffer)))
 
 (defun comment-dwim-line (&optional arg)
   "Replacement for the comment-dwim command.
@@ -246,7 +244,7 @@
   (add-hook mode
     (lambda ()
       (progn
-        (display-line-numbers-mode 0)
+;;         (display-line-numbers-mode 0)
         (setq show-trailing-whitespace nil)))))
 
 (use-package projectile
@@ -266,6 +264,24 @@
   :config
     (counsel-projectile-mode 1))
 
+(use-package perspective
+  :demand t
+  :after (ivy projectile)
+  :chords
+    (",," . persp-ivy-switch-buffer)
+  :custom
+    (persp-initial-frame-name "Main")
+  :config
+  ;; Running `persp-mode' multiple times resets the perspective list...
+  (unless (equal persp-mode t)
+    (persp-mode)))
+
+(use-package persp-projectile
+  :demand t
+  :after (perspective projectile counsel-projectile)
+  :bind
+    ([remap counsel-projectile-switch-project] . projectile-persp-switch-project))
+
 (use-package ivy-rich
   :init
   (ivy-rich-mode 1)
@@ -275,9 +291,9 @@
 
 ;; (setq-default show-trailing-whitespace nil)
 ;; Do we need the following code then ?
-(add-hook
-  'prog-mode-hook
-  'display-line-numbers-mode)
+;; (add-hook
+;;   'prog-mode-hook
+;;   'display-line-numbers-mode)
 (add-hook
   'prog-mode-hook
   '(lambda ()
@@ -288,31 +304,49 @@
   'rainbow-delimiters-mode)
 (electric-indent-mode 1)
 
-(setq dashboard-projects-backend 'projectile)
-(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
-(setq dashboard-startup-banner 'logo)
-(setq dashboard-set-heading-icons t)
-(setq dashboard-set-file-icons t)
-(setq dashboard-items '((recents . 5)
-                      (bookmarks . 5)
-                      (projects . 5)))
-
 (use-package evil-collection
   :after evil
   :config
   (evil-collection-init))
 
+(defun init-dashboard ()
+  (progn
+    (switch-to-buffer "*dashboard*")
+    (goto-char (point-min))
+    (redisplay)))
+
+(use-package dashboard
+  :after projectile
+  :config
+    (dashboard-setup-startup-hook)
+    (init-dashboard)
+  :custom
+    (dashboard-projects-backend 'projectile)
+    (initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+    (dashboard-startup-banner 'logo)
+    (dashboard-set-heading-icons t)
+    (dashboard-set-file-icons t)
+    (dashboard-items '((recents . 5)
+                      (bookmarks . 5)
+                      (projects . 5))))
+
+(use-package helpful
+  :after counsel
+  :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+  :bind
+    ("<f1> p" . helpful-at-point)
+    ([remap describe-symbol] . helpful-symbol)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-key] . helpful-key))
+
+
 (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
 (key-chord-define-global "``" 'aw-flip-window)
 
 (global-set-key (kbd "C-x b") 'ibuffer)
-(global-set-key (kbd "<f1> p") 'helpful-at-point)
 (global-set-key (kbd "M-o") 'ace-window)
-(global-set-key [remap describe-symbol] 'helpful-symbol)
-(global-set-key [remap describe-function] 'counsel-describe-function)
-(global-set-key [remap describe-variable] 'counsel-describe-variable)
-(global-set-key [remap describe-command] 'helpful-command)
-(global-set-key [remap describe-key] 'helpful-key)
 
 ;;;;(use-package key-chord
 ;;;;  :after evil
@@ -322,8 +356,6 @@
 
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 
-(setq counsel-describe-function-function #'helpful-callable)
-(setq counsel-describe-variable-function #'helpful-variable)
 
 (keyfreq-mode 1)
 (keyfreq-autosave-mode 1)
@@ -380,7 +412,6 @@
 ;        (goto-line (read-number "Goto line: ")))
 ;    (linum-mode -1)))
 
-
 (setq explicit-shell-file-name "zsh")
 (setq term-prompt-regexp "^\*>")
 
@@ -405,16 +436,6 @@
 
 ;; (setq lsp-keymap-prefix "C-c l")
 ;; (lsp-enable-which-key-integration t)
-
-(dashboard-setup-startup-hook)
-
-(defun init-dashboard ()
-  (progn
-    (switch-to-buffer "*dashboard*")
-    (goto-char (point-min))
-    (redisplay)))
-
-(init-dashboard)
 
 ;; keep this as last as possible after all the minor modes
 (envrc-global-mode)
