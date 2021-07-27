@@ -341,6 +341,34 @@
     ([remap describe-command] . helpful-command)
     ([remap describe-key] . helpful-key))
 
+(use-package expand-region
+  :config
+  (global-set-key (kbd "C-j") 'er/expand-region)
+  (set-variable 'expand-region-subword-enabled t))
+
+(use-package engine-mode
+  :demand t
+  :config
+  (engine-mode t)
+  (engine/set-keymap-prefix (kbd "C-c s"))
+  (defengine google "https://google.com/?q=%s"
+    :keybinding "s")
+  (defengine duckduckgo "https://duckduckgo.com/?q=%s"
+    :keybinding "d")
+  (defengine hoogle "https://www.haskell.org/hoogle/?hoogle=%s"
+    :keybinding "h"))
+
+(use-package avy
+  :config
+    (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+    (setq avy-styles-alist
+          '((avy-goto-char-2 . post)
+            (avy-goto-line   . pre)
+            (avy-goto-char-timer . at-full)))
+  :bind
+    ("C-;" . avy-goto-char-timer)
+    ("C-:" . avy-goto-char-2)
+    ("C-'" . avy-goto-line))
 
 (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
 (key-chord-define-global "``" 'aw-flip-window)

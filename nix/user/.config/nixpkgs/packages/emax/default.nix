@@ -9,7 +9,7 @@ let
         # ace-jump-mode
         ace-window
         all-the-icons
-        # avy
+        avy
         centaur-tabs
         company
         company-prescient
@@ -21,6 +21,7 @@ let
         doom-themes
         # elscreen
         # elscreen-separate-buffer-list
+        engine-mode
         envrc
         ess
         ess-R-data-view
@@ -28,6 +29,7 @@ let
         evil
         evil-collection
         evil-org
+        expand-region
         f
         git-gutter
         # fancy-dabbrev
