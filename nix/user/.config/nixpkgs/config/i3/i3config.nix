@@ -24,9 +24,7 @@ in
     };
     modifier = "Mod4";
     keybindings = useWithModifier modifier ({
-      "Return" = "exec ${alacritty}/bin/alacritty";
-      "Shift+Return" = "exec ${alacritty}/bin/alacritty -e tmux";
-# kill focused window
+      # kill focused window
       "a" = "focus child";
       #"asciitilde" = "move container to workspace back_and_forth";
       "BackSpace" = "mode $leave";
@@ -38,35 +36,27 @@ in
       "less" = "move workspace to output left";
       "greater" = "move workspace to output right";
       "c" = "reload";
-      "d" = "exec rofi -show drun";
       "e" = "layout toggle stacking tabbed splith splitv";
       "equal" = "scratchpad show";
       "f" = "fullscreen toggle";
-      "g" = ''exec ${wmfocus}/bin/wmfocus --fill -c asdf --textcolor red'';
       "grave" = "workspace back_and_forth";
       "h" = "focus left";
       "j" = "focus down";
       "k" = "focus up";
       "l" = "focus right";
       "minus" = "split vertical";
-      "n" = "exec passdo --notify";
-      "p" = "exec passdo --copy";
       "q" = "kill";
       "r" = "mode resize";
       "Shift+a" = "focus parent";
       "Shift+c" = "restart";
-      "Shift+d" = "exec ${rofiElectronAppsRunner}/bin/rofiElectronAppsRunner";
       "Shift+equal" = "move scratchpad";
       "Shift+h" = "move left";
       "Shift+j" = "move down";
       "Shift+k" = "move up";
       "Shift+l" = "move right";
-      "Shift+p" = "exec passdo --type";
-      "Shift+slash" = ''exec menu-surfraw'';
-      "Shift+space" = "floating toggle";
       "slash" = ''exec quickswitch.py -d "rofi -i -dmenu"'';
       "s" = "layout stacking";
-      "space" = "focus mode_toggle";
+      "Space" = "focus mode_toggle";
       "t" = "split toggle";
       "v" = "exec ${shareLink}/bin/shareLink";
       "w" = "layout tabbed";

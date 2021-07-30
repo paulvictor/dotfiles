@@ -162,20 +162,8 @@
      :map minibuffer-local-map
      ("C-r" . counsel-minibuffer-history)))
 
-(use-package prescient
-  :after (company)
-  :commands prescient-persist-mode
-  :init
-    (setq prescient-history-length 30))
-
-(use-package ivy-prescient
-  :after (ivy counsel)
-  :config
-    (ivy-prescient-mode 1))
-
-(use-package company-prescient
-  :after (company prescient))
-
+;; Implement a custom function for middle of the word completion like here :
+;; https://github.com/company-mode/company-mode/issues/340
 (use-package company
   :demand t
   :config
@@ -196,14 +184,28 @@
     (company-dabbrev-char-regexp "\\(\\sw\\|\\s_\\|_\\|-\\)")
     (company-minimum-prefix-length 3)
   :bind
-    (:map company-mode-map
-      ("<tab>" . company-indent-or-complete-common)
+    (;; :map company-mode-map
+      ;;("<tab>" . company-indent-or-complete-common)
     :map company-active-map
       ("TAB" . company-select-next)
       ("<backtab>" . company-select-previous)
       ("RET" . nil)
       ("C-j" . company-select-next-or-abort)
       ("C-k" . company-select-previous-or-abort)))
+
+(use-package prescient
+  :after (company)
+  :commands prescient-persist-mode
+  :init
+    (setq prescient-history-length 30))
+
+(use-package ivy-prescient
+  :after (ivy counsel)
+  :config
+    (ivy-prescient-mode 1))
+
+(use-package company-prescient
+  :after (company prescient))
 
 (use-package which-key
   :custom
@@ -215,6 +217,11 @@
  :config
  (which-key-setup-side-window-right-bottom)
  (which-key-mode 1))
+
+(use-package wgrep)
+
+(use-package magit
+  :after (company company-prescient))
 
 (defun comment-dwim-line (&optional arg)
   "Replacement for the comment-dwim command.
@@ -393,6 +400,7 @@
 
 (global-set-key (kbd "C-?") 'help-command)
 (global-set-key (kbd "M-?") 'mark-paragraph)
+
 ; kill current buffer instead of prompting
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
 
@@ -406,7 +414,7 @@
 (define-key minibuffer-local-map (kbd "ESC") 'keyboard-escape-quit)
 ; (define-key swiper-map (kbd "<ESC>") 'minibuffer-keyboard-quit)
 
-;(add-hook 'some-mode-hook
+;  (add-hook 'some-mode-hook
 ;          (lambda ()
 ;            (define-key evil-normal-state-local-map
 ;                        (kbd "w") 'some-function)))
@@ -428,7 +436,7 @@
 ;  (ad-activate 'linum-update)
 ;
 ;  (global-linum-mode t)
-; (linum-relative-on)
+;  (linum-relative-on)
 
 ;(global-set-key [remap goto-line] 'goto-line-with-feedback)
 ;(defun goto-line-with-feedback ()

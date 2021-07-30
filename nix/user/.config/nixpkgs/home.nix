@@ -1112,11 +1112,31 @@ rec {
       "application/x-extension-xht" = [ "firefox.desktop" ];
     };
   };
+  services.sxhkd = {
+    enable = true;
+    keybindings = {
+      "super + Return" = "${alacritty}/bin/alacritty";
+      "super + shift + Return" = "${alacritty}/bin/alacritty -e tmux";
+      "super + d" = "rofi -show drun";
+      "super + g" = ''${wmfocus}/bin/wmfocus --fill -c asdf --textcolor red'';
+      "super + n" = "passdo --notify";
+      "super + p" = "passdo --copy";
+      "super + shift + p" = "passdo --type";
+      "super + shift + slash" = "menu-surfraw";
+      "super + shift + d" = "${rofiElectronAppsRunner}/bin/rofiElectronAppsRunner";
+      # Pulse Audio controls
+      "Audio{Raise,Lower}Volume" = "pactl set-sink-volume @DEFAULT_SINK@ {+5%,-5%}"; #increase sound volume
+      "AudioMute" =  "pactl set-sink-mute  @DEFAULT_SINK@ toggle"; # mute sound
+      # Sreen brightness controls
+      "MonBrightness{Up,Down}" = "light {-A,-U} 5";
+    };
+  };
   services.xcape = {
     enable = true;
     mapExpression = {
       Shift_L = "Escape";
-      Shift_R = "Control_L|period";
+      # Keycodes are at https://cgit.freedesktop.org/xorg/proto/x11proto/tree/keysymdef.h without the XK_ prefix
+      Shift_R = "Control_L|Hyper_L|Meta_L|Z";
       Control_L = "Control_L|X";
       Control_R = "Alt_L|X";
     };

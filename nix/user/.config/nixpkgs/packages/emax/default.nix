@@ -62,6 +62,7 @@ let
         use-package-chords
         vterm
         which-key
+        wgrep
       ])
     ]
     ++
