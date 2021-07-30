@@ -67,7 +67,7 @@
   newHighlight = green bold 22
 [diff-so-fancy]
   useUnicodeRuler = false
-[commit]
-  gpgsign = true
+; [commit]
+  ; gpgsign = true
 [pull]
   rebase = true
