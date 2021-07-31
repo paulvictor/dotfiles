@@ -69,19 +69,11 @@ let
     [ (with epkgs.orgPackages; [ org ]) ]
     ++
     [ (with epkgs.elpaPackages; [ undo-tree ]) ]);
-  custom-init =
-    pkgs.writeText "init.el"
-      (builtins.replaceStrings
-        [ "zsh" ]
-        [ "${pkgs.zsh}/bin/zsh" ]
-        (lib.readFile ./mk-init-el.el));
   myemacs = runCommand "myemacs" { buildInputs = [ makeWrapper ripgrep fd R ]; } ''
     mkdir -pv $out/bin
     makeWrapper ${customizedEmacs}/bin/emacs $out/bin/emax \
       --prefix PATH : ${lib.makeBinPath [ ripgrep fd ]} \
-      --add-flags -nl \
-      --add-flags --load \
-      --add-flags ${custom-init}
+      --add-flags --maximized
   '';
 in
 {
