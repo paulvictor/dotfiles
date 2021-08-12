@@ -123,7 +123,7 @@ let
 #             #ln -sLt $out/lib/mozilla/native-messaging-hosts ${brotab}/lib/python3.8/site-packages/brotab/mediator/firefox_mediator.json
 #           '';
 #       });
-  tomb-overlay = import ../../../common/pkgs/tomb.nix;
+  tomb-overlay = import ../common/pkgs/tomb.nix;
   tmuxWithConfig = callPackage ./packages/tmux/default.nix {};
 in
 rec {
