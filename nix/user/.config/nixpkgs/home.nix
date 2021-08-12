@@ -32,6 +32,7 @@ let
   neovim-overlay = import (builtins.fetchTarball {
     url = https://github.com/mjlbach/neovim-nightly-overlay/archive/master.tar.gz;
   });
+  ripgrep-overlay = import ./packages/ripgrep.nix;
   rofi-fuzzy = import ./wrappers/rofi-fuzzy.nix;
   brotab-overlay =
     import ./packages/brotab.nix;
@@ -143,6 +144,7 @@ rec {
   nixpkgs.overlays = [
     tomb-overlay
     brotab-overlay
+    ripgrep-overlay
     neovim-overlay
     rofi-fuzzy
     pass-overlay

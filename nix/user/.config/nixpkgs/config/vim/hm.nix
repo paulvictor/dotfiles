@@ -35,8 +35,8 @@ in
           denite-nvim
           deoplete-nvim
           dracula
-          vim-fugitive
-          vim-gitgutter
+          #vim-fugitive
+          #vim-gitgutter
           ghcid
           haskell-vim
           #Hoogle

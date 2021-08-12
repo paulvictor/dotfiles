@@ -21,8 +21,10 @@ let
         doom-themes
         # elscreen
         # elscreen-separate-buffer-list
+        # eglot # Has some issue with project.el. Emacs 28 should fix this
         engine-mode
         envrc
+        equake
         ess
         ess-R-data-view
         ess-smart-underscore
@@ -45,6 +47,7 @@ let
         magit
         nix-mode
         nix-modeline
+        origami
         page-break-lines
         paredit
         perspective
@@ -56,10 +59,13 @@ let
         s
         slime
         slime-company
+        sly
+        sly-quicklisp
         swiper
         transient
         use-package
         use-package-chords
+        # vimish-fold # Need keybindings but is good
         vterm
         which-key
         wgrep

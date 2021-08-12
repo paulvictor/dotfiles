@@ -27,8 +27,8 @@ let
           denite-nvim
           deoplete-nvim
           dracula
-          fugitive
-          gitgutter
+          #fugitive
+          #gitgutter
           ghcid
           haskell-vim
           Hoogle

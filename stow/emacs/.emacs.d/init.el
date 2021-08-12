@@ -12,7 +12,8 @@
 ; This must be done before font settings!
 ; (set-frame-parameter (selected-frame) 'alpha '(85 . 70))
 ; (add-to-list 'default-frame-alist '(alpha . (85 . 70)))
-(add-to-list 'default-frame-alist '(font . "VictorMono Nerd Font-12"))
+(when (display-graphic-p)
+  (add-to-list 'default-frame-alist '(font . "VictorMono Nerd Font-13")))
 (set-mouse-color "white")
 (setq-default indent-tabs-mode nil)
 (menu-bar-mode -1)
@@ -39,11 +40,19 @@
 ;; enable eldoc for minibuffer evaluations use this snippet
 (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
 
+(defun add-to-words-syntax (mode-hook chars)
+  (seq-do
+    #'(lambda (c)
+       (add-hook mode-hook
+        #'(lambda () (modify-syntax-entry ?- "w"))))
+   chars))
+
+(add-to-words-syntax 'emacs-lisp-mode-hook "-_")
+(add-to-words-syntax 'nix-mode-hook "-_")
+(add-to-words-syntax 'haskell-mode-hook "_")
+
 ;; enable paredit for minibuffer evaluations use this snippet
 ;; (add-hook 'eval-expression-minibuffer-setup-hook #'paredit-mode)
-
-;; Add _ as part of a word
-(modify-syntax-entry ?_ "w")
 
 ;; Change "yes or no" to "y or n"
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -87,8 +96,11 @@
     (evil-flash-delay 5)
     (evil-shift-width 2)
     (evil-undo-system 'undo-tree)
+  :init
+    (setq evil-search-module 'evil-search)
   :config
-  (evil-mode 1))
+    (evil-select-search-module 'evil-search-module 'evil-search)
+    (evil-mode 1))
 
 (use-package doom-modeline
   :custom
@@ -112,7 +124,6 @@
 
 (use-package ivy
   :config
-
     (ivy-mode 1)
   :custom
     (ivy-re-builders-alist
@@ -172,11 +183,17 @@
     (company-prescient-mode 1)
     (company-tng-mode 1)
     (global-company-mode 1)
+    ; Use tab key to cycle through suggestions.
+    ; ('tng' means 'tab and go')
+    (company-tng-configure-default)
   :init
     (setq tab-always-indent 'complete)
+    ; No delay in showing suggestions.
+    (setq company-idle-delay 0)
   :custom
+    (company-idle-delay 0)
+    (company-selection-wrap-around t)
     (company-require-match nil)
-    (company-idle-delay nil)
     (company-dabbrev-other-buffers t)
     (company-dabbrev-time-limit 0.2)
     (company-dabbrev-code-time-limit 0.2)
@@ -185,43 +202,62 @@
     (company-minimum-prefix-length 3)
   :bind
     (;; :map company-mode-map
-      ;;("<tab>" . company-indent-or-complete-common)
+      ;; ("<tab>" . company-complete)
     :map company-active-map
-      ("TAB" . company-select-next)
+      ("TAB" . company-complete-common-or-cycle)
       ("<backtab>" . company-select-previous)
       ("RET" . nil)
       ("C-j" . company-select-next-or-abort)
       ("C-k" . company-select-previous-or-abort)))
 
 (use-package prescient
+  :demand t
   :after (company)
   :commands prescient-persist-mode
   :init
     (setq prescient-history-length 30))
 
 (use-package ivy-prescient
+  :demand t
   :after (ivy counsel)
   :config
     (ivy-prescient-mode 1))
 
 (use-package company-prescient
+  :demand t
   :after (company prescient))
 
 (use-package which-key
-  :custom
+ :custom
   (which-key-idle-delay 0.2)
   ;; max width of which-key frame: number of columns (an integer)
   (which-key-frame-max-width 60)
   ;; max height of which-key frame: number of lines (an integer)
   (which-key-frame-max-height 20)
  :config
- (which-key-setup-side-window-right-bottom)
- (which-key-mode 1))
+  (which-key-setup-side-window-right-bottom)
+  (which-key-mode 1))
 
 (use-package wgrep)
 
 (use-package magit
   :after (company company-prescient))
+
+(use-package origami)
+
+(dolist (mode-hook '(emacs-lisp-mode-hook
+                     nix-mode-hook
+                     haskell-mode-hook
+                     ess-r-mode-hook
+                     shell-mode-hook
+                     eshell-mode-hook))
+  (add-hook mode-hook
+    #'(lambda ()
+        (origami-mode 1))))
+
+(add-hook 'ess-r-help-mode
+          #'(lambda ()
+              (evil-mode 1)))
 
 (defun comment-dwim-line (&optional arg)
   "Replacement for the comment-dwim command.
@@ -243,12 +279,12 @@
     (whitespace-cleanup)))
 
 ;; Sets up keybindings and stuff from default to ivy mode
-(dolist (mode '(org-mode-hook
-                vterm-mode-hook
-                term-mode-hook
-                shell-mode-hook
-                eshell-mode-hook))
-  (add-hook mode
+(dolist (mode-hook '(org-mode-hook
+                     vterm-mode-hook
+                     term-mode-hook
+                     shell-mode-hook
+                     eshell-mode-hook))
+  (add-hook mode-hook
     (lambda ()
       (progn
 ;;         (display-line-numbers-mode 0)
@@ -419,7 +455,7 @@
 ;            (define-key evil-normal-state-local-map
 ;                        (kbd "w") 'some-function)))
 
-;  (defvar my-linum-current-line-number 0)
+;  (defvar *my-linum-current-line-number* 0)
 ;
 ;  (setq linum-format 'my-linum-relative-line-numbers)
 ;
@@ -460,6 +496,11 @@
 (global-set-key (kbd "M-l") 'windmove-right)
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C-=") 'text-scale-decrease)
+
+(add-hook 'inferior-ess-r-mode-hook
+          (lambda ()
+            (local-set-key (kbd "C-j") 'comint-next-input)
+            (local-set-key (kbd "C-k") 'comint-previous-input)))
 
 (defun split-term-below ()
   "Split term below and switch to it"
