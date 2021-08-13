@@ -55,7 +55,7 @@ in
       "Shift+k" = "move up";
       "Shift+l" = "move right";
       "slash" = ''exec quickswitch.py -d "rofi -i -dmenu"'';
-      "s" = "layout stacking";
+      # "s" = "layout stacking";
       "Space" = "focus mode_toggle";
       "t" = "split toggle";
       "v" = "exec ${shareLink}/bin/shareLink";

@@ -1123,14 +1123,19 @@ rec {
       "super + g" = ''${wmfocus}/bin/wmfocus --fill -c asdf --textcolor red'';
       "super + n" = "passdo --notify";
       "super + p" = "passdo --copy";
+      "super + s" = "scrot -m";
+      "super + shift + s" = "scrot -s";
       "super + shift + p" = "passdo --type";
       "super + shift + slash" = "menu-surfraw";
       "super + shift + d" = "${rofiElectronAppsRunner}/bin/rofiElectronAppsRunner";
+      # OCR a screen selection
+      "super + x" = "${imagemagick}/bin/convert x: -modulate 100,0 -resize 400% -set density 300 png:- | ${tesseract}/bin/tesseract stdin stdout | ${xclip}/bin/xclip -selection clipboard";
       # Pulse Audio controls
-      "Audio{Raise,Lower}Volume" = "pactl set-sink-volume @DEFAULT_SINK@ {+5%,-5%}"; #increase sound volume
-      "AudioMute" =  "pactl set-sink-mute  @DEFAULT_SINK@ toggle"; # mute sound
+      "XF86Audio{Raise,Lower}Volume" = "pactl set-sink-volume @DEFAULT_SINK@ {+5%,-5%}"; #increase sound volume
+      "XF86AudioMute" =  "pactl set-sink-mute  @DEFAULT_SINK@ toggle"; # mute sound
+      "XF86MicMute" =  "pulseaudio-ctl mute-input"; # mute mic
       # Sreen brightness controls
-      "MonBrightness{Up,Down}" = "light {-A,-U} 5";
+      "MonBrightness{Up,Down}" = "light -{A,U} 5";
     };
   };
   services.xcape = {
