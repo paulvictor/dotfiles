@@ -59,8 +59,8 @@ let
         s
         slime
         slime-company
-        sly
-        sly-quicklisp
+#         sly
+#         sly-quicklisp
         swiper
         transient
         use-package

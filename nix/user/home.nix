@@ -1,7 +1,6 @@
 {pkgs, config, ... }:
 
 let
-  nixpkgs-unstable = import <nixpkgs-unstable> {};
   comma = import (fetchTarball https://github.com/Shopify/comma/tarball/master) { inherit pkgs; };
   firefox-overlay =
     import
@@ -29,6 +28,7 @@ let
   agenix = import (fetchTarball "https://github.com/ryantm/agenix/tarball/ddb81b8bdafa83a7aa210fc98ead4c78e7a70912") { inherit pkgs; };
   all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") { inherit pkgs; };
   betterlockscreen = pkgs.callPackage ./packages/betterlockscreen {};
+  xdotool-overlay = import ./packages/xdotool.nix;
   neovim-overlay = import (builtins.fetchTarball {
     url = https://github.com/mjlbach/neovim-nightly-overlay/archive/master.tar.gz;
   });
@@ -142,6 +142,7 @@ rec {
     };
   };
   nixpkgs.overlays = [
+    xdotool-overlay
     tomb-overlay
     brotab-overlay
     ripgrep-overlay
@@ -219,6 +220,20 @@ rec {
 #      Type = "simple";
 #    };
 #  };
+  systemd.user.services.XmodMap = {
+    Unit = {
+      Description = "Loads the XModMap Keymap";
+      After = [ "graphical.target" ];
+      Requires = [ "graphical.target" ];
+      # Wants = [ "display-manager.service" ];
+    };
+    Service = {
+      Environment="XAUTHORITY=${config.home.homeDirectory}/.Xauthority";
+      ExecStart = "${xorg.xmodmap}/bin/xmodmap -verbose ${config.home.homeDirectory}/.Xmodmap";
+      Type = "oneshot";
+      RemainAfterExit = "yes";
+    };
+  };
   home.packages = [
     acpi # TODO : Install only on laptops
     afuse
@@ -314,6 +329,7 @@ rec {
       outputs = [ "out" ];
     }))
     lsof
+    pbgopy
     pcsclite
     pcsctools
     pms
@@ -369,8 +385,7 @@ rec {
     zoom-us
     z-lua
   ] ++
-  (with easy-purs; [ psc-package purescript spago purp ]) ++
-  (with nixpkgs-unstable; [ pbgopy ]);
+  (with easy-purs; [ psc-package purescript spago purp ]);
   xresources.extraConfig = builtins.readFile (
     builtins.fetchurl {
       url = https://github.com/chriskempson/base16-xresources/raw/master/xresources/base16-solarized-dark-256.Xresources;
@@ -625,12 +640,25 @@ rec {
     fetchSubmodules = true;
   };
 
-  services.screen-locker = {
-    enable = true;
-    lockCmd = ''${i3exit}/bin/i3exit lock'';
-    inactiveInterval = 5;
-    xautolockExtraOptions = ["-notify" "30" "-notifier" "${libnotify}/bin/notify-send" ];
+  systemd.user.services.xss-lock = {
+    Unit = {
+      Description = "xss-lock, session locker service";
+      After = [ "graphical-session-pre.target" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+
+    Install = { WantedBy = [ "graphical-session.target" ]; };
+
+    Service = {
+      Environment="PATH=/run/wrappers/bin";
+      ExecStart =
+        lib.concatStringsSep " "
+          ([ "${pkgs.xss-lock}/bin/xss-lock" "-s \${XDG_SESSION_ID}" ]
+           ++ [ "--notifier" "${libnotify}/bin/notify-send" ]
+           ++ [ "-- ${i3exit}bin/i3exit lock" ]);
+    };
   };
+
   programs.ssh = {
     enable = true;
     compression = true;
@@ -662,7 +690,7 @@ rec {
 
   programs.direnv = {
     enable = true;
-    enableNixDirenvIntegration = true;
+    nix-direnv.enable = true;
     enableZshIntegration = true;
     stdlib = ''
       : ''${XDG_CACHE_HOME:=$HOME/.cache}
@@ -883,7 +911,7 @@ rec {
       realName = "Paul Victor Raj";
       flavor = "gmail.com";
       mbsync = {
-        enable = true;
+        enable = false;
         create = "both";
         expunge = "both";
         extraConfig.account = {
@@ -900,7 +928,7 @@ rec {
             ExpireUnread = "no";
           };
           drafts = {
-            masterPattern = "\"[Gmail]/Drafts\"";
+            #masterPattern = "[Gmail]/Drafts";
             slavePattern = "Drafts";
             extraConfig = {
               Create = "Both";
@@ -913,11 +941,11 @@ rec {
               Create = "Both";
               Expunge = "Both";
             };
-            masterPattern = "[Gmail]/Sent Mail";
+            #masterPattern = "[Gmail]/Sent Mail";
             slavePattern = "Sent";
           };
           starred= {
-            masterPattern = "\"[Gmail]/Starred\"";
+            #masterPattern = "\"[Gmail]/Starred\"";
             slavePattern = "Starred";
             extraConfig = {
               Create = "Both";

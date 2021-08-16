@@ -416,6 +416,15 @@
 (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
 (key-chord-define-global "``" 'aw-flip-window)
 
+(use-package slime
+  :init
+    (setq inferior-lisp-program "sbcl") ; TODO : Move to dir specific config
+  :config
+    (add-hook 'slime-load-hook
+      (lambda ()
+        (define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)))
+    (require 'slime-autoloads))
+
 (global-set-key (kbd "C-x b") 'ibuffer)
 (global-set-key (kbd "M-o") 'ace-window)
 
@@ -516,3 +525,13 @@
 
 ;; keep this as last as possible after all the minor modes
 (envrc-global-mode)
+
+(setf custom-file
+      (let*
+          ((init-file-components (s-split "/" (file-truename user-init-file)))
+           (custom-file-components (-drop-last 1 init-file-components))
+           (custom-file (s-join "/" (-snoc custom-file-components "custom.el"))))
+        custom-file))
+(when
+  (file-exists-p custom-file)
+  (load-file custom-file))

@@ -43,20 +43,14 @@ in
   # Set your time zone.
   time.timeZone = "Asia/Kolkata";
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  # This gets merged with https://github.com/NixOS/nixpkgs/blob/nixos-20.09/nixos/modules/config/system-path.nix#L11
   environment.systemPackages = with pkgs; [
     bc
     binutils
     bluez
-    #compton-git
-    #coreutils-full
     exfat
     exfat-utils
     file
     git
-    #gnupg
     home-manager
     htop
     libnl
@@ -67,7 +61,6 @@ in
     patchelf
     pciutils
     psmisc
-    #udev
     vim
     wget
     wirelesstools
@@ -75,9 +68,6 @@ in
     zsh
   ];
 
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
   # Open ports in the firewall.
@@ -164,7 +154,8 @@ in
     displayManager = {
       defaultSession = "xsession";
       autoLogin = {
-        enable = false;
+        # This is because the HOME partition is anyway zfs encrypted and so would need a passphrase to mount
+        enable = true;
         user = "viktor";
       };
       lightdm.enable = true;
@@ -176,7 +167,6 @@ in
         }
       ];
     };
-    #desktopManager.default = "xsession";
     layout = "us,apl";
     xkbOptions = "grp:win_space_toggle,terminate:ctrl_alt_bksp";
     exportConfiguration = true;
