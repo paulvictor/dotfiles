@@ -220,7 +220,7 @@ rec {
 #      Type = "simple";
 #    };
 #  };
-  systemd.user.services.XmodMap = {
+  systemd.user.services.xmodmap = {
     Unit = {
       Description = "Loads the XModMap Keymap";
       After = [ "graphical.target" ];
@@ -286,6 +286,8 @@ rec {
     hack-nerdfonts
     haskellPackages.niv
     hicolor_icon_theme
+    (iosevka-bin.override { variant = "aile"; })
+    (iosevka-bin.override { variant = "slab"; })
     i3exit
     # jailed-firefox
     jq
@@ -650,12 +652,12 @@ rec {
     Install = { WantedBy = [ "graphical-session.target" ]; };
 
     Service = {
-      Environment="PATH=/run/wrappers/bin";
+      Environment="PATH=/run/wrappers/bin:${coreutils}/bin";
       ExecStart =
         lib.concatStringsSep " "
           ([ "${pkgs.xss-lock}/bin/xss-lock" "-s \${XDG_SESSION_ID}" ]
            ++ [ "--notifier" "${libnotify}/bin/notify-send" ]
-           ++ [ "-- ${i3exit}bin/i3exit lock" ]);
+           ++ [ "-- ${i3exit}/bin/i3exit lock" ]);
     };
   };
 
@@ -1161,9 +1163,9 @@ rec {
       # Pulse Audio controls
       "XF86Audio{Raise,Lower}Volume" = "pactl set-sink-volume @DEFAULT_SINK@ {+5%,-5%}"; #increase sound volume
       "XF86AudioMute" =  "pactl set-sink-mute  @DEFAULT_SINK@ toggle"; # mute sound
-      "XF86MicMute" =  "pulseaudio-ctl mute-input"; # mute mic
+      # "XF86MicMute" =  "pulseaudio-ctl mute-input"; # mute mic
       # Sreen brightness controls
-      "MonBrightness{Up,Down}" = "light -{A,U} 5";
+      "XF86MonBrightness{Up,Down}" = "light -{A,U} 5";
     };
   };
   services.xcape = {

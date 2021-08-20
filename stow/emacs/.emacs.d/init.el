@@ -1,4 +1,4 @@
-;;; config.el -*- lexical-binding: t; -*-
+;;; init.el -*- lexical-binding: t; -*-
 (require 'package)
 
 ;; optional. makes unpure packages archives unavailable
@@ -6,6 +6,7 @@
 
 (setq package-enable-at-startup nil)
 (package-initialize)
+(setq gc-cons-threshold (* 4 1024 1024))
 
 ; if nil, italics is universally disabled
 (setq w32-enable-italics t)
@@ -59,6 +60,39 @@
 
 ;Show matching parens
 (show-paren-mode)
+
+(use-package anzu)
+
+(use-package dired
+  :ensure nil
+  :commands (dired dired-jump)
+  :after (evil-collection)
+  :custom
+  ((dired-listing-switches "-agho --group-directories-first"))
+  :config
+  (evil-collection-define-key 'normal 'dired-mode-map
+    "h" 'dired-single-up-directory
+    "l" 'dired-single-buffer))
+
+(use-package dired-x
+  :ensure nil
+  :bind
+  (("C-x D" . dired-jump)))
+
+(use-package dired-single
+  :after (dired dired-jump)
+  :commands (dired dired-jump))
+
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))
+
+(use-package no-littering
+  :demand t
+  :custom
+  (no-littering-etc-directory
+   (expand-file-name "config/" user-emacs-directory))
+  (no-littering-var-directory
+   (expand-file-name "data/" user-emacs-directory)))
 
 (use-package use-package-chords
   :init
@@ -149,6 +183,11 @@
         ("C-l" . ivy-alt-done)
         ("C-j" . ivy-next-line)
         ("C-k" . ivy-previous-line)
+        ("C-<return>" . (lambda ()
+                           (interactive)
+                           (progn
+                            (ivy-call)
+                            (ivy-next-line))))
       :map ivy-switch-buffer-map
         ("C-k" . ivy-previous-line)
         ("C-j" . ivy-next-line)
@@ -173,13 +212,18 @@
      :map minibuffer-local-map
      ("C-r" . counsel-minibuffer-history)))
 
+(use-package all-the-icons-ivy
+  :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup))
+
 ;; Implement a custom function for middle of the word completion like here :
 ;; https://github.com/company-mode/company-mode/issues/340
 (use-package company
+  :after (evil-collection)
   :demand t
   :config
     (unless (eq 'company-dabbrev (car company-backends))
       (push 'company-dabbrev company-backends))
+    (push 'company-files company-backends)
     (company-prescient-mode 1)
     (company-tng-mode 1)
     (global-company-mode 1)
@@ -187,6 +231,7 @@
     ; ('tng' means 'tab and go')
     (company-tng-configure-default)
   :init
+    ;; Always have the ability to complete filenames
     (setq tab-always-indent 'complete)
     ; No delay in showing suggestions.
     (setq company-idle-delay 0)
@@ -194,16 +239,14 @@
     (company-idle-delay 0)
     (company-selection-wrap-around t)
     (company-require-match nil)
-    (company-dabbrev-other-buffers t)
+    (company-dabbrev-other-buffers 'all)
     (company-dabbrev-time-limit 0.2)
     (company-dabbrev-code-time-limit 0.2)
     (company-dabbrev-downcase nil)
     (company-dabbrev-char-regexp "\\(\\sw\\|\\s_\\|_\\|-\\)")
     (company-minimum-prefix-length 3)
   :bind
-    (;; :map company-mode-map
-      ;; ("<tab>" . company-complete)
-    :map company-active-map
+    (:map company-active-map
       ("TAB" . company-complete-common-or-cycle)
       ("<backtab>" . company-select-previous)
       ("RET" . nil)
@@ -228,14 +271,17 @@
   :after (company prescient))
 
 (use-package which-key
+  :demand t
  :custom
+  (which-key-show-docstrings t)
+  (which-key-show-prefix 'mode-line)
   (which-key-idle-delay 0.2)
   ;; max width of which-key frame: number of columns (an integer)
   (which-key-frame-max-width 60)
   ;; max height of which-key frame: number of lines (an integer)
   (which-key-frame-max-height 20)
  :config
-  (which-key-setup-side-window-right-bottom)
+  (which-key-setup-side-window-bottom)
   (which-key-mode 1))
 
 (use-package wgrep)
@@ -244,6 +290,41 @@
   :after (company company-prescient))
 
 (use-package origami)
+
+(use-package ess
+  :custom
+  (ess-use-company nil)
+  :config
+  (add-hook 'inferior-ess-mode-hook 'turn-off-evil-mode)
+
+  (add-hook 'ess-r-help-mode
+            #'(lambda ()
+                (evil-mode 1)))
+
+  (setq ess-ask-for-ess-directory nil)
+
+  (add-hook 'inferior-ess-r-mode-hook
+            (lambda ()
+              (local-set-key (kbd "C-j") 'comint-next-input)
+              (local-set-key (kbd "C-k") 'comint-previous-input)))
+
+  (setq display-buffer-alist
+        `(("^\\*R Dired"
+          (display-buffer-reuse-window display-buffer-in-side-window)
+          (side . right)
+          (slot . -1)
+          (window-width . 0.33)
+          (reusable-frames . nil))
+          ("^\\*R"
+          (display-buffer-reuse-window display-buffer-at-bottom)
+          (window-width . 0.5)
+          (reusable-frames . nil))
+          ("^\\*Help"
+          (display-buffer-reuse-window display-buffer-in-side-window)
+          (side . right)
+          (slot . 1)
+          (window-width . 0.33)
+          (reusable-frames . nil)))))
 
 (dolist (mode-hook '(emacs-lisp-mode-hook
                      nix-mode-hook
@@ -254,10 +335,6 @@
   (add-hook mode-hook
     #'(lambda ()
         (origami-mode 1))))
-
-(add-hook 'ess-r-help-mode
-          #'(lambda ()
-              (evil-mode 1)))
 
 (defun comment-dwim-line (&optional arg)
   "Replacement for the comment-dwim command.
@@ -324,6 +401,9 @@
   :after (perspective projectile counsel-projectile)
   :bind
     ([remap counsel-projectile-switch-project] . projectile-persp-switch-project))
+
+(use-package all-the-icons-ivy-rich
+  :init (all-the-icons-ivy-rich-mode 1))
 
 (use-package ivy-rich
   :init
@@ -425,8 +505,135 @@
         (define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)))
     (require 'slime-autoloads))
 
+(use-package ibuffer
+  :hook
+    (ibuffer-mode . hl-line-mode)
+  :custom
+  (ibuffer-movement-cycle nil)
+  (ibuffer-default-shrink-to-minimum-size nil)
+  (ibuffer-formats
+   '((mark modified read-only locked
+        " "
+        (name 40 40 :left :elide)
+        " "
+        (size 9 -1 :right)
+        " "
+        (mode 16 16 :left :elide)
+        " " filename-and-process)
+     (mark " "
+           (name 16 -1)
+           " " filename)))
+  (ibuffer-saved-filter-groups nil)
+  (ibuffer-old-time 24)
+  )
+
 (global-set-key (kbd "C-x b") 'ibuffer)
 (global-set-key (kbd "M-o") 'ace-window)
+
+(use-package org
+  :hook
+  (org-mode . (lambda ()
+                (org-indent-mode)
+                ;; (variable-pitch-mode 1)
+                (auto-fill-mode 0)
+;;                  Visual line mode messes up git gutter ;
+;;                 (visual-line-mode 1)
+                (setq evil-auto-indent nil)))
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (R . t)
+     (shell . t)
+     (lisp . t)))
+  (advice-add 'org-refile :after 'org-save-all-org-buffers)
+  (font-lock-add-keywords
+    'org-mode
+    '(("^ *\\([-]\\) "
+      (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+  (setq org-ellipsis " ▾"
+        org-hide-emphasis-markers t
+        org-src-fontify-natively t
+        org-fontify-quote-and-verse-blocks t
+        org-src-tab-acts-natively t
+        org-edit-src-content-indentation 2
+        org-hide-block-startup nil
+        org-src-preserve-indentation nil
+        org-startup-folded 'content
+        org-cycle-separator-lines 2)
+  (set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
+  (dolist (face '((org-level-1 . 1.3)
+                  (org-level-2 . 1.2)
+                  (org-level-3 . 1.1)
+                  (org-level-4 . 1.0)
+                  (org-level-5 . 0.9)
+                  (org-level-6 . 0.8)
+                  (org-level-7 . 0.9)
+                  (org-level-8 . 0.8)))
+    (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face)))
+  (setq org-agenda-start-with-log-mode t
+        org-log-done 'time
+        org-log-into-drawer t
+        org-refile-targets '(("Archive.org" :maxlevel . 1)))
+  (setq org-capture-templates
+    `(("t" "Tasks")
+      ("tt" "Task" entry (file+olp "~/org-files/tasks.org" "Inbox")
+           "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+      ("n" "Notes")
+      ("nn" "Notes" entry
+           (file+olp+datetree "~/org-files/notes.org")
+           "\n* %<%I:%M %p> - Notes : notes :\n\n%?\n\n"
+           :clock-in :clock-resume
+           :empty-lines 1)))
+  (setq org-agenda-files
+        '("~/org-files/tasks.org")))
+
+(use-package org-tempo
+  :config
+  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  )
+(use-package org-indent)
+
+(use-package org-superstar
+  :after org
+  :custom
+    (org-superstar-remove-leading-stars t)
+    (org-superstar-headline-bullets-list
+     '(
+       ;;; Large
+       "◉" "○" "●" "✸"
+       ;;; Small
+       "►" "•" "★" "▸"
+       ))
+  :init
+    (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+
+
+;; Ensure that anything that should be fixed-pitch in Org files appears that way
+(set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+(set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
+(set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+(set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+(set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+
+;; Messes up git gutter
+;; (use-package visual-fill-column
+;;   :custom
+;;   (fill-column 100)
+;;   :defer t
+;;   :hook
+;;   (prog-mode . (lambda ()
+;;                  (visual-line-mode 1)
+;;                  (visual-fill-column-mode 1)))
+;;   (org-mode . (lambda ()
+;;                 (setq visual-fill-column-width 110
+;;                       visual-fill-column-center-text t)
+;;                 (visual-fill-column-mode 1))))
 
 ;;;;(use-package key-chord
 ;;;;  :after evil
@@ -452,7 +659,6 @@
 (define-key evil-normal-state-map (kbd "SPC") 'evil-ex)
 (define-key evil-visual-state-map (kbd "SPC") 'evil-ex)
 (add-hook 'term-mode-hook 'turn-off-evil-mode)
-(add-hook 'inferior-ess-mode-hook 'turn-off-evil-mode)
 ; In term mode turn off all related to evil mode
 
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
@@ -496,7 +702,6 @@
 (setq explicit-shell-file-name "zsh")
 (setq term-prompt-regexp "^\*>")
 
-(setq ess-ask-for-ess-directory nil)
 (setq show-trailing-whitespace t)
 
 (global-set-key (kbd "M-h") 'windmove-left)
@@ -505,11 +710,6 @@
 (global-set-key (kbd "M-l") 'windmove-right)
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C-=") 'text-scale-decrease)
-
-(add-hook 'inferior-ess-r-mode-hook
-          (lambda ()
-            (local-set-key (kbd "C-j") 'comint-next-input)
-            (local-set-key (kbd "C-k") 'comint-previous-input)))
 
 (defun split-term-below ()
   "Split term below and switch to it"

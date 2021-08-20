@@ -9,14 +9,19 @@ let
         # ace-jump-mode
         ace-window
         all-the-icons
+        all-the-icons-ivy
+        all-the-icons-ivy-rich
+        all-the-icons-dired
+        all-the-icons-ibuffer
+        anzu
         avy
-        centaur-tabs
         company
         company-prescient
         counsel
         counsel-projectile
         dash
         dashboard
+        dired-single
         doom-modeline
         doom-themes
         # elscreen
@@ -47,6 +52,8 @@ let
         magit
         nix-mode
         nix-modeline
+        no-littering
+        org-superstar
         origami
         page-break-lines
         paredit
@@ -66,6 +73,7 @@ let
         use-package
         use-package-chords
         # vimish-fold # Need keybindings but is good
+        visual-fill-column
         vterm
         which-key
         wgrep
@@ -75,7 +83,7 @@ let
     [ (with epkgs.orgPackages; [ org ]) ]
     ++
     [ (with epkgs.elpaPackages; [ undo-tree ]) ]);
-  myemacs = runCommand "myemacs" { buildInputs = [ makeWrapper ripgrep fd R ]; } ''
+  myemacs = runCommand "myemacs" { buildInputs = [ makeWrapper ripgrep fd ]; } ''
     mkdir -pv $out/bin
     makeWrapper ${customizedEmacs}/bin/emacs $out/bin/emax \
       --prefix PATH : ${lib.makeBinPath [ ripgrep fd ]} \
