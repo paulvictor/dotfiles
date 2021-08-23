@@ -38,9 +38,6 @@
 ;; (setq savehist-file "~/git/.emacs.d/personal/emacs-history")
 (savehist-mode 1)
 
-;; enable eldoc for minibuffer evaluations use this snippet
-(add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
-
 (defun add-to-words-syntax (mode-hook chars)
   (seq-do
     #'(lambda (c)
@@ -54,6 +51,8 @@
 
 ;; enable paredit for minibuffer evaluations use this snippet
 ;; (add-hook 'eval-expression-minibuffer-setup-hook #'paredit-mode)
+;; enable eldoc for minibuffer evaluations use this snippet
+(add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
 
 ;; Change "yes or no" to "y or n"
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -319,7 +318,7 @@
           (display-buffer-reuse-window display-buffer-at-bottom)
           (window-width . 0.5)
           (reusable-frames . nil))
-          ("^\\*Help"
+          ("^\\*help[R]"
           (display-buffer-reuse-window display-buffer-in-side-window)
           (side . right)
           (slot . 1)
@@ -735,3 +734,5 @@
 (when
   (file-exists-p custom-file)
   (load-file custom-file))
+
+(setq enable-local-eval t)
