@@ -411,6 +411,12 @@
   :config
   (setq ivy-format-function #'ivy-format-function-line))
 
+(use-package guru-mode
+  :hook prog-mode)
+
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
 ;; (setq-default show-trailing-whitespace nil)
 ;; Do we need the following code then ?
 ;; (add-hook
@@ -421,9 +427,6 @@
   '(lambda ()
     (setq show-trailing-whitespace t)))
 (recentf-mode 1)
-(add-hook
-  'prog-mode-hook
-  'rainbow-delimiters-mode)
 (electric-indent-mode 1)
 
 (use-package evil-collection
@@ -469,16 +472,16 @@
   (set-variable 'expand-region-subword-enabled t))
 
 (use-package engine-mode
-  :demand t
+  :defer t
   :config
-  (engine-mode t)
-  (engine/set-keymap-prefix (kbd "C-c s"))
-  (defengine google "https://google.com/?q=%s"
-    :keybinding "s")
-  (defengine duckduckgo "https://duckduckgo.com/?q=%s"
-    :keybinding "d")
-  (defengine hoogle "https://www.haskell.org/hoogle/?hoogle=%s"
-    :keybinding "h"))
+    (engine-mode t)
+    (engine/set-keymap-prefix (kbd "C-c s"))
+    (defengine google "https://google.com/?q=%s"
+      :keybinding "s")
+    (defengine duckduckgo "https://duckduckgo.com/?q=%s"
+      :keybinding "d")
+    (defengine hoogle "https://www.haskell.org/hoogle/?hoogle=%s"
+      :keybinding "h"))
 
 (use-package avy
   :config
@@ -523,8 +526,7 @@
            (name 16 -1)
            " " filename)))
   (ibuffer-saved-filter-groups nil)
-  (ibuffer-old-time 24)
-  )
+  (ibuffer-old-time 24))
 
 (global-set-key (kbd "C-x b") 'ibuffer)
 (global-set-key (kbd "M-o") 'ace-window)

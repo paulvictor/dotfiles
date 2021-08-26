@@ -246,7 +246,6 @@ rec {
     autorandr
     axel
     bat
-    betterlockscreen
     bind
     bindfs
     brotab

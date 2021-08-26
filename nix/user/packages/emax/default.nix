@@ -39,6 +39,7 @@ let
         expand-region
         f
         git-gutter
+        guru-mode
         # fancy-dabbrev
         haskell-mode
         helpful
