@@ -41,6 +41,12 @@
   ;; (setq savehist-file "~/git/.emacs.d/personal/emacs-history")
   (savehist-mode 1)
 
+  (defun pvr/switch-to-previous-buffer ()
+    "Switch to previously open buffer.
+  Repeated invocations toggle between the two most recently open buffers."
+    (interactive)
+    (switch-to-buffer (other-buffer (current-buffer) 1)))
+
   (defun add-to-words-syntax (mode-hook chars)
     (seq-do
       #'(lambda (c)
@@ -137,10 +143,9 @@
       (setq evil-want-integration t)
       (setq evil-search-module 'evil-search)
     :config
-      (define-key evil-normal-state-map (kbd "SPC") 'evil-ex)
-      (define-key evil-visual-state-map (kbd "SPC") 'evil-ex)
-      (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-      (define-key evil-visual-state-map (kbd "C-g") 'evil-normal-state)
+      (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
+      (evil-define-key '(normal visual) 'global (kbd "SPC") 'evil-ex)
+      (evil-define-key '(insert visual) 'global (kbd "C-g") 'evil-normal-state)
       (evil-select-search-module 'evil-search-module 'evil-search)
       (evil-mode 1))
 
@@ -185,7 +190,6 @@
     :bind
       (("C-x /" . swiper-isearch)
       ("C-x *" . swiper-thing-at-point)
-      ("C-M-j" . counsel-switch-buffer)
       ("C-x 8" . swiper-all-thing-at-point)
         :map ivy-minibuffer-map
           ("<tab>" . ivy-alt-done)
@@ -376,30 +380,42 @@
   ;;         (display-line-numbers-mode 0)
           (setq show-trailing-whitespace nil)))))
 
+  (defun pvr/split-term ()
+    "Split term below and switch to it"
+    (interactive)
+    (progn
+      (split-window-sensibly (selected-window))
+      (other-window 1)
+      (projectile-run-vterm nil)))
+
   (use-package projectile
+    :demand t
     :config
       (projectile-mode 1)
-    :demand t
-    :chords
-      ((",." . projectile-find-file))
+    :bind-keymap
+      ("C-x p" . projectile-command-map)
     :bind
       ("C-x C-r" . projectile-recentf)
+      ("C-x t" . pvr/split-term)
     :init
       (when (file-directory-p "~/stuff")
         (setq projectile-project-search-path '("~/stuff"))))
+
+  ;; (global-set-key (kbd "C-x t") 'split-term-below)
 
   (use-package counsel-projectile
     :after projectile
     :custom
       (projectile-switch-project-action counsel-projectile-find-file)
+    :bind
+      ("C-M-j" . counsel-projectile-switch-to-buffer)
+      ("C-M-k" . counsel-projectile-find-file)
     :config
       (counsel-projectile-mode 1))
 
   (use-package perspective
     :demand t
     :after (ivy projectile)
-    :chords
-      (",," . persp-ivy-switch-buffer)
     :custom
       (persp-initial-frame-name "Main")
     :config
@@ -507,8 +523,6 @@
       ("C-:" . avy-goto-char-2)
       ("C-'" . avy-goto-line))
 
-  (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
-  (key-chord-define-global "``" 'aw-flip-window)
 
   (use-package slime
     :hook (lisp-mode . slime-mode)
@@ -543,6 +557,13 @@
 
   (global-set-key (kbd "C-x b") 'ibuffer)
   (global-set-key (kbd "M-o") 'ace-window)
+
+  (use-package ace-window
+  :init
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+  :config
+  (key-chord-define-global "``" 'aw-flip-window)
+  (key-chord-define-global "~`" #'(lambda () (aw-swap-window (previous-window)))))
 
   (use-package org
     :hook
@@ -655,7 +676,6 @@
   ;;;;    ;; Max time delay between two key presses to be considered a key chord
   ;;;;  :config)
 
-  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 
 
   (keyfreq-mode 1)
@@ -669,6 +689,7 @@
 
   ; kill current buffer instead of prompting
   (global-set-key (kbd "C-x k") 'kill-this-buffer)
+  (global-set-key (kbd "C-x K") 'kill-buffer-and-window)
 
   (add-hook 'term-mode-hook 'turn-off-evil-mode)
   ; In term mode turn off all related to evil mode
@@ -723,14 +744,6 @@
   (global-set-key (kbd "C-+") 'text-scale-increase)
   (global-set-key (kbd "C-=") 'text-scale-decrease)
 
-  (defun split-term-below ()
-    "Split term below and switch to it"
-    (interactive)
-    (split-window-below)
-    (projectile-run-vterm))
-  (global-set-key (kbd "C-x t") 'split-term-below)
-
-  (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
 
   ;; (setq lsp-keymap-prefix "C-c l")
   ;; (lsp-enable-which-key-integration t)
@@ -753,5 +766,5 @@
 #+end_src
 # Local Variables:
 # org-confirm-babel-evaluate: nil
-# eval: (add-hook 'after-save-hook (lambda () (when (y-or-n-p "Tangle?") (org-babel-tangle (buffer-file-name) (s-replace ".org" ".el" (buffer-file-name))))) nil t)
+# eval: (add-hook 'after-save-hook (lambda () (check-parens) (when (y-or-n-p "Tangle?") (org-babel-tangle (buffer-file-name) (s-replace ".org" ".el" (buffer-file-name))))) nil t)
 # End:
