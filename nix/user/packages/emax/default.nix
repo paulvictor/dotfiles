@@ -27,6 +27,7 @@ let
         # elscreen
         # elscreen-separate-buffer-list
         # eglot # Has some issue with project.el. Emacs 28 should fix this
+        elisp-slime-nav
         engine-mode
         envrc
         equake
@@ -38,17 +39,20 @@ let
         evil-org
         expand-region
         f
+        general
         git-gutter
         guru-mode
         # fancy-dabbrev
         haskell-mode
         helpful
+        hydra
         ivy
         ivy-prescient
         ivy-rich
         key-chord
         keyfreq
         linum-relative
+        lispyville
         lsp-mode
         magit
         nix-mode
@@ -78,6 +82,7 @@ let
         vterm
         which-key
         wgrep
+        zerodark-theme
       ])
     ]
     ++
