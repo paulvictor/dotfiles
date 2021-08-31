@@ -4,6 +4,9 @@
   ;;; init.el -*- lexical-binding: t; -*-
   (require 'package)
 
+  (use-package f)
+  (use-package s)
+
   ;; optional. makes unpure packages archives unavailable
   (setq package-archives nil)
 
@@ -50,8 +53,8 @@
   (defun add-to-words-syntax (mode-hook chars)
     (seq-do
       #'(lambda (c)
-	 (add-hook mode-hook
-	  #'(lambda () (modify-syntax-entry c "w"))))
+         (add-hook mode-hook
+          #'(lambda () (modify-syntax-entry c "w"))))
      chars))
 
   (add-to-words-syntax 'emacs-lisp-mode-hook "-_")
@@ -144,7 +147,6 @@
       (setq evil-search-module 'evil-search)
     :config
       (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
-  ;;     (evil-define-key '(normal visual) 'global (kbd "SPC") 'evil-ex)
       (evil-define-key '(insert visual) 'global (kbd "C-g") 'evil-normal-state)
       (evil-define-key 'normal 'global (kbd ", SPC") 'evil-ex-nohighlight)
       (evil-select-search-module 'evil-search-module 'evil-search)
@@ -198,13 +200,13 @@
       (ivy-mode 1)
     :custom
       (ivy-re-builders-alist
-	'((read-file-name-internal . ivy--regex-fuzzy)
-	  (read-file-name . ivy--regex-fuzzy)
-	  (swiper . ivy--regex-ignore-order)
-	  (counsel-M-x . ivy--regex-ignore-order)
-	  ;; (persp-ivy-switch-buffer . ivy--regex-fuzzy)
-	  ;; (find-file-in-project . ivy--regex-fuzzy)
-	  (t . ivy--regex-plus)))
+        '((read-file-name-internal . ivy--regex-fuzzy)
+          (read-file-name . ivy--regex-fuzzy)
+          (swiper . ivy--regex-ignore-order)
+          (counsel-M-x . ivy--regex-ignore-order)
+          ;; (persp-ivy-switch-buffer . ivy--regex-fuzzy)
+          ;; (find-file-in-project . ivy--regex-fuzzy)
+          (t . ivy--regex-plus)))
       (ivy-use-virtual-buffers t)
       (ivy-wrap t)
       (ivy-count-format "(%d/%d) ")
@@ -213,23 +215,23 @@
       (ivy-height 20)
     :bind
       (("C-x /" . swiper-isearch)
-      ("C-x *" . swiper-thing-at-point)
-      ("C-x 8" . swiper-all-thing-at-point)
-	:map ivy-minibuffer-map
-	  ("<tab>" . ivy-alt-done)
-	  ("C-l" . ivy-alt-done)
-	  ("C-j" . ivy-next-line)
-	  ("C-k" . ivy-previous-line)
-	  ("C-<return>" . (lambda ()
-			     (interactive)
-			     (progn
-			      (ivy-call)
-			      (ivy-next-line))))
-	:map ivy-switch-buffer-map
-	  ("C-k" . ivy-previous-line)
-	  ("C-j" . ivy-next-line)
-	  ("C-l" . ivy-done)
-	  ("C-d" . ivy-switch-buffer-kill)))
+       ("C-x *" . swiper-thing-at-point)
+       ("C-x 8" . swiper-all-thing-at-point)
+       :map ivy-minibuffer-map
+         ("<tab>" . ivy-alt-done)
+         ("C-l" . ivy-alt-done)
+         ("C-j" . ivy-next-line)
+         ("C-k" . ivy-previous-line)
+         ("C-<return>" . (lambda ()
+                             (interactive)
+                             (progn
+                               (ivy-call)
+                               (ivy-next-line))))
+       :map ivy-switch-buffer-map
+         ("C-k" . ivy-previous-line)
+         ("C-j" . ivy-next-line)
+         ("C-l" . ivy-done)
+         ("C-d" . ivy-switch-buffer-kill)))
 
   (use-package counsel
     :config
@@ -268,7 +270,7 @@
     :demand t
     :config
       (unless (eq 'company-dabbrev (car company-backends))
-	(push 'company-dabbrev company-backends))
+        (push 'company-dabbrev company-backends))
       (push 'company-files company-backends)
       (company-prescient-mode 1)
       (company-tng-mode 1)
@@ -293,11 +295,11 @@
       (company-minimum-prefix-length 3)
     :bind
       (:map company-active-map
-	("TAB" . company-complete-common-or-cycle)
-	("<backtab>" . company-select-previous)
-	("RET" . nil)
-	("C-j" . company-select-next-or-abort)
-	("C-k" . company-select-previous-or-abort)))
+        ("TAB" . company-complete-common-or-cycle)
+        ("<backtab>" . company-select-previous)
+        ("RET" . nil)
+        ("C-j" . company-select-next-or-abort)
+        ("C-k" . company-select-previous-or-abort)))
 
   (use-package prescient
     :demand t
@@ -333,6 +335,9 @@
   (use-package wgrep)
 
   (use-package magit
+    :custom
+      (evil-collection-magit-want-horizontal-movement t)
+      (evil-collection-magit-use-z-for-folds t)
     :after (company company-prescient))
 
   (use-package origami)
@@ -344,43 +349,42 @@
     (add-hook 'inferior-ess-mode-hook 'turn-off-evil-mode)
 
     (add-hook 'ess-r-help-mode
-	      #'(lambda ()
-		  (evil-mode 1)))
+              #'(lambda () (evil-mode 1)))
 
     (setq ess-ask-for-ess-directory nil)
 
     (add-hook 'inferior-ess-r-mode-hook
-	      (lambda ()
-		(local-set-key (kbd "C-j") 'comint-next-input)
-		(local-set-key (kbd "C-k") 'comint-previous-input)))
+              (lambda ()
+                (local-set-key (kbd "C-j") 'comint-next-input)
+                (local-set-key (kbd "C-k") 'comint-previous-input)))
 
     (setq display-buffer-alist
-	  `(("^\\*R Dired"
-	    (display-buffer-reuse-window display-buffer-in-side-window)
-	    (side . right)
-	    (slot . -1)
-	    (window-width . 0.33)
-	    (reusable-frames . nil))
-	    ("^\\*R"
-	    (display-buffer-reuse-window display-buffer-at-bottom)
-	    (window-width . 0.5)
-	    (reusable-frames . nil))
-	    ("^\\*help[R]"
-	    (display-buffer-reuse-window display-buffer-in-side-window)
-	    (side . right)
-	    (slot . 1)
-	    (window-width . 0.33)
-	    (reusable-frames . nil)))))
+          `(("^\\*R Dired"
+            (display-buffer-reuse-window display-buffer-in-side-window)
+            (side . right)
+            (slot . -1)
+            (window-width . 0.33)
+            (reusable-frames . nil))
+            ("^\\*R"
+            (display-buffer-reuse-window display-buffer-at-bottom)
+            (window-width . 0.5)
+            (reusable-frames . nil))
+            ("^\\*help[R]"
+            (display-buffer-reuse-window display-buffer-in-side-window)
+            (side . right)
+            (slot . 1)
+            (window-width . 0.33)
+            (reusable-frames . nil)))))
 
   (dolist (mode-hook '(emacs-lisp-mode-hook
-		       nix-mode-hook
-		       haskell-mode-hook
-		       ess-r-mode-hook
-		       shell-mode-hook
-		       eshell-mode-hook))
+                       nix-mode-hook
+                       haskell-mode-hook
+                       ess-r-mode-hook
+                       shell-mode-hook
+                       eshell-mode-hook))
     (add-hook mode-hook
       #'(lambda ()
-	  (origami-mode 1))))
+          (origami-mode 1))))
 
   (defun comment-dwim-line (&optional arg)
     "Replacement for the comment-dwim command.
@@ -391,11 +395,11 @@
       (interactive "*P")
       (comment-normalize-vars)
       (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
-	  (comment-or-uncomment-region (line-beginning-position) (line-end-position))
-	(comment-dwim arg))
+          (comment-or-uncomment-region (line-beginning-position) (line-end-position))
+        (comment-dwim arg))
       (next-line))
 
-  (global-set-key (kbd "M-;") 'comment-dwim-line)
+  (evil-define-key '(visual normal insert) 'global (kbd "M-;") 'comment-dwim-line)
 
   (add-hook 'before-save-hook
     (lambda ()
@@ -403,15 +407,15 @@
 
   ;; Sets up keybindings and stuff from default to ivy mode
   (dolist (mode-hook '(org-mode-hook
-		       vterm-mode-hook
-		       term-mode-hook
-		       shell-mode-hook
-		       eshell-mode-hook))
+                       vterm-mode-hook
+                       term-mode-hook
+                       shell-mode-hook
+                       eshell-mode-hook))
     (add-hook mode-hook
       (lambda ()
-	(progn
+        (progn
   ;;         (display-line-numbers-mode 0)
-	  (setq show-trailing-whitespace nil)))))
+          (setq show-trailing-whitespace nil)))))
 
   (defun pvr/split-term ()
     "Split term below and switch to it"
@@ -434,12 +438,14 @@
       ("C-x t" . pvr/split-term)
     :init
       (when (file-directory-p "~/stuff")
-	(setq projectile-project-search-path '("~/stuff"))))
+        (setq projectile-project-search-path '("~/stuff"))))
 
   ;; (global-set-key (kbd "C-x t") 'split-term-below)
 
   (use-package counsel-projectile
     :after projectile
+    :custom
+      (counsel-projectile-remove-current-buffer t)
     :bind
       ("C-M-j" . counsel-projectile-switch-to-buffer)
       ("C-M-k" . counsel-projectile-find-file)
@@ -513,8 +519,8 @@
       (dashboard-set-heading-icons t)
       (dashboard-set-file-icons t)
       (dashboard-items '((recents . 5)
-			(bookmarks . 5)
-			(projects . 5))))
+                        (bookmarks . 5)
+                        (projects . 5))))
 
   (use-package helpful
     :after counsel
@@ -537,19 +543,19 @@
       (engine-mode t)
       (engine/set-keymap-prefix (kbd "C-c s"))
       (defengine google "https://google.com/?q=%s"
-	:keybinding "s")
+        :keybinding "s")
       (defengine duckduckgo "https://duckduckgo.com/?q=%s"
-	:keybinding "d")
+        :keybinding "d")
       (defengine hoogle "https://www.haskell.org/hoogle/?hoogle=%s"
-	:keybinding "h"))
+        :keybinding "h"))
 
   (use-package avy
     :config
       (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
       (setq avy-styles-alist
-	    '((avy-goto-char-2 . post)
-	      (avy-goto-line   . pre)
-	      (avy-goto-char-timer . at-full)))
+            '((avy-goto-char-2 . post)
+              (avy-goto-line   . pre)
+              (avy-goto-char-timer . at-full)))
     :bind
       ("C-;" . avy-goto-char-timer)
       ("C-:" . avy-goto-char-2)
@@ -561,8 +567,8 @@
       (setq inferior-lisp-program "sbcl") ; TODO : Move to dir specific config
     :config
       (add-hook 'slime-load-hook
-	(lambda ()
-	  (define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)))
+        (lambda ()
+          (define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)))
       (require 'slime-autoloads))
 
   (use-package ibuffer
@@ -573,16 +579,16 @@
     (ibuffer-default-shrink-to-minimum-size nil)
     (ibuffer-formats
      '((mark modified read-only locked
-	  " "
-	  (name 40 40 :left :elide)
-	  " "
-	  (size 9 -1 :right)
-	  " "
-	  (mode 16 16 :left :elide)
-	  " " filename-and-process)
+          " "
+          (name 40 40 :left :elide)
+          " "
+          (size 9 -1 :right)
+          " "
+          (mode 16 16 :left :elide)
+          " " filename-and-process)
        (mark " "
-	     (name 16 -1)
-	     " " filename)))
+             (name 16 -1)
+             " " filename)))
     (ibuffer-saved-filter-groups nil)
     (ibuffer-old-time 24))
 
@@ -599,12 +605,12 @@
   (use-package org
     :hook
     (org-mode . (lambda ()
-		  (org-indent-mode)
-		  ;; (variable-pitch-mode 1)
-		  (auto-fill-mode 0)
+                  (org-indent-mode)
+                  ;; (variable-pitch-mode 1)
+                  (auto-fill-mode 0)
   ;;                  Visual line mode messes up git gutter ;
   ;;                 (visual-line-mode 1)
-		  (setq evil-auto-indent nil)))
+                  (setq evil-auto-indent nil)))
     :config
     (org-babel-do-load-languages
      'org-babel-load-languages
@@ -616,45 +622,65 @@
     (font-lock-add-keywords
       'org-mode
       '(("^ *\\([-]\\) "
-	(0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+        (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
     (setq org-ellipsis " ▾"
-	  org-hide-emphasis-markers t
-	  org-src-fontify-natively t
-	  org-fontify-quote-and-verse-blocks t
-	  org-src-tab-acts-natively t
-	  org-edit-src-content-indentation 2
-	  org-hide-block-startup nil
-	  org-src-preserve-indentation nil
-	  org-startup-folded 'content
-	  org-cycle-separator-lines 2)
+          org-hide-emphasis-markers t
+          org-src-fontify-natively t
+          org-fontify-quote-and-verse-blocks t
+          org-src-tab-acts-natively t
+          org-edit-src-content-indentation 2
+          org-hide-block-startup nil
+          org-src-preserve-indentation nil
+          org-startup-folded 'content
+          org-cycle-separator-lines 2)
     (set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
     (dolist (face '((org-level-1 . 1.3)
-		    (org-level-2 . 1.2)
-		    (org-level-3 . 1.1)
-		    (org-level-4 . 1.0)
-		    (org-level-5 . 0.9)
-		    (org-level-6 . 0.8)
-		    (org-level-7 . 0.9)
-		    (org-level-8 . 0.8)))
+                    (org-level-2 . 1.2)
+                    (org-level-3 . 1.1)
+                    (org-level-4 . 1.0)
+                    (org-level-5 . 0.9)
+                    (org-level-6 . 0.8)
+                    (org-level-7 . 0.9)
+                    (org-level-8 . 0.8)))
       (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face)))
     (setq org-agenda-start-with-log-mode t
-	  org-log-done 'time
-	  org-log-into-drawer t
-	  org-refile-targets '(("Archive.org" :maxlevel . 1)))
+          org-log-done 'time
+          org-log-into-drawer t
+          org-refile-targets '(("Archive.org" :maxlevel . 1)))
     (setq org-capture-templates
       `(("t" "Tasks")
-	("tt" "Task" entry (file+olp "~/org-files/tasks.org" "Inbox")
-	     "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
-	("n" "Notes")
-	("nn" "Notes" entry
-	     (file+olp+datetree "~/org-files/notes.org")
-	     "\n* %<%I:%M %p> - Notes : notes :\n\n%?\n\n"
-	     :clock-in :clock-resume
-	     :empty-lines 1)))
+        ("tt" "Task" entry (file+olp "~/org-files/tasks.org" "Inbox")
+             "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+        ("n" "Notes")
+        ("nn" "Notes" entry
+             (file+olp+datetree "~/org-files/notes.org")
+             "\n* %<%I:%M %p> - Notes : notes :\n\n%?\n\n"
+             :clock-in :clock-resume
+             :empty-lines 1)))
     (setq org-agenda-files
-	  '("~/org-files/tasks.org")))
+          '("~/org-files/tasks.org")))
 
   (use-package hydra)
+
+  (defhydra pvr/window-ops (:timeout 4)
+    "Move to windows"
+    ("h" (windmove-left) "Left")
+    ("j" (windmove-down) "Down")
+    ("k" (windmove-up) "Up")
+    ("l" (windmove-right) "Right")
+    ("+" (evil-window-increase-height) "Increase height")
+    ("-" (evil-window-decrease-height) "Decrease height")
+    ("<" (evil-window-decrease-width) "Decrease width")
+    (">" (evil-window-increase-width) "Increase width")
+    ("q" nil "Quit" :exit t))
+
+  (use-package zoom-window
+    :custom
+    (zoom-window-use-persp nil)
+    (zoom-window-mode-line-color "Blue"))
+
+  (use-package lispy)
+  (use-package lispyville)
 
   (use-package org-tempo
     :config
@@ -669,14 +695,13 @@
       (org-superstar-remove-leading-stars t)
       (org-superstar-headline-bullets-list
        '(
-	 ;;; Large
-	 "◉" "○" "●" "✸"
-	 ;;; Small
-	 "►" "•" "★" "▸"
-	 ))
+         ;;; Large
+         "◉" "○" "●" "✸"
+         ;;; Small
+         "►" "•" "★" "▸"
+         ))
     :init
       (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
-
 
   ;; Ensure that anything that should be fixed-pitch in Org files appears that way
   (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
@@ -726,8 +751,7 @@
 
   (setq show-trailing-whitespace t)
 
-  (global-set-key (kbd "C-+") 'text-scale-increase)
-  (global-set-key (kbd "C-=") 'text-scale-decrease)
+  (winner-mode 1)
 
   (pvr/space-keys-def
     :infix "w"
@@ -742,27 +766,27 @@
     ">" 'evil-window-increase-width
     "x" 'evil-window-delete
     "s" 'ace-swap-window
+    ";" 'pvr/window-ops/body
     "TAB" 'aw-flip-window
+    "z" 'zoom-window-zoom
+    "u" 'winner-undo
     "-" 'split-window-below
     "\\" 'split-window-vertically)
   ;; keep this as last as possible after all the minor modes
   (envrc-global-mode)
 
   (setf custom-file
-	(let*
-	    ((init-file-components (s-split "/" (file-truename user-init-file)))
-	     (custom-file-components (-drop-last 1 init-file-components))
-	     (custom-file (s-join "/" (-snoc custom-file-components "custom.el"))))
-	  custom-file))
+        (let*
+            ((init-file-components (s-split "/" (file-truename user-init-file)))
+             (custom-file-components (-drop-last 1 init-file-components))
+             (custom-file (s-join "/" (-snoc custom-file-components "custom.el"))))
+          custom-file))
   (when
     (file-exists-p custom-file)
     (load-file custom-file))
 
   ;; Risky, but I'm going to set it
   (setq enable-local-eval t)
-
-  (use-package f)
-
 
 #+end_src
 # Local Variables:

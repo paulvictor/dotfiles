@@ -39,6 +39,7 @@ let
         evil-org
         expand-region
         f
+        flycheck
         general
         git-gutter
         guru-mode
@@ -52,6 +53,7 @@ let
         key-chord
         keyfreq
         linum-relative
+        lispy
         lispyville
         lsp-mode
         magit
@@ -83,10 +85,13 @@ let
         which-key
         wgrep
         zerodark-theme
+        zoom-window
       ])
     ]
     ++
     [ (with epkgs.orgPackages; [ org ]) ]
+    ++
+    [ (with epkgs; [ nano-theme ]) ]
     ++
     [ (with epkgs.elpaPackages; [ undo-tree ]) ]);
   myemacs = runCommand "myemacs" { buildInputs = [ makeWrapper ripgrep fd ]; } ''
@@ -99,6 +104,7 @@ in
 {
   desktopApp = pkgs.makeDesktopItem {
     name = "Emacs";
+    comment = "Start hacking!";
     exec = "${myemacs}/bin/emax %F";
     icon = "${pkgs.emacs}/share/icons/hicolor/scalable/apps/emacs.ico";
     desktopName = "Emacs";
