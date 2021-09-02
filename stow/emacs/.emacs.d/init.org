@@ -161,19 +161,12 @@
       ";" 'evil-ex
       ":" 'evil-repeat-find-char)
     (general-create-definer pvr/space-keys-def
-      :keymaps '(normal insert emacs)
+      :keymaps '(normal visual insert emacs)
       :prefix "SPC"
       :non-normal-prefix "C-SPC"))
 
   (pvr/space-keys-def
     "SPC" 'evil-ex) ; Till I get over SPC-W
-
-  (pvr/space-keys-def
-    :infix "g"
-    ""  '(nil :wk "git")
-    "s" 'magit-status
-    "b" 'magit-branch
-    "l" 'magit-log-head)
 
   (use-package doom-modeline
     :custom
@@ -436,37 +429,26 @@
     :bind
       ("C-x C-r" . projectile-recentf)
       ("C-x t" . pvr/split-term)
+      ("C-M-j" . counsel-projectile-switch-to-buffer)
+      ("C-M-k" . counsel-projectile-find-file)
     :init
       (when (file-directory-p "~/stuff")
         (setq projectile-project-search-path '("~/stuff"))))
 
-  ;; (global-set-key (kbd "C-x t") 'split-term-below)
-
-  (use-package counsel-projectile
-    :after projectile
-    :custom
-      (counsel-projectile-remove-current-buffer t)
-    :bind
-      ("C-M-j" . counsel-projectile-switch-to-buffer)
-      ("C-M-k" . counsel-projectile-find-file)
-    :config
-      (counsel-projectile-mode 1))
-
   (use-package perspective
     :demand t
-    :after (ivy projectile)
     :custom
       (persp-initial-frame-name "Main")
+    :bind
+      ([remap projectile-switch-project] . projectile-persp-switch-project)
     :config
-    ;; Running `persp-mode' multiple times resets the perspective list...
-    (unless (equal persp-mode t)
-      (persp-mode)))
+      (persp-mode 1))
 
   (use-package persp-projectile
-    :demand t
-    :after (perspective projectile counsel-projectile)
+    :after (perspective projectile)
     :bind
-      ([remap counsel-projectile-switch-project] . projectile-persp-switch-project))
+      ;([remap counsel-projectile-switch-project] . projectile-persp-switch-project)
+      ([remap projectile-switch-project] . projectile-persp-switch-project))
 
   (use-package all-the-icons-ivy-rich
     :init (all-the-icons-ivy-rich-mode 1))
@@ -555,11 +537,7 @@
       (setq avy-styles-alist
             '((avy-goto-char-2 . post)
               (avy-goto-line   . pre)
-              (avy-goto-char-timer . at-full)))
-    :bind
-      ("C-;" . avy-goto-char-timer)
-      ("C-:" . avy-goto-char-2)
-      ("C-'" . avy-goto-line))
+              (avy-goto-char-timer . at-full))))
 
   (use-package slime
     :hook (lisp-mode . slime-mode)
@@ -596,11 +574,10 @@
   (global-set-key (kbd "M-o") 'ace-window)
 
   (use-package ace-window
-  :init
-  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-  :config
-  (key-chord-define-global "``" 'aw-flip-window)
-  (key-chord-define-global "~`" #'(lambda () (aw-swap-window (previous-window)))))
+    :init
+      (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+    :config
+      (key-chord-define-global "``" 'aw-flip-window))
 
   (use-package org
     :hook
@@ -754,6 +731,16 @@
   (winner-mode 1)
 
   (pvr/space-keys-def
+    :infix ";"
+    ""  '(nil :wk "Avy Goto")
+    ";" 'avy-goto-char-timer
+    "'" 'avy-goto-char-2
+    "w" 'avy-goto-word-0
+    "W" 'avy-goto-word-1
+    "l" 'avy-goto-line)
+
+
+  (pvr/space-keys-def
     :infix "w"
     ""  '(nil :wk "Windows")
     "h" 'windmove-left
@@ -772,9 +759,6 @@
     "u" 'winner-undo
     "-" 'split-window-below
     "\\" 'split-window-vertically)
-  ;; keep this as last as possible after all the minor modes
-  (envrc-global-mode)
-
   (setf custom-file
         (let*
             ((init-file-components (s-split "/" (file-truename user-init-file)))
@@ -784,6 +768,10 @@
   (when
     (file-exists-p custom-file)
     (load-file custom-file))
+
+  ;; keep this as last as possible after all the minor modes
+  (envrc-global-mode)
+
 
   ;; Risky, but I'm going to set it
   (setq enable-local-eval t)
