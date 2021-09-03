@@ -1,18 +1,40 @@
 #+TITLE: Emacs configuration
 
+* Startup performance
 #+begin_src emacs-lisp
   ;;; init.el -*- lexical-binding: t; -*-
-  (require 'package)
+  (setq gc-cons-threshold (* 20 1024 1024))
+  ;; Profile emacs startup
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (message "*** Emacs loaded in %s with %d garbage collections."
+                       (format "%.2f seconds"
+                               (float-time
+                                (time-subtract after-init-time before-init-time)))
+                       gcs-done)))
+#+end_src
+* Package Settings
+#+begin_src emacs-lisp
 
-  (use-package f)
-  (use-package s)
+  (require 'package)
 
   ;; optional. makes unpure packages archives unavailable
   (setq package-archives nil)
 
   (setq package-enable-at-startup nil)
   (package-initialize)
-  (setq gc-cons-threshold (* 4 1024 1024))
+
+  (use-package use-package-chords
+    :init
+    (setq key-chord-two-keys-delay 0.2) ; default 0.1
+    :ensure t
+    :config (key-chord-mode 1))
+
+#+end_src
+* Visual stuff
+#+begin_src emacs-lisp
+
+  (setq inhibit-startup-screen t)
 
   ; if nil, italics is universally disabled
   (setq w32-enable-italics t)
@@ -29,26 +51,112 @@
   (set-fringe-mode 10)
   (scroll-bar-mode -1)
   (setq visual-bell t)
+  (setq visible-bell t)
+  (setq whitespace-style '(trailing tabs))
+  (column-number-mode)
+  (setq show-trailing-whitespace t)
+  (add-hook 'before-save-hook
+    (lambda ()
+      (whitespace-cleanup)))
+
+  ;Show matching parens
+  (show-paren-mode)
+
+  (defun init-dashboard ()
+    (progn
+      (switch-to-buffer "*dashboard*")
+      (goto-char (point-min))
+      (redisplay)))
+
+  (use-package doom-themes
+    :init
+    (setq
+      doom-themes-enable-bold t    ; if nil, bold is universally disabled
+      doom-themes-enable-italic t)
+    :config
+    (load-theme 'doom-tomorrow-night t))
+
+  (use-package doom-modeline
+    :custom
+      (doom-modeline-window-width-limit fill-column)
+      (doom-modeline-project-detection 'projectile)
+      (doom-modeline-buffer-file-name-style 'truncate-with-project)
+      (doom-modeline-icon (display-graphic-p))
+      (doom-modeline-buffer-encoding t)
+      (doom-modeline-modal-icon t)
+      (doom-modeline-major-mode-icon t)
+      (doom-modeline-major-mode-color-icon t)
+      (doom-modeline-buffer-state-icon t)
+      (doom-modeline-buffer-modification-icon t)
+      (doom-modeline-persp-name t)
+      (doom-modeline-display-default-persp-name nil)
+      (doom-modeline-persp-icon t)
+      ;; (doom-modeline-lsp t)
+      (doom-modeline-modal-icon t)
+    :config
+    (doom-modeline-mode 1))
+
+  (use-package dashboard
+    :after projectile
+    :config
+      (dashboard-setup-startup-hook)
+      (init-dashboard)
+    :custom
+      (dashboard-projects-backend 'projectile)
+      (initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+      (dashboard-startup-banner 'logo)
+      (dashboard-set-heading-icons t)
+      (dashboard-set-file-icons t)
+      (dashboard-items '((recents . 5)
+                        (bookmarks . 5)
+                        (projects . 5))))
+
+#+end_src
+* Base configurations
+#+begin_src emacs-lisp
+
   (setq auto-save-timeout nil)
   (setq make-backup-files nil)
   (setq tab-width 2)
   (setq bookmark-save-flag 1)
   (setq bookmark-use-annotations t)
   (setq bookmark-size-search 100)
-  (setq whitespace-style '(trailing tabs))
-  (column-number-mode)
   ;; (global-display-line-numbers-mode t)
-  (setq inhibit-startup-screen t)
   (setq comment-style "aligned")
   ;; TODO : Save it in a proper sync'able place
   ;; (setq savehist-file "~/git/.emacs.d/personal/emacs-history")
   (savehist-mode 1)
+  ;; Change "yes or no" to "y or n"
+  (fset 'yes-or-no-p 'y-or-n-p)
 
-  (defun pvr/switch-to-previous-buffer ()
-    "Switch to previously open buffer.
-  Repeated invocations toggle between the two most recently open buffers."
-    (interactive)
-    (switch-to-buffer (other-buffer (current-buffer) 1)))
+#+end_src
+* Generic Helpers
+#+begin_src emacs-lisp
+
+  (use-package f)
+  (use-package s)
+  (use-package dash)
+
+  ;; enable eldoc for minibuffer evaluations use this snippet
+  (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
+
+#+end_src
+* No Littering
+#+begin_src emacs-lisp
+
+  (setq auto-save-default nil)
+
+  (use-package no-littering
+    :demand t
+    :custom
+    (no-littering-etc-directory
+     (expand-file-name "config/" user-emacs-directory))
+    (no-littering-var-directory
+     (expand-file-name "data/" user-emacs-directory)))
+
+#+end_src
+* Syntax helpers
+#+begin_src emacs-lisp
 
   (defun add-to-words-syntax (mode-hook chars)
     (seq-do
@@ -63,72 +171,9 @@
   (add-to-words-syntax 'org-mode-hook "_-")
   (add-to-words-syntax 'ess-r-mode-hook "_")
 
-  ;; enable paredit for minibuffer evaluations use this snippet
-  ;; (add-hook 'eval-expression-minibuffer-setup-hook #'paredit-mode)
-  ;; enable eldoc for minibuffer evaluations use this snippet
-  (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
-
-  ;; Change "yes or no" to "y or n"
-  (fset 'yes-or-no-p 'y-or-n-p)
-
-  ;Show matching parens
-  (show-paren-mode)
-
-  (use-package anzu)
-
-  (use-package dired
-    :ensure nil
-    :commands (dired dired-jump)
-    :after (evil-collection)
-    :custom
-    ((dired-listing-switches "-agho --group-directories-first"))
-    :config
-    (evil-collection-define-key 'normal 'dired-mode-map
-      "h" 'dired-single-up-directory
-      "l" 'dired-single-buffer))
-
-  (use-package dired-x
-    :ensure nil
-    :bind
-    (("C-x D" . dired-jump)))
-
-  (use-package dired-single
-    :after (dired dired-jump)
-    :commands (dired dired-jump))
-
-  (use-package all-the-icons-dired
-    :hook (dired-mode . all-the-icons-dired-mode))
-
-  (use-package no-littering
-    :demand t
-    :custom
-    (no-littering-etc-directory
-     (expand-file-name "config/" user-emacs-directory))
-    (no-littering-var-directory
-     (expand-file-name "data/" user-emacs-directory)))
-
-  (use-package use-package-chords
-    :init
-    (setq key-chord-two-keys-delay 0.2) ; default 0.1
-    :ensure t
-    :config (key-chord-mode 1))
-
-  (use-package git-gutter
-    :config
-      (global-git-gutter-mode t))
-
-  (use-package doom-themes
-    :init
-    (setq
-      doom-themes-enable-bold t    ; if nil, bold is universally disabled
-      doom-themes-enable-italic t)
-    :config
-    (load-theme 'doom-zenburn t))
-
-  (use-package undo-tree
-    :init
-    :config
-      (global-undo-tree-mode 1))
+#+end_src
+* Evil
+#+begin_src emacs-lisp
 
   (use-package evil
     :after (undo-tree)
@@ -153,7 +198,7 @@
       (evil-mode 1))
 
   (use-package general
-    :after evil
+    ; :after evil
     :config
     (general-evil-setup t)
     (general-define-key
@@ -165,389 +210,38 @@
       :prefix "SPC"
       :non-normal-prefix "C-SPC"))
 
-  (pvr/space-keys-def
-    "SPC" 'evil-ex) ; Till I get over SPC-W
+#+end_src
+* Directories and buffers
+#+begin_src emacs-lisp
 
-  (use-package doom-modeline
-    :custom
-      (doom-modeline-window-width-limit fill-column)
-      (doom-modeline-project-detection 'projectile)
-      (doom-modeline-buffer-file-name-style 'truncate-with-project)
-      (doom-modeline-icon (display-graphic-p))
-      (doom-modeline-buffer-encoding t)
-      (doom-modeline-modal-icon t)
-      (doom-modeline-major-mode-icon t)
-      (doom-modeline-major-mode-color-icon t)
-      (doom-modeline-buffer-state-icon t)
-      (doom-modeline-buffer-modification-icon t)
-      (doom-modeline-persp-name t)
-      (doom-modeline-display-default-persp-name nil)
-      (doom-modeline-persp-icon t)
-      ;; (doom-modeline-lsp t)
-      (doom-modeline-modal-icon t)
-    :config
-    (doom-modeline-mode 1))
-
-  (use-package ivy
-    :config
-      (ivy-mode 1)
-    :custom
-      (ivy-re-builders-alist
-        '((read-file-name-internal . ivy--regex-fuzzy)
-          (read-file-name . ivy--regex-fuzzy)
-          (swiper . ivy--regex-ignore-order)
-          (counsel-M-x . ivy--regex-ignore-order)
-          ;; (persp-ivy-switch-buffer . ivy--regex-fuzzy)
-          ;; (find-file-in-project . ivy--regex-fuzzy)
-          (t . ivy--regex-plus)))
-      (ivy-use-virtual-buffers t)
-      (ivy-wrap t)
-      (ivy-count-format "(%d/%d) ")
-      (enable-recursive-minibuffers t)
-      (ivy-initial-inputs-alist nil)
-      (ivy-height 20)
-    :bind
-      (("C-x /" . swiper-isearch)
-       ("C-x *" . swiper-thing-at-point)
-       ("C-x 8" . swiper-all-thing-at-point)
-       :map ivy-minibuffer-map
-         ("<tab>" . ivy-alt-done)
-         ("C-l" . ivy-alt-done)
-         ("C-j" . ivy-next-line)
-         ("C-k" . ivy-previous-line)
-         ("C-<return>" . (lambda ()
-                             (interactive)
-                             (progn
-                               (ivy-call)
-                               (ivy-next-line))))
-       :map ivy-switch-buffer-map
-         ("C-k" . ivy-previous-line)
-         ("C-j" . ivy-next-line)
-         ("C-l" . ivy-done)
-         ("C-d" . ivy-switch-buffer-kill)))
-
-  (use-package counsel
-    :config
-      (global-set-key [remap describe-function] 'counsel-describe-function)
-      (global-set-key [remap describe-variable] 'counsel-describe-variable)
-      (counsel-mode 1)
-    :bind
-      (("M-x" . counsel-M-x)
-       ("C-x '" . counsel-recentf)
-       ("M-y" . counsel-yank-pop)
-  ;;      ("<f1> f" . counsel-describe-function)
-  ;;      ("<f1> v" . counsel-describe-variable)
-  ;;      ("<f1> l" . counsel-find-library)
-  ;;      ("<f1> b" . counsel-descbinds)
-       ("C-x C-f" . counsel-find-file)
-       ("C-/" . counsel-rg)
-       :map minibuffer-local-map
-       ("C-r" . counsel-minibuffer-history)))
-
-  (pvr/space-keys-def
-    :infix "h"
-    ""  '(nil :wk "Help")
-    "f" 'counsel-describe-function
-    "p" 'helpful-at-point
-    "b" 'counsel-descbinds
-    "v" 'counsel-describe-variable
-    "l" 'counsel-find-library)
-
-  (use-package all-the-icons-ivy
-    :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup))
-
-  ;; Implement a custom function for middle of the word completion like here :
-  ;; https://github.com/company-mode/company-mode/issues/340
-  (use-package company
+  (use-package dired
+    :ensure nil
+    :commands (dired dired-jump)
     :after (evil-collection)
-    :demand t
-    :config
-      (unless (eq 'company-dabbrev (car company-backends))
-        (push 'company-dabbrev company-backends))
-      (push 'company-files company-backends)
-      (company-prescient-mode 1)
-      (company-tng-mode 1)
-      (global-company-mode 1)
-      ; Use tab key to cycle through suggestions.
-      ; ('tng' means 'tab and go')
-      (company-tng-configure-default)
-    :init
-      ;; Always have the ability to complete filenames
-      (setq tab-always-indent 'complete)
-      ; No delay in showing suggestions.
-      (setq company-idle-delay 0)
     :custom
-      (company-idle-delay 0)
-      (company-selection-wrap-around t)
-      (company-require-match nil)
-      (company-dabbrev-other-buffers 'all)
-      (company-dabbrev-time-limit 0.2)
-      (company-dabbrev-code-time-limit 0.2)
-      (company-dabbrev-downcase nil)
-      (company-dabbrev-char-regexp "\\(\\sw\\|\\s_\\|_\\|-\\)")
-      (company-minimum-prefix-length 3)
+    ((dired-listing-switches "-agho --group-directories-first"))
+    :config
+    (evil-collection-define-key 'normal 'dired-mode-map
+      "h" 'dired-single-up-directory
+      "l" 'dired-single-buffer))
+
+  (use-package dired-x
+    :ensure nil
     :bind
-      (:map company-active-map
-        ("TAB" . company-complete-common-or-cycle)
-        ("<backtab>" . company-select-previous)
-        ("RET" . nil)
-        ("C-j" . company-select-next-or-abort)
-        ("C-k" . company-select-previous-or-abort)))
+    (("C-x D" . dired-jump)))
 
-  (use-package prescient
-    :demand t
-    :after (company)
-    :commands prescient-persist-mode
-    :init
-      (setq prescient-history-length 30))
+  (use-package dired-single
+    :after (dired dired-jump)
+    :commands (dired dired-jump))
 
-  (use-package ivy-prescient
-    :demand t
-    :after (ivy counsel)
-    :config
-      (ivy-prescient-mode 1))
+  (use-package all-the-icons-dired
+    :hook (dired-mode . all-the-icons-dired-mode))
 
-  (use-package company-prescient
-    :demand t
-    :after (company prescient))
-
-  (use-package which-key
-    :demand t
-   :custom
-    (which-key-show-docstrings t)
-    (which-key-show-prefix 'mode-line)
-    (which-key-idle-delay 0.2)
-    ;; max width of which-key frame: number of columns (an integer)
-    (which-key-frame-max-width 60)
-    ;; max height of which-key frame: number of lines (an integer)
-    (which-key-frame-max-height 20)
-   :config
-    (which-key-setup-side-window-bottom)
-    (which-key-mode 1))
-
-  (use-package wgrep)
-
-  (use-package magit
-    :custom
-      (evil-collection-magit-want-horizontal-movement t)
-      (evil-collection-magit-use-z-for-folds t)
-    :after (company company-prescient))
-
-  (use-package origami)
-
-  (use-package ess
-    :custom
-    (ess-use-company nil)
-    :config
-    (add-hook 'inferior-ess-mode-hook 'turn-off-evil-mode)
-
-    (add-hook 'ess-r-help-mode
-              #'(lambda () (evil-mode 1)))
-
-    (setq ess-ask-for-ess-directory nil)
-
-    (add-hook 'inferior-ess-r-mode-hook
-              (lambda ()
-                (local-set-key (kbd "C-j") 'comint-next-input)
-                (local-set-key (kbd "C-k") 'comint-previous-input)))
-
-    (setq display-buffer-alist
-          `(("^\\*R Dired"
-            (display-buffer-reuse-window display-buffer-in-side-window)
-            (side . right)
-            (slot . -1)
-            (window-width . 0.33)
-            (reusable-frames . nil))
-            ("^\\*R"
-            (display-buffer-reuse-window display-buffer-at-bottom)
-            (window-width . 0.5)
-            (reusable-frames . nil))
-            ("^\\*help[R]"
-            (display-buffer-reuse-window display-buffer-in-side-window)
-            (side . right)
-            (slot . 1)
-            (window-width . 0.33)
-            (reusable-frames . nil)))))
-
-  (dolist (mode-hook '(emacs-lisp-mode-hook
-                       nix-mode-hook
-                       haskell-mode-hook
-                       ess-r-mode-hook
-                       shell-mode-hook
-                       eshell-mode-hook))
-    (add-hook mode-hook
-      #'(lambda ()
-          (origami-mode 1))))
-
-  (defun comment-dwim-line (&optional arg)
-    "Replacement for the comment-dwim command.
-    If no region is selected and current line is not blank and we are not at the end of the line,
-    then comment current line.
-    Replaces default behaviour of comment-dwim, when it inserts comment at the end of the line.
-    Also move to the next line, since that's the most frequent action after"
-      (interactive "*P")
-      (comment-normalize-vars)
-      (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
-          (comment-or-uncomment-region (line-beginning-position) (line-end-position))
-        (comment-dwim arg))
-      (next-line))
-
-  (evil-define-key '(visual normal insert) 'global (kbd "M-;") 'comment-dwim-line)
-
-  (add-hook 'before-save-hook
-    (lambda ()
-      (whitespace-cleanup)))
-
-  ;; Sets up keybindings and stuff from default to ivy mode
-  (dolist (mode-hook '(org-mode-hook
-                       vterm-mode-hook
-                       term-mode-hook
-                       shell-mode-hook
-                       eshell-mode-hook))
-    (add-hook mode-hook
-      (lambda ()
-        (progn
-  ;;         (display-line-numbers-mode 0)
-          (setq show-trailing-whitespace nil)))))
-
-  (defun pvr/split-term ()
-    "Split term below and switch to it"
+  (defun pvr/switch-to-previous-buffer ()
+    "Switch to previously open buffer.
+  Repeated invocations toggle between the two most recently open buffers."
     (interactive)
-    (progn
-      (split-window-sensibly (selected-window))
-      (other-window 1)
-      (projectile-run-vterm nil)))
-
-  (use-package projectile
-    :demand t
-    :custom
-      (projectile-switch-project-action #'counsel-projectile-find-file)
-    :config
-      (projectile-mode 1)
-    :bind-keymap
-      ("C-x p" . projectile-command-map)
-    :bind
-      ("C-x C-r" . projectile-recentf)
-      ("C-x t" . pvr/split-term)
-      ("C-M-j" . counsel-projectile-switch-to-buffer)
-      ("C-M-k" . counsel-projectile-find-file)
-    :init
-      (when (file-directory-p "~/stuff")
-        (setq projectile-project-search-path '("~/stuff"))))
-
-  (use-package perspective
-    :demand t
-    :custom
-      (persp-initial-frame-name "Main")
-    :bind
-      ([remap projectile-switch-project] . projectile-persp-switch-project)
-    :config
-      (persp-mode 1))
-
-  (use-package persp-projectile
-    :after (perspective projectile)
-    :bind
-      ;([remap counsel-projectile-switch-project] . projectile-persp-switch-project)
-      ([remap projectile-switch-project] . projectile-persp-switch-project))
-
-  (use-package all-the-icons-ivy-rich
-    :init (all-the-icons-ivy-rich-mode 1))
-
-  (use-package ivy-rich
-    :init
-    (ivy-rich-mode 1)
-    :after counsel
-    :config
-    (setq ivy-format-function #'ivy-format-function-line))
-
-  (use-package guru-mode
-    :hook prog-mode)
-
-  (use-package rainbow-delimiters
-    :hook (prog-mode . rainbow-delimiters-mode))
-
-  ;; (setq-default show-trailing-whitespace nil)
-  ;; Do we need the following code then ?
-  ;; (add-hook
-  ;;   'prog-mode-hook
-  ;;   'display-line-numbers-mode)
-  (add-hook
-    'prog-mode-hook
-    '(lambda ()
-      (setq show-trailing-whitespace t)))
-  (recentf-mode 1)
-  (electric-indent-mode 1)
-
-  (use-package evil-collection
-    :after evil
-    :config
-    (evil-collection-init))
-
-  (defun init-dashboard ()
-    (progn
-      (switch-to-buffer "*dashboard*")
-      (goto-char (point-min))
-      (redisplay)))
-
-  (use-package dashboard
-    :after projectile
-    :config
-      (dashboard-setup-startup-hook)
-      (init-dashboard)
-    :custom
-      (dashboard-projects-backend 'projectile)
-      (initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
-      (dashboard-startup-banner 'logo)
-      (dashboard-set-heading-icons t)
-      (dashboard-set-file-icons t)
-      (dashboard-items '((recents . 5)
-                        (bookmarks . 5)
-                        (projects . 5))))
-
-  (use-package helpful
-    :after counsel
-    :custom
-      (counsel-describe-function-function #'helpful-callable)
-      (counsel-describe-variable-function #'helpful-variable)
-    :bind
-      ([remap describe-symbol] . helpful-symbol)
-      ([remap describe-command] . helpful-command)
-      ([remap describe-key] . helpful-key))
-
-  (use-package expand-region
-    :config
-    (global-set-key (kbd "C-j") 'er/expand-region)
-    (set-variable 'expand-region-subword-enabled t))
-
-  (use-package engine-mode
-    :defer t
-    :config
-      (engine-mode t)
-      (engine/set-keymap-prefix (kbd "C-c s"))
-      (defengine google "https://google.com/?q=%s"
-        :keybinding "s")
-      (defengine duckduckgo "https://duckduckgo.com/?q=%s"
-        :keybinding "d")
-      (defengine hoogle "https://www.haskell.org/hoogle/?hoogle=%s"
-        :keybinding "h"))
-
-  (use-package avy
-    :config
-      (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-      (setq avy-styles-alist
-            '((avy-goto-char-2 . post)
-              (avy-goto-line   . pre)
-              (avy-goto-char-timer . at-full))))
-
-  (use-package slime
-    :hook (lisp-mode . slime-mode)
-    :init
-      (setq inferior-lisp-program "sbcl") ; TODO : Move to dir specific config
-    :config
-      (add-hook 'slime-load-hook
-        (lambda ()
-          (define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)))
-      (require 'slime-autoloads))
+    (switch-to-buffer (other-buffer (current-buffer) 1)))
 
   (use-package ibuffer
     :hook
@@ -571,13 +265,31 @@
     (ibuffer-old-time 24))
 
   (global-set-key (kbd "C-x b") 'ibuffer)
-  (global-set-key (kbd "M-o") 'ace-window)
 
-  (use-package ace-window
-    :init
-      (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-    :config
-      (key-chord-define-global "``" 'aw-flip-window))
+  ; kill current buffer instead of prompting
+  (global-set-key (kbd "C-x K") 'kill-this-buffer)
+  (global-set-key (kbd "C-x k") 'kill-buffer-and-window)
+
+#+end_src
+* Terminal settings
+#+begin_src emacs-lisp
+
+  (add-hook 'term-mode-hook 'turn-off-evil-mode)
+  (setq explicit-shell-file-name "zsh")
+  (setq term-prompt-regexp "^\*>")
+
+  (use-package vterm :defer t)
+  (defun pvr/split-term ()
+    "Split term below and switch to it"
+    (interactive)
+    (progn
+      (split-window-sensibly (selected-window))
+      (other-window 1)
+      (projectile-run-vterm nil)))
+
+#+end_src
+* Org settings
+#+begin_src emacs-lisp
 
   (use-package org
     :hook
@@ -637,28 +349,6 @@
     (setq org-agenda-files
           '("~/org-files/tasks.org")))
 
-  (use-package hydra)
-
-  (defhydra pvr/window-ops (:timeout 4)
-    "Move to windows"
-    ("h" (windmove-left) "Left")
-    ("j" (windmove-down) "Down")
-    ("k" (windmove-up) "Up")
-    ("l" (windmove-right) "Right")
-    ("+" (evil-window-increase-height) "Increase height")
-    ("-" (evil-window-decrease-height) "Decrease height")
-    ("<" (evil-window-decrease-width) "Decrease width")
-    (">" (evil-window-increase-width) "Increase width")
-    ("q" nil "Quit" :exit t))
-
-  (use-package zoom-window
-    :custom
-    (zoom-window-use-persp nil)
-    (zoom-window-mode-line-color "Blue"))
-
-  (use-package lispy)
-  (use-package lispyville)
-
   (use-package org-tempo
     :config
     (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
@@ -691,6 +381,400 @@
   (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
   (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
 
+#+end_src
+* Ivy, swiper, counsel, projectile ...
+#+begin_src emacs-lisp
+
+  (use-package ivy
+    :config
+      (ivy-mode 1)
+    :custom
+      (ivy-re-builders-alist
+        '((read-file-name-internal . ivy--regex-fuzzy)
+          (read-file-name . ivy--regex-fuzzy)
+          (swiper . ivy--regex-ignore-order)
+          (counsel-M-x . ivy--regex-ignore-order)
+          ;; (persp-ivy-switch-buffer . ivy--regex-fuzzy)
+          ;; (find-file-in-project . ivy--regex-fuzzy)
+          (t . ivy--regex-plus)))
+      (ivy-use-virtual-buffers t)
+      (ivy-wrap t)
+      (ivy-count-format "(%d/%d) ")
+      (enable-recursive-minibuffers t)
+      (ivy-initial-inputs-alist nil)
+      (ivy-height 20)
+    :bind
+      (("C-x /" . swiper-isearch)
+       ("C-x *" . swiper-thing-at-point)
+       ("C-x 8" . swiper-all-thing-at-point)
+       :map ivy-minibuffer-map
+         ("<tab>" . ivy-alt-done)
+         ("C-l" . ivy-alt-done)
+         ("C-j" . ivy-next-line)
+         ("C-k" . ivy-previous-line)
+         ("C-<return>" . (lambda ()
+                             (interactive)
+                             (progn
+                               (ivy-call)
+                               (ivy-next-line))))
+       :map ivy-switch-buffer-map
+         ("C-k" . ivy-previous-line)
+         ("C-j" . ivy-next-line)
+         ("C-l" . ivy-done)
+         ("C-d" . ivy-switch-buffer-kill)))
+
+  (use-package counsel
+    :config
+      (global-set-key [remap describe-function] 'counsel-describe-function)
+      (global-set-key [remap describe-variable] 'counsel-describe-variable)
+      (counsel-mode 1)
+    :bind
+      (("M-x" . counsel-M-x)
+       ("C-x '" . counsel-recentf)
+       ("M-y" . counsel-yank-pop)
+       ("C-x C-f" . counsel-find-file)
+       ("C-/" . counsel-rg)
+       :map minibuffer-local-map
+       ("C-r" . counsel-minibuffer-history)))
+
+  (use-package all-the-icons-ivy
+    :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup))
+
+  (use-package ivy-prescient
+    :demand t
+    :after (ivy counsel)
+    :config
+      (ivy-prescient-mode 1))
+
+  (use-package projectile
+    :demand t
+    :custom
+    (projectile-switch-project-action #'counsel-projectile-find-file)
+    :config
+    (projectile-mode 1)
+    :bind-keymap
+    ("C-x p" . projectile-command-map)
+    :bind
+    ("C-x C-r" . projectile-recentf)
+    ("C-x t" . pvr/split-term)
+    ("C-M-j" . counsel-projectile-switch-to-buffer)
+    ("C-M-k" . counsel-projectile-find-file)
+    :init
+    (when (file-directory-p "~/stuff")
+      (setq projectile-project-search-path '("~/stuff"))))
+
+  (use-package perspective
+    :demand t
+    :custom
+    (persp-initial-frame-name "Main")
+    :bind
+    ([remap projectile-switch-project] . projectile-persp-switch-project)
+    :config
+    (persp-mode 1))
+
+  (use-package persp-projectile
+    :after (perspective projectile)
+    :bind
+                                        ;([remap counsel-projectile-switch-project] . projectile-persp-switch-project)
+    ([remap projectile-switch-project] . projectile-persp-switch-project))
+
+  (use-package all-the-icons-ivy-rich
+    :init (all-the-icons-ivy-rich-mode 1))
+
+  (use-package ivy-rich
+    :init
+    (ivy-rich-mode 1)
+    :after counsel
+    :config
+    (setq ivy-format-function #'ivy-format-function-line))
+
+#+end_src
+* Version control
+#+begin_src emacs-lisp
+
+  (use-package git-gutter
+    :config
+    (global-git-gutter-mode t))
+
+  (use-package magit
+    :custom
+    (evil-collection-magit-want-horizontal-movement t)
+    (evil-collection-magit-use-z-for-folds t)
+    :after (company company-prescient))
+
+#+end_src
+* The rest
+#+begin_src emacs-lisp
+
+  (use-package anzu)
+
+  (use-package undo-tree
+    :init
+    :config
+    (global-undo-tree-mode 1))
+
+  (pvr/space-keys-def
+    "SPC" 'evil-ex) ; Till I get over SPC-W
+
+  (pvr/space-keys-def
+    :infix "h"
+    ""  '(nil :wk "Help")
+    "f" 'counsel-describe-function
+    "p" 'helpful-at-point
+    "b" 'counsel-descbinds
+    "v" 'counsel-describe-variable
+    "l" 'counsel-find-library)
+
+  ;; Implement a custom function for middle of the word completion like here :
+  ;; https://github.com/company-mode/company-mode/issues/340
+  (use-package company
+    :after (evil-collection)
+    :demand t
+    :config
+    (unless (eq 'company-dabbrev (car company-backends))
+      (push 'company-dabbrev company-backends))
+    (push 'company-files company-backends)
+    (company-prescient-mode 1)
+    (company-tng-mode 1)
+    (global-company-mode 1)
+                                          ; Use tab key to cycle through suggestions.
+                                          ; ('tng' means 'tab and go')
+    (company-tng-configure-default)
+    :init
+    ;; Always have the ability to complete filenames
+    (setq tab-always-indent 'complete)
+                                          ; No delay in showing suggestions.
+    (setq company-idle-delay 0)
+    :custom
+    (company-idle-delay 0)
+    (company-selection-wrap-around t)
+    (company-require-match nil)
+    (company-dabbrev-other-buffers 'all)
+    (company-dabbrev-time-limit 0.2)
+    (company-dabbrev-code-time-limit 0.2)
+    (company-dabbrev-downcase nil)
+    (company-dabbrev-char-regexp "\\(\\sw\\|\\s_\\|_\\|-\\)")
+    (company-minimum-prefix-length 3)
+    :bind
+    (:map company-active-map
+          ("TAB" . company-complete-common-or-cycle)
+          ("<backtab>" . company-select-previous)
+          ("RET" . nil)
+          ("C-j" . company-select-next-or-abort)
+          ("C-k" . company-select-previous-or-abort)))
+
+  (use-package prescient
+    :after (company)
+    :commands prescient-persist-mode
+    :init
+    (setq prescient-history-length 30))
+
+  (use-package company-prescient
+    :after (company prescient))
+
+  (use-package which-key
+    :demand t
+    :custom
+      (which-key-show-docstrings t)
+      (which-key-show-prefix 'mode-line)
+      (which-key-idle-delay 0.2)
+      ;; max width of which-key frame: number of columns (an integer)
+      (which-key-frame-max-width 60)
+      ;; max height of which-key frame: number of lines (an integer)
+      (which-key-frame-max-height 20)
+    :config
+      (which-key-setup-side-window-bottom)
+      (which-key-mode 1))
+
+  (use-package wgrep)
+
+  (use-package origami
+    :custom
+      (origami-fold-replacement " ▾")
+    :config
+    (dolist (mode-hook '(emacs-lisp-mode-hook
+                          nix-mode-hook
+                          haskell-mode-hook
+                          ess-r-mode-hook
+                          shell-mode-hook
+                          eshell-mode-hook))
+      (add-hook mode-hook
+                #'(lambda ()
+                    (origami-mode 1)))))
+
+  (pvr/space-keys-def
+    :infix "z"
+    ""  '(nil :wk "Avy Goto")
+    "o" 'origami-open-node
+    "O" 'origami-open-node-recursively
+    "c" 'origami-close-node
+    "C" 'origami-close-node-recursively
+    "t" 'origami-forward-toggle-node
+    "TAB" 'origami-recursively-toggle-node
+    "M-o" 'origami-open-all-nodes
+    "M-c" 'origami-close-all-nodes
+    "M-t" 'origami-toggle-all-nodes
+    "j" 'origami-forward-fold-same-level
+    "k" 'origami-backward-fold-same-level)
+
+  (use-package ess
+    :custom
+    (ess-use-company nil)
+    :config
+    (add-hook 'inferior-ess-mode-hook 'turn-off-evil-mode)
+
+    (add-hook 'ess-r-help-mode
+              #'(lambda () (evil-mode 1)))
+
+    (setq ess-ask-for-ess-directory nil)
+
+    (add-hook 'inferior-ess-r-mode-hook
+              (lambda ()
+                (local-set-key (kbd "C-j") 'comint-next-input)
+                (local-set-key (kbd "C-k") 'comint-previous-input)))
+
+    (setq display-buffer-alist
+          `(("^\\*R Dired"
+              (display-buffer-reuse-window display-buffer-in-side-window)
+              (side . right)
+              (slot . -1)
+              (window-width . 0.33)
+              (reusable-frames . nil))
+            ("^\\*R"
+              (display-buffer-reuse-window display-buffer-at-bottom)
+              (window-width . 0.5)
+              (reusable-frames . nil))
+            ("^\\*help[R]"
+              (display-buffer-reuse-window display-buffer-in-side-window)
+              (side . right)
+              (slot . 1)
+              (window-width . 0.33)
+              (reusable-frames . nil)))))
+
+  (defun comment-dwim-line (&optional arg)
+    "Replacement for the comment-dwim command.
+  If no region is selected and current line is not blank and we are not at the end of the line,
+  then comment current line.
+  Replaces default behaviour of comment-dwim, when it inserts comment at the end of the line.
+  Also move to the next line, since that's the most frequent action after"
+    (interactive "*P")
+    (comment-normalize-vars)
+    (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
+        (comment-or-uncomment-region (line-beginning-position) (line-end-position))
+      (comment-dwim arg))
+    (next-line))
+
+  (evil-define-key '(visual normal insert) 'global (kbd "M-;") 'comment-dwim-line)
+
+  ;; Sets up keybindings and stuff from default to ivy mode
+  (dolist (mode-hook '(org-mode-hook
+                        vterm-mode-hook
+                        term-mode-hook
+                        shell-mode-hook
+                        eshell-mode-hook))
+    (add-hook mode-hook
+              (lambda ()
+                (progn
+                  ;;         (display-line-numbers-mode 0)
+                  (setq show-trailing-whitespace nil)))))
+
+  (use-package guru-mode
+    :hook prog-mode)
+
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
+
+  ;; (setq-default show-trailing-whitespace nil)
+  ;; Do we need the following code then ?
+  ;; (add-hook
+  ;;   'prog-mode-hook
+  ;;   'display-line-numbers-mode)
+  (add-hook
+    'prog-mode-hook
+    '(lambda ()
+      (setq show-trailing-whitespace t)))
+  (recentf-mode 1)
+  (electric-indent-mode 1)
+
+  (use-package evil-collection
+    :after evil
+    :config
+    (evil-collection-init))
+
+  (use-package helpful
+    :after counsel
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind
+    ([remap describe-symbol] . helpful-symbol)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-key] . helpful-key))
+
+  (use-package expand-region
+    :config
+    (global-set-key (kbd "C-j") 'er/expand-region)
+    (set-variable 'expand-region-subword-enabled t))
+
+  (use-package engine-mode
+    :defer t
+    :config
+    (engine-mode t)
+    (engine/set-keymap-prefix (kbd "C-c s"))
+    (defengine google "https://google.com/?q=%s"
+      :keybinding "s")
+    (defengine duckduckgo "https://duckduckgo.com/?q=%s"
+      :keybinding "d")
+    (defengine hoogle "https://www.haskell.org/hoogle/?hoogle=%s"
+      :keybinding "h"))
+
+  (use-package avy
+    :config
+    (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+    (setq avy-styles-alist
+          '((avy-goto-char-2 . post)
+            (avy-goto-line   . pre)
+            (avy-goto-char-timer . at-full))))
+
+  (use-package slime
+    :hook (lisp-mode . slime-mode)
+    :init
+    (setq inferior-lisp-program "sbcl") ; TODO : Move to dir specific config
+    :config
+    (add-hook 'slime-load-hook
+              (lambda ()
+                (define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)))
+    (require 'slime-autoloads))
+
+  (use-package ace-window
+    :init
+    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+    :config
+    (global-set-key (kbd "M-o") 'ace-window)
+    (key-chord-define-global "``" 'aw-flip-window))
+
+  (use-package hydra)
+
+  (defhydra pvr/window-ops (:timeout 4)
+    "Move to windows"
+    ("h" (windmove-left) "Left")
+    ("j" (windmove-down) "Down")
+    ("k" (windmove-up) "Up")
+    ("l" (windmove-right) "Right")
+    ("+" (evil-window-increase-height) "Increase height")
+    ("-" (evil-window-decrease-height) "Decrease height")
+    ("<" (evil-window-decrease-width) "Decrease width")
+    (">" (evil-window-increase-width) "Increase width")
+    ("q" nil "Quit" :exit t))
+
+  (use-package zoom-window
+    :custom
+    (zoom-window-use-persp nil)
+    (zoom-window-mode-line-color "Blue"))
+
+  (use-package lispy)
+  (use-package lispyville)
+
   ;; Messes up git gutter
   ;; (use-package visual-fill-column
   ;;   :custom
@@ -708,25 +792,11 @@
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1)
 
-  (setq visible-bell t)
-  (setq auto-save-default nil)
-
   (global-set-key (kbd "C-?") 'help-command)
   (global-set-key (kbd "M-?") 'mark-paragraph)
 
-  ; kill current buffer instead of prompting
-  (global-set-key (kbd "C-x K") 'kill-this-buffer)
-  (global-set-key (kbd "C-x k") 'kill-buffer-and-window)
-
-  (add-hook 'term-mode-hook 'turn-off-evil-mode)
-  ; In term mode turn off all related to evil mode
-
-  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
   (define-key minibuffer-local-map (kbd "ESC") 'keyboard-escape-quit)
-  (setq explicit-shell-file-name "zsh")
-  (setq term-prompt-regexp "^\*>")
-
-  (setq show-trailing-whitespace t)
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
   (winner-mode 1)
 
@@ -738,7 +808,6 @@
     "w" 'avy-goto-word-0
     "W" 'avy-goto-word-1
     "l" 'avy-goto-line)
-
 
   (pvr/space-keys-def
     :infix "w"
@@ -762,21 +831,21 @@
   (setf custom-file
         (let*
             ((init-file-components (s-split "/" (file-truename user-init-file)))
-             (custom-file-components (-drop-last 1 init-file-components))
-             (custom-file (s-join "/" (-snoc custom-file-components "custom.el"))))
+              (custom-file-components (-drop-last 1 init-file-components))
+              (custom-file (s-join "/" (-snoc custom-file-components "custom.el"))))
           custom-file))
   (when
-    (file-exists-p custom-file)
+      (file-exists-p custom-file)
     (load-file custom-file))
 
   ;; keep this as last as possible after all the minor modes
   (envrc-global-mode)
 
-
   ;; Risky, but I'm going to set it
   (setq enable-local-eval t)
 
 #+end_src
+
 # Local Variables:
 # org-confirm-babel-evaluate: nil
 # eval: (add-hook 'after-save-hook (lambda () (check-parens) (when (y-or-n-p "Tangle?") (org-babel-tangle (buffer-file-name) (f-swap-ext (buffer-file-name) "el")))) nil t)
