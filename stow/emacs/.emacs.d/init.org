@@ -1,4 +1,6 @@
 #+TITLE: Emacs configuration
+#+AUTHOR: Paul Victor Raj
+#+EMAIL: paulvictor@gmail.com
 
 * Startup performance
 #+begin_src emacs-lisp
@@ -58,6 +60,7 @@
   (add-hook 'before-save-hook
     (lambda ()
       (whitespace-cleanup)))
+  (modify-all-frames-parameters '((fullscreen . maximized)))
 
   ;Show matching parens
   (show-paren-mode)
@@ -125,9 +128,23 @@
   (setq comment-style "aligned")
   ;; TODO : Save it in a proper sync'able place
   ;; (setq savehist-file "~/git/.emacs.d/personal/emacs-history")
+  (setq savehist-file "~/.emacs.d/var/savehist")
   (savehist-mode 1)
+  (setq history-length t
+        history-delete-duplicates t
+        savehist-save-minibuffer-history 1)
+  (setq savehist-additional-variables
+        '(kill-ring
+          search-ring
+          regexp-search-ring))
+
   ;; Change "yes or no" to "y or n"
   (fset 'yes-or-no-p 'y-or-n-p)
+
+  ;; Auto-revert to disk on file change
+  (global-auto-revert-mode t)
+
+  (defalias 'list-buffers 'ibuffer)
 
 #+end_src
 * Generic Helpers
@@ -139,6 +156,19 @@
 
   ;; enable eldoc for minibuffer evaluations use this snippet
   (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
+
+  (use-package general
+    ; :after evil
+    :config
+    (general-evil-setup t)
+    (general-define-key
+      :states 'motion ; Normal, visual, operator states
+      ";" 'evil-ex
+      ":" 'evil-repeat-find-char)
+    (general-create-definer pvr/space-keys-def
+      :keymaps '(normal visual insert emacs)
+      :prefix "SPC"
+      :non-normal-prefix "C-SPC"))
 
 #+end_src
 * No Littering
@@ -197,18 +227,8 @@
       (evil-select-search-module 'evil-search-module 'evil-search)
       (evil-mode 1))
 
-  (use-package general
-    ; :after evil
-    :config
-    (general-evil-setup t)
-    (general-define-key
-      :states 'motion ; Normal, visual, operator states
-      ";" 'evil-ex
-      ":" 'evil-repeat-find-char)
-    (general-create-definer pvr/space-keys-def
-      :keymaps '(normal visual insert emacs)
-      :prefix "SPC"
-      :non-normal-prefix "C-SPC"))
+  (pvr/space-keys-def
+    "SPC" 'evil-ex) ; Till I get over SPC-W
 
 #+end_src
 * Directories and buffers
@@ -514,9 +534,6 @@
     (global-undo-tree-mode 1))
 
   (pvr/space-keys-def
-    "SPC" 'evil-ex) ; Till I get over SPC-W
-
-  (pvr/space-keys-def
     :infix "h"
     ""  '(nil :wk "Help")
     "f" 'counsel-describe-function
@@ -528,49 +545,46 @@
   ;; Implement a custom function for middle of the word completion like here :
   ;; https://github.com/company-mode/company-mode/issues/340
   (use-package company
-    :after (evil-collection)
-    :demand t
-    :config
-    (unless (eq 'company-dabbrev (car company-backends))
-      (push 'company-dabbrev company-backends))
-    (push 'company-files company-backends)
-    (company-prescient-mode 1)
-    (company-tng-mode 1)
-    (global-company-mode 1)
-                                          ; Use tab key to cycle through suggestions.
-                                          ; ('tng' means 'tab and go')
-    (company-tng-configure-default)
     :init
-    ;; Always have the ability to complete filenames
-    (setq tab-always-indent 'complete)
-                                          ; No delay in showing suggestions.
-    (setq company-idle-delay 0)
+      (setq tab-always-indent 'complete)
+      (add-hook 'prog-mode-hook
+                #'(lambda ()
+                   (company-mode 1)
+                   (company-prescient-mode 1)
+                   (company-tng-mode 1)
+                   (company-tng-configure-default)))
     :custom
-    (company-idle-delay 0)
-    (company-selection-wrap-around t)
-    (company-require-match nil)
-    (company-dabbrev-other-buffers 'all)
-    (company-dabbrev-time-limit 0.2)
-    (company-dabbrev-code-time-limit 0.2)
-    (company-dabbrev-downcase nil)
-    (company-dabbrev-char-regexp "\\(\\sw\\|\\s_\\|_\\|-\\)")
-    (company-minimum-prefix-length 3)
+      (company-idle-delay 0)
+      (company-selection-wrap-around t)
+      (company-require-match nil)
+      (company-dabbrev-other-buffers 'all)
+      (company-dabbrev-time-limit 0.2)
+      (company-dabbrev-code-time-limit 0.2)
+      (company-dabbrev-downcase nil)
+      (company-dabbrev-char-regexp "\\(\\sw\\|\\s_\\|_\\|-\\)")
+      (company-minimum-prefix-length 3)
     :bind
-    (:map company-active-map
-          ("TAB" . company-complete-common-or-cycle)
-          ("<backtab>" . company-select-previous)
-          ("RET" . nil)
-          ("C-j" . company-select-next-or-abort)
-          ("C-k" . company-select-previous-or-abort)))
+      (:map company-active-map
+            ("TAB" . company-complete-common-or-cycle)
+            ("<backtab>" . company-select-previous)
+            ("RET" . nil)
+            ("C-j" . company-select-next-or-abort)
+            ("C-k" . company-select-previous-or-abort)))
+
+  (add-hook 'prog-mode-hook
+    (lambda ()
+      (setq company-backends
+            '(company-capf
+              company-dabbrev
+              company-dabbrev-code
+              company-files))))
 
   (use-package prescient
-    :after (company)
     :commands prescient-persist-mode
     :init
     (setq prescient-history-length 30))
 
-  (use-package company-prescient
-    :after (company prescient))
+  (use-package company-prescient)
 
   (use-package which-key
     :demand t
@@ -596,7 +610,6 @@
                           nix-mode-hook
                           haskell-mode-hook
                           ess-r-mode-hook
-                          shell-mode-hook
                           eshell-mode-hook))
       (add-hook mode-hook
                 #'(lambda ()
@@ -666,29 +679,12 @@
 
   (evil-define-key '(visual normal insert) 'global (kbd "M-;") 'comment-dwim-line)
 
-  ;; Sets up keybindings and stuff from default to ivy mode
-  (dolist (mode-hook '(org-mode-hook
-                        vterm-mode-hook
-                        term-mode-hook
-                        shell-mode-hook
-                        eshell-mode-hook))
-    (add-hook mode-hook
-              (lambda ()
-                (progn
-                  ;;         (display-line-numbers-mode 0)
-                  (setq show-trailing-whitespace nil)))))
-
   (use-package guru-mode
     :hook prog-mode)
 
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
 
-  ;; (setq-default show-trailing-whitespace nil)
-  ;; Do we need the following code then ?
-  ;; (add-hook
-  ;;   'prog-mode-hook
-  ;;   'display-line-numbers-mode)
   (add-hook
     'prog-mode-hook
     '(lambda ()
@@ -713,8 +709,18 @@
 
   (use-package expand-region
     :config
-    (global-set-key (kbd "C-j") 'er/expand-region)
+    (evil-define-key '(normal emacs) 'global (kbd "C-'") 'er/expand-region)
+    (evil-define-key '(normal emacs) 'global (kbd "C-;") 'er/contract-region)
     (set-variable 'expand-region-subword-enabled t))
+
+  (defhydra pvr/expand (:timeout 4)
+    "Expand/Contract windows"
+    ("h" er/contract-region "Contract")
+    ("l" er/expand-region "Expand")
+    ("q" nil "Quit" :exit t))
+
+  (pvr/space-keys-def
+    "e" 'pvr/expand/body)
 
   (use-package engine-mode
     :defer t
@@ -761,10 +767,13 @@
     ("j" (windmove-down) "Down")
     ("k" (windmove-up) "Up")
     ("l" (windmove-right) "Right")
-    ("+" (evil-window-increase-height) "Increase height")
-    ("-" (evil-window-decrease-height) "Decrease height")
-    ("<" (evil-window-decrease-width) "Decrease width")
-    (">" (evil-window-increase-width) "Increase width")
+    ("p" (evil-window-prev) "Previous")
+    ("n" (evil-window-next) "Next")
+    ("+" (evil-window-increase-height 1) "Increase height")
+    ("-" (evil-window-decrease-height 1) "Decrease height")
+    ("<" (evil-window-decrease-width 1) "Decrease width")
+    (">" (evil-window-increase-width 1) "Increase width")
+    ("=" (balance-windows) "Increase width")
     ("q" nil "Quit" :exit t))
 
   (use-package zoom-window
@@ -812,10 +821,12 @@
   (pvr/space-keys-def
     :infix "w"
     ""  '(nil :wk "Windows")
+    "p" 'evil-window-prev
     "h" 'windmove-left
     "j" 'windmove-down
     "k" 'windmove-up
     "l" 'windmove-right
+    "n" 'evil-window-next
     "+" 'evil-window-increase-height
     "-" 'evil-window-decrease-height
     "<" 'evil-window-decrease-width
@@ -826,8 +837,9 @@
     "TAB" 'aw-flip-window
     "z" 'zoom-window-zoom
     "u" 'winner-undo
-    "-" 'split-window-below
-    "\\" 'split-window-vertically)
+    "RET" 'split-window-horizontally
+    "M-RET" 'split-window-vertically)
+
   (setf custom-file
         (let*
             ((init-file-components (s-split "/" (file-truename user-init-file)))
