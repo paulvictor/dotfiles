@@ -1,4 +1,4 @@
-#+TITLE: Emacs configuration
+#+TITLE: Emacs Configuration
 #+AUTHOR: Paul Victor Raj
 #+EMAIL: paulvictor@gmail.com
 
@@ -61,6 +61,11 @@
     (lambda ()
       (whitespace-cleanup)))
   (modify-all-frames-parameters '((fullscreen . maximized)))
+
+  (add-hook
+    'prog-mode-hook
+    '(lambda ()
+      (setq show-trailing-whitespace t)))
 
   ;Show matching parens
   (show-paren-mode)
@@ -147,9 +152,16 @@
   (defalias 'list-buffers 'ibuffer)
 
 #+end_src
+* Table of contents on save
+#+begin_src emacs-lisp
+(use-package org-make-toc
+    :hook (org-mode . org-make-toc-mode))
+#+end_src
+
 * Generic Helpers
 #+begin_src emacs-lisp
 
+  (recentf-mode 1)
   (use-package f)
   (use-package s)
   (use-package dash)
@@ -201,6 +213,8 @@
   (add-to-words-syntax 'org-mode-hook "_-")
   (add-to-words-syntax 'ess-r-mode-hook "_")
 
+  (electric-indent-mode 1)
+
 #+end_src
 * Evil
 #+begin_src emacs-lisp
@@ -227,8 +241,13 @@
       (evil-select-search-module 'evil-search-module 'evil-search)
       (evil-mode 1))
 
+  (use-package evil-collection
+    :after evil
+    :config
+    (evil-collection-init))
+
   (pvr/space-keys-def
-    "SPC" 'evil-ex) ; Till I get over SPC-W
+    "SPC" 'evil-ex)
 
 #+end_src
 * Directories and buffers
@@ -523,24 +542,8 @@
     :after (company company-prescient))
 
 #+end_src
-* The rest
+* Completions
 #+begin_src emacs-lisp
-
-  (use-package anzu)
-
-  (use-package undo-tree
-    :init
-    :config
-    (global-undo-tree-mode 1))
-
-  (pvr/space-keys-def
-    :infix "h"
-    ""  '(nil :wk "Help")
-    "f" 'counsel-describe-function
-    "p" 'helpful-at-point
-    "b" 'counsel-descbinds
-    "v" 'counsel-describe-variable
-    "l" 'counsel-find-library)
 
   ;; Implement a custom function for middle of the word completion like here :
   ;; https://github.com/company-mode/company-mode/issues/340
@@ -585,6 +588,26 @@
     (setq prescient-history-length 30))
 
   (use-package company-prescient)
+
+#+end_src
+* The rest
+#+begin_src emacs-lisp
+
+  (use-package anzu)
+
+  (use-package undo-tree
+    :init
+    :config
+    (global-undo-tree-mode 1))
+
+  (pvr/space-keys-def
+    :infix "h"
+    ""  '(nil :wk "Help")
+    "f" 'counsel-describe-function
+    "p" 'helpful-at-point
+    "b" 'counsel-descbinds
+    "v" 'counsel-describe-variable
+    "l" 'counsel-find-library)
 
   (use-package which-key
     :demand t
@@ -685,18 +708,6 @@
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
 
-  (add-hook
-    'prog-mode-hook
-    '(lambda ()
-      (setq show-trailing-whitespace t)))
-  (recentf-mode 1)
-  (electric-indent-mode 1)
-
-  (use-package evil-collection
-    :after evil
-    :config
-    (evil-collection-init))
-
   (use-package helpful
     :after counsel
     :custom
@@ -712,12 +723,6 @@
     (evil-define-key '(normal emacs) 'global (kbd "C-'") 'er/expand-region)
     (evil-define-key '(normal emacs) 'global (kbd "C-;") 'er/contract-region)
     (set-variable 'expand-region-subword-enabled t))
-
-  (defhydra pvr/expand (:timeout 4)
-    "Expand/Contract windows"
-    ("h" er/contract-region "Contract")
-    ("l" er/expand-region "Expand")
-    ("q" nil "Quit" :exit t))
 
   (pvr/space-keys-def
     "e" 'pvr/expand/body)
@@ -742,16 +747,6 @@
             (avy-goto-line   . pre)
             (avy-goto-char-timer . at-full))))
 
-  (use-package slime
-    :hook (lisp-mode . slime-mode)
-    :init
-    (setq inferior-lisp-program "sbcl") ; TODO : Move to dir specific config
-    :config
-    (add-hook 'slime-load-hook
-              (lambda ()
-                (define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)))
-    (require 'slime-autoloads))
-
   (use-package ace-window
     :init
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
@@ -760,6 +755,12 @@
     (key-chord-define-global "``" 'aw-flip-window))
 
   (use-package hydra)
+
+  (defhydra pvr/expand (:timeout 4)
+    "Expand/Contract windows"
+    ("h" er/contract-region "Contract")
+    ("l" er/expand-region "Expand")
+    ("q" nil "Quit" :exit t))
 
   (defhydra pvr/window-ops (:timeout 4)
     "Move to windows"
@@ -781,6 +782,16 @@
     (zoom-window-use-persp nil)
     (zoom-window-mode-line-color "Blue"))
 
+  (use-package slime
+    :hook (lisp-mode . slime-mode)
+    :init
+    (setq inferior-lisp-program "sbcl") ; TODO : Move to dir specific config
+    :config
+    (add-hook 'slime-load-hook
+              (lambda ()
+                (define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)))
+    (require 'slime-autoloads))
+
   (use-package lispy)
   (use-package lispyville)
 
@@ -800,9 +811,6 @@
 
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1)
-
-  (global-set-key (kbd "C-?") 'help-command)
-  (global-set-key (kbd "M-?") 'mark-paragraph)
 
   (define-key minibuffer-local-map (kbd "ESC") 'keyboard-escape-quit)
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)

@@ -60,6 +60,7 @@ let
         nix-mode
         nix-modeline
         no-littering
+        org-make-toc
         org-superstar
         origami
         page-break-lines
@@ -70,6 +71,7 @@ let
         prescient
         projectile
         rainbow-delimiters
+        ripgrep
         s
         slime
         slime-company
