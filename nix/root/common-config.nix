@@ -15,6 +15,7 @@ let
                 https://www.x.org/releases/individual/data/xkeyboard-config/xkeyboard-config-2.28.tar.gz; }); };
 in
 {
+  imports = [./services/key-remaps.nix];
   #nix.package = pkgs.nixUnstable;
   nix.nixPath = [
     "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
