@@ -160,11 +160,14 @@
 
 * Generic Helpers
 #+begin_src emacs-lisp
-
-  (recentf-mode 1)
   (use-package f)
   (use-package s)
   (use-package dash)
+
+  (use-package recentf
+    :config
+    (recentf-mode t)
+    (setq recentf-max-saved-items 500))
 
   ;; enable eldoc for minibuffer evaluations use this snippet
   (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
@@ -181,7 +184,18 @@
       :keymaps '(normal visual insert emacs)
       :prefix "SPC"
       :non-normal-prefix "C-SPC"))
+  (defun occur-dwim ()
+    "Call `occur' with a sane default."
+    (interactive)
+    (push (if (region-active-p)
+              (buffer-substring-no-properties
+              (region-beginning)
+              (region-end))
+            (thing-at-point 'symbol))
+          regexp-history)
+    (call-interactively 'occur))
 
+  (bind-key "M-s o" 'occur-dwim)
 #+end_src
 * No Littering
 #+begin_src emacs-lisp
@@ -225,7 +239,6 @@
       (evil-shift-width 2)
       (evil-vsplit-window-right t)
       (evil-split-window-below t)
-      (evil-want-keybinding nil)
       (evil-want-C-u-scroll t)
       (evil-disable-insert-state-bindings t)
       (evil-flash-delay 5)
@@ -235,6 +248,7 @@
       (setq evil-want-integration t)
       (setq evil-search-module 'evil-search)
     :config
+      (setq evil-want-keybinding nil)
       (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
       (evil-define-key '(insert visual) 'global (kbd "C-g") 'evil-normal-state)
       (evil-define-key 'normal 'global (kbd ", SPC") 'evil-ex-nohighlight)
@@ -242,9 +256,11 @@
       (evil-mode 1))
 
   (use-package evil-collection
-    :after evil
+    :init
+      (setq evil-want-keybinding nil)
     :config
-    (evil-collection-init))
+      (setq evil-want-integration t)
+      (evil-collection-init (remq 'lispy evil-collection-mode-list)))
 
   (pvr/space-keys-def
     "SPC" 'evil-ex)
@@ -396,7 +412,6 @@
   (use-package org-indent)
 
   (use-package org-superstar
-    :after org
     :custom
       (org-superstar-remove-leading-stars t)
       (org-superstar-headline-bullets-list
@@ -419,6 +434,13 @@
   (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
   (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
   (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+
+  (use-package evil-org
+    :after (evil evil-collection)
+    :custom
+      (evil-org-use-additional-insert t)
+    :init
+      (add-hook 'org-mode-hook 'evil-org-mode))
 
 #+end_src
 * Ivy, swiper, counsel, projectile ...
@@ -514,8 +536,17 @@
   (use-package persp-projectile
     :after (perspective projectile)
     :bind
-                                        ;([remap counsel-projectile-switch-project] . projectile-persp-switch-project)
     ([remap projectile-switch-project] . projectile-persp-switch-project))
+
+  (use-package counsel-projectile
+    :custom
+      (counsel-projectile-preview-buffers nil)
+    :bind
+      ("C-M-j" . counsel-projectile-switch-to-buffer)
+      ("C-M-k" . counsel-projectile-find-file)
+      (:map projectile-command-map ("p" . projectile-persp-switch-project))
+    :config
+    (counsel-projectile-mode 1))
 
   (use-package all-the-icons-ivy-rich
     :init (all-the-icons-ivy-rich-mode 1))
@@ -536,6 +567,9 @@
     (global-git-gutter-mode t))
 
   (use-package magit
+    :config
+    (setq magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
+    (setq magit-diff-refine-hunk t)
     :custom
     (evil-collection-magit-want-horizontal-movement t)
     (evil-collection-magit-use-z-for-folds t)
@@ -590,6 +624,46 @@
   (use-package company-prescient)
 
 #+end_src
+* Lisp
+#+begin_src emacs-lisp
+
+    (use-package slime
+      :hook (lisp-mode . slime-mode)
+      :init
+      (setq inferior-lisp-program "sbcl") ; TODO : Move to dir specific config
+      (add-to-list 'slime-contribs 'slime-fancy)
+      :config
+      (add-hook 'slime-load-hook
+                (lambda ()
+                  (define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)))
+      (require 'slime-autoloads))
+
+  ;  (use-package lispy
+  ;    :init
+  ;      (add-hook 'lisp-mode-hook (lambda () (lispy-mode 1)))
+  ;      (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
+  ;    :custom
+  ;      (lispy-key-theme '(lispy c-digits)))
+
+    (use-package lispyville
+      :custom
+        (lispyville-key-theme '(operators c-w c-u prettify additional-motions commentary slurp/barf-cp wrap additional))
+      :config
+        (evil-define-key '(insert visual) 'lispyville-mode-map "(" 'lispy-parens
+                                                               "[" 'lispy-brackets
+                                                               (string #x22) 'lispy-quotes ; Works with emacs lisp but org mode has some problem with the escaped quotes
+                                                               "{" 'lispy-braces)
+        ; Evil rebinds these on insert mode to normal mode switch and so am manually binding them
+        (evil-define-key 'normal 'lispyville-mode-map "[" 'lispyville-next-opening
+                                                      "{" 'lispyville-previous-opening
+                                                      "]" 'lispyville-next-closing
+                                                      "}" 'lispyville-previous-closing)
+        (evil-define-key 'normal 'lispyville-mode-map (kbd "M-H") 'lispyville-beginning-of-next-defun)
+      :init
+        (add-hook 'lisp-mode-hook #'lispyville-mode)
+        (add-hook 'emacs-lisp-mode-hook #'lispyville-mode))
+
+#+end_src
 * The rest
 #+begin_src emacs-lisp
 
@@ -640,7 +714,7 @@
 
   (pvr/space-keys-def
     :infix "z"
-    ""  '(nil :wk "Avy Goto")
+    ""  '(nil :wk "Fold")
     "o" 'origami-open-node
     "O" 'origami-open-node-recursively
     "c" 'origami-close-node
@@ -781,19 +855,6 @@
     :custom
     (zoom-window-use-persp nil)
     (zoom-window-mode-line-color "Blue"))
-
-  (use-package slime
-    :hook (lisp-mode . slime-mode)
-    :init
-    (setq inferior-lisp-program "sbcl") ; TODO : Move to dir specific config
-    :config
-    (add-hook 'slime-load-hook
-              (lambda ()
-                (define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)))
-    (require 'slime-autoloads))
-
-  (use-package lispy)
-  (use-package lispyville)
 
   ;; Messes up git gutter
   ;; (use-package visual-fill-column
