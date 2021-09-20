@@ -376,6 +376,7 @@ rec {
     wmfocus
     xclip
     xdotool
+    xorg.xdpyinfo
     xorg.xmodmap
     xsel
     youtube-dl
