@@ -120,6 +120,14 @@
                         (projects . 5))))
 
 #+end_src
+* Auth sources
+#+begin_src emacs-lisp
+  (use-package auth-source-pass
+    :init
+    (setq auth-sources '(password-store)
+          auth-source-pass-filename "~/.password-store/non-yubikey")
+  )
+#+end_src
 * Base configurations
 #+begin_src emacs-lisp
 
@@ -169,11 +177,21 @@
     (recentf-mode t)
     (setq recentf-max-saved-items 500))
 
+  (use-package pdf-tools
+    :config
+      (pdf-tools-install t t nil nil)
+      (setq-default pdf-view-display-size 'fit-width)
+      (add-hook 'pdf-view-mode-hook
+        (lambda ()
+          (set (make-local-variable 'evil-emacs-state-cursor) (list nil))
+          (blink-cursor-mode -1)))
+    :custom
+      (pdf-annot-activate-created-annotations t "automatically annotate highlights"))
+
   ;; enable eldoc for minibuffer evaluations use this snippet
   (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
 
   (use-package general
-    ; :after evil
     :config
     (general-evil-setup t)
     (general-define-key
@@ -184,6 +202,7 @@
       :keymaps '(normal visual insert emacs)
       :prefix "SPC"
       :non-normal-prefix "C-SPC"))
+
   (defun occur-dwim ()
     "Call `occur' with a sane default."
     (interactive)
@@ -196,6 +215,28 @@
     (call-interactively 'occur))
 
   (bind-key "M-s o" 'occur-dwim)
+
+  ; Not explicitly included in emax/default.nix, but pulled in as a dependency of `slack`
+  (use-package alert
+    :commands (alert)
+    :init
+    (setq alert-default-style 'libnotify))
+#+end_src
+* Slack
+#+begin_src emacs-lisp
+  (use-package slack
+    :commands (slack-start)
+    :init
+      (setq slack-buffer-emojify t) ;; if you want to enable emoji, default nil
+      (setq slack-prefer-current-team t)
+    :config
+      (slack-register-team
+        :name "juspay"
+        :default t
+        :token (auth-source-pick-first-password
+                  :host "juspay.slack.com"
+                  :user "paul.victor@juspay.in")
+        :full-and-display-names t))
 #+end_src
 * No Littering
 #+begin_src emacs-lisp
@@ -226,6 +267,7 @@
   (add-to-words-syntax 'haskell-mode-hook "_")
   (add-to-words-syntax 'org-mode-hook "_-")
   (add-to-words-syntax 'ess-r-mode-hook "_")
+  (add-to-words-syntax 'lisp-mode-hook "_-")
 
   (electric-indent-mode 1)
 
@@ -249,7 +291,7 @@
       (setq evil-search-module 'evil-search)
     :config
       (setq evil-want-keybinding nil)
-      (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
+      ;(key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
       (evil-define-key '(insert visual) 'global (kbd "C-g") 'evil-normal-state)
       (evil-define-key 'normal 'global (kbd ", SPC") 'evil-ex-nohighlight)
       (evil-select-search-module 'evil-search-module 'evil-search)
@@ -581,15 +623,16 @@
 
   ;; Implement a custom function for middle of the word completion like here :
   ;; https://github.com/company-mode/company-mode/issues/340
+  (defun pvr/setup-company ()
+    (company-mode 1)
+    (company-prescient-mode 1)
+    (company-tng-mode 1)
+    (company-tng-configure-default))
   (use-package company
     :init
       (setq tab-always-indent 'complete)
-      (add-hook 'prog-mode-hook
-                #'(lambda ()
-                   (company-mode 1)
-                   (company-prescient-mode 1)
-                   (company-tng-mode 1)
-                   (company-tng-configure-default)))
+      (add-hook 'prog-mode-hook #'pvr/setup-company)
+      (add-hook 'org-mode-hook #'pvr/setup-company)
     :custom
       (company-idle-delay 0)
       (company-selection-wrap-around t)
@@ -627,41 +670,50 @@
 * Lisp
 #+begin_src emacs-lisp
 
-    (use-package slime
-      :hook (lisp-mode . slime-mode)
-      :init
-      (setq inferior-lisp-program "sbcl") ; TODO : Move to dir specific config
-      (add-to-list 'slime-contribs 'slime-fancy)
-      :config
-      (add-hook 'slime-load-hook
-                (lambda ()
-                  (define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)))
-      (require 'slime-autoloads))
+  (evil-define-key '(motion insert) 'slime-repl-mode (kbd "C-c s") 'slime-selector)
+  (evil-define-key '(motion insert) 'slime-mode (kbd "C-c s") 'slime-selector)
 
-  ;  (use-package lispy
-  ;    :init
-  ;      (add-hook 'lisp-mode-hook (lambda () (lispy-mode 1)))
-  ;      (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
-  ;    :custom
-  ;      (lispy-key-theme '(lispy c-digits)))
+  (defun hyperspec-lookup--hyperspec-lookup-w3m (orig-fun &rest args)
+    (let ((browse-url-browser-function 'w3m-browse-url))
+      (apply orig-fun args)))
 
-    (use-package lispyville
-      :custom
-        (lispyville-key-theme '(operators c-w c-u prettify additional-motions commentary slurp/barf-cp wrap additional))
-      :config
-        (evil-define-key '(insert visual) 'lispyville-mode-map "(" 'lispy-parens
-                                                               "[" 'lispy-brackets
-                                                               (string #x22) 'lispy-quotes ; Works with emacs lisp but org mode has some problem with the escaped quotes
-                                                               "{" 'lispy-braces)
-        ; Evil rebinds these on insert mode to normal mode switch and so am manually binding them
-        (evil-define-key 'normal 'lispyville-mode-map "[" 'lispyville-next-opening
-                                                      "{" 'lispyville-previous-opening
-                                                      "]" 'lispyville-next-closing
-                                                      "}" 'lispyville-previous-closing)
-        (evil-define-key 'normal 'lispyville-mode-map (kbd "M-H") 'lispyville-beginning-of-next-defun)
-      :init
-        (add-hook 'lisp-mode-hook #'lispyville-mode)
-        (add-hook 'emacs-lisp-mode-hook #'lispyville-mode))
+  (use-package slime
+    :hook (lisp-mode . slime-mode)
+    :init
+    (setq inferior-lisp-program "sbcl") ; TODO : Move to dir specific config
+    (add-to-list 'slime-contribs 'slime-fancy)
+    :config
+    (advice-add 'hyperspec-lookup :around #'hyperspec-lookup--hyperspec-lookup-w3m)
+    (add-hook 'slime-load-hook
+              (lambda ()
+                (define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)))
+    (require 'slime-autoloads))
+
+;  (use-package lispy
+;    :init
+;      (add-hook 'lisp-mode-hook (lambda () (lispy-mode 1)))
+;      (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
+;    :custom
+;      (lispy-key-theme '(lispy c-digits)))
+
+  (use-package lispyville
+    :custom
+      (lispyville-key-theme '(operators c-w c-u prettify additional-motions commentary slurp/barf-cp wrap additional additional-insert))
+    :config
+      (evil-define-key '(insert visual) 'lispyville-mode-map "(" 'lispy-parens
+                                                              "[" 'lispy-brackets
+                                                              ; Works with emacs lisp but org mode has some problem with the escaped quotes
+                                                              (string #x22) 'lispy-quotes
+                                                              "{" 'lispy-braces)
+      ; Evil rebinds these on insert mode to normal mode switch and so am manually binding them
+      (evil-define-key 'normal 'lispyville-mode-map "[" 'lispyville-next-opening
+                                                    "{" 'lispyville-previous-opening
+                                                    "]" 'lispyville-next-closing
+                                                    "}" 'lispyville-previous-closing)
+      (evil-define-key 'normal 'lispyville-mode-map (kbd "M-H") 'lispyville-beginning-of-next-defun)
+    :init
+      (add-hook 'lisp-mode-hook #'lispyville-mode)
+      (add-hook 'emacs-lisp-mode-hook #'lispyville-mode))
 
 #+end_src
 * The rest
@@ -686,28 +738,28 @@
   (use-package which-key
     :demand t
     :custom
-      (which-key-show-docstrings t)
-      (which-key-show-prefix 'mode-line)
-      (which-key-idle-delay 0.2)
-      ;; max width of which-key frame: number of columns (an integer)
-      (which-key-frame-max-width 60)
-      ;; max height of which-key frame: number of lines (an integer)
-      (which-key-frame-max-height 20)
+    (which-key-show-docstrings t)
+    (which-key-show-prefix 'mode-line)
+    (which-key-idle-delay 0.2)
+    ;; max width of which-key frame: number of columns (an integer)
+    (which-key-frame-max-width 60)
+    ;; max height of which-key frame: number of lines (an integer)
+    (which-key-frame-max-height 20)
     :config
-      (which-key-setup-side-window-bottom)
-      (which-key-mode 1))
+    (which-key-setup-side-window-bottom)
+    (which-key-mode 1))
 
   (use-package wgrep)
 
   (use-package origami
     :custom
-      (origami-fold-replacement " ▾")
+    (origami-fold-replacement " ▾")
     :config
     (dolist (mode-hook '(emacs-lisp-mode-hook
-                          nix-mode-hook
-                          haskell-mode-hook
-                          ess-r-mode-hook
-                          eshell-mode-hook))
+                         nix-mode-hook
+                         haskell-mode-hook
+                         ess-r-mode-hook
+                         eshell-mode-hook))
       (add-hook mode-hook
                 #'(lambda ()
                     (origami-mode 1)))))
@@ -745,21 +797,21 @@
 
     (setq display-buffer-alist
           `(("^\\*R Dired"
-              (display-buffer-reuse-window display-buffer-in-side-window)
-              (side . right)
-              (slot . -1)
-              (window-width . 0.33)
-              (reusable-frames . nil))
+             (display-buffer-reuse-window display-buffer-in-side-window)
+             (side . right)
+             (slot . -1)
+             (window-width . 0.33)
+             (reusable-frames . nil))
             ("^\\*R"
-              (display-buffer-reuse-window display-buffer-at-bottom)
-              (window-width . 0.5)
-              (reusable-frames . nil))
+             (display-buffer-reuse-window display-buffer-at-bottom)
+             (window-width . 0.5)
+             (reusable-frames . nil))
             ("^\\*help[R]"
-              (display-buffer-reuse-window display-buffer-in-side-window)
-              (side . right)
-              (slot . 1)
-              (window-width . 0.33)
-              (reusable-frames . nil)))))
+             (display-buffer-reuse-window display-buffer-in-side-window)
+             (side . right)
+             (slot . 1)
+             (window-width . 0.33)
+             (reusable-frames . nil)))))
 
   (defun comment-dwim-line (&optional arg)
     "Replacement for the comment-dwim command.
@@ -825,7 +877,6 @@
     :init
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
     :config
-    (global-set-key (kbd "M-o") 'ace-window)
     (key-chord-define-global "``" 'aw-flip-window))
 
   (use-package hydra)
@@ -838,6 +889,7 @@
 
   (defhydra pvr/window-ops (:timeout 4)
     "Move to windows"
+    ("w" (ace-window))
     ("h" (windmove-left) "Left")
     ("j" (windmove-down) "Down")
     ("k" (windmove-up) "Up")
@@ -878,6 +930,22 @@
 
   (winner-mode 1)
 
+  (defun insert-after-lispy-right (&optional count)
+    (interactive "p")
+    (let
+        ((regex (s-concat "\s*" lispy-right)))
+      (when (looking-at regex)
+        (re-search-forward regex nil nil (or count 1)))))
+  (defun insert-before-lispy-left (&optional count)
+    (interactive "p")
+    (let
+        ((regex (s-concat "\s*" lispy-left)))
+      (when (looking-back regex)
+        (re-search-backward regex nil nil (or count 1)))))
+  (evil-define-key '(insert) 'global
+    (kbd "C-h") 'insert-before-lispy-left
+    (kbd "C-l") 'insert-after-lispy-right)
+
   (pvr/space-keys-def
     :infix ";"
     ""  '(nil :wk "Avy Goto")
@@ -896,6 +964,7 @@
     "k" 'windmove-up
     "l" 'windmove-right
     "n" 'evil-window-next
+    "w" 'ace-window
     "+" 'evil-window-increase-height
     "-" 'evil-window-decrease-height
     "<" 'evil-window-decrease-width
@@ -912,8 +981,8 @@
   (setf custom-file
         (let*
             ((init-file-components (s-split "/" (file-truename user-init-file)))
-              (custom-file-components (-drop-last 1 init-file-components))
-              (custom-file (s-join "/" (-snoc custom-file-components "custom.el"))))
+             (custom-file-components (-drop-last 1 init-file-components))
+             (custom-file (s-join "/" (-snoc custom-file-components "custom.el"))))
           custom-file))
   (when
       (file-exists-p custom-file)

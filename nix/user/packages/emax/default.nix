@@ -65,6 +65,7 @@ let
         origami
         page-break-lines
         paredit
+        pdf-tools
         perspective
         persp-projectile
         popup
@@ -73,6 +74,7 @@ let
         rainbow-delimiters
         ripgrep
         s
+        slack
         slime
         slime-company
 #         sly
@@ -84,11 +86,14 @@ let
         # vimish-fold # Need keybindings but is good
         visual-fill-column
         vterm
+        w3m
         which-key
         wgrep
         zerodark-theme
         zoom-window
-      ])
+      ]
+      ++ [ flim apel ] # Needed only from w3m atm
+    )
     ]
     ++
     [ (with epkgs.orgPackages; [ org ]) ]
@@ -96,7 +101,7 @@ let
     [ (with epkgs; [ nano-theme ]) ]
     ++
     [ (with epkgs.elpaPackages; [ undo-tree ]) ]);
-  myemacs = runCommand "myemacs" { buildInputs = [ makeWrapper ripgrep fd ]; } ''
+  myemacs = runCommand "myemacs" { buildInputs = [ makeWrapper ripgrep fd w3m ]; } ''
     mkdir -pv $out/bin
     makeWrapper ${customizedEmacs}/bin/emacs $out/bin/emax \
       --prefix PATH : ${lib.makeBinPath [ ripgrep fd ]} \
