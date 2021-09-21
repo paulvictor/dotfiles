@@ -223,8 +223,8 @@ rec {
   systemd.user.services.xmodmap = {
     Unit = {
       Description = "Loads the XModMap Keymap";
-      After = [ "graphical.target" ];
-      Requires = [ "graphical.target" ];
+      After = [ "graphical-session.target" ];
+      Requires = [ "graphical-session.target" ];
       # Wants = [ "display-manager.service" ];
     };
     Service = {
@@ -376,6 +376,7 @@ rec {
     wmfocus
     xclip
     xdotool
+    xorg.xdpyinfo
     xorg.xmodmap
     xsel
     youtube-dl
@@ -1167,14 +1168,14 @@ rec {
       "XF86MonBrightness{Up,Down}" = "light -{A,U} 5";
     };
   };
-  services.xcape = {
-    enable = true;
-    mapExpression = {
-      Shift_L = "Escape";
-      # Keycodes are at https://cgit.freedesktop.org/xorg/proto/x11proto/tree/keysymdef.h without the XK_ prefix
-      Shift_R = "Control_L|Hyper_L|Meta_L|Z";
-      Control_L = "Control_L|X";
-      Control_R = "Alt_L|X";
-    };
-  };
+#   services.xcape = {
+#     enable = true;
+#     mapExpression = {
+#       Shift_L = "Escape";
+#       # Keycodes are at https://cgit.freedesktop.org/xorg/proto/x11proto/tree/keysymdef.h without the XK_ prefix
+#       Shift_R = "Control_L|Hyper_L|Meta_L|Z";
+#       Control_L = "Control_L|X";
+#       Control_R = "Alt_L|X";
+#     };
+#   };
 }
