@@ -9,15 +9,39 @@ let
       DOUBLE_TAP_MILLISEC: 150
 
     MAPPINGS:
+      - KEY: KEY_ESC
+        TAP:  KEY_UNKNOWN
+        HOLD: KEY_UNKNOWN
+      - KEY: KEY_SPACE
+        TAP:  KEY_SPACE
+        HOLD: KEY_LEFTALT
+        HOLD_START: BEFORE_CONSUME
+      - KEY: KEY_LEFTCTRL
+        TAP:  [ KEY_LEFTCTRL, KEY_X ]
+        HOLD: KEY_UNKNOWN
+        HOLD_START: BEFORE_CONSUME
+      - KEY: KEY_RIGHTCTRL
+        TAP:  [ KEY_LEFTALT, KEY_X ]
+        HOLD: KEY_RIGHTCTRL
+        HOLD_START: BEFORE_CONSUME
       - KEY: KEY_ENTER
         TAP: KEY_ENTER
         HOLD: KEY_RIGHTCTRL
+        HOLD_START: BEFORE_CONSUME
+      - KEY: KEY_LEFTSHIFT
+        TAP: KEY_ESC
+        HOLD: KEY_LEFTSHIFT
+        HOLD_START: BEFORE_CONSUME
+      - KEY: KEY_TAB
+        TAP: KEY_TAB
+        HOLD: [KEY_LEFTCTRL, KEY_LEFTMETA, KEY_LEFTALT ]
+        HOLD_START: BEFORE_CONSUME
   '';
   udevmon-config = writeText "udevmon.yaml" ''
    - JOB: "${interception-tools}/bin/intercept -g $DEVNODE | ${interception-tools-plugins.dual-function-keys}/bin/dual-function-keys -c ${config}  | ${interception-tools}/bin/uinput -d $DEVNODE"
      DEVICE:
        EVENTS:
-         EV_KEY: [KEY_ENTER]
+         EV_KEY: [KEY_ENTER, KEY_LEFTCTRL, KEY_RIGHTCTRL, KEY_LEFTSHIFT, KEY_TAB, KEY_ESC, KEY_SPACE]
   '';
 in
 {
