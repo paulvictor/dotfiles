@@ -182,7 +182,9 @@ rec {
   xsession = {
     enable = true;
     initExtra = lib.readFile onAttachMonitor;
-    windowManager.i3 = import ./config/i3/i3config.nix { inherit pkgs rofiElectronAppsRunner shareLink ; };
+    windowManager.command = "${sbcl}/bin/sbcl --load /home/viktor/stuff/stumpwm-config/init.lisp";
+#     windowManager.command = "${stumpwm}/bin/stumpwm";
+#     windowManager.i3 = import ./config/i3/i3config.nix { inherit pkgs rofiElectronAppsRunner shareLink ; };
   };
   imports = [
     # ./services/pCloudCC.nix
@@ -220,20 +222,20 @@ rec {
 #      Type = "simple";
 #    };
 #  };
-  systemd.user.services.xmodmap = {
-    Unit = {
-      Description = "Loads the XModMap Keymap";
-      After = [ "graphical-session.target" ];
-      Requires = [ "graphical-session.target" ];
-      # Wants = [ "display-manager.service" ];
-    };
-    Service = {
-      Environment="XAUTHORITY=${config.home.homeDirectory}/.Xauthority";
-      ExecStart = "${xorg.xmodmap}/bin/xmodmap -verbose ${config.home.homeDirectory}/.Xmodmap";
-      Type = "oneshot";
-      RemainAfterExit = "yes";
-    };
-  };
+#   systemd.user.services.xmodmap = {
+#     Unit = {
+#       Description = "Loads the XModMap Keymap";
+#       After = [ "graphical-session.target" ];
+#       Requires = [ "graphical-session.target" ];
+#       # Wants = [ "display-manager.service" ];
+#     };
+#     Service = {
+#       Environment="XAUTHORITY=${config.home.homeDirectory}/.Xauthority";
+#       ExecStart = "${xorg.xmodmap}/bin/xmodmap -verbose ${config.home.homeDirectory}/.Xmodmap";
+#       Type = "oneshot";
+#       RemainAfterExit = "yes";
+#     };
+#   };
   home.packages = [
     acpi # TODO : Install only on laptops
     afuse
@@ -1096,7 +1098,7 @@ rec {
         { key = "N"; mode = "Vi"; action = "SearchNext"; }
       ];
       draw_bold_text_with_bright_colors = true;
-      background_opacity = 0.0;
+      background_opacity = 1.0;
       colors1 = {
         primary = {
           background = "0x181818";
@@ -1147,19 +1149,19 @@ rec {
   services.sxhkd = {
     enable = true;
     keybindings = {
-      "super + Return" = "${alacritty}/bin/alacritty";
-      "super + shift + Return" = "${alacritty}/bin/alacritty -e tmux";
-      "super + d" = "rofi -show drun";
-      "super + g" = ''${wmfocus}/bin/wmfocus --fill -c asdf --textcolor red'';
-      "super + n" = "passdo --notify";
-      "super + p" = "passdo --copy";
-      "super + s" = "scrot -m";
-      "super + shift + s" = "scrot -s";
-      "super + shift + p" = "passdo --type";
-      "super + shift + slash" = "menu-surfraw";
-      "super + shift + d" = "${rofiElectronAppsRunner}/bin/rofiElectronAppsRunner";
+      "control + hyper + alt + Return" = "${alacritty}/bin/alacritty";
+      "control + hyper + alt + shift + Return" = "${alacritty}/bin/alacritty -e tmux";
+      "control + hyper + alt + d" = "rofi -show drun";
+      "control + hyper + alt + g" = ''${wmfocus}/bin/wmfocus --fill -c asdf --textcolor red'';
+      "control + hyper + alt + n" = "passdo --notify";
+      "control + hyper + alt + p" = "passdo --copy";
+      "control + hyper + alt + s" = "scrot -m";
+      "control + hyper + alt + shift + s" = "scrot -s";
+      "control + hyper + alt + shift + p" = "passdo --type";
+      "control + hyper + alt + shift + slash" = "menu-surfraw";
+      "control + hyper + alt + shift + d" = "${rofiElectronAppsRunner}/bin/rofiElectronAppsRunner";
       # OCR a screen selection
-      "super + x" = "${imagemagick}/bin/convert x: -modulate 100,0 -resize 400% -set density 300 png:- | ${tesseract}/bin/tesseract stdin stdout | ${xclip}/bin/xclip -selection clipboard";
+      "control + hyper + alt + x" = "${imagemagick}/bin/convert x: -modulate 100,0 -resize 400% -set density 300 png:- | ${tesseract}/bin/tesseract stdin stdout | ${xclip}/bin/xclip -selection clipboard";
       # Pulse Audio controls
       "XF86Audio{Raise,Lower}Volume" = "pactl set-sink-volume @DEFAULT_SINK@ {+5%,-5%}"; #increase sound volume
       "XF86AudioMute" =  "pactl set-sink-mute  @DEFAULT_SINK@ toggle"; # mute sound
@@ -1168,14 +1170,4 @@ rec {
       "XF86MonBrightness{Up,Down}" = "light -{A,U} 5";
     };
   };
-#   services.xcape = {
-#     enable = true;
-#     mapExpression = {
-#       Shift_L = "Escape";
-#       # Keycodes are at https://cgit.freedesktop.org/xorg/proto/x11proto/tree/keysymdef.h without the XK_ prefix
-#       Shift_R = "Control_L|Hyper_L|Meta_L|Z";
-#       Control_L = "Control_L|X";
-#       Control_R = "Alt_L|X";
-#     };
-#   };
 }

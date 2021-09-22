@@ -32,16 +32,24 @@ let
         TAP: KEY_ESC
         HOLD: KEY_LEFTSHIFT
         HOLD_START: BEFORE_CONSUME
-      - KEY: KEY_TAB
-        TAP: KEY_TAB
+      - KEY: KEY_RIGHTSHIFT
+        TAP: [KEY_LEFTCTRL, KEY_T ]
+        HOLD: KEY_RIGHTSHIFT
+        HOLD_START: BEFORE_CONSUME
+      - KEY: KEY_CAPSLOCK
+        TAP: [KEY_LEFTCTRL, KEY_T ]
         HOLD: [KEY_LEFTCTRL, KEY_LEFTMETA, KEY_LEFTALT ]
         HOLD_START: BEFORE_CONSUME
+      # - KEY: KEY_TAB
+      #   TAP: KEY_TAB
+      #   HOLD: [KEY_LEFTCTRL, KEY_LEFTMETA, KEY_LEFTALT ]
+      #   HOLD_START: BEFORE_CONSUME
   '';
   udevmon-config = writeText "udevmon.yaml" ''
    - JOB: "${interception-tools}/bin/intercept -g $DEVNODE | ${interception-tools-plugins.dual-function-keys}/bin/dual-function-keys -c ${config}  | ${interception-tools}/bin/uinput -d $DEVNODE"
      DEVICE:
        EVENTS:
-         EV_KEY: [KEY_ENTER, KEY_LEFTCTRL, KEY_RIGHTCTRL, KEY_LEFTSHIFT, KEY_TAB, KEY_ESC, KEY_SPACE]
+         EV_KEY: [KEY_ENTER, KEY_LEFTCTRL, KEY_RIGHTCTRL, KEY_LEFTSHIFT, KEY_TAB, KEY_ESC, KEY_SPACE, KEY_RIGHTSHIFT, KEY_CAPSLOCK ]
   '';
 in
 {
