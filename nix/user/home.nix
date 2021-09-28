@@ -167,18 +167,18 @@ rec {
       size = "48";
     };
   };
-  services.polybar = {
-    enable = true;
-    package =
-      polybar.override {
-        alsaSupport = true;
-        i3GapsSupport = true;
-        iwSupport = true;
-        nlSupport = false;
-      };
-    extraConfig = import ./config/polybar/polybarrc.nix { inherit pkgs config; };
-    script = builtins.readFile "${polybarLaunch}/bin/launchPolybar";
-  };
+#   services.polybar = {
+#     enable = true;
+#     package =
+#       polybar.override {
+#         alsaSupport = true;
+#         i3GapsSupport = true;
+#         iwSupport = true;
+#         nlSupport = false;
+#       };
+#     extraConfig = import ./config/polybar/polybarrc.nix { inherit pkgs config; };
+#     script = builtins.readFile "${polybarLaunch}/bin/launchPolybar";
+#   };
   xsession = {
     enable = true;
     initExtra = lib.readFile onAttachMonitor;
@@ -621,6 +621,8 @@ rec {
           "browser.tabs.loadBookmarksInBackground" = true;
           "browser.tabs.tabMinWidth" = 50;
           "browser.urlbar.dnsResolveSingleWordsAfterSearch" = 0;
+          "browser.link.open_newwindow.restriction" = 0;
+          "privacy.popups.showBrowserMessage" = true;
           "extensions.pocket.enabled" = false;
           "extensions.screenshots.disabled" = true;
           "ui.prefersReducedMotion" = 1;
@@ -1152,7 +1154,7 @@ rec {
       "control + hyper + alt + Return" = "${alacritty}/bin/alacritty";
       "control + hyper + alt + shift + Return" = "${alacritty}/bin/alacritty -e tmux";
       "control + hyper + alt + d" = "rofi -show drun";
-      "control + hyper + alt + g" = ''${wmfocus}/bin/wmfocus --fill -c asdf --textcolor red'';
+#       "control + hyper + alt + g" = ''${wmfocus}/bin/wmfocus --fill -c asdf --textcolor red'';
       "control + hyper + alt + n" = "passdo --notify";
       "control + hyper + alt + p" = "passdo --copy";
       "control + hyper + alt + s" = "scrot -m";

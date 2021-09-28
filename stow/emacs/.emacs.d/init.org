@@ -292,6 +292,8 @@
     :config
       (setq evil-want-keybinding nil)
       ;(key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
+      (evil-define-key '(insert normal) 'global (kbd "C-x C-x") 'previous-buffer)
+      (evil-define-key '(insert normal) 'global (kbd "C-x ESC") 'next-buffer)
       (evil-define-key '(insert visual) 'global (kbd "C-g") 'evil-normal-state)
       (evil-define-key 'normal 'global (kbd ", SPC") 'evil-ex-nohighlight)
       (evil-select-search-module 'evil-search-module 'evil-search)

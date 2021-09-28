@@ -4,7 +4,6 @@ writeShellScriptBin "i3exit" ''
   llock() {
     gllock &
     sleep 3
-    #${i3lock-fancy}/bin/i3lock-fancy -p -f Sauce-Code-Pro-Nerd-Font-Complete
   }
 
   case "$1" in
@@ -13,8 +12,8 @@ writeShellScriptBin "i3exit" ''
       ${xorg.xset}/bin/xset -display :0.0 dpms force off
       ;;
     logout)
-      ${xorg.xset}/bin/xset -display :0.0 dpms force off
-      ${i3-gaps}/bin/i3-msg exit
+      local s=$(${systemd}/bin/loginctl session-status | awk 'NR==1 {print $1}')
+      ${systemd}/bin/loginctl terminate-session $s
       ;;
     suspend)
       llock && systemctl suspend
