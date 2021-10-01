@@ -182,7 +182,8 @@ rec {
   xsession = {
     enable = true;
     initExtra = lib.readFile onAttachMonitor;
-    windowManager.command = "${sbcl}/bin/sbcl --load /home/viktor/stuff/stumpwm-config/init.lisp";
+    windowManager.command = "${import ./scripts/mk-stumpwm.nix { inherit pkgs;}}";
+#     windowManager.command = "${sbcl}/bin/sbcl --load /home/viktor/stuff/stumpwm-config/init.lisp";
 #     windowManager.command = "${stumpwm}/bin/stumpwm";
 #     windowManager.i3 = import ./config/i3/i3config.nix { inherit pkgs rofiElectronAppsRunner shareLink ; };
   };

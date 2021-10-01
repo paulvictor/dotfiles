@@ -12,7 +12,7 @@ writeShellScriptBin "i3exit" ''
       ${xorg.xset}/bin/xset -display :0.0 dpms force off
       ;;
     logout)
-      local s=$(${systemd}/bin/loginctl session-status | awk 'NR==1 {print $1}')
+      s=$(${systemd}/bin/loginctl session-status | awk 'NR==1 {print $1}')
       ${systemd}/bin/loginctl terminate-session $s
       ;;
     suspend)
