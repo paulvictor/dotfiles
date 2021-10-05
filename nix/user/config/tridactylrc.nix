@@ -43,8 +43,9 @@ unbind --mode=ex <C-c>
 bind gd tabdetach
 bind gD composite tabduplicate; tabdetach
 
-bind <F1> tabprev
-bind <F2> tabnext_gt
+" Learn to use JK
+" bind <F1> tabprev
+" bind <F2> tabnext_gt
 
 bind / fillcmdline find
 bind ? fillcmdline find -?
