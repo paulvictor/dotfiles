@@ -1,5 +1,5 @@
 self: super:
 
 {
-   pass-with-extensions = super.pass.withExtensions(e: [ e.pass-otp e.pass-tomb e.pass-import ]);
+   pass-with-extensions = super.pass.withExtensions(e: [ e.pass-otp e.pass-tomb e.pass-import e.pass-update ]);
 }
