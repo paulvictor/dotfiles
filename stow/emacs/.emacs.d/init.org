@@ -603,6 +603,30 @@
     (setq ivy-format-function #'ivy-format-function-line))
 
 #+end_src
+* Equake
+#+begin_src emacs-lisp
+(use-package equake
+  ;; some examples of optional settings follow:
+  :custom
+  ;; set width a bit less than full-screen (prevent 'overflow' on multi-monitor):
+  (equake-size-width 0.99)
+  ;; set distinct face for Equake: white foreground with dark blue background, and different font:
+  :custom-face
+  (equake-buffer-face
+   ((t (:inherit 'default :family "DejaVu Sans Mono" :background "#000022" :foreground "white"))))
+  :config
+  ;; prevent accidental frame closure:
+  (advice-add #'save-buffers-kill-terminal :before-while #'equake-kill-emacs-advice)
+  ;; binding to restore last Equake tab when viewing a non-Equake buffer
+  (global-set-key (kbd "C-M-^") #'equake-restore-last-etab)
+  ;; set default shell
+  (setq equake-default-shell 'vterm)
+  ;; set list of available shells
+  (setq equake-available-shells
+   '("shell"
+     "vterm"
+     "eshell")))
+#+end_src
 * Version control
 #+begin_src emacs-lisp
 
@@ -699,20 +723,23 @@
 ;      (lispy-key-theme '(lispy c-digits)))
 
   (use-package lispyville
+    :hook
+      ;; Check if we can use prog-mode ?
+      ((slime-mode slime-repl-mode lisp-mode org-mode ess-r-mode nix-mode haskell-mode elisp-mode) . lispyville-mode)
     :custom
       (lispyville-key-theme '(operators c-w c-u prettify additional-motions commentary slurp/barf-cp wrap additional additional-insert))
     :config
-      (evil-define-key '(insert visual) 'lispyville-mode-map "(" 'lispy-parens
-                                                              "[" 'lispy-brackets
-                                                              ; Works with emacs lisp but org mode has some problem with the escaped quotes
-                                                              (string #x22) 'lispy-quotes
-                                                              "{" 'lispy-braces)
+      (evil-define-key '(insert visual) lispyville-mode-map "(" 'lispy-parens
+                                                            "[" 'lispy-brackets
+                                                            ; Works with emacs lisp but org mode has some problem with the escaped quotes
+                                                            (string #x22) 'lispy-quotes
+                                                            "{" 'lispy-braces)
       ; Evil rebinds these on insert mode to normal mode switch and so am manually binding them
-      (evil-define-key 'normal 'lispyville-mode-map "[" 'lispyville-next-opening
+      (evil-define-key 'normal lispyville-mode-map "[" 'lispyville-next-opening
                                                     "{" 'lispyville-previous-opening
                                                     "]" 'lispyville-next-closing
                                                     "}" 'lispyville-previous-closing)
-      (evil-define-key 'normal 'lispyville-mode-map (kbd "M-H") 'lispyville-beginning-of-next-defun)
+      (evil-define-key 'normal lispyville-mode-map (kbd "M-H") 'lispyville-beginning-of-next-defun)
     :init
       (add-hook 'lisp-mode-hook #'lispyville-mode)
       (add-hook 'emacs-lisp-mode-hook #'lispyville-mode))
