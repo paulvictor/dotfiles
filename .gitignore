@@ -1,1 +1,12 @@
-/stow/emacs/.emacs.d/init.el
+/diff.patch
+move-to-stumpwm.org
+result
+stow/emacs/.emacs.d/Emacs.org
+stow/emacs/.emacs.d/custom.el
+stow/emacs/.emacs.d/recentf
+stow/emacs/.emacs.d/var/
+stow/stumpwm/.stumpwm.d/log
+stow/stumpwm/.stumpwm.d/sources.org
+stow/stumpwm/.stumpwm.d/stumpwm.log
+stow/stumpwm/.stumpwm.d/stumpwm.log.1
+stow/emacs/.emacs.d/init.el
