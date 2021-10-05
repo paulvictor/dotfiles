@@ -725,7 +725,7 @@
   (use-package lispyville
     :hook
       ;; Check if we can use prog-mode ?
-      ((slime-mode slime-repl-mode lisp-mode org-mode ess-r-mode nix-mode haskell-mode elisp-mode) . lispyville-mode)
+      ((slime-mode slime-repl-mode lisp-mode elisp-mode) . lispyville-mode)
     :custom
       (lispyville-key-theme '(operators c-w c-u prettify additional-motions commentary slurp/barf-cp wrap additional additional-insert))
     :config
