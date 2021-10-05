@@ -677,20 +677,20 @@ rec {
     serverAliveInterval = 30;
     serverAliveCountMax = 5;
     extraConfig = ''
-      IdentityFile ~/.ssh/ec2keys/id_ed25519.pub
+      IdentityFile ~/.ssh/id_rsa.pub
     '';
     matchBlocks = {
       "github" = {
         host = "github";
         hostname = "github.com";
         user = "git";
-        identityFile = "~/.ssh/ec2keys/id_ed25519.pub";
+        identityFile = "~/.ssh/id_rsa.pub";
       };
       "bitbucket" = {
         host = "bitbucket";
         hostname = "bitbucket.org";
         user = "git";
-        identityFile = "~/.ssh/ec2keys/id_ed25519.pub";
+        identityFile = "~/.ssh/id_rsa.pub";
       };
     };
   };
@@ -714,7 +714,7 @@ rec {
   programs.gpg = {
     enable = true;
     settings = {
-      default-key = "0x18497AC961BB2FB6";
+      default-key = "0xA96C9B89755DF7D2";
       default-recipient-self = true;
       require-cross-certification = true;
       no-symkey-cache = true;
@@ -735,23 +735,17 @@ rec {
     maxCacheTtl = 6 * 3600;
     maxCacheTtlSsh = 6 * 3600;
     sshKeys = [
-      "# paulvictor@gmail.com.id_rsa"
-      "2FB840B6253FB6DAEF4A977F20E14A3C664B572C"
-      "# pauljupay.pem"
-      "8C2FD88912D38D2361C7F9735347E0EE9713E047"
-      "# paulvictor@gmail.com.us-east-1"
-      "B17B36ED77654FCB5791085A4D96C07C3847AC0C"
-      "# ed25519"
-      "8735F84BDCBF387618FF890769AE2D4E4C2AB139"
+      "# id_rsa"
+      "1F525695DC054E59E3D357E2F76F05DE63F2AD0D"
     ];
   };
 
   programs.password-store = {
     enable = true;
-    package = pass.withExtensions(e: [ e.pass-otp e.pass-tomb ]);
+    package = pass-with-extensions;
     settings = {
-      PASSWORD_STORE_DIR = "${config.home.homeDirectory}/.password-store";
-      PASSWORD_STORE_KEY = "3264D1648F8FB1A4A3F74C9318497AC961BB2FB6";
+      PASSWORD_STORE_DIR = "${config.home.homeDirectory}/migrate-keys/password-store";
+      PASSWORD_STORE_KEY = "3E6925C73B18D3DB43A2104EA96C9B89755DF7D2";
       PASSWORD_STORE_X_SELECTION = "SECONDARY";
     };
   };
@@ -895,7 +889,7 @@ rec {
     "juspay.in" = {
       primary = true;
       #primary = false;
-      passwordCommand = "${pkgs.gnupg}/bin/gpg -dq .password-store/Juspay/Email/Mail/AllSpark-Dell.gpg"; # TODO Use address
+#       passwordCommand = "${pkgs.gnupg}/bin/gpg -dq .password-store/Juspay/Email/Mail/AllSpark-Dell.gpg"; # TODO Use address
       neomutt = {
         enable = true;
         extraConfig = ''
@@ -990,7 +984,7 @@ rec {
         enable = true;
       };
       gpg = {
-        key = "3264D1648F8FB1A4A3F74C9318497AC961BB2FB6";
+        key = "3E6925C73B18D3DB43A2104EA96C9B89755DF7D2";
         signByDefault = true;
       };
     };
