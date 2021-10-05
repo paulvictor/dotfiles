@@ -264,8 +264,15 @@ in
   virtualisation.lxd.enable = true;
 
   security.wrappers = {
-    gllock.source = "${gllock}/bin/gllock";
+    gllock = {
+      owner = "root";
+      group = "root";
+      setuid = true;
+      source = "${gllock}/bin/gllock";
+    };
     cryptsetup = {
+      owner = "root";
+      group = "root";
       source = "${pkgs.cryptsetup}/bin/cryptsetup";
       capabilities = "cap_sys_admin+ep";
     };
