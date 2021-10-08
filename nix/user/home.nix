@@ -567,7 +567,7 @@ rec {
   #services.flameshot.enable = true;
   services.network-manager-applet.enable = true;
   services.pasystray.enable = true;
-  programs.neovim = import ./config/vim/hm.nix { inherit pkgs; };
+  programs.neovim.enable = true;# = import ./config/vim/hm.nix { inherit pkgs; };
   programs.firefox = {
     enable = true;
     #package = firefox-beta-bin ; # wrapFirefox (latest.firefox-beta-bin) { browserName = "firefox"; };
