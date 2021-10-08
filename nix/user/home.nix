@@ -12,7 +12,8 @@ let
   ffmpeg-overlay = import ./packages/ffmpeg.nix;
   wallpaper-overlay = import ./packages/wallpaper.nix;
   compton-git-overlay = import ./packages/compton-git.nix;
-  pass-overlay = import ./packages/pass.nix;
+  pass-override-overlay = import ./packages/pass-override.nix;
+  pass-extensions-overlay = import ./packages/pass-extensions.nix;
   julia-overlay = import ./packages/julia.nix;
   dyalog-nixos = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
   hie = import ./packages/hie.nix { inherit pkgs; } ;
@@ -148,7 +149,8 @@ rec {
     ripgrep-overlay
     neovim-overlay
     rofi-fuzzy
-    pass-overlay
+    pass-override-overlay
+    pass-extensions-overlay
     ffmpeg-overlay
     mpd-overlay
     firefox-overlay
