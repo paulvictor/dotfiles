@@ -744,7 +744,7 @@ rec {
     enable = true;
     package = pass-with-extensions;
     settings = {
-      PASSWORD_STORE_DIR = "${config.home.homeDirectory}/migrate-keys/password-store";
+      PASSWORD_STORE_DIR = "${config.home.homeDirectory}/.password-store";
       PASSWORD_STORE_KEY = "3E6925C73B18D3DB43A2104EA96C9B89755DF7D2";
       PASSWORD_STORE_X_SELECTION = "SECONDARY";
     };
