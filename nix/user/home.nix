@@ -84,6 +84,8 @@ let
     callPackage ./packages/fira-code-nerdfonts.nix {};
   victor-mono-nerdfonts =
     callPackage ./packages/victor-mono-nerdfonts/default.nix {};
+  all-the-icons-fonts =
+    callPackage ./packages/all-the-icons-fonts.nix {};
   menu-surfraw =
     import ./scripts/menu-surfraw.nix { inherit pkgs; };
   shareLink =
@@ -371,6 +373,7 @@ rec {
     unzip
     #victor-mono
     victor-mono-nerdfonts
+    all-the-icons-fonts
     vifm
     vlc
     vlc_qt5
