@@ -756,7 +756,7 @@ rec {
   };
 
   services.mbsync = {
-    enable = true;
+    enable = false;
     package = pkgs.writeShellScriptBin "mbsync" ''
        ${pkgs.isync}/bin/mbsync $@
        NOTMUCH_CONFIG=${config.xdg.configHome}/notmuch/notmuchrc ${pkgs.notmuch}/bin/notmuch new
