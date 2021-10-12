@@ -10,6 +10,7 @@
 (load-module "net")
 (load-module "wifi")
 (load-module "mem")
+(load-module "battery-portable")
 
 (setf wifi:*iwconfig-path* "/run/current-system/sw/bin/iwconfig")
 
@@ -22,22 +23,23 @@
                             "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"))))
     (multiple-value-bind (sec min hr date mon yr dow)
         (get-decoded-time)
-      (format NIL "~2,'0d:~2,'0d:~2,'0d ~a, ~d ~a ~d"
-              hr min sec
+      (format NIL "~2,'0d:~2,'0d ~a, ~d ~a"
+              hr min
               (dow-str dow)
-              date (mon-str mon) yr))))
+              date (mon-str mon)))))
 
 ;; (setf cpu::*cpu-modeline-fmt* " %C ")
 (setf mem::*mem-modeline-fmt* "%a %p %b")
 (setf *screen-mode-line-format*
-      (list "[^B%n^b] | %W " ; groups/windows
+      (list "[^B%n^b] | %W" ; groups/windows
 ;;             (bar 20 10 #\| #\x)
             "^>" ; right align
-            " | %C "
-            " | %M "
-            " | %l "
-            " | %I "
-            " | ^7* " '(:eval (pretty-time)); date
+            "| %C "
+            "| %M "
+            "| %l "
+            "| %I "
+            "| Bat: %B "
+            "| ^7*" '(:eval (pretty-time)); date
             ))
 
 (dolist (head (screen-heads (current-screen)))
