@@ -136,15 +136,9 @@ in
     isNormalUser = true;
     hashedPassword = "$6$SCMbhhof$227ZIsJWgaZmuZX3gwWUTv4E5VrPaVKmZ/97cbU6yclJdn7To3F0ngRAcvmYX5mPOunW8bU6v16vqvxkqjivK.";
     uid = 1000;
-    extraGroups = [ "networkmanager" "audio" "wheel" "tty" "lp" "fuse" "docker" "adbusers" "netdev" "lxd" "disk" ];
+    extraGroups = [ "networkmanager" "audio" "wheel" "tty" "lp" "fuse" "docker" "adbusers" "netdev" "lxd" "disk" "video" ];
     shell = pkgs.zsh;
   };
-
-  # This value determines the NixOS release with which your system is to be
-  # compatible, in order to avoid breaking some software such as database
-  # servers. You should change this only after NixOS release notes say you
-  # should.
-  system.stateVersion = "20.09"; # Did you read the comment?
 
   networking.networkmanager.enable = true;
   system.autoUpgrade.enable = false;
@@ -230,7 +224,8 @@ in
     logDriver = "journald";
   };
 
-  services.udev.packages = [ pkgs.crda pkgs.android-udev-rules pkgs.yubikey-personalization ];
+  services.udev.packages =
+    with pkgs; [ crda android-udev-rules yubikey-personalization ];
   services.pcscd.enable = true;
   nix.trustedUsers = [ "@wheel" "viktor" "root" ];
   programs.adb.enable = true;
@@ -260,6 +255,7 @@ in
   services.thermald.enable = pkgs.lib.mkDefault true;
 
   programs.firejail.enable = true;
+  programs.light.enable = true;
 
   virtualisation.lxd.enable = true;
 

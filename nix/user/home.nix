@@ -1165,11 +1165,11 @@ rec {
       # OCR a screen selection
       "control + hyper + alt + x" = "${imagemagick}/bin/convert x: -modulate 100,0 -resize 400% -set density 300 png:- | ${tesseract}/bin/tesseract stdin stdout | ${xclip}/bin/xclip -selection clipboard";
       # Pulse Audio controls
-      "XF86Audio{Raise,Lower}Volume" = "pactl set-sink-volume @DEFAULT_SINK@ {+5%,-5%}"; #increase sound volume
-      "XF86AudioMute" =  "pactl set-sink-mute  @DEFAULT_SINK@ toggle"; # mute sound
+      "XF86Audio{Raise,Lower}Volume" = "${pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ {+5%,-5%}"; #increase sound volume
+      "XF86AudioMute" =  "${pulseaudio}/bin/pactl set-sink-mute  @DEFAULT_SINK@ toggle"; # mute sound
       # "XF86MicMute" =  "pulseaudio-ctl mute-input"; # mute mic
       # Sreen brightness controls
-      "XF86MonBrightness{Up,Down}" = "light -{A,U} 5";
+      "XF86MonBrightness{Up,Down}" = "${light}/bin/light -{A,U} 5";
     };
   };
 }
