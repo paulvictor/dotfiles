@@ -115,7 +115,7 @@ let
     sha256 = "187frmvb6z7k3p4yr15v10y4piz0fm6zhqp1jxqqhyaxdszrzwqw";
     meta = {};
   };
-  emax = import ./packages/emax { inherit pkgs; };
+  customizedEmacs = import ./packages/emax { inherit pkgs; };
   firefox-beta-with-extensions =
     (wrapFirefox latest.firefox-beta-bin {}).override({browserName = "firefox";});
 #         .overrideAttrs(oldAttrs:
@@ -259,8 +259,7 @@ rec {
     cantarell-fonts
     #cachix
     comma
-    emax.desktopApp
-    emax.cliApp
+    customizedEmacs
     ungoogled-chromium
     ddgr
     deluge
@@ -1153,6 +1152,7 @@ rec {
     keybindings = {
       "control + hyper + alt + Return" = "${alacritty}/bin/alacritty";
       "control + hyper + alt + shift + Return" = "${alacritty}/bin/alacritty -e tmux";
+      "control + hyper + alt + e" = "${customizedEmacs}/bin/emacs";
       "control + hyper + alt + d" = "rofi -show drun";
 #       "control + hyper + alt + g" = ''${wmfocus}/bin/wmfocus --fill -c asdf --textcolor red'';
       "control + hyper + alt + n" = "passdo --notify";

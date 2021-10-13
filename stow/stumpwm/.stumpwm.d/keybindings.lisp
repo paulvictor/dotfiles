@@ -14,9 +14,6 @@
     ('local
      (define-key pvr/bindings (kbd key) command))))
 
-; Move to sxhkd ?
-(set-keybindings "e" "exec emax" :where 'both)
-
 (loop for (vim-key name) in '(("k" "up")
                               ("j" "down")
                               ("h" "left")

@@ -15,7 +15,7 @@
 (setf wifi:*iwconfig-path* "/run/current-system/sw/bin/iwconfig")
 
 (defun pretty-time ()
-  "Returns the date formatted as '17:19:51 Неделя, 27 Април 2014'."
+  "Returns the date formatted as '17:19 Thu, 27 Oct."
   (flet ((dow-str (dow)
            (nth dow '("Mon" "Tue" "Wed" "Thu" "Fri" "Sat" "Sun")))
          (mon-str (mon)
@@ -23,7 +23,7 @@
                             "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"))))
     (multiple-value-bind (sec min hr date mon yr dow)
         (get-decoded-time)
-      (format NIL "~2,'0d:~2,'0d ~a, ~d ~a"
+      (format NIL "~2,'0d:~2,'0d | ~a, ~d ~a"
               hr min
               (dow-str dow)
               date (mon-str mon)))))

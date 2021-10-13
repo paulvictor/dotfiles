@@ -101,20 +101,15 @@ let
     [ (with epkgs; [ nano-theme ]) ]
     ++
     [ (with epkgs.elpaPackages; [ undo-tree ]) ]);
-  myemacs = runCommand "myemacs" { buildInputs = [ makeWrapper ripgrep fd w3m ]; } ''
-    mkdir -pv $out/bin
-    makeWrapper ${customizedEmacs}/bin/emacs $out/bin/emax \
-      --prefix PATH : ${lib.makeBinPath [ ripgrep fd ]} \
-      --add-flags --maximized
-  '';
-in
-{
-  desktopApp = pkgs.makeDesktopItem {
+  myemacs = symlinkJoin {
     name = "Emacs";
-    comment = "Start hacking!";
-    exec = "${myemacs}/bin/emax %F";
-    icon = "${pkgs.emacs}/share/icons/hicolor/scalable/apps/emacs.ico";
-    desktopName = "Emacs";
+    paths = [ customizedEmacs ];
+    buildInputs = [ makeWrapper ripgrep fd w3m ];
+    postBuild = ''
+      wrapProgram $out/bin/emacs \
+        --prefix PATH : ${lib.makeBinPath [ ripgrep fd ]} \
+        --add-flags --maximized
+    '';
   };
-  cliApp = myemacs;
-}
+in
+myemacs
