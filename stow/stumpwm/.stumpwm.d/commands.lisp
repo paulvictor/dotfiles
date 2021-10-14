@@ -14,6 +14,7 @@
            group)))))
 
 (defvar *enabled?* t)
+;; TODO : Make it work across systems
 (defvar *rat-name* "Logitech Wireless Mouse")
 
 (defcommand poison () ()

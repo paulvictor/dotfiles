@@ -9,5 +9,5 @@
 (setf *message-window-gravity* :top-right)
 (setf *input-window-gravity* :top-right)
 
-;; (setf *mouse-focus-policy* :click)
+(setf *mouse-focus-policy* :click)
 (set-fg-color "green")

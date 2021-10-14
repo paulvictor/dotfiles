@@ -45,6 +45,7 @@ instead of any error."
 (pvr/load "globalwindows")
 (pvr/load "border")
 (pvr/load "modeline")
+(pvr/load "equake")
 ; Message bar settings
 
 (which-key-mode)
