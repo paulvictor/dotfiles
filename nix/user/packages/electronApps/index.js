@@ -24,7 +24,7 @@ app.on('ready', () => {
   });
   mainWindow.loadURL(appUrl,
     {
-      userAgent: "Mozilla/5.0 (X11; Linux x86_64; rv:85.0) Gecko/20100101 Firefox/85.0"
+      userAgent: "Mozilla/5.0 (X11; Linux x86_64; rv:92.0) Gecko/20100101 Firefox/92.0"
     });
   mainWindow.on('closed', () => { mainWindow = null; });
 });
