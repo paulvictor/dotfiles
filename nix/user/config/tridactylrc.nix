@@ -27,8 +27,8 @@ bind d composite tabclose | tab #
 bind x tabclose
 
 " Only hint search results on Google and DDG
-bindurl www.google.com f hint -Jc .rc > div > a
-bindurl www.google.com F hint -Jbc .rc > div > a
+" bindurl www.google.com f hint -Jc .rc > div > a
+" bindurl www.google.com F hint -Jbc .rc > div > a
 
 bindurl ^https://duckduckgo.com f hint -Jc [class=result__a]
 bindurl ^https://duckduckgo.com F hint -Jbc [class=result__a]
