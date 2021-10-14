@@ -77,8 +77,6 @@ let
         slack
         slime
         slime-company
-#         sly
-#         sly-quicklisp
         swiper
         transient
         use-package
@@ -89,6 +87,7 @@ let
         w3m
         which-key
         wgrep
+        yequake
         zerodark-theme
         zoom-window
       ]
