@@ -197,7 +197,7 @@ rec {
   ];
   # Let Home Manager install and manage itself.
   #programs.home-manager.enable = true;
-  programs.zsh = import ./config/zsh.nix { inherit pkgs config tmuxWithConfig; };
+  programs.zsh = import ./config/zsh.nix { inherit pkgs config tmuxWithConfig customizedEmacs; };
   fonts.fontconfig.enable = true;
 #  services.pCloudCC = {
 #    enable = true;
@@ -1170,6 +1170,14 @@ rec {
       # "XF86MicMute" =  "pulseaudio-ctl mute-input"; # mute mic
       # Sreen brightness controls
       "XF86MonBrightness{Up,Down}" = "${light}/bin/light -{A,U} 5";
+    };
+  };
+  services.emacs = {
+    enable = true;
+    package = customizedEmacs;
+    client= {
+      enable = true;
+      arguments = [ "-c" "-n" "-a" "emacs" ];
     };
   };
 }

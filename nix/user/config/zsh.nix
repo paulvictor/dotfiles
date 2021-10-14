@@ -1,4 +1,4 @@
-{ pkgs, config, tmuxWithConfig }:
+{ pkgs, config, tmuxWithConfig, customizedEmacs }:
 
 with pkgs;
 let
@@ -106,7 +106,7 @@ in {
     [[ $TERM = "rxvt-unicode-256color" ]] &&
       (for (( i=1; i<=$LINES; i++ )); do echo; done; clear)
 
-    export EDITOR=${neovim}/bin/nvim
+    export EDITOR="${customizedEmacs}/bin/emacsclient -c"
     #eval "$(${lua}/bin/lua ${z-lua}/bin/z --init zsh enhanced once fzf)"
     _ZL_ECHO=1
     _ZL_MATCH_MODE=1
