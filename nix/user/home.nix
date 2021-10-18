@@ -260,7 +260,7 @@ rec {
     #cachix
     comma
     customizedEmacs
-    ungoogled-chromium
+    (ungoogled-chromium.override { enableWideVine = true;})
     ddgr
     deluge
     dejavu_fonts
@@ -376,7 +376,7 @@ rec {
     vifm
     vlc
     vlc_qt5
-    (vivaldi.override { proprietaryCodecs = true; inherit vivaldi-ffmpeg-codecs;})
+    (vivaldi.override { proprietaryCodecs = true; inherit vivaldi-ffmpeg-codecs vivaldi-widevine; enableWidevine = true;})
     watchexec
     weechat
     wmctrl
