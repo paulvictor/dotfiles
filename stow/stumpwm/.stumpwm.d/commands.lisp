@@ -14,16 +14,22 @@
            group)))))
 
 (defvar *enabled?* t)
-;; TODO : Make it work across systems
-(defvar *rat-name* "Logitech Wireless Mouse")
+
+(ql:quickload "split-sequence")
 
 (defcommand poison () ()
   (banish)
-  (run-shell-command
-   (concatenate 'string
-                "xinput "
-                (if *enabled?* "disable" "enable")
-                " '" *rat-name* "'"))
+  (let* ((list-rats-cmd "xinput list | \grep -E 'slave\\s+pointer' | sed -E 's/([^=]*)=([0-9]+).*/\\2/'")
+         (dev-ids (mapcar (lambda (dim) (parse-integer dim))
+                          (split-sequence:SPLIT-SEQUENCE #\Newline
+                                                         (string-trim '(#\Newline)
+                                                                      (run-shell-command list-rats-cmd t))))))
+    (dolist (rat-id dev-ids)
+      (run-shell-command
+       (concatenate 'string
+                    "xinput "
+                    (if *enabled?* "disable" "enable")
+                    " '" (format nil "~a" rat-id) "'"))))
   (setf *enabled?* (not *enabled?*)))
 
 (defun shell-command (command)
