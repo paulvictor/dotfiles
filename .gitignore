@@ -9,5 +9,5 @@ stow/stumpwm/.stumpwm.d/log
 stow/stumpwm/.stumpwm.d/sources.org
 stow/stumpwm/.stumpwm.d/stumpwm.log
 stow/stumpwm/.stumpwm.d/stumpwm.log.1
-stow/emacs/.emacs.d/init.el
 /nix/root/configuraton.nix
+/stow/emacs/.emacs.d/init.org
