@@ -149,7 +149,7 @@ rec {
     tomb-overlay
     brotab-overlay
     ripgrep-overlay
-    neovim-overlay
+#     neovim-overlay
     rofi-fuzzy
     pass-override-overlay
     pass-extensions-overlay
@@ -354,6 +354,7 @@ rec {
     rofi-systemd
     ruby
     rxvt_unicode-with-plugins
+    sbcl
     scrot
     shareLink
     siji

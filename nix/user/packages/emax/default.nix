@@ -3,7 +3,7 @@
 with pkgs;
 let
   customizedEmacs =
-  (emacsPackagesGen emacs).emacsWithPackages(epkgs:
+    (emacsPackagesGen (emacs.override {withImageMagick = true; })).emacsWithPackages(epkgs:
   [ (with epkgs.melpaPackages;
       [
         # ace-jump-mode
@@ -77,6 +77,7 @@ let
         slack
         slime
         slime-company
+        sly
         swiper
         transient
         use-package

@@ -2,5 +2,5 @@
 
 (load-module "globalwindows")
 
-;; (set-keybindings "." "global-windowslist")
-;; (set-keybindings "," "global-pull-windowslist")
+(set-keybindings "." "global-windowlist")
+(set-keybindings "," "global-pull-windowlist")

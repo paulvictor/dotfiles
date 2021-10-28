@@ -36,6 +36,7 @@
 * Visual stuff
 #+begin_src emacs-lisp
   (defun pvr/set-font-faces ()
+    (set-mouse-color "white")
     (set-face-attribute 'default nil :font "VictorMono Nerd Font" :height 110)
     (set-face-attribute 'variable-pitch nil :font "Iosevka Slab" :height 100)
     (set-face-attribute 'fixed-pitch nil :font "Iosevka Fixed Slab" :height 110)
@@ -56,7 +57,6 @@
   ; (add-to-list 'default-frame-alist '(alpha . (85 . 70)))
   (when (display-graphic-p)
     (add-to-list 'default-frame-alist '(font . "VictorMono Nerd Font-13")))
-  (set-mouse-color "white")
   (setq-default indent-tabs-mode nil)
   (menu-bar-mode -1)
   (tool-bar-mode -1)
@@ -622,16 +622,16 @@
   ;; set width a bit less than full-screen (prevent 'overflow' on multi-monitor):
   (equake-size-width 0.99)
   ;; set distinct face for Equake: white foreground with dark blue background, and different font:
-  :custom-face
-  (equake-buffer-face
-   ((t (:inherit 'default :family "DejaVu Sans Mono" :background "#000022" :foreground "white"))))
-  :config
+  ;;:custom-face
+  ;;(equake-buffer-face
+  ;; ((t (:inherit 'default :family "DejaVu Sans Mono" :background "#000022" :foreground "white"))))
+  ;;:config
   ;; prevent accidental frame closure:
-  (advice-add #'save-buffers-kill-terminal :before-while #'equake-kill-emacs-advice)
+  ;;(advice-add #'save-buffers-kill-terminal :before-while #'equake-kill-emacs-advice)
   ;; binding to restore last Equake tab when viewing a non-Equake buffer
-  (global-set-key (kbd "C-M-^") #'equake-restore-last-etab)
+  ;;(global-set-key (kbd "C-M-^") #'equake-restore-last-etab)
   ;; set default shell
-  (setq equake-default-shell 'vterm)
+  (setq equake-default-shell 'eshell)
   ;; set list of available shells
   (setq equake-available-shells
    '("shell"
@@ -713,6 +713,12 @@
   (defun hyperspec-lookup--hyperspec-lookup-w3m (orig-fun &rest args)
     (let ((browse-url-browser-function 'w3m-browse-url))
       (apply orig-fun args)))
+
+  (use-package sly
+    :hook (lisp-mode . slime-mode)
+    :init
+    (setq inferior-lisp-program "sbcl")) ; TODO : Move to dir specific config
+
 
   (use-package slime
     :hook (lisp-mode . slime-mode)
