@@ -266,8 +266,8 @@
   :config
     (setq evil-want-keybinding nil)
     ;(key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
-    (evil-define-key '(insert normal) 'global (kbd "C-x C-x") 'previous-buffer)
-    (evil-define-key '(insert normal) 'global (kbd "C-x ESC") 'next-buffer)
+;;     (evil-define-key '(insert normal) 'global (kbd "C-x C-x") 'previous-buffer)
+;;     (evil-define-key '(insert normal) 'global (kbd "C-x ESC") 'next-buffer)
     (evil-define-key '(insert visual) 'global (kbd "C-g") 'evil-normal-state)
     (evil-define-key 'normal 'global (kbd ", SPC") 'evil-ex-nohighlight)
     (evil-select-search-module 'evil-search-module 'evil-search)
@@ -361,6 +361,8 @@ Repeated invocations toggle between the two most recently open buffers."
 ;;                  Visual line mode messes up git gutter ;
 ;;                 (visual-line-mode 1)
                 (setq evil-auto-indent nil)))
+  :custom
+  (org-directory "~/org-files")
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -393,22 +395,16 @@ Repeated invocations toggle between the two most recently open buffers."
                   (org-level-7 . 0.9)
                   (org-level-8 . 0.8)))
     (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face)))
-  (setq org-agenda-start-with-log-mode t
-        org-log-done 'time
-        org-log-into-drawer t
-        org-refile-targets '(("Archive.org" :maxlevel . 1)))
   (setq org-capture-templates
-    `(("t" "Tasks")
-      ("tt" "Task" entry (file+olp "~/org-files/tasks.org" "Inbox")
+        '(("l" "Useful Links" entry
+           (file+olp "Links.org" "Links")
+           "* %x :%^g")
+          ("t" "Tasks" entry
+           (file+olp "Tasks.org" "Tasks")
            "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
-      ("n" "Notes")
-      ("nn" "Notes" entry
-           (file+olp+datetree "~/org-files/notes.org")
-           "\n* %<%I:%M %p> - Notes : notes :\n\n%?\n\n"
-           :clock-in :clock-resume
-           :empty-lines 1)))
-  (setq org-agenda-files
-        '("~/org-files/tasks.org")))
+          ("s" "Snippets" entry
+           (file+olp "Snippets.org" "Snippets")
+           "* %? \n ** %i\n"))))
 
 (use-package org-tempo
   :config
@@ -972,17 +968,22 @@ Also move to the next line, since that's the most frequent action after"
 ;; Risky, but I'm going to set it
 (setq enable-local-eval t)
 
-(defun workspace-setup ()
-  "Setup Local Workspaces"
+(defun eshell-persp ()
+  "Crete a new persp for eshell"
   (interactive)
-  (flet ((eshell-setup ()
-                       (persp-switch "eshell" t)
-                       (eshell))
-         (vterm-setup ()
-                      (persp-switch "vterm" t)
-                      (eshell)))
-    (eshell-setup)
-    (vterm-setup)
-    (persp-switch "Main")))
+  (persp-switch "eshell")
+  (with-perspective "eshell"
+    (let
+        ((buffer (eshell)))
+      (persp-switch-to-buffer buffer)
+      (persp-set-buffer "*eshell*"))))
 
-(workspace-setup)
+(defun vterm-persp ()
+  "Crete a new persp for vterm"
+  (interactive)
+  (persp-switch "vterm")
+  (with-perspective "vterm"
+    (let
+        ((buffer (vterm)))
+      (persp-switch-to-buffer buffer)
+      (persp-set-buffer "*vterm*"))))
