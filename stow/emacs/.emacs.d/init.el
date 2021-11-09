@@ -17,11 +17,38 @@
 (setq package-enable-at-startup nil)
 (package-initialize)
 
+(use-package f)
+(use-package s)
+(use-package dash)
+
 (use-package use-package-chords
   :init
   (setq key-chord-two-keys-delay 0.2) ; default 0.1
   :ensure t
   :config (key-chord-mode 1))
+
+(defvar pvr/persist-dir
+  (let ((d (or (getenv "PERSIST_DIR") "~/plain")))
+    (unless (f-dir? d)
+      (error "PERSIST_DIR not set"))
+    d))
+
+(defvar pvr/emacs-persist-dir
+  (f-join pvr/persist-dir "emacs.d"))
+
+(use-package no-littering
+  :demand t
+  :init
+  (setq no-littering-etc-directory
+        (f-join pvr/emacs-persist-dir "emacs/")
+        no-littering-var-directory
+         (f-join pvr/emacs-persist-dir "var/" )))
+
+(setf custom-file (no-littering-expand-etc-file-name "custom.el"))
+
+(when
+    (file-exists-p custom-file)
+  (load-file custom-file))
 
 (defun pvr/set-font-faces ()
   (set-mouse-color "white")
@@ -155,10 +182,6 @@
 (use-package org-make-toc
     :hook (org-mode . org-make-toc-mode))
 
-(use-package f)
-(use-package s)
-(use-package dash)
-
 (use-package recentf
   :config
   (recentf-mode t)
@@ -224,14 +247,6 @@
       :full-and-display-names t))
 
 (setq auto-save-default nil)
-
-(use-package no-littering
-  :demand t
-  :custom
-  (no-littering-etc-directory
-   (expand-file-name "config/" user-emacs-directory))
-  (no-littering-var-directory
-   (expand-file-name "data/" user-emacs-directory)))
 
 (defun add-to-words-syntax (mode-hook chars)
   (seq-do
@@ -439,48 +454,53 @@ Repeated invocations toggle between the two most recently open buffers."
 
 (use-package evil-org
   :after (evil evil-collection)
+  :config
+  (add-to-list 'evil-digit-bound-motions 'evil-org-beginning-of-line)
+  (evil-define-key 'motion 'evil-org-mode
+    (kbd "0") 'evil-org-beginning-of-line)
   :custom
-    (evil-org-use-additional-insert t)
+  (evil-org-use-additional-insert t)
   :init
-    (add-hook 'org-mode-hook 'evil-org-mode))
+  (fset 'evil-redirect-digit-argument 'ignore)
+  (add-hook 'org-mode-hook 'evil-org-mode))
 
 (use-package ivy
   :config
-    (ivy-mode 1)
+  (ivy-mode 1)
   :custom
-    (ivy-re-builders-alist
-      '((read-file-name-internal . ivy--regex-fuzzy)
-        (read-file-name . ivy--regex-fuzzy)
-        (swiper . ivy--regex-ignore-order)
-        (counsel-M-x . ivy--regex-ignore-order)
-        ;; (persp-ivy-switch-buffer . ivy--regex-fuzzy)
-        ;; (find-file-in-project . ivy--regex-fuzzy)
-        (t . ivy--regex-plus)))
-    (ivy-use-virtual-buffers t)
-    (ivy-wrap t)
-    (ivy-count-format "(%d/%d) ")
-    (enable-recursive-minibuffers t)
-    (ivy-initial-inputs-alist nil)
-    (ivy-height 20)
+  (ivy-re-builders-alist
+   '((read-file-name-internal . ivy--regex-fuzzy)
+     (read-file-name . ivy--regex-fuzzy)
+     (swiper . ivy--regex-ignore-order)
+     (counsel-M-x . ivy--regex-ignore-order)
+     ;; (persp-ivy-switch-buffer . ivy--regex-fuzzy)
+     ;; (find-file-in-project . ivy--regex-fuzzy)
+     (t . ivy--regex-plus)))
+  (ivy-use-virtual-buffers t)
+  (ivy-wrap t)
+  (ivy-count-format "(%d/%d) ")
+  (enable-recursive-minibuffers t)
+  (ivy-initial-inputs-alist nil)
+  (ivy-height 20)
   :bind
-    (("C-x /" . swiper-isearch)
-     ("C-x *" . swiper-thing-at-point)
-     ("C-x 8" . swiper-all-thing-at-point)
-     :map ivy-minibuffer-map
-       ("<tab>" . ivy-alt-done)
-       ("C-l" . ivy-alt-done)
-       ("C-j" . ivy-next-line)
-       ("C-k" . ivy-previous-line)
-       ("C-<return>" . (lambda ()
-                           (interactive)
-                           (progn
-                             (ivy-call)
-                             (ivy-next-line))))
-     :map ivy-switch-buffer-map
-       ("C-k" . ivy-previous-line)
-       ("C-j" . ivy-next-line)
-       ("C-l" . ivy-done)
-       ("C-d" . ivy-switch-buffer-kill)))
+  (("C-x /" . swiper-isearch)
+   ("C-x *" . swiper-thing-at-point)
+   ("C-x 8" . swiper-all-thing-at-point)
+   :map ivy-minibuffer-map
+   ("<tab>" . ivy-alt-done)
+   ("C-l" . ivy-alt-done)
+   ("C-j" . ivy-next-line)
+   ("C-k" . ivy-previous-line)
+   ("C-<return>" . (lambda ()
+                     (interactive)
+                     (progn
+                       (ivy-call)
+                       (ivy-next-line))))
+   :map ivy-switch-buffer-map
+   ("C-k" . ivy-previous-line)
+   ("C-j" . ivy-next-line)
+   ("C-l" . ivy-done)
+   ("C-d" . ivy-switch-buffer-kill)))
 
 (use-package counsel
   :config
@@ -952,16 +972,6 @@ Also move to the next line, since that's the most frequent action after"
   "RET" 'split-window-horizontally
   "M-RET" 'split-window-vertically)
 
-(setf custom-file
-      (let*
-          ((init-file-components (s-split "/" (file-truename user-init-file)))
-           (custom-file-components (-drop-last 1 init-file-components))
-           (custom-file (s-join "/" (-snoc custom-file-components "custom.el"))))
-        custom-file))
-(when
-    (file-exists-p custom-file)
-  (load-file custom-file))
-
 ;; keep this as last as possible after all the minor modes
 (envrc-global-mode)
 
@@ -987,3 +997,5 @@ Also move to the next line, since that's the most frequent action after"
         ((buffer (vterm)))
       (persp-switch-to-buffer buffer)
       (persp-set-buffer "*vterm*"))))
+
+(load-file (concat user-emacs-directory "eshell.el"))
