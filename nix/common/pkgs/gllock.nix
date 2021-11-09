@@ -12,6 +12,7 @@ pkgs.stdenv.mkDerivation rec {
   buildInputs = with pkgs; [ xorg.libX11 xorg.xorgproto glew110 glxinfo ];
   patchPhase = ''
     echo "SHADER_LOCATION=${src}/shaders" >> config.mk
+    sed -i 's/circle/ascii/' config.mk
   '';
   installPhase = ''
     mkdir -pv $out/bin
