@@ -246,6 +246,7 @@ rec {
     afuse
     ag
     agenix.agenix
+    all-the-icons-fonts
     android-file-transfer
     android-studio
     arandr
@@ -318,6 +319,7 @@ rec {
     nodePackages.bower2nix
     nodePackages.node2nix
     noto-fonts
+    nyxt
     opensc
     openssh
     openssl
@@ -373,7 +375,6 @@ rec {
     unzip
     #victor-mono
     victor-mono-nerdfonts
-    all-the-icons-fonts
     vifm
     vlc
     vlc_qt5
