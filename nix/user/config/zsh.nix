@@ -46,6 +46,7 @@ in {
   dotDir = ".zsh";
   history = {
     path = "${config.home.homeDirectory}/plain/zsh/zsh_history";
+#     path = "plain/zsh/zsh_history";
     expireDuplicatesFirst = true;
     extended = true;
     ignoreDups = true;
