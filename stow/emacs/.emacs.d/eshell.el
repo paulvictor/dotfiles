@@ -32,19 +32,18 @@
   (interactive)
   (require 'em-hist)
   (save-excursion
-    (let* ((start-pos (eshell-bol))
-           (end-pos (point-at-eol))
-           (input (buffer-substring-no-properties start-pos end-pos)))
-      (let* ((command (ivy-read "Execute : "
-                                (delete-dups
-                                 (when (> (ring-size eshell-history-ring) 0)
-                                   (ring-elements eshell-history-ring)))
-                                :initial-input input
-                                :preselect 0
-                                :action #'ivy-completion-in-region-action))
-             (cursor-move (length command)))
-        (kill-region (+ start-pos cursor-move) (+ end-pos cursor-move)))))
-  ;; move cursor to eol
+    (let* ((start-pos (save-excursion (eshell-bol)))
+            (end-pos (point-at-eol))
+            (input (buffer-substring-no-properties start-pos end-pos))
+            (command (ivy-read "Execute : "
+                               (delete-dups
+                                (when (> (ring-size eshell-history-ring) 0)
+                                  (ring-elements eshell-history-ring)))
+                               :initial-input input
+                               :preselect 0
+                               :require-match nil)))
+      (kill-region start-pos end-pos)
+      (insert command)))
   (end-of-line))
 
 (use-package eshell
@@ -84,10 +83,10 @@
                 (string-prefix-p "cd " str)
                 (string-prefix-p " " str)))))
   ;; (with-eval-after-load 'eshell-mode
-;;     (general-define-key
-;;      :keymaps 'eshell-mode-map
-;;      :states '(insert normal emacs)
-;;      "C-r" #'pvr/esh-history))
+  ;;     (general-define-key
+  ;;      :keymaps 'eshell-mode-map
+  ;;      :states '(insert normal emacs)
+  ;;      "C-r" #'pvr/esh-history))
   :bind
   (:map eshell-mode-map
         ("C-k" . eshell-previous-matching-input-from-input)

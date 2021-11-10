@@ -161,7 +161,7 @@
 (setq comment-style "aligned")
 ;; TODO : Save it in a proper sync'able place
 ;; (setq savehist-file "~/git/.emacs.d/personal/emacs-history")
-(setq savehist-file "~/.emacs.d/var/savehist")
+(setq savehist-file (no-littering-expand-var-file-name "savehist") )
 (savehist-mode 1)
 (setq history-length t
       history-delete-duplicates t

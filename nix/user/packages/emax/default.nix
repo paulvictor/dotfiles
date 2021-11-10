@@ -20,6 +20,7 @@ let
             company-prescient
             counsel
             counsel-projectile
+            copy-as-format
             dash
             dashboard
             dired-single

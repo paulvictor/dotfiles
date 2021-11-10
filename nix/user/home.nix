@@ -558,7 +558,7 @@ rec {
   };
   services.picom = {
     enable = true;
-    backend = "glx";
+    backend = "xrender";
     blur = true;
     fadeDelta = 0;
     menuOpacity = "0.7";
@@ -571,8 +571,8 @@ rec {
     '';
   };
   #services.flameshot.enable = true;
-  services.network-manager-applet.enable = true;
-  services.pasystray.enable = true;
+#   services.network-manager-applet.enable = true;
+#   services.pasystray.enable = true;
   programs.neovim.enable = true;# = import ./config/vim/hm.nix { inherit pkgs; };
   programs.firefox = {
     enable = true;

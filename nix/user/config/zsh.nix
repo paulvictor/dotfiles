@@ -45,6 +45,7 @@ in {
   enableAutosuggestions = true;
   dotDir = ".zsh";
   history = {
+    path = "${config.home.homeDirectory}/plain/zsh/zsh_history";
     expireDuplicatesFirst = true;
     extended = true;
     ignoreDups = true;

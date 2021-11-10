@@ -1,5 +1,5 @@
 # TODO : Look at https://github.com/openlab-aux/vuizvui for a better arrangement
-# { config, pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   # This value determines the NixOS release with which your system is to be
@@ -14,4 +14,5 @@
   imports = [ ./hardware-configuration.nix ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
+  boot.kernelPackages = pkgs.linuxPackages_5_14;
 }
