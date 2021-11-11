@@ -528,7 +528,7 @@ Repeated invocations toggle between the two most recently open buffers."
 (use-package projectile
   :demand t
   :custom
-  (projectile-switch-project-action #'counsel-projectile-find-file)
+  (projectile-switch-project-action #'projectile-commander)
   :config
   (projectile-mode 1)
   :bind-keymap
@@ -564,6 +564,9 @@ Repeated invocations toggle between the two most recently open buffers."
     ("C-M-k" . counsel-projectile-find-file)
     (:map projectile-command-map ("p" . projectile-persp-switch-project))
   :config
+  (def-projectile-commander-method ?r
+    "Counsel projectile ripgrep"
+    (counsel-projectile-rg))
   (counsel-projectile-mode 1))
 
 (use-package all-the-icons-ivy-rich
