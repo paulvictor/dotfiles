@@ -295,8 +295,8 @@
     (setq evil-want-integration t)
     (evil-collection-init (remq 'lispy evil-collection-mode-list)))
 
-(pvr/space-keys-def
-  "SPC" 'evil-ex)
+;; (pvr/space-keys-def
+;;   "SPC" 'evil-ex)
 
 (use-package dired
   :ensure nil
@@ -530,6 +530,7 @@ Repeated invocations toggle between the two most recently open buffers."
   :custom
   (projectile-switch-project-action #'projectile-commander)
   :config
+
   (projectile-mode 1)
   :bind-keymap
   ("C-x p" . projectile-command-map)
@@ -539,6 +540,9 @@ Repeated invocations toggle between the two most recently open buffers."
   ("C-M-j" . counsel-projectile-switch-to-buffer)
   ("C-M-k" . counsel-projectile-find-file)
   :init
+  (def-projectile-commander-method ?r
+    "Counsel projectile ripgrep"
+    (counsel-projectile-rg))
   (when (file-directory-p "~/stuff")
     (setq projectile-project-search-path '("~/stuff"))))
 
@@ -564,9 +568,7 @@ Repeated invocations toggle between the two most recently open buffers."
     ("C-M-k" . counsel-projectile-find-file)
     (:map projectile-command-map ("p" . projectile-persp-switch-project))
   :config
-  (def-projectile-commander-method ?r
-    "Counsel projectile ripgrep"
-    (counsel-projectile-rg))
+
   (counsel-projectile-mode 1))
 
 (use-package all-the-icons-ivy-rich
@@ -864,10 +866,15 @@ Also move to the next line, since that's the most frequent action after"
 
 (use-package avy
   :config
+  (general-define-key
+   :keymaps 'global
+   :states '(normal insert emacs)
+   "C-." 'avy-goto-char-timer
+   "C-," 'avy-goto-word-0)
   (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
   (setq avy-styles-alist
         '((avy-goto-char-2 . post)
-          (avy-goto-line   . pre)
+          (avy-goto-line . pre)
           (avy-goto-char-timer . at-full))))
 
 (use-package ace-window
@@ -975,9 +982,6 @@ Also move to the next line, since that's the most frequent action after"
   "RET" 'split-window-horizontally
   "M-RET" 'split-window-vertically)
 
-;; keep this as last as possible after all the minor modes
-(envrc-global-mode)
-
 ;; Risky, but I'm going to set it
 (setq enable-local-eval t)
 
@@ -1001,4 +1005,18 @@ Also move to the next line, since that's the most frequent action after"
       (persp-switch-to-buffer buffer)
       (persp-set-buffer "*vterm*"))))
 
+(use-package purescript-mode
+  :mode "\\.purs\\'")
+
+(use-package psc-ide
+  :init
+  (psc-ide-flycheck-setup)
+  (add-hook 'purescript-mode-hook
+            #'(lambda ()
+                (psc-ide-mode)
+                (turn-on-purescript-indentation))))
 (load-file (concat user-emacs-directory "eshell.el"))
+
+;; keep this as last as possible after all the minor modes
+(add-hook 'after-init-hook #'envrc-global-mode)
+;; (envrc-global-mode)

@@ -43,6 +43,8 @@ let
          (map (n: {name = n; value = pkgs.callPackage (dir + ("/" + n)) {}; })
          (builtins.filter (n: builtins.pathExists (dir + ("/" + n + "/default.nix")))
            (builtins.attrNames content)));
+  impermanence-src = fetchTarball "https://github.com/nix-community/impermanence/tarball/master";
+  mk-jail-profile = import ./config/jail-profile.nix;
 in
 with pkgs;
 let
@@ -62,6 +64,8 @@ let
     import ./packages/electronApps/rofiRun.nix { inherit pkgs rofi electronApps; };
   onAttachMonitor =
     import ./scripts/onAttachMonitor.nix { inherit pkgs config; };
+  custom-vieb =
+    import ./packages/vieb.nix { inherit pkgs config; };
   polybarLaunch =
     import ./scripts/polybarLaunch.nix { inherit pkgs; };
   i3exit =
@@ -191,10 +195,16 @@ rec {
 #     windowManager.command = "${stumpwm}/bin/stumpwm";
 #     windowManager.i3 = import ./config/i3/i3config.nix { inherit pkgs rofiElectronAppsRunner shareLink ; };
   };
-  imports = [
-    # ./services/pCloudCC.nix
-    ./services/mpd.nix
-  ];
+   imports = [
+     "${impermanence-src}/home-manager.nix"
+     ./services/gocryptfs.nix
+   ];
+  home.persistence."/persist/home/viktor" = {
+    directories = [
+      "Downloads"
+      "crypt"
+    ];
+  };
   # Let Home Manager install and manage itself.
   #programs.home-manager.enable = true;
   programs.zsh = import ./config/zsh.nix { inherit pkgs config tmuxWithConfig customizedEmacs; };
@@ -378,6 +388,7 @@ rec {
     unzip
     #victor-mono
     victor-mono-nerdfonts
+    custom-vieb
     vifm
     vlc
     vlc_qt5
@@ -490,6 +501,8 @@ rec {
     lib.concatStringsSep "\n"
     [ # (builtins.readFile ./config/apl.xmodmap)
       (builtins.readFile ./config/xmodmap)];
+  home.file.".vieb/colors/gruvbox.css".source = ./config/vieb/colors/gruvbox.css;
+  home.file.".vieb/colors/smalltabs.css".source = ./config/vieb/colors/smalltabs.css;
   programs.autorandr = {
     enable = true;
     hooks.postswitch = {

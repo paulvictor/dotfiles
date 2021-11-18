@@ -57,7 +57,7 @@
    eshell-hist-ignoredups t
    eshell-destroy-buffer-when-process-dies t)
   (with-eval-after-load 'em-term
-    (dolist (p '("alsamixer" "htop" "mpv" "watch" "vim" "nvim" "rtorrent" "bluetoothctl"))
+    (dolist (p '("alsamixer" "htop" "mpv" "watch" "vim" "nvim" "rtorrent" "bluetoothctl" "pscid" "ssh"))
       (add-to-list 'eshell-visual-commands p))
     (setq eshell-visual-subcommands
           '(("git" "log" "diff" "show")
@@ -122,3 +122,11 @@
 
 ;; Always save history
 (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
+
+(use-package ansi-color
+  :ensure nil
+  :after eshell
+  :init
+  (add-hook 'eshell-preoutput-filter-functions
+            ; Change to ansi-color-filter-apply if it's too slow
+            'ansi-color-apply))

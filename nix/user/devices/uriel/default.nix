@@ -1,9 +1,10 @@
-{ config, pkgs, ...}:
+{ config, pkgs, ...}@args:
 
 {
+  import ../../services/gocryptfs.nix args;
 
-  imports = [
-    ../../services/mpd.nix
-    ../../services/gocryptfs.nix
-  ];
+#   imports = [
+# #     ../../services/mpd.nix
+#     ../../services/gocryptfs.nix
+#   ];
 }

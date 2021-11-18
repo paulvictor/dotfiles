@@ -78,6 +78,8 @@ let
             popper
             prescient
             projectile
+            psc-ide
+            psci
             rainbow-delimiters
             ripgrep
             s

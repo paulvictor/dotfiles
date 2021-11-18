@@ -46,9 +46,8 @@ in {
   dotDir = ".zsh";
   history = {
     path = "${config.home.homeDirectory}/plain/zsh/zsh_history";
-#     path = "plain/zsh/zsh_history";
     expireDuplicatesFirst = true;
-    extended = true;
+    extended = false;
     ignoreDups = true;
     save = 100000;
     share = true;
@@ -61,9 +60,10 @@ in {
     setopt autocd
     setopt cdablevars
     unsetopt correct_all
+    setopt incappendhistory
     export PAGER=less
     setopt nolistambiguous
-    conf() { [ "$1" != "" ] && cp "$1" "$1".bak-`date +%d%m%y`; vim "$1"; }
+    unsetopt EXTENDED_HISTORY
     export LANG=en_US.UTF-8
     export LC_COLLATE="en_US.UTF-8"
     export LC_CTYPE="en_US.UTF-8"
@@ -86,7 +86,7 @@ in {
 
     autoload -U compinit && compinit
     zstyle ":completion:*:commands" rehash 1
-    export NIX_PATH=easy-purescript-nix=https://github.com/justinwoo/easy-purescript-nix/tarball/master:$NIX_PATH
+#     export NIX_PATH=easy-purescript-nix=https://github.com/justinwoo/easy-purescript-nix/tarball/master:$NIX_PATH
     SPACESHIP_NIX_SHELL_PREFIX="in "
     #SPACESHIP_NIX_SHELL_SUFFIX=""
     SPACESHIP_CHAR_SYMBOL="*> "
