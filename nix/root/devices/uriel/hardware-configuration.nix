@@ -46,11 +46,18 @@
   fileSystems."/persist" =
     { device = "master/safe/persist";
       fsType = "zfs";
+      neededForBoot = true;
     };
 
   fileSystems."/home" =
     { device = "master/safe/home";
       fsType = "zfs";
+    };
+
+  fileSystems."/tomb" =
+    { device = "master/safe/tomb";
+      fsType = "zfs";
+      neededForBoot = true;
     };
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";

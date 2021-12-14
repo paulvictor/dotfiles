@@ -26,7 +26,6 @@ let
       fetchSubmodules = true;
     };
     in import srcRepo;
-  agenix = import (fetchTarball "https://github.com/ryantm/agenix/tarball/ddb81b8bdafa83a7aa210fc98ead4c78e7a70912") { inherit pkgs; };
   all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") { inherit pkgs; };
   betterlockscreen = pkgs.callPackage ./packages/betterlockscreen {};
   xdotool-overlay = import ./packages/xdotool.nix;
@@ -258,7 +257,6 @@ rec {
     acpi # TODO : Install only on laptops
     afuse
     ag
-    agenix.agenix
     all-the-icons-fonts
     android-file-transfer
     android-studio
@@ -266,7 +264,6 @@ rec {
     asciinema
     autorandr
     axel
-    bat
     bind
     bindfs
     brotab
@@ -284,7 +281,6 @@ rec {
     electronApps
     enscript
     entr
-    exa
     feh
     ferdi
     ffmpeg-full
@@ -410,6 +406,15 @@ rec {
     zoom-us
     z-lua
   ] ++
+  [ procs
+    bat
+    fd
+    dust
+    tokei
+    bottom
+    tealdeer
+    bandwhich
+    grex ] ++
   (with easy-purs; [ psc-package purescript spago purp ]);
   xresources.extraConfig = builtins.readFile (
     builtins.fetchurl {

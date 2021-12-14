@@ -52,9 +52,9 @@
 
 (defun pvr/set-font-faces ()
   (set-mouse-color "white")
-  (set-face-attribute 'default nil :font "VictorMono Nerd Font" :height 110)
-  (set-face-attribute 'variable-pitch nil :font "Iosevka Slab" :height 100)
-  (set-face-attribute 'fixed-pitch nil :font "Iosevka Fixed Slab" :height 110)
+  (set-face-attribute 'default nil :font "VictorMono Nerd Font" :height 110 :weight 'semi-bold)
+  (set-face-attribute 'variable-pitch nil :font "Iosevka Slab" :height 100 :weight 'semi-bold)
+  (set-face-attribute 'fixed-pitch nil :font "Iosevka Fixed Slab" :height 110 :weight 'semi-bold)
   (set-frame-parameter (selected-frame) 'alpha '(85 . 85)))
 (if (daemonp)
     (add-hook 'after-make-frame-functions
@@ -530,8 +530,9 @@ Repeated invocations toggle between the two most recently open buffers."
   :custom
   (projectile-switch-project-action #'projectile-commander)
   :config
-
-  (projectile-mode 1)
+  (def-projectile-commander-method ?r
+    "Counsel projectile ripgrep"
+    (counsel-projectile-rg)) (projectile-mode 1)
   :bind-keymap
   ("C-x p" . projectile-command-map)
   :bind
@@ -540,9 +541,6 @@ Repeated invocations toggle between the two most recently open buffers."
   ("C-M-j" . counsel-projectile-switch-to-buffer)
   ("C-M-k" . counsel-projectile-find-file)
   :init
-  (def-projectile-commander-method ?r
-    "Counsel projectile ripgrep"
-    (counsel-projectile-rg))
   (when (file-directory-p "~/stuff")
     (setq projectile-project-search-path '("~/stuff"))))
 
@@ -623,6 +621,7 @@ Repeated invocations toggle between the two most recently open buffers."
   (company-prescient-mode 1)
   (company-tng-mode 1)
   (company-tng-configure-default))
+
 (use-package company
   :init
     (setq tab-always-indent 'complete)
@@ -649,10 +648,10 @@ Repeated invocations toggle between the two most recently open buffers."
 (add-hook 'prog-mode-hook
   (lambda ()
     (setq company-backends
-          '(company-capf
-            company-dabbrev
+          '(company-dabbrev
             company-dabbrev-code
-            company-files))))
+            company-files
+            company-capf))))
 
 (use-package prescient
   :commands prescient-persist-mode
@@ -668,10 +667,11 @@ Repeated invocations toggle between the two most recently open buffers."
     (let ((browse-url-browser-function 'w3m-browse-url))
       (apply orig-fun args)))
 
-  (use-package sly
-    :hook (lisp-mode . sly-mode)
-    :init
-    (setq inferior-lisp-program "sbcl")) ; TODO : Move to dir specific config
+  ;; (use-package sly
+;;     :hook (lisp-mode . sly-mode)
+;;     :init
+;;     (setq inferior-lisp-program "sbcl"))
+                                        ; TODO : Move to dir specific config
 
   (use-package slime
     :hook (lisp-mode . slime-mode)
@@ -688,7 +688,7 @@ Repeated invocations toggle between the two most recently open buffers."
   (use-package lispyville
     :hook
       ;; Check if we can use prog-mode ?
-      ((slime-mode slime-repl-mode lisp-mode elisp-mode sly-mode) . lispyville-mode)
+      ((slime-mode slime-repl-mode lisp-mode elisp-mode) . lispyville-mode)
     :custom
       (lispyville-key-theme '(operators c-w c-u prettify additional-motions commentary slurp/barf-cp wrap additional additional-insert))
     :config
@@ -846,7 +846,7 @@ Also move to the next line, since that's the most frequent action after"
 (use-package expand-region
   :config
   (evil-define-key '(normal emacs) 'global (kbd "C-'") 'er/expand-region)
-  (evil-define-key '(normal emacs) 'global (kbd "C-;") 'er/contract-region)
+  (evil-define-key '(normal emacs) 'global (kbd "C-\"") 'er/contract-region)
   (set-variable 'expand-region-subword-enabled t))
 
 (pvr/space-keys-def
@@ -870,6 +870,7 @@ Also move to the next line, since that's the most frequent action after"
    :keymaps 'global
    :states '(normal insert emacs)
    "C-." 'avy-goto-char-timer
+   "C-;" 'avy-goto-line
    "C-," 'avy-goto-word-0)
   (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
   (setq avy-styles-alist
@@ -1009,14 +1010,39 @@ Also move to the next line, since that's the most frequent action after"
   :mode "\\.purs\\'")
 
 (use-package psc-ide
-  :init
-  (psc-ide-flycheck-setup)
+  :config
   (add-hook 'purescript-mode-hook
-            #'(lambda ()
-                (psc-ide-mode)
-                (turn-on-purescript-indentation))))
+            (lambda ()
+              (psc-ide-mode)
+              (psc-ide-flycheck-setup)
+              (turn-on-purescript-indentation))))
+
 (load-file (concat user-emacs-directory "eshell.el"))
 
 ;; keep this as last as possible after all the minor modes
 (add-hook 'after-init-hook #'envrc-global-mode)
-;; (envrc-global-mode)
+
+(use-package popper
+  :ensure t                             ; or :straight t
+  :bind (("M-`" . popper-cycle)
+         ("C-`" . popper-toggle-latest)
+         ("C-M-`" . popper-toggle-type))
+  :custom
+  (popper-group-function  #'popper-group-by-perspective)
+  :init
+  (setq popper-window-height 25)
+  (setq popper-reference-buffers
+        '("\\*Messages\\*"
+          helpful-mode
+          nix-repl-mode
+          compilation-mode))
+  ;; Match eshell, shell, term and/or vterm buffers
+  (setq popper-reference-buffers
+        (append popper-reference-buffers
+                '("^\\*eshell.*\\*$" eshell-mode ;eshell as a popup
+                  "^\\*shell.*\\*$" shell-mode   ;shell as a popup
+                  "^\\*term.*\\*$" term-mode     ;term as a popup
+                  "^\\*vterm.*\\*$" vterm-mode   ;vterm as a popup
+                  )))
+  (popper-mode 1)
+  (popper-echo-mode 1))

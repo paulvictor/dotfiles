@@ -13,9 +13,13 @@ let
             src =
               fetchTarball
                 https://www.x.org/releases/individual/data/xkeyboard-config/xkeyboard-config-2.28.tar.gz; }); };
+  sops-nix =  builtins.fetchTarball "https://github.com/Mic92/sops-nix/archive/master.tar.gz";
 in
 {
-  imports = [./services/key-remaps.nix];
+  imports = [
+    ./services/key-remaps.nix
+    "${sops-nix}/modules/sops"
+  ];
   #nix.package = pkgs.nixUnstable;
   nix.nixPath = [
     "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
@@ -52,6 +56,7 @@ in
     exfat-utils
     file
     git
+    gnupg
     home-manager
     htop
     libnl
@@ -69,7 +74,17 @@ in
     zsh
   ];
 
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    forwardX11 = true;
+    hostKeys = [
+      {
+        path = "/tomb/${config.networking.hostName}/ssh/ssh_host_rsa_key";
+        type = "rsa";
+        bits = 4096;
+      }
+    ];
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -136,7 +151,7 @@ in
     isNormalUser = true;
     hashedPassword = "$6$SCMbhhof$227ZIsJWgaZmuZX3gwWUTv4E5VrPaVKmZ/97cbU6yclJdn7To3F0ngRAcvmYX5mPOunW8bU6v16vqvxkqjivK.";
     uid = 1000;
-    extraGroups = [ "networkmanager" "audio" "wheel" "tty" "lp" "fuse" "docker" "adbusers" "netdev" "lxd" "disk" "video" ];
+    extraGroups = [ "networkmanager" "audio" "wheel" "tty" "lp" "fuse" "docker" "adbusers" "netdev" "lxd" "disk" "video" "keys" ];
     shell = pkgs.zsh;
   };
 

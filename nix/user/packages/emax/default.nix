@@ -86,7 +86,7 @@ let
             slack
             slime
             slime-company
-            sly
+#             sly
             swiper
             transient
             use-package

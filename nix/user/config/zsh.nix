@@ -113,6 +113,9 @@ in {
     _ZL_ECHO=1
     _ZL_MATCH_MODE=1
 
+    function qqbc() { echo "scale=''${2:-2}; $1" | bc -l }
+
+    function gen-passwd () { ${pkgs.gnupg}/bin/gpg --gen-random --armor 0 $1:-24 }
     source ${zsh-nix-shell.out}/nix-shell.plugin.zsh
   '';
   shellAliases = {

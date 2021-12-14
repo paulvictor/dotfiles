@@ -15,4 +15,21 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
   boot.kernelPackages = pkgs.linuxPackages_5_14;
+
+  services.logind.extraConfig = ''
+    IdleAction=lock
+    IdleActionSec=300
+    HoldoffTimeoutSec=5
+  '';
+
+  sops.defaultSopsFile = ./secrets.yaml;
+
+  sops.gnupg.sshKeyPaths = [ "/tomb/${config.networking.hostName}/ssh/ssh_host_rsa_key" ];
+  sops.secrets = {
+    crypt-mount-key = {
+      key = "home-persistence/key";
+      owner = config.users.users.viktor.name;
+      mode = "0400";
+    };
+  };
 }
