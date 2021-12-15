@@ -7,7 +7,6 @@ in {
   systemd.user.services.mount-crypt-vol = {
     Unit = {
       Description = "Mount encrypted volume containing persistent data";
-      After = [ "yubikey-touch-detector.target" ];
     };
 
     Install = {
