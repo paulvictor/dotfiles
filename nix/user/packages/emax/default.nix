@@ -30,8 +30,9 @@ let
             # elscreen-separate-buffer-list
             # eglot # Has some issue with project.el. Emacs 28 should fix this
             elisp-slime-nav
+            direnv
             engine-mode
-            envrc
+            # envrc
             equake
             #         esh-autosuggest
             eshell-prompt-extras
@@ -105,11 +106,9 @@ let
         )
         ]
         ++
-        [ (with epkgs.orgPackages; [ org ]) ]
-        ++
         [ (with epkgs; [ nano-theme ]) ]
         ++
-        [ (with epkgs.elpaPackages; [ undo-tree ]) ]);
+        [ (with epkgs.elpaPackages; [ undo-tree org ]) ]);
   myemacs = symlinkJoin {
     name = "Emacs";
     paths = [ customizedEmacs ];

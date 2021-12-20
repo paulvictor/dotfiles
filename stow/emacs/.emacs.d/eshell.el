@@ -52,6 +52,7 @@
   (eshell-history-file-name (no-littering-expand-var-file-name "eshell-history"))
   :config
   (setenv "PAGER" "cat") ; solves issues, such as with 'git log' and the default 'less'
+  (add-to-list 'direnv-non-file-modes 'eshell-mode)
   (setq
    eshell-history-size 4096
    eshell-hist-ignoredups t

@@ -538,8 +538,6 @@ Repeated invocations toggle between the two most recently open buffers."
   :bind
   ("C-x C-r" . projectile-recentf)
   ("C-x t" . pvr/split-term)
-  ("C-M-j" . counsel-projectile-switch-to-buffer)
-  ("C-M-k" . counsel-projectile-find-file)
   :init
   (when (file-directory-p "~/stuff")
     (setq projectile-project-search-path '("~/stuff"))))
@@ -560,13 +558,11 @@ Repeated invocations toggle between the two most recently open buffers."
 
 (use-package counsel-projectile
   :custom
-    (counsel-projectile-preview-buffers nil)
+  (counsel-projectile-preview-buffers nil)
+  (counsel-projectile-mode t)
   :bind
-    ("C-M-j" . counsel-projectile-switch-to-buffer)
-    ("C-M-k" . counsel-projectile-find-file)
-    (:map projectile-command-map ("p" . projectile-persp-switch-project))
-  :config
-
+  (:map projectile-command-map ("p" . projectile-persp-switch-project))
+  :init
   (counsel-projectile-mode 1))
 
 (use-package all-the-icons-ivy-rich
@@ -1020,7 +1016,11 @@ Also move to the next line, since that's the most frequent action after"
 (load-file (concat user-emacs-directory "eshell.el"))
 
 ;; keep this as last as possible after all the minor modes
-(add-hook 'after-init-hook #'envrc-global-mode)
+;; (add-hook 'after-init-hook #'envrc-global-mode)
+
+(use-package direnv
+  :config
+  (direnv-mode))
 
 (use-package popper
   :ensure t                             ; or :straight t
