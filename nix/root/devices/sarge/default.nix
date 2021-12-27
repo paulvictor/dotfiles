@@ -1,6 +1,10 @@
 # TODO : Look at https://github.com/openlab-aux/vuizvui for a better arrangement
 { config, pkgs, ... }:
 
+let
+  syncthing-key-file = "/run/syncthing-key.pem";
+  syncthing-cert-file = "/run/syncthing-cert.pem";
+in
 {
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
@@ -22,9 +26,6 @@
     HoldoffTimeoutSec=5
   '';
 
-  #boot.initrd.postDeviceCommands = pkgs.lib.mkAfter ''
-  #  zfs rollback -r master/local/root@blank
-  #'';
   sops.defaultSopsFile = ./secrets.yaml;
 
   sops.gnupg.sshKeyPaths = [ "/tomb/${config.networking.hostName}/ssh/ssh_host_rsa_key" ];
@@ -33,6 +34,43 @@
       key = "home-persistence/key";
       owner = config.users.users.viktor.name;
       mode = "0400";
+    };
+    syncthing-key = {
+      key = "syncthing/key.pem";
+      owner = config.users.users.viktor.name;
+      mode = "0400";
+      path = syncthing-key-file;
+    };
+    syncthing-cert = {
+      key = "syncthing/cert.pem";
+      owner = config.users.users.viktor.name;
+      mode = "0400";
+      path = syncthing-cert-file;
+    };
+  };
+
+  services.syncthing = {
+    enable = true;
+    user = "viktor";
+    key = syncthing-key-file;
+    cert = syncthing-cert-file;
+    devices = {
+      sarge = {
+        id = "OWYAVCE-HZNWJAH-CX4XEOR-ECZKTEB-W6YXQTB-B52HOXA-BRT7PBB-J3OQIQ7";
+        name = config.networking.hostName;
+        introducer = true;
+      };
+      uriel = {
+        id = "IYLKTPE-SF5YCW4-XXC6C5H-JJF6IZL-NMXDFL5-G2JDDBE-3QS4GSD-I4J3IAC";
+        name = "uriel";
+        introducer = true;
+      };
+    };
+    folders = {
+      "/persist/home/viktor/crypt" = {
+        id = "persistent-home";
+        devices = [ "uriel" "sarge" ];
+      };
     };
   };
 }
