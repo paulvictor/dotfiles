@@ -51,7 +51,7 @@ in
 
   services.syncthing = {
     enable = true;
-    user = "viktor";
+    user = config.users.users.viktor.name;
     key = syncthing-key-file;
     cert = syncthing-cert-file;
     devices = {
