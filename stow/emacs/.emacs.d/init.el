@@ -17,6 +17,10 @@
 (setq package-enable-at-startup nil)
 (package-initialize)
 
+(setenv "SSH_AUTH_SOCK"
+        (substring
+         (shell-command-to-string "echo $SSH_AUTH_SOCK") 0 -1))
+
 (use-package f)
 (use-package s)
 (use-package dash)
