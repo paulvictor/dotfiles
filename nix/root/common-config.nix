@@ -14,11 +14,13 @@ let
               fetchTarball
                 https://www.x.org/releases/individual/data/xkeyboard-config/xkeyboard-config-2.28.tar.gz; }); };
   sops-nix =  builtins.fetchTarball "https://github.com/Mic92/sops-nix/archive/master.tar.gz";
+  guix-overlay = self: super: { guix = pkgs.callPackage ./packages/guix.nix {}; };
 in
 {
   imports = [
     ./services/key-remaps.nix
     "${sops-nix}/modules/sops"
+    ./guix/modules/services/guix.nix
   ];
   #nix.package = pkgs.nixUnstable;
   nix.nixPath = [
@@ -28,7 +30,7 @@ in
     "/nix/var/nix/profiles/per-user/root/channels"
     #"agenix=${fetchTarball "https://github.com/ryantm/agenix/archive/master.tar.gz"}"
     "home-manager=${fetchTarball "https://github.com/nix-community/home-manager/tarball/master"}" ];
-  nixpkgs.overlays = [ hm-overlay tomb-overlay firejail-overlay ];
+  nixpkgs.overlays = [ guix-overlay hm-overlay tomb-overlay firejail-overlay ];
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.permittedInsecurePackages = [ "steghide-0.5.1" ];
 
@@ -57,6 +59,7 @@ in
     file
     git
     gnupg
+    guix
     home-manager
     htop
     libnl
@@ -287,5 +290,9 @@ in
       source = "${pkgs.cryptsetup}/bin/cryptsetup";
       capabilities = "cap_sys_admin+ep";
     };
+  };
+
+  services.guix = {
+    enable = true;
   };
 }
