@@ -3,7 +3,7 @@
 with pkgs;
 let
   customizedEmacs =
-    (emacsPackagesGen (emacs.override {withImageMagick = true; }))
+    (emacsPackagesGen (emacs.override { withImageMagick = true; }))
       .emacsWithPackages(epkgs:
         [ (with epkgs.melpaPackages;
           [
@@ -47,8 +47,11 @@ let
             f
             fish-completion
             flycheck
+            geiser
+            geiser-guile
             general
             git-gutter
+            guix
             guru-mode
             # fancy-dabbrev
             haskell-mode

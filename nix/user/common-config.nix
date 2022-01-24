@@ -323,7 +323,7 @@ rec {
     nix-bundle
     nix-index
     nixos-generators
-    nodejs-10_x
+    nodejs
     nodePackages.bower
     nodePackages.bower2nix
     nodePackages.node2nix
@@ -607,6 +607,8 @@ rec {
       #nur.repos.rycee.firefox-addons.https-everywhere
       #nur.repos.rycee.firefox-addons.google-search-link-fix
       nur.repos.rycee.firefox-addons.tridactyl
+    	nur.repos.rycee.firefox-addons.i-dont-care-about-cookies
+      nur.repos.rycee.firefox-addons.videospeed
       brotab-extension
       darkreader-extension
       #nur.repos.rycee.firefox-addons.dark-night-mode
@@ -901,9 +903,9 @@ rec {
         ${notmuch}/bin/notmuch tag --batch --input=${notmuch-rules}
       '';
   };
-  programs.alot = {
-    enable = true;
-  };
+#   programs.alot = {
+#     enable = true;
+#   };
   programs.msmtp.enable = true;
   programs.astroid = {
     enable = true;
