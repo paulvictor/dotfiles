@@ -48,3 +48,6 @@
     (if (eq 'TILE-WINDOW (type-of w))
         (float-window w (current-group))
         (unfloat-window w (current-group)))))
+
+(defcommand eshell (name) ((:string "Name for the shell"))
+  (run-shell-command "emacsclient -c -n -e '(pvr/new-eshell-window)'" t))

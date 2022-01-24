@@ -46,23 +46,42 @@
       (insert command)))
   (end-of-line))
 
+(defun pvr/eshell-quit-or-delete-char (arg)
+  (interactive "p")
+  (if (and (eolp) (looking-back eshell-prompt-regexp))
+      (progn
+        (eshell-life-is-too-much)       ; Why not? (eshell/exit)
+        (ignore-errors
+          (delete-window)))
+    (delete-forward-char arg)))
+
 (use-package eshell
-  ;;   :commands (eshell)
   :custom
   (eshell-history-file-name (no-littering-expand-var-file-name "eshell-history"))
+  (eshell-prefer-lisp-functions t)
+  (eshell-destroy-buffer-when-process-dies t)
   :config
   (setenv "PAGER" "cat") ; solves issues, such as with 'git log' and the default 'less'
+  (setenv "GUIX_PROFILE" "/home/viktor/.config/guix/current")
   (add-to-list 'direnv-non-file-modes 'eshell-mode)
+  (add-hook 'eshell-mode-hook (lambda ()
+    (eshell/alias "e" "find-file $1")
+    (eshell/alias "ee" "find-file-other-window $1")
+
+    (eshell/alias "gd" "magit-diff-unstaged")
+    (eshell/alias "gds" "magit-diff-staged")
+    (eshell/alias "d" "dired-other-window $1")))
   (setq
    eshell-history-size 4096
-   eshell-hist-ignoredups t
-   eshell-destroy-buffer-when-process-dies t)
+   eshell-hist-ignoredups t)
   (with-eval-after-load 'em-term
-    (dolist (p '("alsamixer" "htop" "mpv" "watch" "vim" "nvim" "rtorrent" "bluetoothctl" "pscid" "ssh"))
+    (dolist (p '("alsamixer" "htop" "mpv" "watch" "vim" "nvim" "rtorrent" "bluetoothctl" "pscid" "ssh" "tail"))
       (add-to-list 'eshell-visual-commands p))
     (setq eshell-visual-subcommands
           '(("git" "log" "diff" "show")
-            ("sudo" "vi" "visudo"))))
+            ("sudo" "vi" "visudo")
+            ("sudo" "su")
+            ("guix" "search"))))
   (with-eval-after-load 'em-alias
     (dolist
         (alias
@@ -90,6 +109,7 @@
   ;;      "C-r" #'pvr/esh-history))
   :bind
   (:map eshell-mode-map
+        ("C-d" . pvr/eshell-quit-or-delete-char)
         ("C-k" . eshell-previous-matching-input-from-input)
         ("C-j" . eshell-next-matching-input-from-input)
         ("C-r" . pvr/esh-history)))
@@ -131,3 +151,29 @@
   (add-hook 'eshell-preoutput-filter-functions
             ; Change to ansi-color-filter-apply if it's too slow
             'ansi-color-apply))
+
+(defun eshell-here ()
+  "Opens up a new shell in the directory associated with the
+current buffer's file. The eshell is renamed to match that
+directory to make multiple eshell windows easier."
+  (interactive)
+  (let* ((parent (if (buffer-file-name)
+                     (file-name-directory (buffer-file-name))
+                   default-directory))
+         (height (/ (window-total-height) 3))
+         (name   (car (last (split-string parent "/" t)))))
+    (split-window-vertically (- height))
+    (other-window 1)
+    (eshell "new")
+    (rename-buffer (concat "*eshell: " name "*"))
+
+    (insert (concat "ls"))
+    (eshell-send-input)))
+
+(bind-key "C-!" 'eshell-here)
+
+(defun pvr/new-eshell ()
+  (interactive)
+  (let ((name (pvr/random-name)))
+    (eshell "new")
+    (rename-buffer (concat "*eshell " name " *"))))

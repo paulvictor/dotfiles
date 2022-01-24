@@ -38,6 +38,7 @@ instead of any error."
 (pvr/load "emacs")
 (pvr/load "fonts")
 (pvr/load "defaults")
+(pvr/load "helpers")
 (pvr/load "commands")
 (pvr/load "keybindings")
 (pvr/load "session")
@@ -45,7 +46,7 @@ instead of any error."
 (pvr/load "globalwindows")
 (pvr/load "border")
 (pvr/load "modeline")
-(pvr/load "equake")
+;; (pvr/load "equake")
 ; Message bar settings
 
 (which-key-mode)

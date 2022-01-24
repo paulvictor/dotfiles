@@ -14,12 +14,32 @@
 ;; optional. makes unpure packages archives unavailable
 (setq package-archives nil)
 
+(setq enable-recursive-minibuffers t)
+
 (setq package-enable-at-startup nil)
 (package-initialize)
 
-(setenv "SSH_AUTH_SOCK"
-        (substring
-         (shell-command-to-string "echo $SSH_AUTH_SOCK") 0 -1))
+(defun set-ssh-auth-sock-env ()
+  (setenv "SSH_AUTH_SOCK"
+          (substring
+           (shell-command-to-string "echo $SSH_AUTH_SOCK") 0 -1)))
+
+(load-file (concat user-emacs-directory "names.el"))
+
+(setq-default frame-title-format
+              '(:eval
+                (format "%s@%s: %s %s"
+                        (or (file-remote-p default-directory 'user)
+                            user-real-login-name)
+                        (or (file-remote-p default-directory 'host)
+                            system-name)
+                        (buffer-name)
+                        (cond
+                         (buffer-file-truename
+                          (concat "(" buffer-file-truename ")"))
+                         (dired-directory
+                          (concat "{" dired-directory "}"))
+                         (t "[no file]")))))
 
 (use-package f)
 (use-package s)
@@ -63,10 +83,11 @@
 (if (daemonp)
     (add-hook 'after-make-frame-functions
               (lambda (frame)
-                      (setq doom-modeline-icon t)
-                      (with-selected-frame frame
-                        (pvr/set-font-faces))))
-    (pvr/set-font-faces))
+                (setq doom-modeline-icon t)
+                (with-selected-frame frame
+                  (pvr/set-font-faces)
+                  (set-ssh-auth-sock-env))))
+  (pvr/set-font-faces))
 (setq inhibit-startup-screen t)
 
 ; if nil, italics is universally disabled
@@ -101,16 +122,15 @@
 (show-paren-mode)
 
 (defun init-dashboard ()
-  (progn
-    (switch-to-buffer "*dashboard*")
-    (goto-char (point-min))
-    (redisplay)))
+  (switch-to-buffer "*dashboard*")
+  (goto-char (point-min))
+  (redisplay))
 
 (use-package doom-themes
   :init
   (setq
-    doom-themes-enable-bold t    ; if nil, bold is universally disabled
-    doom-themes-enable-italic t)
+   doom-themes-enable-bold t    ; if nil, bold is universally disabled
+   doom-themes-enable-italic t)
   :config
   (load-theme 'doom-tomorrow-night t))
 
@@ -137,8 +157,8 @@
 (use-package dashboard
   :after projectile
   :config
-    (dashboard-setup-startup-hook)
-    (init-dashboard)
+  (dashboard-setup-startup-hook)
+  (init-dashboard)
   :custom
     (dashboard-projects-backend 'projectile)
     (initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
@@ -1019,6 +1039,11 @@ Also move to the next line, since that's the most frequent action after"
 
 (load-file (concat user-emacs-directory "eshell.el"))
 
+(defun pvr/new-eshell-window ()
+  (let* ((name (pvr/random-name)))
+    (progn
+      (let ((shell-buffer (eshell "new")))
+        (rename-buffer (concat "*EsHeLl: " name "*"))))))
 ;; keep this as last as possible after all the minor modes
 ;; (add-hook 'after-init-hook #'envrc-global-mode)
 
@@ -1043,7 +1068,7 @@ Also move to the next line, since that's the most frequent action after"
   ;; Match eshell, shell, term and/or vterm buffers
   (setq popper-reference-buffers
         (append popper-reference-buffers
-                '("^\\*eshell.*\\*$" eshell-mode ;eshell as a popup
+                '(;"^\\*eshell.*\\*$" eshell-mode ;eshell as a popup
                   "^\\*shell.*\\*$" shell-mode   ;shell as a popup
                   "^\\*term.*\\*$" term-mode     ;term as a popup
                   "^\\*vterm.*\\*$" vterm-mode   ;vterm as a popup
