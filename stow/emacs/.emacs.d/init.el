@@ -22,7 +22,7 @@
 (defun set-ssh-auth-sock-env ()
   (setenv "SSH_AUTH_SOCK"
           (substring
-           (shell-command-to-string "echo $SSH_AUTH_SOCK") 0 -1)))
+           (shell-command-to-string "gpgconf --list-dirs agent-ssh-socket") 0 -1)))
 
 (load-file (concat user-emacs-directory "names.el"))
 
