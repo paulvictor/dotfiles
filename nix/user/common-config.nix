@@ -1175,8 +1175,8 @@ rec {
   services.sxhkd = {
     enable = true;
     keybindings = {
-      "control + hyper + alt + Return" = "${alacritty}/bin/alacritty";
-      "control + hyper + alt + shift + Return" = "${alacritty}/bin/alacritty -e tmux";
+#       "control + hyper + alt + Return" = "${alacritty}/bin/alacritty";
+      "control + hyper + alt + shift + Return" = "${alacritty}/bin/alacritty";
       "control + hyper + alt + e" = "${customizedEmacs}/bin/emacs";
       "control + hyper + alt + d" = "rofi -show drun";
 #       "control + hyper + alt + g" = ''${wmfocus}/bin/wmfocus --fill -c asdf --textcolor red'';
