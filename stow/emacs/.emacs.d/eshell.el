@@ -64,18 +64,13 @@
   (setenv "PAGER" "cat") ; solves issues, such as with 'git log' and the default 'less'
   (setenv "GUIX_PROFILE" "/home/viktor/.config/guix/current")
   (add-to-list 'direnv-non-file-modes 'eshell-mode)
-  (add-hook 'eshell-mode-hook (lambda ()
-    (eshell/alias "e" "find-file $1")
-    (eshell/alias "ee" "find-file-other-window $1")
-
-    (eshell/alias "gd" "magit-diff-unstaged")
-    (eshell/alias "gds" "magit-diff-staged")
-    (eshell/alias "d" "dired-other-window $1")))
+  (require 'em-pred)
+;;   (require 'nix-shell)
   (setq
    eshell-history-size 4096
    eshell-hist-ignoredups t)
   (with-eval-after-load 'em-term
-    (dolist (p '("alsamixer" "htop" "mpv" "watch" "vim" "nvim" "rtorrent" "bluetoothctl" "pscid" "ssh" "tail"))
+    (dolist (p '("alsamixer" "htop" "mpv" "watch" "vim" "nvim" "rtorrent" "bluetoothctl" "pscid" "ssh" "tail" "tmux" "screen"))
       (add-to-list 'eshell-visual-commands p))
     (setq eshell-visual-subcommands
           '(("git" "log" "diff" "show")
@@ -92,6 +87,14 @@
            ("mvv" "mv -iv $*")
            ("rmv" "rm -v $*")
            ("md" "eshell/mkdir -p $*")
+           ("e" "find-file $1")
+           ("ee" "find-file-other-window $1")
+           ("clipcopy" "xclip -in -selection clipboard")
+           ("clippaste" "xclip -out -selection clipboard")
+
+           ("gd" "magit-diff-unstaged")
+           ("gds" "magit-diff-staged")
+           ("d" "dired-other-window $1")
            ("mkcd" "eshell/mkdir -p $* ; cd $1"))) ; TODO: '&&' does not work because mkdir exits with nil?
       (add-to-list 'eshell-command-aliases-list alias)))
   ;;   (eshell-write-aliases-list)

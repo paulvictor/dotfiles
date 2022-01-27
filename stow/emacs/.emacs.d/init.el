@@ -10,6 +10,8 @@
                      gcs-done)))
 
 (require 'package)
+(require 'man)
+(require 'ffap)
 
 ;; optional. makes unpure packages archives unavailable
 (setq package-archives nil)
@@ -1044,6 +1046,7 @@ Also move to the next line, since that's the most frequent action after"
     (progn
       (let ((shell-buffer (eshell "new")))
         (rename-buffer (concat "*EsHeLl: " name "*"))))))
+
 ;; keep this as last as possible after all the minor modes
 ;; (add-hook 'after-init-hook #'envrc-global-mode)
 
@@ -1057,21 +1060,33 @@ Also move to the next line, since that's the most frequent action after"
          ("C-`" . popper-toggle-latest)
          ("C-M-`" . popper-toggle-type))
   :custom
-  (popper-group-function  #'popper-group-by-perspective)
+  (popper-group-function #'popper-group-by-perspective)
   :init
   (setq popper-window-height 25)
-  (setq popper-reference-buffers
-        '("\\*Messages\\*"
-          helpful-mode
-          nix-repl-mode
-          compilation-mode))
   ;; Match eshell, shell, term and/or vterm buffers
   (setq popper-reference-buffers
-        (append popper-reference-buffers
-                '(;"^\\*eshell.*\\*$" eshell-mode ;eshell as a popup
-                  "^\\*shell.*\\*$" shell-mode   ;shell as a popup
-                  "^\\*term.*\\*$" term-mode     ;term as a popup
-                  "^\\*vterm.*\\*$" vterm-mode   ;vterm as a popup
-                  )))
+        '(          ;"^\\*eshell.*\\*$" eshell-mode ;eshell as a popup
+          "^\\*shell.*\\*$" shell-mode  ;shell as a popup
+          "^\\*term.*\\*$" term-mode    ;term as a popup
+          "^\\*vterm.*\\*$" vterm-mode  ;vterm as a popup
+          helpful-mode
+          nix-repl-mode
+          compilation-mode
+          "\\*Messages\\*"))
   (popper-mode 1)
   (popper-echo-mode 1))
+
+(use-package nix-mode
+  :mode "\\.nix\\'")
+
+(use-package nix-drv-mode
+  :ensure nix-mode
+  :mode "\\.drv\\'")
+
+(use-package nix-shell
+  :ensure nix-mode
+  :commands (nix-shell-unpack nix-shell-configure nix-shell-build nix-eshell nix-eshell-with-packages nix-shell))
+
+(use-package nix-repl
+  :ensure nix-mode
+  :commands (nix-repl))
