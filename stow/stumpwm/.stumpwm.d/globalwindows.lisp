@@ -2,5 +2,5 @@
 
 (load-module "globalwindows")
 
-(set-keybindings "." "global-windowlist")
-(set-keybindings "," "global-pull-windowlist")
+(set-keybindings "." "global-windowlist" :where 'top)
+(set-keybindings "," "global-pull-windowlist" :where 'top)

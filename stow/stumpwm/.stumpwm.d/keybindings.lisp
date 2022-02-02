@@ -4,6 +4,10 @@
 
 ;; (setf pvr/bindings (copy-kmap *root-map*))
 
+(undefine-key *top-map* (kbd  "C-t"))
+
+(set-prefix-key (kbd "C-M-s-Up"))
+
 (defun set-keybindings (key command &key (where 'both))
   (case where
     ('both
@@ -53,3 +57,5 @@
 (set-keybindings "SPC" "toggle-float" :where 'top)
 (set-keybindings "=" "poison" :where 'top)
 (set-keybindings "RET" "eshell foo" :where 'top)
+(set-keybindings "R" "remove-split" :where 'top)
+(set-keybindings "r" "iresize" :where 'top)

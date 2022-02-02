@@ -255,6 +255,7 @@ in
     keep-derivations = true
     experimental-features = nix-command flakes
   '';
+  nix.package = pkgs.nixFlakes;
   nix.systemFeatures = [ "kvm" "big-parallel" ];
   services.zfs.autoScrub.enable = true;
   boot.loader.grub.copyKernels = true;
