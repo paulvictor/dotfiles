@@ -10,27 +10,27 @@ let
             # ace-jump-mode
             ace-window
             all-the-icons
-            all-the-icons-ivy
-            all-the-icons-ivy-rich
             all-the-icons-dired
             all-the-icons-ibuffer
+            all-the-icons-ivy
+            all-the-icons-ivy-rich
             anzu
             avy
             company
             company-prescient
+            copy-as-format
             counsel
             counsel-projectile
-            copy-as-format
             dash
             dashboard
             dired-single
+            direnv
             doom-modeline
             doom-themes
-            # elscreen
-            # elscreen-separate-buffer-list
             # eglot # Has some issue with project.el. Emacs 28 should fix this
             elisp-slime-nav
-            direnv
+            # elscreen
+            # elscreen-separate-buffer-list
             engine-mode
             # envrc
             equake
@@ -45,6 +45,7 @@ let
             evil-org
             expand-region
             f
+            # fancy-dabbrev
             fish-completion
             flycheck
             geiser
@@ -53,19 +54,21 @@ let
             git-gutter
             guix
             guru-mode
-            # fancy-dabbrev
             haskell-mode
             helpful
             hydra
             ivy
             ivy-prescient
             ivy-rich
+            json-mode
             key-chord
             keyfreq
             linum-relative
             lispy
             lispyville
+            lsp-haskell
             lsp-mode
+            lsp-ui
             magit
             nix-mode
             nix-modeline
@@ -78,12 +81,12 @@ let
             pdf-tools
             perspective
             persp-projectile
-            popup
             popper
+            popup
             prescient
             projectile
-            psc-ide
             psci
+            psc-ide
             rainbow-delimiters
             ripgrep
             s
@@ -99,8 +102,9 @@ let
             visual-fill-column
             vterm
             w3m
-            which-key
             wgrep
+            which-key
+            yaml-mode
             yequake
             zerodark-theme
             zoom-window

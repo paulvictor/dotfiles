@@ -151,7 +151,7 @@
     (doom-modeline-persp-name t)
     (doom-modeline-display-default-persp-name nil)
     (doom-modeline-persp-icon t)
-    ;; (doom-modeline-lsp t)
+    (doom-modeline-lsp t)
     (doom-modeline-modal-icon t)
   :config
   (doom-modeline-mode 1))
@@ -322,7 +322,7 @@
     (evil-collection-init (remq 'lispy evil-collection-mode-list)))
 
 ;; (pvr/space-keys-def
-;;   "SPC" 'evil-ex)
+;;   "SPC" 'lsp-keymap-prefix)
 
 (use-package dired
   :ensure nil
@@ -481,7 +481,7 @@ Repeated invocations toggle between the two most recently open buffers."
 (use-package evil-org
   :after (evil evil-collection)
   :config
-  (add-to-list 'evil-digit-bound-motions 'evil-org-beginning-of-line)
+;;   (add-to-list 'evil-digit-bound-motions 'evil-org-beginning-of-line)
   (evil-define-key 'motion 'evil-org-mode
     (kbd "0") 'evil-org-beginning-of-line)
   :custom
@@ -556,9 +556,7 @@ Repeated invocations toggle between the two most recently open buffers."
   :custom
   (projectile-switch-project-action #'projectile-commander)
   :config
-  (def-projectile-commander-method ?r
-    "Counsel projectile ripgrep"
-    (counsel-projectile-rg)) (projectile-mode 1)
+  (projectile-mode 1)
   :bind-keymap
   ("C-x p" . projectile-command-map)
   :bind
@@ -566,7 +564,8 @@ Repeated invocations toggle between the two most recently open buffers."
   ("C-x t" . pvr/split-term)
   :init
   (when (file-directory-p "~/stuff")
-    (setq projectile-project-search-path '("~/stuff"))))
+    (setq projectile-project-search-path '("~/stuff")))
+  )
 
 (use-package perspective
   :demand t
@@ -586,6 +585,10 @@ Repeated invocations toggle between the two most recently open buffers."
   :custom
   (counsel-projectile-preview-buffers nil)
   (counsel-projectile-mode t)
+  :config
+  (def-projectile-commander-method ?t
+    "Counsel projectile eshell"
+    (projectile-run-eshell))
   :bind
   (:map projectile-command-map ("p" . projectile-persp-switch-project))
   :init
@@ -650,7 +653,7 @@ Repeated invocations toggle between the two most recently open buffers."
     (add-hook 'prog-mode-hook #'pvr/setup-company)
     (add-hook 'org-mode-hook #'pvr/setup-company)
   :custom
-    (company-idle-delay 0)
+    (company-idle-delay 0.0)
     (company-selection-wrap-around t)
     (company-require-match nil)
     (company-dabbrev-other-buffers 'all)
@@ -658,12 +661,12 @@ Repeated invocations toggle between the two most recently open buffers."
     (company-dabbrev-code-time-limit 0.2)
     (company-dabbrev-downcase nil)
     (company-dabbrev-char-regexp "\\(\\sw\\|\\s_\\|_\\|-\\)")
-    (company-minimum-prefix-length 3)
+    (company-minimum-prefix-length 1)
   :bind
     (:map company-active-map
           ("TAB" . company-complete-common-or-cycle)
           ("<backtab>" . company-select-previous)
-          ("RET" . nil)
+          ("RET" . company-complete-selection)
           ("C-j" . company-select-next-or-abort)
           ("C-k" . company-select-previous-or-abort)))
 
@@ -746,6 +749,9 @@ Repeated invocations toggle between the two most recently open buffers."
   :init
   :config
   (global-undo-tree-mode 1))
+
+;; (pvr/space-keys-def
+;;   "l" '(:keymap lsp-command-map :wk "LSP"))
 
 (pvr/space-keys-def
   :infix "h"
