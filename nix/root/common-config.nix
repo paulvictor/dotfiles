@@ -1,48 +1,30 @@
 { config, pkgs, lib, ...}:
 
-let
-  gllock = pkgs.callPackage ../common/pkgs/gllock.nix {};
-  tomb-overlay = import ../common/pkgs/tomb.nix;
-  firejail-overlay = import ../common/pkgs/firejail.nix;
-  hm-overlay = import "${fetchTarball "https://github.com/nix-community/home-manager/tarball/master"}/overlay.nix";
-  #hm = pkgs.callPackage (fetchTarball "https://github.com/rycee/home-manager/tarball/release-20.09") {};
-  xkeyboardconfig-overlay =
-    self: super:
-      { xkeyboard_config =
-          super.xkeyboard_config.overrideDerivation(oldAttrs: {
-            src =
-              fetchTarball
-                https://www.x.org/releases/individual/data/xkeyboard-config/xkeyboard-config-2.28.tar.gz; }); };
-  sops-nix =  builtins.fetchTarball "https://github.com/Mic92/sops-nix/archive/master.tar.gz";
-  guix-overlay = self: super: { guix = pkgs.callPackage ./packages/guix.nix {}; };
-in
 {
   imports = [
     ./services/key-remaps.nix
-    "${sops-nix}/modules/sops"
-    ./guix/modules/services/guix.nix
   ];
   #nix.package = pkgs.nixUnstable;
-  nix.nixPath = [
-    "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-    #"nixpkgs-unstable=${fetchTarball "https://github.com/NixOS/nixpkgs/tarball/master"}"
-    #"nixos-config=/etc/nixos/configuration.nix"
-    "/nix/var/nix/profiles/per-user/root/channels"
+#   nix.nixPath = [
+#     "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
+#     #"nixpkgs-unstable=${fetchTarball "https://github.com/NixOS/nixpkgs/tarball/master"}"
+#     #"nixos-config=/etc/nixos/configuration.nix"
+#     "/nix/var/nix/profiles/per-user/root/channels" ];
     #"agenix=${fetchTarball "https://github.com/ryantm/agenix/archive/master.tar.gz"}"
-    "home-manager=${fetchTarball "https://github.com/nix-community/home-manager/tarball/master"}" ];
-  nixpkgs.overlays = [ guix-overlay hm-overlay tomb-overlay firejail-overlay ];
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.permittedInsecurePackages = [ "steghide-0.5.1" ];
+#     "home-manager=${fetchTarball "https://github.com/nix-community/home-manager/tarball/master"}" ];
+#   nixpkgs.overlays = [ guix-overlay hm-overlay tomb-overlay firejail-overlay ];
+#   nixpkgs.config.allowUnfree = true;
+#   nixpkgs.config.permittedInsecurePackages = [ "steghide-0.5.1" ];
 
   # Use the systemd-boot EFI boot loader.
 #   boot.loader.systemd-boot.enable = true;
   networking.useDHCP = false;
   networking.wireless.enable = false;  # Enables wireless support via wpa_supplicant.
   networking.enableIPv6 = false;
-  networking.extraHosts = let
-    hostsPath = https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts;
-    hostsFile = builtins.fetchurl hostsPath;
-  in builtins.readFile "${hostsFile}";
+#   networking.extraHosts = let
+#     hostsPath = https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts;
+#     hostsFile = builtins.fetchurl hostsPath;
+#   in builtins.readFile "${hostsFile}";
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
   networking.networkmanager.insertNameservers = [ "8.8.8.8" "8.8.4.4" ];
   networking.firewall.enable = false;
@@ -283,7 +265,7 @@ in
       owner = "root";
       group = "root";
       setuid = true;
-      source = "${gllock}/bin/gllock";
+      source = "${pkgs.gllock}/bin/gllock";
     };
     cryptsetup = {
       owner = "root";
