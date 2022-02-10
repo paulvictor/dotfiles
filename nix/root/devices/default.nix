@@ -1,4 +1,4 @@
-{ lib , pkgs , system , homeManager , self }:
+{ lib , pkgs , system , homeManager , self, sops-nix }:
 
 let
   inherit (builtins) attrNames isAttrs readDir listToAttrs;
@@ -15,10 +15,10 @@ let
       modules = let
         common = {
           imports = [
-            ../root/guix/modules/services/guix.nix
+            ../guix/modules/services/guix.nix
             # TODO : Move this to distributed modules
             # Since hostName is available, use that to determine what components are needed
-            ../root/common-config.nix
+            ../common-config.nix
           ];
           hardware.enableRedistributableFirmware = lib.mkDefault true;
 
@@ -35,13 +35,13 @@ let
           sops-nix.nixosModule
           homeManager.nixosModule
           machine
-        ]
+        ];
     };
-  recImportDirs = { dir, mkSystem ? mkSystem }:
-    mapAttrs'
-      (dir: _:
-        nameValuePair dir (mkSystem dir)
-          (readDir dir));
+  recImportDirs = dir:
+    listToAttrs
+      (map
+        (n: { name = n; value = mkSystem n; })
+        (attrNames (readDir dir)));
 
 in
-recImportDirs { dir = ./devices };
+recImportDirs (toString ./.)
