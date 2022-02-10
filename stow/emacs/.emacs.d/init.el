@@ -1096,3 +1096,5 @@ Also move to the next line, since that's the most frequent action after"
 (use-package nix-repl
   :ensure nix-mode
   :commands (nix-repl))
+
+(load-file (concat user-emacs-directory "ghcid.el"))
