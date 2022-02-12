@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../services/key-remaps.nix
+    ./key-remaps.nix
   ];
   services.xserver = {
     enable = true;
