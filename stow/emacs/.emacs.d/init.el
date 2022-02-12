@@ -21,10 +21,11 @@
 (setq package-enable-at-startup nil)
 (package-initialize)
 
-(defun set-ssh-auth-sock-env ()
+(defun set-env-vars ()
   (setenv "SSH_AUTH_SOCK"
           (substring
-           (shell-command-to-string "gpgconf --list-dirs agent-ssh-socket") 0 -1)))
+           (shell-command-to-string "gpgconf --list-dirs agent-ssh-socket") 0 -1))
+  (setenv "EDITOR" "emacsclient -c"))
 
 (load-file (concat user-emacs-directory "names.el"))
 
@@ -88,7 +89,7 @@
                 (setq doom-modeline-icon t)
                 (with-selected-frame frame
                   (pvr/set-font-faces)
-                  (set-ssh-auth-sock-env))))
+                  (set-env-vars))))
   (pvr/set-font-faces))
 (setq inhibit-startup-screen t)
 
