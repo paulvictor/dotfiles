@@ -1,4 +1,4 @@
-{ lib , system , homeManager , self, sops-nix, nixpkgs }:
+{ lib , system , homeManager , self, sops-nix, nixpkgs, pkgs }:
 
 let
   inherit (builtins) attrNames isAttrs readDir listToAttrs;
@@ -6,22 +6,6 @@ let
   inherit (lib) filterAttrs hasSuffix mapAttrs' nameValuePair removeSuffix;
 
   inherit (lib) hasPrefix;
-
-  gllock-overlay = import ../../overlays/gllock.nix;
-  tomb-overlay = import ../../overlays/tomb.nix;
-  guix-overlay = import ../../overlays/guix.nix;
-  pkgs = import nixpkgs {
-    inherit system;
-    config = {
-      allowUnfree = true;
-      permittedInsecurePackages = [ "steghide-0.5.1" ];
-    };
-    overlays = [
-      gllock-overlay
-      tomb-overlay
-      guix-overlay
-    ];
-  };
 
   mkSystem = hostName:
     lib.nixosSystem {

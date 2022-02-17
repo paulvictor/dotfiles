@@ -19,7 +19,7 @@ writeShellScriptBin "passdo" ''
   password_files=( "''${password_files[@]#"$prefix"/}" )
   password_files=( "''${password_files[@]%.gpg}" )
 
-  password=$(printf '%s\n' "''${password_files[@]}" | rofi -i -matching fuzzy -dmenu "$@")
+  password=$(printf '%s\n' "''${password_files[@]}" | ${rofi} -i -matching fuzzy -dmenu "$@")
   if echo $password | grep -q "TOTP$" ; then
     otp_prefix="otp"
   fi

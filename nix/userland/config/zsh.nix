@@ -1,13 +1,7 @@
-{ pkgs, config, tmuxWithConfig, customizedEmacs }:
+{ pkgs, config }:
 
 with pkgs;
 let
-  zsh-nix-shell = fetchFromGitHub {
-    "owner" = "chisui";
-    "repo" = "zsh-nix-shell";
-    rev = "b6ac21e77d6d8e48f6ac08842345c8c9cd3460d5";
-    sha256 = "166cgdfn53vq9bjg6589zwhiqayfymq8zvvrd94ps4sv78w3v3wn";
-  };
   nix-shell-spaceship-fn = ''
     SPACESHIP_NIX_SHELL_SHOW="''${SPACESHIP_NIX_SHELL_SHOW=true}"
     SPACESHIP_NIX_SHELL_PREFIX="''${SPACESHIP_NIX_SHELL_PREFIX="$SPACESHIP_PROMPT_DEFAULT_PREFIX"}"
@@ -74,7 +68,7 @@ in {
     export LC_ALL="en_US.UTF-8"
     function new-tmux-from-dir-name {
       dir_name=$(echo `basename $PWD` | tr '.' '-')
-      ${tmuxWithConfig}/bin/tmux new-session -As $dir_name
+      tmux new-session -As $dir_name
     }
     # Better SSH/Rsync/SCP Autocomplete
     zstyle ':completion:*:(scp|rsync):*' tag-order ' hosts:-ipaddr:ip\ address hosts:-host:host files'
@@ -108,7 +102,7 @@ in {
     [[ $TERM = "rxvt-unicode-256color" ]] &&
       (for (( i=1; i<=$LINES; i++ )); do echo; done; clear)
 
-    export EDITOR="${customizedEmacs}/bin/emacsclient -c"
+    export EDITOR="emacsclient -c"
     #eval "$(${lua}/bin/lua ${z-lua}/bin/z --init zsh enhanced once fzf)"
     _ZL_ECHO=1
     _ZL_MATCH_MODE=1
@@ -116,7 +110,7 @@ in {
     function qqbc() { echo "scale=''${2:-2}; $1" | bc -l }
 
     function gen-passwd () { ${pkgs.gnupg}/bin/gpg --gen-random --armor 0 $1:-24 }
-    source ${zsh-nix-shell.out}/nix-shell.plugin.zsh
+    source ${pkgs.zsh-nix-shell.out}/nix-shell.plugin.zsh
   '';
   shellAliases = {
     grep = "GREP_COLOR=\"1;33;40\" LANG=C egrep --color=always";

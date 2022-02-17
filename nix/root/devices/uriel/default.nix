@@ -13,7 +13,7 @@
   networking.hostId = "237ab499";
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
-#   boot.kernelPackages = pkgs.linuxPackages_5_15;
+  boot.kernelPackages = pkgs.linuxPackages_5_15;
 
   services.logind.extraConfig = ''
     IdleAction=lock

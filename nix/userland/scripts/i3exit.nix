@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs ? import <nixpkgs> {}}:
 with pkgs;
 writeShellScriptBin "i3exit" ''
   llock() {

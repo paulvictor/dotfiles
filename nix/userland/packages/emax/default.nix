@@ -1,9 +1,11 @@
-{pkgs ? import <nixpkgs> {}}:
+{pkgs ? import <nixpkgs> {}, specialArgs ? {withGUI = true;}}:
 
 with pkgs;
 let
+  _emacs =
+    if specialArgs.withGUI then pkgs.emacs else pkgs.emacs-nox;
   customizedEmacs =
-    (emacsPackagesGen (emacs.override { withImageMagick = true; }))
+    (emacsPackagesGen (_emacs.override { withImageMagick = true; }))
       .emacsWithPackages(epkgs:
         [ (with epkgs.melpaPackages;
           [

@@ -1,0 +1,20 @@
+* Organizing the system
+** Root
+*** Devices
+**** Thinkpad (uriel)
+**** XPS (cadaver)
+**** Desktop (sarge)
+**** DO proxy (bones-1)
+**** Raspberry pi at home
+**** Raspberry pi outside
+*** Things to migrate
+**** Networking
+**** Disks
+**** Software (essential)
+**** Software (desktop)
+**** Server software
+**** Desktop environment
+**** user
+**** services for daemons
+**** VPN
+** User
