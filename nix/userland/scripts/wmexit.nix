@@ -1,6 +1,6 @@
 { pkgs ? import <nixpkgs> {}}:
 with pkgs;
-writeShellScriptBin "i3exit" ''
+writeShellScriptBin "wmexit" ''
   llock() {
     gllock &
     sleep 3

@@ -1,8 +1,8 @@
 ! clear Lock
 ! keycode 66 = Hyper_L
 ! add mod4 = Hyper_L
-clear mod4
-add mod4 = Super_L
+! clear mod4
+! add mod4 = Super_L
 pointer = 1 2 3 5 4 7 6 8 9 10 11 12
 keycode 232 = XF86MonBrightnessDown
 keycode 233 = XF86MonBrightnessUp

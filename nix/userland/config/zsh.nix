@@ -21,20 +21,20 @@ let
         "$SPACESHIP_NIX_SHELL_SUFFIX"
     }
   '';
-  manPager = runCommand "lezz" {
-    buildInputs = [ makeWrapper ];
-  } ''
-   mkdir -pv $out/bin
-   makeWrapper ${less}/bin/less $out/bin/lezz \
-    --set LESS_TERMCAP_mb $(printf '\e[01;31m') \
-    --set LESS_TERMCAP_md $(printf '\e[01;35m') \
-    --set LESS_TERMCAP_me $(printf '\e[0m')  \
-    --set LESS_TERMCAP_se $(printf '\e[0m')  \
-    --set LESS_TERMCAP_so $(printf '\e[01;33m')  \
-    --set LESS_TERMCAP_ue $(printf '\e[0m')  \
-    --set LESS_TERMCAP_us $(printf '\e[04;36m')
- '';
-in {
+  manPager =
+    runCommand "lezz" {buildInputs = [ makeWrapper ];} ''
+      mkdir -pv $out/bin
+      makeWrapper ${less}/bin/less $out/bin/lezz \
+        --set LESS_TERMCAP_mb $(printf '\e[01;31m') \
+        --set LESS_TERMCAP_md $(printf '\e[01;35m') \
+        --set LESS_TERMCAP_me $(printf '\e[0m')  \
+        --set LESS_TERMCAP_se $(printf '\e[0m')  \
+        --set LESS_TERMCAP_so $(printf '\e[01;33m')  \
+        --set LESS_TERMCAP_ue $(printf '\e[0m')  \
+        --set LESS_TERMCAP_us $(printf '\e[04;36m')
+    '';
+in
+{
   enable = true;
   enableAutosuggestions = true;
   dotDir = ".zsh";
@@ -110,7 +110,7 @@ in {
     function qqbc() { echo "scale=''${2:-2}; $1" | bc -l }
 
     function gen-passwd () { ${pkgs.gnupg}/bin/gpg --gen-random --armor 0 $1:-24 }
-    source ${pkgs.zsh-nix-shell.out}/nix-shell.plugin.zsh
+    source ${pkgs.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh
   '';
   shellAliases = {
     grep = "GREP_COLOR=\"1;33;40\" LANG=C egrep --color=always";

@@ -19,6 +19,6 @@
     (when command
       (case command
         (:abort (run-commands "echo Aborted."))
-        (t (run-shell-command (format nil "i3exit ~(~a~)" command)))))))
+        (t (run-shell-command (format nil "wmexit ~(~a~)" command)))))))
 
 (set-keybindings "DEL" "session-menu" :where 'top)

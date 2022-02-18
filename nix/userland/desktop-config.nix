@@ -6,7 +6,7 @@ mkIf
   (let
     rofiElectronAppsRunner = pkgs.callPackage ../overlays/electronApps/rofiRun.nix {};
     onAttachMonitorScript = pkgs.callPackage ./scripts/onAttachMonitor.nix {};
-    i3exit = pkgs.callPackage ./scripts/i3exit.nix {};
+    wmexit = pkgs.callPackage ./scripts/wmexit.nix {};
     passdo = pkgs.callPackage ./scripts/passdo.nix {};
     quickswitch-for-i3 = pkgs.callPackage ./packages/quickswitch-for-i3 {};
     findWindowByTitle = pkgs.callPackage ./scripts/findWindowByTitle.nix {};
@@ -33,7 +33,7 @@ mkIf
         asciinema
         dunst
         findWindowByTitle
-        i3exit
+        wmexit
         pa_applet
         paprefs
         passdo
@@ -119,6 +119,7 @@ mkIf
       };
       services.sxhkd = {
         enable = true;
+        extraOptions =  [ "-m" " -1" ];
         keybindings = {
           #       "control + hyper + alt + Return" = "${alacritty}/bin/alacritty";
           "control + hyper + alt + shift + Return" = "${alacritty}/bin/alacritty";
@@ -190,7 +191,7 @@ mkIf
             { key = "N"; mode = "Vi"; action = "SearchNext"; }
           ];
           draw_bold_text_with_bright_colors = true;
-          background_opacity = 1.0;
+          window.opacity = 0.8;
           colors1 = {
             primary = {
               background = "0x181818";
@@ -257,7 +258,7 @@ mkIf
             lib.concatStringsSep " "
               ([ "${pkgs.xss-lock}/bin/xss-lock" "-s \${XDG_SESSION_ID}" ]
                ++ [ "--notifier" "${libnotify}/bin/notify-send" ]
-               ++ [ "-- ${i3exit}/bin/i3exit lock" ]);
+               ++ [ "-- ${wmexit}/bin/wmexit lock" ]);
         };
       };
 

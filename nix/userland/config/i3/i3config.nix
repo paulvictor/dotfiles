@@ -7,7 +7,7 @@ let
   numbers = map toString (lib.range 1 9);
   workspaceNumbers = lib.zipListsWith (x: y: x + ": " + y) numbers workspaces ;
   useWithModifier = mod: lib.mapAttrs' (k: v: lib.nameValuePair (mod + "+" + k) v);
-  changeToi3ExitOption = lib.mapAttrs (k: v: "exec --no-startup-id i3exit ${v}, mode \"default\"");
+  changeTowmexitOption = lib.mapAttrs (k: v: "exec --no-startup-id wmexit ${v}, mode \"default\"");
 in
 {
   config = rec {
@@ -73,7 +73,7 @@ in
     keycodebindings = useWithModifier modifier {
     };
     modes = {
-      "$leave" = changeToi3ExitOption {
+      "$leave" = changeTowmexitOption {
         l = "lock";
         e = "logout";
         s = "suspend";
