@@ -105,21 +105,22 @@ lib.mkIf
         };
         programs.firefox = {
           enable = true;
+          package = firefox-beta-bin;
           #package = firefox-beta-bin ; # wrapFirefox (latest.firefox-beta-bin) { browserName = "firefox"; };
           extensions = [
             #nur.repos.rycee.firefox-addons.violentmonkey
             #nur.repos.rycee.firefox-addons.tree-style-tab
             #nur.repos.rycee.firefox-addons.temporary-containers
             #nur.repos.rycee.firefox-addons.refined-github
-            #nur.repos.rycee.firefox-addons.i-dont-care-about-cookies
-            #nur.repos.rycee.firefox-addons.https-everywhere
-            #nur.repos.rycee.firefox-addons.google-search-link-fix
+            nur.repos.rycee.firefox-addons.i-dont-care-about-cookies
+            nur.repos.rycee.firefox-addons.https-everywhere
+            nur.repos.rycee.firefox-addons.google-search-link-fix
             nur.repos.rycee.firefox-addons.tridactyl
             nur.repos.rycee.firefox-addons.i-dont-care-about-cookies
             nur.repos.rycee.firefox-addons.videospeed
             brotab-extension
             darkreader-extension
-            #nur.repos.rycee.firefox-addons.dark-night-mode
+            nur.repos.rycee.firefox-addons.dark-night-mode
           ];
           profiles = {
             "proxied" = {

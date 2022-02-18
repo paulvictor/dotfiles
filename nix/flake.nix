@@ -17,9 +17,10 @@
     nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/nur";
     nur.inputs.nixpkgs.follows = "nixpkgs";
+    mozilla.url = "github:mozilla/nixpkgs-mozilla";
   };
 
-  outputs = { self, homeManager, nixpkgs, sops-nix, emacsOverlay, neovim, impermanence, nixos-generators, nur }@outArgs :
+  outputs = { self, nixpkgs, emacsOverlay, neovim, ... }@inputs :
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
@@ -67,16 +68,17 @@
           electron-apps
           wallpaper-overlay
           surfraw-overlay
-          nur.overlay
+          inputs.nur.overlay
+          inputs.mozilla.overlays.firefox
         ];
       };
 
-      mkHomeConfig = extraArgs: homeManager.lib.homeManagerConfiguration (rec {
+      mkHomeConfig = extraArgs: inputs.homeManager.lib.homeManagerConfiguration (rec {
         system = extraArgs.system or "x86_64-linux";
         pkgs = extraArgs.pkgs or pkgs; # Can be used to pass different value of pkgs for different systems
         configuration = {
           imports = [
-            impermanence.nixosModules.home-manager.impermanence
+            inputs.impermanence.nixosModules.home-manager.impermanence
             ./userland/home-configuration.nix
           ];
         };
@@ -87,7 +89,7 @@
     in
       {
         nixosConfigurations =
-          import ./root/devices/default.nix { inherit lib nixpkgs system self homeManager sops-nix pkgs ; };
+          import ./root/devices/default.nix { inherit lib nixpkgs system self pkgs ; inherit (inputs) homeManager sops-nix ; };
         homeConfigurations = {
           "viktor@uriel" = mkHomeConfig {
             inherit system;
