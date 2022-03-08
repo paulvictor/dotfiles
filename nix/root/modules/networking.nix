@@ -10,10 +10,12 @@
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-#   networking.extraHosts = let
-#     hostsPath = https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts;
-#     hostsFile = builtins.fetchurl hostsPath;
-#   in builtins.readFile "${hostsFile}";
+  networking.extraHosts = let
+    hostsFile = builtins.fetchurl {
+      url = https://raw.githubusercontent.com/jerryn70/GoodbyeAds/a780eb7563af945b3364d5fcbca37dcafbb26da8/Hosts/GoodbyeAds.txt;
+      sha256 = "15d3w6sp7xfsbala1rbhgk6y9hv2f6cbpswhnrg6sqfffi6gfrdi";
+    };
+  in hostsFile;
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
   networking.networkmanager.insertNameservers = [ "8.8.8.8" "8.8.4.4" ];
   networking.firewall.enable = false;

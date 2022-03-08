@@ -1,12 +1,6 @@
 { config, pkgs, lib, ...}:
 
 {
-#   nix.nixPath = [
-#     "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-#     #"nixpkgs-unstable=${fetchTarball "https://github.com/NixOS/nixpkgs/tarball/master"}"
-#     #"nixos-config=/etc/nixos/configuration.nix"
-#     "/nix/var/nix/profiles/per-user/root/channels" ];
-
   nix.autoOptimiseStore = true;
   nix.extraOptions = ''
     keep-outputs = true
@@ -15,6 +9,8 @@
   '';
   nix.package = pkgs.nixFlakes;
   nix.systemFeatures = [ "kvm" "big-parallel" ];
+
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" "armv7l-linux" "riscv64-linux" ];
 
   services.guix.enable = true;
 }
