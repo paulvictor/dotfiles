@@ -1099,3 +1099,7 @@ Also move to the next line, since that's the most frequent action after"
   :commands (nix-repl))
 
 (load-file (concat user-emacs-directory "ghcid.el"))
+
+(use-package org-roam
+  :custom
+  (org-roam-directory "~/plain/roam-notes"))

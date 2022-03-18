@@ -5,7 +5,7 @@ let
   _emacs =
     if specialArgs.withGUI then pkgs.emacs else pkgs.emacs-nox;
   customizedEmacs =
-    (emacsPackagesGen (_emacs.override { withImageMagick = true; }))
+    (emacsPackagesFor (_emacs.override { withImageMagick = true; }))
       .emacsWithPackages(epkgs:
         [ (with epkgs.melpaPackages;
           [
@@ -76,6 +76,7 @@ let
             nix-modeline
             no-littering
             org-make-toc
+            org-roam
             org-superstar
             origami
             page-break-lines

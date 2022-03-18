@@ -13,7 +13,6 @@
     binutils
     bluez
     exfat
-    exfat-utils
     file
     git
     gnupg

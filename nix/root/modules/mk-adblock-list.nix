@@ -14,4 +14,12 @@ let
     url = https://raw.githubusercontent.com/StevenBlack/hosts/0adb22b4bffc948168dbd7e25e8e2055b5ddfd75/data/StevenBlack/hosts;
     sha256 = "0gr5br069vadhxg9v13fp2pif261xg4dipjlhgh50gkb16dddxa0";
   };
-in concatText "blacklist-hosts" [ goodbye-ads-hosts yt-ads-hosts stevenblack-hosts ]
+in # concatText "blacklist-hosts" [ goodbye-ads-hosts yt-ads-hosts stevenblack-hosts ]
+
+  runCommandLocal "blacklist.txt"
+    { executable = false; meta = {}; destination = ""; files = [ goodbye-ads-hosts yt-ads-hosts stevenblack-hosts ]; checkPhase = "";}
+      ''
+        file=$out$destination
+        mkdir -p "$(dirname "$file")"
+        cat $files  | grep -v clickhouse.com > "$file"
+      ''

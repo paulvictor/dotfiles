@@ -51,14 +51,14 @@ lib.mkIf
             fira-code
             firacode-nerdfonts
             font-awesome_5
-            font-awesome-ttf
+            font-awesome
             networkmanagerapplet
             google-chrome
             google-play-music-desktop-player
             googler
             gromit-mpx
             hack-nerdfonts
-            hicolor_icon_theme
+            hicolor-icon-theme
             league-of-moveable-type
             material-icons
             menu-surfraw
@@ -74,7 +74,7 @@ lib.mkIf
             siji
             source-code-pro-nerdfonts
             surfraw
-            surf-webkit2
+            surf
             ubuntu_font_family
             unifont
             victor-mono-nerdfonts

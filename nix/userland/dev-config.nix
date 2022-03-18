@@ -26,7 +26,7 @@ lib.mkIf
         };
         home.packages =
           [
-            ag
+            silver-searcher
 #             android-studio
             axel
             bind

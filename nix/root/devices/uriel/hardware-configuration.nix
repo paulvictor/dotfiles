@@ -33,6 +33,11 @@
       fsType = "zfs";
     };
 
+  fileSystems."/gnu" =
+    { device = "master/safe/gnu";
+      fsType = "zfs";
+    };
+
   fileSystems."/tmp" =
     { device = "master/local/tmp";
       fsType = "zfs";
