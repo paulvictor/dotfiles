@@ -58,6 +58,7 @@ let
             guru-mode
             haskell-mode
             helpful
+            hl-todo
             hydra
             ivy
             ivy-prescient
