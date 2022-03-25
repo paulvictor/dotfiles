@@ -43,6 +43,11 @@
       fsType = "vfat";
     };
 
+  fileSystems."/gnu" =
+    { device = "master/safe/gnu";
+      fsType = "zfs";
+    };
+
   fileSystems."/persist" =
     { device = "master/safe/persist";
       fsType = "zfs";

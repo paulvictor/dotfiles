@@ -89,12 +89,31 @@
     in
       {
         nixosConfigurations =
-          import ./root/devices/default.nix { inherit lib nixpkgs system self pkgs ; inherit (inputs) homeManager sops-nix ; };
+          import ./root/devices/default.nix {
+            inherit lib nixpkgs system self pkgs;
+            inherit (inputs) homeManager sops-nix;
+          };
         homeConfigurations = {
           "viktor@uriel" = mkHomeConfig {
             inherit system;
             inherit pkgs;
             extraSpecialArgs = {
+              hostSpecificImports = [
+                ./userland/devices/uriel.nix
+              ];
+              withGUI = true; # Enable/disable gui programs
+              isDesktop = true; # Desktop environment setup. Roughly if any of the X related things should be enabled
+              isDevEnv = true; # For all dev packages
+              networkInterface = "wlp2s0";
+            };
+          };
+          "viktor@sarge" = mkHomeConfig {
+            inherit system;
+            inherit pkgs;
+            extraSpecialArgs = {
+              hostSpecificImports = [
+                ./userland/devices/sarge.nix
+              ];
               withGUI = true; # Enable/disable gui programs
               isDesktop = true; # Desktop environment setup. Roughly if any of the X related things should be enabled
               isDevEnv = true; # For all dev packages

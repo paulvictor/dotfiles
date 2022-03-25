@@ -16,5 +16,5 @@ with pkgs;
       ./dev-config.nix
       ./desktop-config.nix
       ./gui-config.nix
-    ];
+    ] ++ specialArgs.hostSpecificImports;
 }

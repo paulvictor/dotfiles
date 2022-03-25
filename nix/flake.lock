@@ -121,10 +121,7 @@
     "neovim-flake": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "nixpkgs": [
-          "neovim",
-          "nixpkgs"
-        ]
+        "nixpkgs": "nixpkgs"
       },
       "locked": {
         "dir": "contrib",
@@ -180,6 +177,22 @@
     },
     "nixpkgs": {
       "locked": {
+        "lastModified": 1647893727,
+        "narHash": "sha256-pOi7VdCb+s5Cwh5CS7YEZVRgH9uCmE87J5W7iXv29Ck=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "1ec61dd4167f04be8d05c45780818826132eea0d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
         "lastModified": 1647350163,
         "narHash": "sha256-OcMI+PFEHTONthXuEQNddt16Ml7qGvanL3x8QOl2Aao=",
         "owner": "NixOS",
@@ -217,7 +230,7 @@
         "mozilla": "mozilla",
         "neovim": "neovim",
         "nixos-generators": "nixos-generators",
-        "nixpkgs": "nixpkgs",
+        "nixpkgs": "nixpkgs_2",
         "nur": "nur",
         "sops-nix": "sops-nix"
       }
