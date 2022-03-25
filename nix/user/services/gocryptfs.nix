@@ -15,9 +15,9 @@ in {
 
     Service = {
       Environment =
-        "PATH=/run/wrappers/bin:${pkgs.coreutils}/bin:${pkgs.gocryptfs}/bin:${pkgs.pass}/bin";
+        [ "PATH=/run/wrappers/bin:${pkgs.coreutils}/bin:${pkgs.gocryptfs}/bin:${pkgs.pass}/bin" ];
       ExecStart =
-        ''${pkgs.gocryptfs}/bin/gocryptfs -nonempty -extpass "cat /run/secrets/crypt-mount-key" ${cryptDir} ${plainDir}'';
+        ''${pkgs.gocryptfs}/bin/gocryptfs -badname '*.sync-conflict*' -nonempty -extpass "cat /run/secrets/crypt-mount-key" ${cryptDir} ${plainDir}'';
       ExecStop =
         ''fusermount -u ${plainDir}'';
       RemainAfterExit = "yes";

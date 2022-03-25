@@ -1103,3 +1103,69 @@ Also move to the next line, since that's the most frequent action after"
 (use-package org-roam
   :custom
   (org-roam-directory "~/plain/roam-notes"))
+
+(use-package hl-todo
+  :init
+  (global-hl-todo-mode)
+  :custom
+  hl-todo-keyword-faces '(("TODO" . "#FF0000")
+                          ("FIXME" . "#FF0000")
+                          ("DEBUG" . "#A020F0")
+                          ("GOTCHA" . "#FF4500")
+                          ("STUB" . "#1E90FF")))
+
+(use-package pulsar
+  :custom
+  ((pulsar-pulse t)
+   (pulsar-delay 0.055)
+   (pulsar-iterations 10)
+   (pulsar-face 'pulsar-magenta)
+   (pulsar-highlight-face 'pulsar-yellow)
+
+   (pulsar-pulse-functions
+    '(isearch-repeat-forward
+      isearch-repeat-backward
+      evil-avy-goto-line
+      evil-avy-goto-char
+      evil-avy-goto-char-timer
+      evil-avy-goto-word-0
+      evil-avy-goto-word-1
+      recenter-top-bottom
+      move-to-window-line-top-bottom
+      reposition-window
+      bookmark-jump
+      other-window
+      delete-window
+      delete-other-windows
+      forward-page
+      backward-page
+      scroll-up-command
+      scroll-down-command
+      windmove-right
+      windmove-left
+      windmove-up
+      windmove-down
+      windmove-swap-states-right
+      windmove-swap-states-left
+      windmove-swap-states-up
+      windmove-swap-states-down
+      tab-new
+      tab-close
+      tab-next
+      org-next-visible-heading
+      org-previous-visible-heading
+      org-forward-heading-same-level
+      org-backward-heading-same-level
+      outline-backward-same-level
+      outline-forward-same-level
+      outline-next-visible-heading
+      outline-previous-visible-heading
+      outline-up-heading
+      evil-scroll-up
+      evil-scroll-down
+      evil-scroll-page-up
+      evil-scroll-page-down)))
+  :config
+  (pulsar-global-mode 1)
+  :bind
+  (("C-c C-x" . pulsar-pulse-line)))

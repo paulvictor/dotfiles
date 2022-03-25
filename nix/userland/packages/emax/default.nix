@@ -2,6 +2,14 @@
 
 with pkgs;
 let
+  emacsPulsar = emacsPackages.trivialBuild {
+    pname = "pulsar";
+    src = fetchgit {
+      "url" = "https://gitlab.com/protesilaos/pulsar.git";
+      "rev" = "5ff2b816337c803053170dfd6d8038238d752dc0";
+      "sha256" = "0qa05v1lzn6h3sajih3qmm4zvx92f4chc7g0zwa1w5b8mhdhnvkd";
+    };
+  };
   _emacs =
     if specialArgs.withGUI then pkgs.emacs else pkgs.emacs-nox;
   customizedEmacs =
@@ -31,6 +39,7 @@ let
             doom-themes
             # eglot # Has some issue with project.el. Emacs 28 should fix this
             elisp-slime-nav
+            emacsPulsar
             # elscreen
             # elscreen-separate-buffer-list
             engine-mode
