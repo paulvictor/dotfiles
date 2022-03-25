@@ -70,6 +70,7 @@
           surfraw-overlay
           inputs.nur.overlay
           inputs.mozilla.overlays.firefox
+          emacsOverlay.overlay
         ];
       };
 
