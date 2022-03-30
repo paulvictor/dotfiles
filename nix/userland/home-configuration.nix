@@ -12,6 +12,7 @@ with pkgs;
   imports =
     [
       ./modules/services/gocryptfs.nix
+      ./modules/services/battery-alert.nix
       ./common.nix
       ./dev-config.nix
       ./desktop-config.nix

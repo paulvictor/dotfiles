@@ -10,7 +10,6 @@ mkIf
     passdo = pkgs.callPackage ./scripts/passdo.nix {};
     quickswitch-for-i3 = pkgs.callPackage ./packages/quickswitch-for-i3 {};
     findWindowByTitle = pkgs.callPackage ./scripts/findWindowByTitle.nix {};
-    batteryWarn = pkgs.callPackage ./scripts/batteryWarn.nix {};
   in
     with pkgs;
     {
@@ -103,20 +102,6 @@ mkIf
     '';
       };
 
-      systemd.user.timers.batteryAlert = {
-        Unit.Description = "Check if battery level has to be warned";
-        Unit.Requires = "batteryAlert.service";
-        Timer.OnCalendar="*-*-* *:*:00";
-        Install.WantedBy = [ "timers.target" ];
-      };
-      systemd.user.services.batteryAlert = {
-        Install.WantedBy = [ "default.target" ];
-        Unit.Description = "Notify if battery is too low";
-        Service = {
-          ExecStart = "${batteryWarn}";
-          Type = "simple";
-        };
-      };
       services.sxhkd = {
         enable = true;
         extraOptions =  [ "-m" " -1" ];

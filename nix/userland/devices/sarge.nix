@@ -2,6 +2,7 @@
 
 with pkgs;
 {
+  services.batteryAlert.enable = false;
   programs.autorandr = {
     enable = true;
     hooks.postswitch = {
