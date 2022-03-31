@@ -38,6 +38,7 @@ let
             doom-modeline
             doom-themes
             # eglot # Has some issue with project.el. Emacs 28 should fix this
+            edit-server
             elisp-slime-nav
             emacsPulsar
             # elscreen

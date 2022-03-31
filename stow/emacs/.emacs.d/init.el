@@ -1115,6 +1115,7 @@ Also move to the next line, since that's the most frequent action after"
                           ("STUB" . "#1E90FF")))
 
 (use-package pulsar
+  :demand t
   :custom
   ((pulsar-pulse t)
    (pulsar-delay 0.055)
@@ -1125,6 +1126,10 @@ Also move to the next line, since that's the most frequent action after"
    (pulsar-pulse-functions
     '(isearch-repeat-forward
       isearch-repeat-backward
+      evil-ex-search-next
+      evil-ex-search-previous
+      evil-ex-search-forward
+      evil-ex-search-backward
       evil-avy-goto-line
       evil-avy-goto-char
       evil-avy-goto-char-timer
@@ -1169,3 +1174,19 @@ Also move to the next line, since that's the most frequent action after"
   (pulsar-global-mode 1)
   :bind
   (("C-c C-x" . pulsar-pulse-line)))
+
+(use-package edit-server
+  :commands edit-server-start
+  :init (if after-init-time
+            (edit-server-start)
+          (add-hook 'after-init-hook
+                    #'(lambda () (edit-server-start))))
+  :config (setq edit-server-new-frame-alist
+                '((name . "Edit with Emacs FRAME")
+                  (top . 200)
+                  (left . 200)
+                  (width . 80)
+                  (height . 25)
+                  (minibuffer . t)
+                  (menu-bar-lines . nil)
+                  (window-system . x))))

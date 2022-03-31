@@ -29,6 +29,14 @@ lib.mkIf
         sha256 = "187frmvb6z7k3p4yr15v10y4piz0fm6zhqp1jxqqhyaxdszrzwqw";
         meta = {};
       };
+      edit-with-emacs-extension = pkgs.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {
+        pname = "edit-with-emacs-extension";
+        version = "1.16";
+        addonId = "{8dd384e7-fc9e-4b6a-a744-497edc3408c3}";
+        url = "https://addons.mozilla.org/firefox/downloads/file/3708541/edit_with_emacs-1.16-an+fx.xpi";
+        sha256 = "sha256-9nCmbDfhOfPUD+ljsOnXfU+ErJLgLx+XQ0SAojy4W5Q=";
+        meta = {};
+      };
       customizedemacs = pkgs.callPackage ./packages/emax {};
     in
       {
@@ -118,6 +126,7 @@ lib.mkIf
             nur.repos.rycee.firefox-addons.i-dont-care-about-cookies
             nur.repos.rycee.firefox-addons.videospeed
             brotab-extension
+            edit-with-emacs-extension
             darkreader-extension
           ];
           profiles = {
