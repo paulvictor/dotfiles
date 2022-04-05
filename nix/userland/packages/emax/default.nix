@@ -82,7 +82,14 @@ let
             lsp-haskell
             lsp-mode
             lsp-ui
+            macrostep
             magit
+            (magit-delta.overrideAttrs(old: {
+              propagatedBuildInputs = old.propagatedBuildInputs ++ [ delta ];
+              propagatedNativeBuildInputs = [ delta ];
+              nativeBuildInputs = old.nativeBuildInputs ++ [ delta ];
+            }))
+
             nix-mode
             nix-modeline
             no-littering
@@ -133,10 +140,10 @@ let
   myemacs = symlinkJoin {
     name = "Emacs";
     paths = [ customizedEmacs ];
-    buildInputs = [ makeWrapper ripgrep fd w3m fish ];
+    buildInputs = [ makeWrapper ripgrep fd w3m fish delta ];
     postBuild = ''
       wrapProgram $out/bin/emacs \
-        --prefix PATH : ${lib.makeBinPath [ ripgrep fd w3m fish ]} \
+        --prefix PATH : ${lib.makeBinPath [ ripgrep fd w3m fish delta ]} \
         --add-flags --maximized
     '';
   };

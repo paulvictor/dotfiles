@@ -39,6 +39,7 @@
       urxvt-perls-overlay = import ./overlays/urxvt-perls.nix;
       electron-apps = import ./overlays/electronApps;
       surfraw-overlay = import ./overlays/surfraw.nix;
+      ql2nix-overlay = import ./overlays/ql2nix.nix;
       #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
 
       pkgs = import nixpkgs {
@@ -71,6 +72,7 @@
           inputs.nur.overlay
           inputs.mozilla.overlays.firefox
           emacsOverlay.overlay
+          ql2nix-overlay
         ];
       };
 

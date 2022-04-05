@@ -55,6 +55,7 @@ lib.mkIf
             sbcl
             tmate
             tmuxWithConfig
+            ql2nix
           ] ++
           (with easy-purescript-nix; [ psc-package purescript spago ]);
       })
