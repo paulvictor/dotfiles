@@ -108,7 +108,7 @@ mkIf
         keybindings = {
           #       "control + hyper + alt + Return" = "${alacritty}/bin/alacritty";
           "control + hyper + alt + shift + Return" = "${alacritty}/bin/alacritty";
-          "control + hyper + alt + e" = "emacs";
+          "control + hyper + alt + e" = "emacsclient -c -n";
           "control + hyper + alt + d" = "rofi -show drun";
           #       "control + hyper + alt + g" = ''${wmfocus}/bin/wmfocus --fill -c asdf --textcolor red'';
           "control + hyper + alt + n" = "passdo --notify";
