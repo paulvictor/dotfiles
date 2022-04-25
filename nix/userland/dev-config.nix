@@ -57,6 +57,6 @@ lib.mkIf
             tmuxWithConfig
             ql2nix
           ] ++
-          (with easy-purescript-nix; [ psc-package purescript ]);
+          (with easy-purescript-nix; [ psc-package purescript spago ]);
       })
 
