@@ -3,6 +3,7 @@
 {
   imports = [
     ./key-remaps.nix
+    ./pipewire.nix
   ];
   services.xserver = {
     enable = true;
@@ -61,25 +62,25 @@
   programs.light.enable = true;
 
   # Enable sound.
-  sound.enable = true;
-  systemd.services.pulseaudio.enable=false;
-  systemd.sockets.pulseaudio.enable=false;
-  hardware.pulseaudio = {
-    enable = true;
-    tcp = {
-      enable = true;
-      anonymousClients.allowAll = true;
-    };
-    package = pkgs.pulseaudioFull;
-    extraModules = [ pkgs.pulseaudio-modules-bt ];
-    daemon.logLevel = "debug";
-    daemon.config = {
-      flat-volumes = "no";
-      enable-lfe-remixing = "no";
-      allow-module-loading = "yes";
-      log-target = "journal";
-    };
-  };
+#   sound.enable = true;
+#   systemd.services.pulseaudio.enable=false;
+#   systemd.sockets.pulseaudio.enable=false;
+#   hardware.pulseaudio = {
+#     enable = true;
+#     tcp = {
+#       enable = true;
+#       anonymousClients.allowAll = true;
+#     };
+#     package = pkgs.pulseaudioFull;
+# #     extraModules = [ pkgs.pulseaudio-modules-bt ];
+#     daemon.logLevel = "debug";
+#     daemon.config = {
+#       flat-volumes = "no";
+#       enable-lfe-remixing = "no";
+#       allow-module-loading = "yes";
+#       log-target = "journal";
+#     };
+#   };
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;

@@ -36,7 +36,7 @@ mkIf
         pa_applet
         paprefs
         passdo
-        pasystray
+#         pasystray
         pavucontrol
         pulseaudio-ctl
         rofiElectronAppsRunner
@@ -210,7 +210,7 @@ mkIf
         };
       };
       xdg.configFile."kitty/kitty.conf".source = import ./config/kitty.nix { inherit pkgs; };
-      xdg.configFile."pulse/default.pa".text = lib.readFile ./config/pulseaudio.conf;
+#       xdg.configFile."pulse/default.pa".text = lib.readFile ./config/pulseaudio.conf;
       xdg.configFile."rofi/config.rasi".source = import ./config/rofi-config.nix {inherit pkgs; };
 
       # Not sure if we can run on darwin
