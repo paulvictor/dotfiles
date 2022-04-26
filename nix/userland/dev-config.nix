@@ -7,12 +7,13 @@ lib.mkIf
     let
       tmuxWithConfig = pkgs.callPackage ./packages/tmux {};
 
-      easy-purescript-nix =  pkgs.fetchFromGitHub {
+      easy-purescript-nix-repo =  pkgs.fetchFromGitHub {
         owner = "justinwoo";
         repo = "easy-purescript-nix";
-        rev = "3630943b74f681289ed87a0ed6c3e502556ddebb";
-        sha256 = "fhr5sisPsm2uzm0VenH7Urpc+AcI39OGpPNaUVTD/8Q=";
+        rev = "d56c436a66ec2a8a93b309c83693cef1507dca7a";
+        sha256 = "T96xGZV2AEP07smv/L2s5U7jY1LTdJEiTnA90gJ3Fco=";
       };
+      easy-purescript-nix = import easy-purescript-nix-repo { inherit pkgs; };
     in
       {
         home.file.".ghc/ghci.conf".text = ''
@@ -26,7 +27,6 @@ lib.mkIf
         };
         home.packages =
           [
-            silver-searcher
 #             android-studio
             axel
             bind
@@ -50,13 +50,15 @@ lib.mkIf
             nodePackages.bower
             nodePackages.bower2nix
             nodePackages.node2nix
+            nodePackages.purescript-language-server
             pv
+            ql2nix
             ruby
             sbcl
+            silver-searcher
             tmate
             tmuxWithConfig
-            ql2nix
           ] ++
-          (with easy-purescript-nix; [ psc-package purescript spago ]);
+          (with easy-purescript-nix; [ psc-package purescript spago pscid spago2nix pulp ]);
       })
 

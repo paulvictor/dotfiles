@@ -2,6 +2,8 @@
   name = Paul Victor Raj
   email = paulvictor@gmail.com
   signingkey = 3264D1648F8FB1A4A3F74C9318497AC961BB2FB6
+[init]
+  defaultBranch = main
 [core]
   editor = nvim
 [alias]
