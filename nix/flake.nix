@@ -94,7 +94,7 @@
         nixosConfigurations =
           import ./root/devices/default.nix {
             inherit lib nixpkgs system self pkgs;
-            inherit (inputs) homeManager sops-nix;
+            inherit (inputs) homeManager sops-nix nixos-generators;
           };
         homeConfigurations = {
           "viktor@uriel" = mkHomeConfig {
