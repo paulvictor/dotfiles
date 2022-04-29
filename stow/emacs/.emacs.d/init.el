@@ -343,6 +343,10 @@
 
 (use-package dired-single
   :after (dired dired-jump)
+  :bind
+  ([remap dired-find-file] . dired-single-buffer)
+  ([remap dired-mouse-find-file-other-window] . dired-single-buffer-mouse)
+  ([remap dired-up-directory] . dired-single-up-directory)
   :commands (dired dired-jump))
 
 (use-package all-the-icons-dired
