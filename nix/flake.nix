@@ -18,9 +18,10 @@
     nur.url = "github:nix-community/nur";
     nur.inputs.nixpkgs.follows = "nixpkgs";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
+    portable-svc.url = "git+https://tulpa.dev/cadey/portable-svc.git?ref=main";
   };
 
-  outputs = { self, nixpkgs, emacsOverlay, neovim, ... }@inputs :
+  outputs = { self, nixpkgs, emacsOverlay, neovim, portable-svc, ... }@inputs :
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
@@ -73,6 +74,7 @@
           inputs.mozilla.overlays.firefox
           emacsOverlay.overlay
           ql2nix-overlay
+          portable-svc.overlay
         ];
       };
 
