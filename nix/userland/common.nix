@@ -25,6 +25,8 @@ with pkgs;
     moreutils
     mpc_cli
     ncmpcpp
+    nix-bundle
+    nix-index
     opensc
     openssh
     openssl
@@ -56,7 +58,6 @@ with pkgs;
   [ procs
     bat
     fd
-    dust
     tokei
     bottom
     tealdeer

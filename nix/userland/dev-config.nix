@@ -10,8 +10,8 @@ lib.mkIf
       easy-purescript-nix-repo =  pkgs.fetchFromGitHub {
         owner = "justinwoo";
         repo = "easy-purescript-nix";
-        rev = "d56c436a66ec2a8a93b309c83693cef1507dca7a";
-        sha256 = "T96xGZV2AEP07smv/L2s5U7jY1LTdJEiTnA90gJ3Fco=";
+        rev = "0ad5775c1e80cdd952527db2da969982e39ff592";
+        sha256 = "bwbpXSTD8Hf7tlCXfZuLfo2QivvX1ZDJ1PijXXRTo3Q=";
       };
       easy-purescript-nix = import easy-purescript-nix-repo { inherit pkgs; };
     in
@@ -43,14 +43,12 @@ lib.mkIf
             kube-prompt
             kubetail
             msgpack-tools
-            nix-bundle
-            nix-index
             #     nixos-generators
             nodejs
-            nodePackages.bower
-            nodePackages.bower2nix
-            nodePackages.node2nix
-            nodePackages.purescript-language-server
+#             nodePackages.bower
+#             nodePackages.bower2nix
+#             nodePackages.node2nix
+#             nodePackages.purescript-language-server
             pv
             ql2nix
             ruby
@@ -58,7 +56,8 @@ lib.mkIf
             silver-searcher
             tmate
             tmuxWithConfig
+            pscid
           ] ++
-          (with easy-purescript-nix; [ psc-package purescript spago pscid spago2nix pulp ]);
+          (with easy-purescript-nix; [ purs-0_14_7 spago spago2nix purescript-language-server ]);
       })
 
