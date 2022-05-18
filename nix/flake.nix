@@ -19,9 +19,11 @@
     nur.inputs.nixpkgs.follows = "nixpkgs";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
     portable-svc.url = "git+https://tulpa.dev/cadey/portable-svc.git?ref=main";
+    portable-svc.inputs.nixpkgs.follows = "nixpkgs";
+    ngnk.url = "github:nathyong/ngnk-nix";
   };
 
-  outputs = { self, nixpkgs, emacsOverlay, neovim, portable-svc, ... }@inputs :
+  outputs = { self, nixpkgs, emacsOverlay, neovim, ... }@inputs :
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
@@ -41,6 +43,7 @@
       electron-apps = import ./overlays/electronApps;
       surfraw-overlay = import ./overlays/surfraw.nix;
       ql2nix-overlay = import ./overlays/ql2nix.nix;
+      nyxt-overlay = import ./overlays/nyxt.nix;
       #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
 
       pkgs = import nixpkgs {
@@ -56,6 +59,8 @@
           };
         };
         overlays = [
+          nyxt-overlay
+          neovim.overlay
           gllock-overlay
           tomb-overlay
           guix-overlay
@@ -74,7 +79,8 @@
           inputs.mozilla.overlays.firefox
           emacsOverlay.overlay
           ql2nix-overlay
-          portable-svc.overlay
+          inputs.portable-svc.overlay
+          inputs.ngnk.overlay
         ];
       };
 

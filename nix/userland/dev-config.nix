@@ -57,6 +57,7 @@ lib.mkIf
             tmate
             tmuxWithConfig
             pscid
+            k # https://github.com/nathyong/ngnk-nix/blob/master/flake.nix && https://codeberg.org/ngn/k
           ] ++
           (with easy-purescript-nix; [ purs-0_14_7 spago spago2nix purescript-language-server ]);
       })
