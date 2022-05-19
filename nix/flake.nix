@@ -26,7 +26,6 @@
   outputs = { self, nixpkgs, emacsOverlay, neovim, ... }@inputs :
     let
       system = "x86_64-linux";
-      lib = nixpkgs.lib;
 
       gllock-overlay = import ./overlays/gllock.nix;
       tomb-overlay = import ./overlays/tomb.nix;
@@ -100,6 +99,9 @@
     in
       {
         nixosConfigurations =
+          let
+            lib = nixpkgs.lib // import ./ip.nix { inherit pkgs; };
+          in
           import ./root/devices/default.nix {
             inherit lib nixpkgs system self pkgs;
             inherit (inputs) homeManager sops-nix nixos-generators;

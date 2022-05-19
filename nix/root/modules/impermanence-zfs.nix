@@ -5,8 +5,11 @@
     source = "/persist/etc/NetworkManager/system-connections/";
   };
   systemd.tmpfiles.rules = [
-    "L /var/lib/bluetooth - - - - /persist/var/lib/bluetooth"
+    "C /var/lib/bluetooth - - - - /persist/var/lib/bluetooth"
+#     "d /var/lib/bluetooth 700 root root -"
+#     "L /var/lib/bluetooth - - - - /persist/var/lib/bluetooth"
   ];
+  systemd.targets."bluetooth".after = ["systemd-tmpfiles-setup.service"];
 
   services.zfs.autoScrub.enable = true;
   boot.loader.grub.copyKernels = true;

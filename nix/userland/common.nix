@@ -87,11 +87,11 @@ with pkgs;
             echo -n "$PWD" | shasum | cut -d ' ' -f 1)}"
       }
 
-      use_flake() {
-        watch_file flake.nix
-        watch_file flake.lock
-        eval "$(nix print-dev-env --profile "$(direnv_layout_dir)/flake-profile")"
-      }
+#       use_flake() {
+#         watch_file flake.nix
+#         watch_file flake.lock
+#         eval "$(nix print-dev-env --profile "$(direnv_layout_dir)/flake-profile")"
+#       }
     '';
   };
 

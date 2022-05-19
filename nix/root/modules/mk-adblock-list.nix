@@ -3,12 +3,12 @@
 with pkgs;
 let
   goodbye-ads-hosts = builtins.fetchurl {
-    url = https://raw.githubusercontent.com/jerryn70/GoodbyeAds/a780eb7563af945b3364d5fcbca37dcafbb26da8/Hosts/GoodbyeAds.txt;
-    sha256 = "15d3w6sp7xfsbala1rbhgk6y9hv2f6cbpswhnrg6sqfffi6gfrdi";
+    url = https://raw.githubusercontent.com/jerryn70/GoodbyeAds/87a8902d971eeebffcf9dda8e8cd6853bfe5ab42/Hosts/GoodbyeAds.txt;
+    sha256 = "1ljgqd6kr4sizx2812lrk0i4m0b2bvnkmi3mb8jjaliqlvw3892q";
   };
   yt-ads-hosts = builtins.fetchurl {
-    url = https://raw.githubusercontent.com/jerryn70/GoodbyeAds/a780eb7563af945b3364d5fcbca37dcafbb26da8/Extension/GoodbyeAds-YouTube-AdBlock.txt;
-    sha256 = "0yys784g49biwwg4xdzzivkhdxi5mhw9d7fs0c660x9fm616va9p";
+    url = https://raw.githubusercontent.com/jerryn70/GoodbyeAds/87a8902d971eeebffcf9dda8e8cd6853bfe5ab42/Extension/GoodbyeAds-YouTube-AdBlock.txt;
+    sha256 = "03lkv523bsqsiwxdxh6vhac3zw4m025inm9ma2ah9qs9yp6d2kja";
   };
   stevenblack-hosts = builtins.fetchurl {
     url = https://raw.githubusercontent.com/StevenBlack/hosts/0adb22b4bffc948168dbd7e25e8e2055b5ddfd75/data/StevenBlack/hosts;
