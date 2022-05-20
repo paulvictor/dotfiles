@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ...}:
+{ config, pkgs, lib, specialArgs, ...}:
 
 {
   nix.autoOptimiseStore = true;
@@ -10,7 +10,10 @@
   nix.package = pkgs.nixFlakes;
   nix.systemFeatures = [ "kvm" "big-parallel" ];
 
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" "armv7l-linux" "riscv64-linux" ];
+  boot.binfmt.emulatedSystems =
+    lib.optionals
+      specialArgs.isPhysicalDevice
+        [ "aarch64-linux" "armv7l-linux" "riscv64-linux" ];
 
   services.guix.enable = true;
 }

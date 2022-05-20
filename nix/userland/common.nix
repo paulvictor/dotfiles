@@ -16,6 +16,7 @@ with pkgs;
   home.packages = [
     comma
     ddgr
+    doctl
     ffmpeg-full
     fzf
     haskellPackages.niv
@@ -30,14 +31,12 @@ with pkgs;
     opensc
     openssh
     openssl
-    #pass-with-extensions
     pbgopy
     #pCloudCC
     pcsclite
     pcsctools
     pms
     prettyping
-    #pscid
     qrcp
     rclone
     rclone-browser
@@ -48,7 +47,6 @@ with pkgs;
     tomb
     tree
     unzip
-    #victor-mono
     vifm
     watchexec
     weechat

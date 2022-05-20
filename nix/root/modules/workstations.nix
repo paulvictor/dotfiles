@@ -1,18 +1,17 @@
-{ config, lib, pkgs, ... } :
+{ config, lib, pkgs, specialArgs, ... } :
 
-
+let
+  inherit (specialArgs) isPhysicalDevice;
+  isCloudDevice = !isPhysicalDevice;
+in
+with pkgs;
 {
   # Set your time zone.
   time.timeZone = "Asia/Kolkata";
 
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = [
     bc
     binutils
-    bluez
-    exfat
     file
     git
     gnupg
@@ -20,57 +19,61 @@
     home-manager
     htop
     libnl
-    libnotify
     man-pages
     posix_man_pages
     nix-prefetch-github
     patchelf
-    pciutils
     psmisc
     vim
     wget
+  ] ++ lib.optionals isPhysicalDevice [
+    libnotify
+    bluez
+    exfat
+    pciutils
     wirelesstools
   ];
 
-
-  services.upower.enable = true;
+  services.upower.enable = isPhysicalDevice;
   #services.nixosManual.showManual = true;
   programs.zsh.enable = true;
 
   virtualisation.docker= {
-    enable = true;
+    enable = isPhysicalDevice;
     logDriver = "journald";
   };
   services.udev.packages =
-    with pkgs; [ crda android-udev-rules yubikey-personalization ];
-  services.pcscd.enable = true;
-  programs.adb.enable = true;
+    lib.optionals isPhysicalDevice
+      [ crda android-udev-rules yubikey-personalization ];
+  services.pcscd.enable = isPhysicalDevice;
+  programs.adb.enable = isPhysicalDevice;
 
   # For SSD's
-  services.fstrim.enable = pkgs.lib.mkDefault true;
+#   services.fstrim.enable = pkgs.lib.mkDefault true;
+  services.fstrim.enable = lib.mkForce isPhysicalDevice;
 
   # For laptops
-  services.tlp.enable = pkgs.lib.mkDefault true;
+  services.tlp.enable = lib.mkForce isPhysicalDevice;
 
   # Again, only for laptops
   # This will save you money and possibly your life!
-  services.thermald.enable = pkgs.lib.mkDefault true;
+  services.thermald.enable = lib.mkForce isPhysicalDevice;
 
-  programs.firejail.enable = true;
+  programs.firejail.enable = isPhysicalDevice;
 
-  virtualisation.lxd.enable = true;
+  virtualisation.lxd.enable = isPhysicalDevice;
 
   security.wrappers = {
     gllock = {
       owner = "root";
       group = "root";
       setuid = true;
-      source = "${pkgs.gllock}/bin/gllock";
+      source = "${gllock}/bin/gllock";
     };
     cryptsetup = {
       owner = "root";
       group = "root";
-      source = "${pkgs.cryptsetup}/bin/cryptsetup";
+      source = "${cryptsetup}/bin/cryptsetup";
       capabilities = "cap_sys_admin+ep";
     };
   };

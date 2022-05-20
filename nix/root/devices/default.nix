@@ -36,6 +36,9 @@ let
     lib.nixosSystem {
       inherit system pkgs;
       modules = mkModules hostName;
+      specialArgs = {
+        isPhysicalDevice = true;
+      };
     };
 
   mkImage = hostName: format:
@@ -46,14 +49,26 @@ let
 
   forAllFormats = lib.genAttrs [ "install-iso" "iso" ];
 
-  forAllDevices =
-    lib.genAttrs (attrNames (readDir ./.));
+  forAllNixOSMachines =
+    lib.genAttrs (attrNames (lib.filterAttrs (k: v: v == "directory") (readDir ./.)));
 
-  systems = forAllDevices mkSystem;
+  doHosts = [ "bones" ];
 
-  medias = forAllDevices (device:
+  systems = forAllNixOSMachines mkSystem;
+
+  medias = forAllNixOSMachines (device:
     forAllFormats (format: mkImage device format));
+
+  doImages = lib.genAttrs doHosts (hostName:
+    nixos-generators.nixosGenerate {
+      inherit pkgs;
+      format = "do";
+      modules = mkModules hostName;
+      specialArgs = {
+        isPhysicalDevice = false;
+      };
+    });
 
 in
 
-systems // { inherit medias; }
+systems // { inherit medias doImages; }

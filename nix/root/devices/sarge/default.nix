@@ -10,7 +10,8 @@
   # should.
   system.stateVersion = "20.09"; # Did you read the comment?
 
-  networking.hostName = "sarge";
+  # Set in devices/default.nix
+#   networking.hostName = "sarge";
   # From head -c4 /dev/urandom | od -A none -t x4
   networking.hostId = "d11572e4";
   boot.loader.systemd-boot.enable = false;
