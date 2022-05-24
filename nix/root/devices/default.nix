@@ -38,6 +38,7 @@ let
       modules = mkModules hostName;
       specialArgs = {
         isPhysicalDevice = true;
+        isMedia = false;
       };
     };
 
@@ -45,6 +46,10 @@ let
     nixos-generators.nixosGenerate {
       inherit pkgs format;
       modules = mkModules hostName;
+      specialArgs = {
+        isPhysicalDevice = true;
+        isMedia = true;
+      };
     };
 
   forAllFormats = lib.genAttrs [ "install-iso" "iso" ];

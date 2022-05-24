@@ -1,4 +1,4 @@
-{ config, lib, pkgs, specialArgs ... } :
+{ config, lib, pkgs, specialArgs, ... } :
 
 lib.attrsets.optionalAttrs
   specialArgs.isPhysicalDevice
@@ -18,7 +18,7 @@ lib.attrsets.optionalAttrs
     networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
     networking.networkmanager.enable = true;
     networking.networkmanager.insertNameservers = [ "8.8.8.8" "8.8.4.4" ];
-    networking.firewall.enable = mkDefault false;
+    networking.firewall.enable = lib.mkDefault false;
 
     services.openssh = {
       enable = true;
