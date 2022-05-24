@@ -23,13 +23,13 @@ lib.attrsets.optionalAttrs
     services.openssh = {
       enable = true;
       forwardX11 = true;
-      #     authorizedKeysCommand = with pkgs;''
-      #       # TODO : Is there a better way?
-      #       ${writeShellScript
-      #           "getMyKey"
-      #           "${curl}/bin/curl -L https://github.com/paulvictor/keys"
-      #        }
-      #     '';
+      authorizedKeysCommand = with pkgs;
+        let
+          script =
+            writeShellScript
+              "getMyKey"
+              "${curl}/bin/curl -L https://github.com/paulvictor.keys";
+        in "${script}";
       hostKeys =
         lib.optionals specialArgs.isPhysicalDevice [
           {
