@@ -13,7 +13,6 @@
   networking.hostId = "237ab499";
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
-  boot.kernelPackages = pkgs.linuxPackages_5_15;
 
   services.logind.extraConfig = ''
     IdleAction=lock
@@ -24,11 +23,6 @@
   imports = [
     ./hardware-configuration.nix
     ./syncthing.nix
-    ../../modules/desktop-environment.nix
-    ../../modules/impermanence-zfs.nix
-    ../../modules/networking.nix
-    ../../modules/viktor.nix
-    ../../modules/workstations.nix
   ];
 
 }

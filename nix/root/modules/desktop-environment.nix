@@ -82,13 +82,19 @@
 #     };
 #   };
 
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
-  hardware.bluetooth.settings = {
-    General = {
-      Enable= "Source,Sink,Media,Socket";
-    };
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    disabledPlugins = [ "sap" ];
+    hsphfpd.enable = true;
+    package = pkgs.bluezFull;
   };
+  environment.etc."bluetooth/audio.conf".text =
+    lib.generators.toINI {} {
+      General = {
+        Enable= "Source,Sink,Media,Socket";
+      };
+    };
 
   services.journald.rateLimitInterval = "0";
   services.journald.rateLimitBurst = 0;
@@ -98,5 +104,7 @@
     SyncIntervalSec=10
     LineMax=100K
   '';
+
+  programs.dconf.enable = true;
 
 }

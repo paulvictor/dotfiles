@@ -1195,5 +1195,5 @@ Also move to the next line, since that's the most frequent action after"
                   (menu-bar-lines . nil)
                   (window-system . x))))
 
-(use-package magit-delta
-  :hook (magit-mode . magit-delta-mode))
+;; (use-package magit-delta
+;;   :hook (magit-mode . magit-delta-mode))

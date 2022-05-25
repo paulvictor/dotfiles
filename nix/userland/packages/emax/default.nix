@@ -84,11 +84,11 @@ let
             lsp-ui
             macrostep
             magit
-            (magit-delta.overrideAttrs(old: {
-              propagatedBuildInputs = old.propagatedBuildInputs ++ [ delta ];
-              propagatedNativeBuildInputs = [ delta ];
-              nativeBuildInputs = old.nativeBuildInputs ++ [ delta ];
-            }))
+#             (magit-delta.overrideAttrs(old: {
+#               propagatedBuildInputs = old.propagatedBuildInputs ++ [ delta ];
+#               propagatedNativeBuildInputs = [ delta ];
+#               nativeBuildInputs = old.nativeBuildInputs ++ [ delta ];
+#             }))
 
             nix-mode
             nix-modeline

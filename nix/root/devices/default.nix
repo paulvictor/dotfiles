@@ -15,6 +15,7 @@ let
           # Since hostName is available, use that to determine what components are needed
           ../common-config.nix
         ];
+
         hardware.enableRedistributableFirmware = lib.mkDefault true;
 
         networking.hostName = hostName;
@@ -30,6 +31,9 @@ let
       sops-nix.nixosModule
       homeManager.nixosModule
       machine
+      ../modules/viktor.nix
+      ../modules/workstations.nix
+      ../modules/ssh.nix
     ];
 
   mkSystem = hostName:

@@ -27,6 +27,7 @@ with pkgs;
     vim
     wget
   ] ++ lib.optionals isPhysicalDevice [
+    virt-manager
     libnotify
     bluez
     exfat

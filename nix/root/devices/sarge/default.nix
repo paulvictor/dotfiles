@@ -16,7 +16,6 @@
   networking.hostId = "d11572e4";
   boot.loader.systemd-boot.enable = false;
   boot.loader.efi.efiSysMountPoint = "/boot";
-  boot.kernelPackages = pkgs.linuxPackages_5_15;
 
   services.logind.extraConfig = ''
     IdleAction=lock
@@ -27,11 +26,10 @@
   imports = [
     ./hardware-configuration.nix
     ./syncthing.nix
-    ../../modules/desktop-environment.nix
-    ../../modules/impermanence-zfs.nix
-    ../../modules/networking.nix
-    ../../modules/viktor.nix
-    ../../modules/workstations.nix
   ];
 
+  virtualisation.libvirtd = {
+    enable = true;
+    onBoot = "ignore";
+  };
 }
