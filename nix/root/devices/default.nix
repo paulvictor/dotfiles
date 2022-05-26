@@ -17,6 +17,7 @@ let
         ];
 
         hardware.enableRedistributableFirmware = lib.mkDefault true;
+        virtualisation.amazonImage.sizeMB = 16*1024;
 
         networking.hostName = hostName;
         system.configurationRevision = lib.mkIf (self ? rev) self.rev;
@@ -63,6 +64,8 @@ let
 
   doHosts = [ "bones" ];
 
+  ec2Hosts = [ "lucy" ];
+
   systems = forAllNixOSMachines mkSystem;
 
   medias = forAllNixOSMachines (device:
@@ -78,6 +81,17 @@ let
       };
     });
 
+  ec2Images = lib.genAttrs ec2Hosts (hostName:
+    nixos-generators.nixosGenerate {
+      inherit pkgs;
+      format = "amazon";
+      modules = mkModules hostName;
+      specialArgs = {
+        isPhysicalDevice = false;
+      };
+#       virtualisation.amazonImage.sizeMB = 16*1024;
+    });
+
 in
 
-systems // { inherit medias doImages; }
+systems // { inherit medias doImages ec2Images; }

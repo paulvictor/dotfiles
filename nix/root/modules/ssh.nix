@@ -5,7 +5,7 @@
   services.openssh = {
     enable = true;
     forwardX11 = true;
-    permitRootLogin = "yes";
+    permitRootLogin = lib.mkDefault "yes";
     gatewayPorts = "yes";
     authorizedKeysCommand = with pkgs;
       let

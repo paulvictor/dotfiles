@@ -15,16 +15,16 @@ with pkgs;
     file
     git
     gnupg
-    guix
-    home-manager
+#     guix
+#     home-manager
     htop
     libnl
     man-pages
-    posix_man_pages
-    nix-prefetch-github
+#     posix_man_pages
+#     nix-prefetch-github
     patchelf
     psmisc
-    vim
+#     vim
     wget
   ] ++ lib.optionals isPhysicalDevice [
     virt-manager
