@@ -17,7 +17,6 @@ let
         ];
 
         hardware.enableRedistributableFirmware = lib.mkDefault true;
-        virtualisation.amazonImage.sizeMB = 16*1024;
 
         networking.hostName = hostName;
         system.configurationRevision = lib.mkIf (self ? rev) self.rev;
@@ -85,7 +84,9 @@ let
     nixos-generators.nixosGenerate {
       inherit pkgs;
       format = "amazon";
-      modules = mkModules hostName;
+      modules =
+        (mkModules hostName)
+        ++ [({...}: { amazonImage.sizeMB = 16 * 1024; })];
       specialArgs = {
         isPhysicalDevice = false;
       };
