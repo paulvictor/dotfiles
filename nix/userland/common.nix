@@ -14,6 +14,7 @@ in
 with pkgs;
 {
   home.packages = [
+    awscli2
     comma
     ddgr
     doctl
