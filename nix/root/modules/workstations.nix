@@ -15,16 +15,15 @@ with pkgs;
     file
     git
     gnupg
-#     guix
-#     home-manager
+    guix
+    home-manager
     htop
     libnl
     man-pages
-#     posix_man_pages
-#     nix-prefetch-github
+    posix_man_pages
+    nix-prefetch-github
     patchelf
     psmisc
-#     vim
     wget
   ] ++ lib.optionals isPhysicalDevice [
     virt-manager
@@ -50,7 +49,6 @@ with pkgs;
   programs.adb.enable = isPhysicalDevice;
 
   # For SSD's
-#   services.fstrim.enable = pkgs.lib.mkDefault true;
   services.fstrim.enable = lib.mkForce isPhysicalDevice;
 
   # For laptops

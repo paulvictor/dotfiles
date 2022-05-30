@@ -90,7 +90,6 @@ let
       specialArgs = {
         isPhysicalDevice = false;
       };
-#       virtualisation.amazonImage.sizeMB = 16*1024;
     });
 
 in
