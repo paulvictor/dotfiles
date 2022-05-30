@@ -11,20 +11,16 @@ let
       common = {
         imports = [
           ../guix/modules/services/guix.nix
-          # TODO : Move this to distributed modules
-          # Since hostName is available, use that to determine what components are needed
           ../common-config.nix
         ];
 
-        hardware.enableRedistributableFirmware = lib.mkDefault true;
-
-        networking.hostName = hostName;
         system.configurationRevision = lib.mkIf (self ? rev) self.rev;
-        users.mutableUsers = false;
-
+        networking.hostName = hostName;
         nixpkgs.pkgs = pkgs;
         nix.registry.nixpkgs.flake = nixpkgs;
       };
+
+
       machine = import "${toString ./.}/${hostName}/default.nix";
     in [
       common

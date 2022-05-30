@@ -32,6 +32,7 @@ in {
 
   config = mkIf (cfg.enable) {
 
+    environment.systemPackages = [ pkgs.guix ];
     users = {
       extraUsers = lib.fold (a: b: a // b) {} (builtins.map buildGuixUser (lib.range 1 10));
       extraGroups.guixbuild = {name = "guixbuild";};
