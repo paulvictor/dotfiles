@@ -1,12 +1,13 @@
-{ lib , system , homeManager , self, sops-nix, nixpkgs, pkgs, nixos-generators }:
+{ lib , homeManager , self, sops-nix, nixpkgs, pkgsFor, nixos-generators, flake-utils, ... }:
 
 let
-  inherit (builtins) attrNames isAttrs readDir listToAttrs;
+  inherit (builtins) attrNames isAttrs readDir listToAttrs elem;
 
   inherit (lib) filterAttrs hasSuffix mapAttrs' nameValuePair removeSuffix;
 
-  inherit (lib) hasPrefix;
-  mkModules = hostName:
+  inherit (lib) hasPrefix forEach;
+
+  mkModules = hostName: system:
     let
       common = {
         imports = [
@@ -16,7 +17,7 @@ let
 
         system.configurationRevision = lib.mkIf (self ? rev) self.rev;
         networking.hostName = hostName;
-        nixpkgs.pkgs = pkgs;
+        nixpkgs.pkgs = pkgsFor system;
         nix.registry.nixpkgs.flake = nixpkgs;
       };
 
@@ -32,62 +33,41 @@ let
       ../modules/ssh.nix
     ];
 
-  mkSystem = hostName:
-    lib.nixosSystem {
+  mkNixosSystem = hostName: system:
+    let
+      pkgs = pkgsFor system;
+    in lib.nixosSystem {
       inherit system pkgs;
-      modules = mkModules hostName;
+      modules = mkModules hostName system;
       specialArgs = {
         isPhysicalDevice = true;
-        isMedia = false;
       };
     };
 
-  mkImage = hostName: format:
-    nixos-generators.nixosGenerate {
-      inherit pkgs format;
-      modules = mkModules hostName;
-      specialArgs = {
-        isPhysicalDevice = true;
-        isMedia = true;
-      };
-    };
-
-  forAllFormats = lib.genAttrs [ "install-iso" "iso" ];
-
-  forAllNixOSMachines =
-    lib.genAttrs (attrNames (lib.filterAttrs (k: v: v == "directory") (readDir ./.)));
-
-  doHosts = [ "bones" ];
-
-  ec2Hosts = [ "lucy" ];
-
-  systems = forAllNixOSMachines mkSystem;
-
-  medias = forAllNixOSMachines (device:
-    forAllFormats (format: mkImage device format));
-
-  doImages = lib.genAttrs doHosts (hostName:
-    nixos-generators.nixosGenerate {
-      inherit pkgs;
-      format = "do";
-      modules = mkModules hostName;
-      specialArgs = {
-        isPhysicalDevice = false;
-      };
-    });
-
-  ec2Images = lib.genAttrs ec2Hosts (hostName:
-    nixos-generators.nixosGenerate {
-      inherit pkgs;
-      format = "amazon";
-      modules =
-        (mkModules hostName)
-        ++ [({...}: { amazonImage.sizeMB = 16 * 1024; })];
-      specialArgs = {
-        isPhysicalDevice = false;
-      };
-    });
+  deviceConfigs = import ./all-devices.nix;
 
 in
-
-systems // { inherit medias doImages ec2Images; }
+listToAttrs
+  (forEach
+    deviceConfigs
+    (deviceConfig:
+      let
+        inherit (deviceConfig) hostName system extraModules format isPhysicalDevice;
+        generatedImage = nixos-generators.nixosGenerate {
+          pkgs = pkgsFor system;
+          format = format;
+          modules =
+            mkModules hostName system
+            ++ (lib.optionals (deviceConfig ? extraModules) deviceConfig.extraModules);
+          specialArgs = {
+            isPhysicalDevice = elem format [ "iso" "install-iso" ];
+          };
+        };
+      in
+        {
+          name = hostName;
+          value =
+            if !(deviceConfig ? format)
+            then mkNixosSystem hostName system
+            else generatedImage;
+        }))

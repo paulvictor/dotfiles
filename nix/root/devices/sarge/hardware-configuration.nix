@@ -70,7 +70,7 @@
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
-  boot.loader.grub.enable = !specialArgs.isMedia;
+  boot.loader.grub.enable = lib.mkDefault true;
   boot.loader.grub.zfsSupport = true;
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.version = 2;

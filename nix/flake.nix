@@ -27,27 +27,27 @@
     ngnk.inputs.flake-utils.follows = "flake-utils";
   };
 
-  outputs = { self, nixpkgs, emacsOverlay, neovim, ... }@inputs :
-    inputs.flake-utils.lib.eachDefaultSystem(system:
-      let
-        gllock-overlay = import ./overlays/gllock.nix;
-        tomb-overlay = import ./overlays/tomb.nix;
-        guix-overlay = import ./overlays/guix.nix;
-        xdotool-overlay = import ./overlays/xdotool.nix;
-        brotab-overlay = import ./overlays/brotab.nix;
-        ripgrep-overlay = import ./overlays/ripgrep.nix;
-        rofi-fuzzy = import ./overlays/rofi-fuzzy.nix;
-        pass-override-overlay = import ./overlays/pass-override.nix;
-        pass-extensions-overlay = import ./overlays/pass-extensions.nix;
-        ffmpeg-overlay = import ./overlays/ffmpeg.nix;
-        wallpaper-overlay = import ./overlays/wallpaper.nix;
-        urxvt-perls-overlay = import ./overlays/urxvt-perls.nix;
-        electron-apps = import ./overlays/electronApps;
-        surfraw-overlay = import ./overlays/surfraw.nix;
-        ql2nix-overlay = import ./overlays/ql2nix.nix;
-        nyxt-overlay = import ./overlays/nyxt.nix;
-        #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
-        pkgs = import nixpkgs {
+  outputs = { self, nixpkgs, emacsOverlay, neovim, flake-utils, ... }@inputs :
+    let
+      gllock-overlay = import ./overlays/gllock.nix;
+      tomb-overlay = import ./overlays/tomb.nix;
+      guix-overlay = import ./overlays/guix.nix;
+      xdotool-overlay = import ./overlays/xdotool.nix;
+      brotab-overlay = import ./overlays/brotab.nix;
+      ripgrep-overlay = import ./overlays/ripgrep.nix;
+      rofi-fuzzy = import ./overlays/rofi-fuzzy.nix;
+      pass-override-overlay = import ./overlays/pass-override.nix;
+      pass-extensions-overlay = import ./overlays/pass-extensions.nix;
+      ffmpeg-overlay = import ./overlays/ffmpeg.nix;
+      wallpaper-overlay = import ./overlays/wallpaper.nix;
+      urxvt-perls-overlay = import ./overlays/urxvt-perls.nix;
+      electron-apps = import ./overlays/electronApps;
+      surfraw-overlay = import ./overlays/surfraw.nix;
+      ql2nix-overlay = import ./overlays/ql2nix.nix;
+      nyxt-overlay = import ./overlays/nyxt.nix;
+      #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
+      pkgsFor = system:
+        import nixpkgs {
           inherit system;
           config = {
             permittedInsecurePackages = [ "steghide-0.5.1" ];
@@ -83,52 +83,57 @@
             inputs.portable-svc.overlay
             inputs.ngnk.overlay
           ];
+      };
+      mkHomeConfig = extraArgs: inputs.homeManager.lib.homeManagerConfiguration (rec {
+        inherit (extraArgs) system;
+        pkgs = pkgsFor system;
+        configuration = {
+          imports = [
+            inputs.impermanence.nixosModules.home-manager.impermanence
+            ./userland/home-configuration.nix
+          ];
         };
-        mkHomeConfig = extraArgs: inputs.homeManager.lib.homeManagerConfiguration (rec {
-          system = extraArgs.system or system;
-          pkgs = extraArgs.pkgs or pkgs; # Can be used to pass different value of pkgs for different systems
-          configuration = {
-            imports = [
-              inputs.impermanence.nixosModules.home-manager.impermanence
-              ./userland/home-configuration.nix
+        username = "viktor";
+        homeDirectory = "/home/viktor";
+      } // extraArgs);
+#         lib = nixpkgs.lib // import ./ip.nix { inherit pkgs; };
+    in {
+      nixosConfigurations =
+        import ./root/devices/default.nix {
+          inherit nixpkgs self pkgsFor;
+          inherit (nixpkgs) lib;
+          inherit (inputs) homeManager sops-nix nixos-generators flake-utils;
+        };
+      homeConfigurations =
+        let
+          system = flake-utils.lib.system.x86_64-linux;
+        in {
+        "viktor@uriel" = mkHomeConfig {
+          inherit system;
+          pkgs = pkgsFor system;
+          extraSpecialArgs = {
+            hostSpecificImports = [
+              ./userland/devices/uriel.nix
             ];
-          };
-          username = "viktor";
-          homeDirectory = "/home/viktor";
-        } // extraArgs);
-        lib = nixpkgs.lib // import ./ip.nix { inherit pkgs; };
-      in {
-        nixosConfigurations =
-          import ./root/devices/default.nix {
-            inherit lib nixpkgs system self pkgs;
-            inherit (inputs) homeManager sops-nix nixos-generators;
-          };
-        homeConfigurations = {
-          "viktor@uriel" = mkHomeConfig {
-            inherit system pkgs;
-            extraSpecialArgs = {
-              hostSpecificImports = [
-                ./userland/devices/uriel.nix
-              ];
-              withGUI = true; # Enable/disable gui programs
-              isDesktop = true; # Desktop environment setup. Roughly if any of the X related things should be enabled
-              isDevEnv = true; # For all dev packages
-              networkInterface = "wlp2s0";
-            };
-          };
-          "viktor@sarge" = mkHomeConfig {
-            inherit system pkgs;
-            extraSpecialArgs = {
-              hostSpecificImports = [
-                ./userland/devices/sarge.nix
-              ];
-              withGUI = true; # Enable/disable gui programs
-              isDesktop = true; # Desktop environment setup. Roughly if any of the X related things should be enabled
-              isDevEnv = true; # For all dev packages
-              networkInterface = "wlp2s0";
-            };
+            withGUI = true; # Enable/disable gui programs
+            isDesktop = true; # Desktop environment setup. Roughly if any of the X related things should be enabled
+            isDevEnv = true; # For all dev packages
+            networkInterface = "wlp2s0";
           };
         };
-      }
-    );
+        "viktor@sarge" = mkHomeConfig {
+          inherit system;
+          pkgs = pkgsFor system;
+          extraSpecialArgs = {
+            hostSpecificImports = [
+              ./userland/devices/sarge.nix
+            ];
+            withGUI = true; # Enable/disable gui programs
+            isDesktop = true; # Desktop environment setup. Roughly if any of the X related things should be enabled
+            isDevEnv = true; # For all dev packages
+            networkInterface = "wlp2s0";
+          };
+        };
+      };
+    };
 }
