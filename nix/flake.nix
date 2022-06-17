@@ -96,19 +96,16 @@
           username = "viktor";
           homeDirectory = "/home/viktor";
         } // extraArgs);
+        lib = nixpkgs.lib // import ./ip.nix { inherit pkgs; };
       in {
         nixosConfigurations =
-          let
-            lib = nixpkgs.lib // import ./ip.nix { inherit pkgs; };
-          in
           import ./root/devices/default.nix {
             inherit lib nixpkgs system self pkgs;
             inherit (inputs) homeManager sops-nix nixos-generators;
           };
         homeConfigurations = {
           "viktor@uriel" = mkHomeConfig {
-            inherit system;
-            inherit pkgs;
+            inherit system pkgs;
             extraSpecialArgs = {
               hostSpecificImports = [
                 ./userland/devices/uriel.nix
@@ -120,8 +117,7 @@
             };
           };
           "viktor@sarge" = mkHomeConfig {
-            inherit system;
-            inherit pkgs;
+            inherit system pkgs;
             extraSpecialArgs = {
               hostSpecificImports = [
                 ./userland/devices/sarge.nix

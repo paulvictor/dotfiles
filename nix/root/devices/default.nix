@@ -20,8 +20,8 @@ let
         nix.registry.nixpkgs.flake = nixpkgs;
       };
 
-
       machine = import "${toString ./.}/${hostName}/default.nix";
+
     in [
       common
       sops-nix.nixosModule
