@@ -43,7 +43,6 @@ lib.mkIf
         home.packages =
           [
             all-the-icons-fonts
-#             android-file-transfer
             autorandr
             brotab
             cantarell-fonts
@@ -58,11 +57,9 @@ lib.mkIf
             ferdi
             fira-code
             firacode-nerdfonts
-            font-awesome_5
             font-awesome
-            networkmanagerapplet
+            font-awesome_5
             google-chrome
-            google-play-music-desktop-player
             googler
             gromit-mpx
             hack-nerdfonts
@@ -71,6 +68,7 @@ lib.mkIf
             material-icons
             menu-surfraw
             mpv
+            networkmanagerapplet
             noto-fonts
             nyxt
             pdftk
@@ -81,12 +79,13 @@ lib.mkIf
             scrot
             siji
             source-code-pro-nerdfonts
-            surfraw
             surf
+            surfraw
             ubuntu_font_family
             unifont
             victor-mono-nerdfonts
             vlc
+            ytmdesktop
             yubico-piv-tool
             yubikey-manager
             yubikey-personalization
