@@ -5,7 +5,7 @@
     source = "/persist/etc/NetworkManager/system-connections/";
   };
   systemd.tmpfiles.rules = [
-    "C /var/lib/bluetooth - - - - /persist/var/lib/bluetooth"
+#     "C /var/lib/bluetooth - - - - /persist/var/lib/bluetooth"
 #     "d /var/lib/bluetooth 700 root root -"
 #     "L /var/lib/bluetooth - - - - /persist/var/lib/bluetooth"
   ];

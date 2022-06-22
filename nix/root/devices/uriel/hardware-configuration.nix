@@ -65,6 +65,12 @@
       neededForBoot = true;
     };
 
+  fileSystems."/var/lib/bluetooth" = {
+    device = "/persist/var/lib/bluetooth";
+    options = [ "bind" "noauto" "x-systemd.automount" ];
+    noCheck = true;
+  };
+
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
   boot.extraModprobeConfig = ''

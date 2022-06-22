@@ -64,6 +64,13 @@
       neededForBoot = true;
     };
 
+  # See https://github.com/NixOS/nixpkgs/issues/170573#issuecomment-1145107975
+  fileSystems."/var/lib/bluetooth" = {
+    device = "/persist/var/lib/bluetooth";
+    options = [ "bind" "noauto" "x-systemd.automount" ];
+    noCheck = true;
+  };
+
   swapDevices =
     [ { device = "/dev/disk/by-uuid/72b544b2-e2c8-46b3-bf6a-f3b35c1f109d"; }
     ];
