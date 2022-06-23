@@ -100,7 +100,7 @@
     in {
       nixosConfigurations =
         import ./root/devices/default.nix {
-          inherit nixpkgs self pkgsFor;
+          inherit nixpkgs self pkgsFor inputs;
           inherit (nixpkgs) lib;
           inherit (inputs) homeManager sops-nix nixos-generators flake-utils;
         };

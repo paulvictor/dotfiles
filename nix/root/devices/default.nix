@@ -1,4 +1,4 @@
-{ lib , homeManager , self, sops-nix, nixpkgs, pkgsFor, nixos-generators, flake-utils, ... }:
+{ lib , homeManager , self, sops-nix, nixpkgs, pkgsFor, nixos-generators, flake-utils, inputs, ... }:
 
 let
   inherit (builtins) attrNames isAttrs readDir listToAttrs elem;
@@ -6,6 +6,14 @@ let
   inherit (lib) filterAttrs hasSuffix mapAttrs' nameValuePair removeSuffix;
 
   inherit (lib) hasPrefix forEach;
+
+  setupNixPath = {config, lib, ...}: {
+    environment.etc =
+      mapAttrs'
+        (name: value: { name = "nix/inputs/${name}"; value = { source = value.outPath; }; })
+        inputs;
+    nix.nixPath = [ "/etc/nix/inputs" ];
+  };
 
   mkModules = hostName: system:
     let
@@ -24,6 +32,7 @@ let
       machine = import "${toString ./.}/${hostName}/default.nix";
 
     in [
+      setupNixPath
       common
       sops-nix.nixosModule
       homeManager.nixosModule
