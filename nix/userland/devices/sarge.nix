@@ -21,21 +21,20 @@ with pkgs;
             VIRTUAL1.enable = false;
             HDMI1 = {
               enable = true;
-              crtc = 0;
-              primary = true;
-              position = "0x618";
-              mode = "2560x1440";
-              rate = "59.95";
-              rotate = "normal";
-            };
-            DP1 = {
-              enable = true;
               crtc = 1;
               primary = false;
               position = "2560x0";
               mode = "2560x1440";
               rate = "59.95";
               rotate = "left";
+            };
+            DP1 = {
+              enable = true;
+              crtc = 0;
+              primary = true;
+              position = "0x560";
+              mode = "2560x1440";
+              rate = "59.95";
             };
           };
         };
