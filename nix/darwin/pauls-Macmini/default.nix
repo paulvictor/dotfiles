@@ -13,7 +13,6 @@ let
       build-users-group = nixbld
     '';
     environment.systemPackages = with pkgs;[
-      #neovim
       openssh
       gnupg
       inputs.homeManager.packages."${system}".default
@@ -25,6 +24,7 @@ let
 in
 darwin.lib.darwinSystem {
   inherit system;
+  hostName = "crash";
   inputs = {
     inherit nixpkgs darwin;
   };
@@ -36,5 +36,6 @@ darwin.lib.darwinSystem {
     ../services/ln-ssh-auth-sock.nix
     ../services/tuns.nix
     ../services/power-mgmt.nix
+    ../modules/networking.nix
   ];
 }
