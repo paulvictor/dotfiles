@@ -25,9 +25,11 @@
     ngnk.url = "github:nathyong/ngnk-nix";
     ngnk.inputs.nixpkgs.follows = "nixpkgs";
     ngnk.inputs.flake-utils.follows = "flake-utils";
+    darwin.url = "github:lnl7/nix-darwin/master";
+    darwin.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, emacsOverlay, neovim, flake-utils, ... }@inputs :
+  outputs = { self, nixpkgs, emacsOverlay, neovim, flake-utils, darwin, ... }@inputs :
     let
       gllock-overlay = import ./overlays/gllock.nix;
       tomb-overlay = import ./overlays/tomb.nix;
@@ -46,6 +48,41 @@
       ql2nix-overlay = import ./overlays/ql2nix.nix;
       nyxt-overlay = import ./overlays/nyxt.nix;
       #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
+      linuxOverlays = [
+        nyxt-overlay
+        neovim.overlay
+        gllock-overlay
+        tomb-overlay
+        guix-overlay
+        xdotool-overlay
+        brotab-overlay
+        ripgrep-overlay
+        rofi-fuzzy
+        pass-override-overlay
+        pass-extensions-overlay
+        ffmpeg-overlay
+        urxvt-perls-overlay
+        electron-apps
+        wallpaper-overlay
+        surfraw-overlay
+        inputs.nur.overlay
+        inputs.mozilla.overlays.firefox
+        ql2nix-overlay
+        inputs.portable-svc.overlay
+        inputs.ngnk.overlay
+      ];
+      darwinOverlays = [
+        neovim.overlay
+        xdotool-overlay
+        brotab-overlay
+        ripgrep-overlay
+        pass-override-overlay
+        pass-extensions-overlay
+        ffmpeg-overlay
+        electron-apps
+        inputs.nur.overlay
+        inputs.mozilla.overlays.firefox
+      ];
       pkgsFor = system:
         import nixpkgs {
           inherit system;
@@ -59,30 +96,7 @@
               enableWideVine = true;
             };
           };
-          overlays = [
-            nyxt-overlay
-            neovim.overlay
-            gllock-overlay
-            tomb-overlay
-            guix-overlay
-            xdotool-overlay
-            brotab-overlay
-            ripgrep-overlay
-            rofi-fuzzy
-            pass-override-overlay
-            pass-extensions-overlay
-            ffmpeg-overlay
-            urxvt-perls-overlay
-            electron-apps
-            wallpaper-overlay
-            surfraw-overlay
-            inputs.nur.overlay
-            inputs.mozilla.overlays.firefox
-            emacsOverlay.overlay
-            ql2nix-overlay
-            inputs.portable-svc.overlay
-            inputs.ngnk.overlay
-          ];
+          overlays = linuxOverlays;
       };
       mkHomeConfig = extraArgs: inputs.homeManager.lib.homeManagerConfiguration (rec {
         inherit (extraArgs) system;
@@ -104,6 +118,12 @@
           inherit (nixpkgs) lib;
           inherit (inputs) homeManager sops-nix nixos-generators flake-utils;
         };
+      darwinConfigurations = import ./darwin/default.nix {
+          inherit nixpkgs self pkgsFor;
+          inherit (nixpkgs) lib;
+          inherit inputs;
+          overlays = darwinOverlays;
+	};
       homeConfigurations =
         let
           system = flake-utils.lib.system.x86_64-linux;
