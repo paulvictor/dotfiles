@@ -64,10 +64,6 @@ with pkgs;
     grex
   ];
 
-  systemd.user.sessionVariables = {
-    GNUPGHOME = "${config.home.homeDirectory}/.gnupg";
-  };
-
   imports = [
     ./zsh.nix
     ./email.nix
@@ -124,7 +120,7 @@ with pkgs;
   };
 
   programs.gpg = {
-    enable = true;
+    enable = pkgs.stdenv.isLinux;
     settings = {
       default-key = "0xA96C9B89755DF7D2";
       default-recipient-self = true;
@@ -148,7 +144,7 @@ with pkgs;
   };
 
   services.emacs = {
-    enable = true;
+    enable = pkgs.stdenv.isLinux;
     package = customizedEmacs;
     client= {
       enable = true;
@@ -170,4 +166,9 @@ with pkgs;
       default = "gray(23) none / gray(20) none";
     };
   };
+} // lib.mkIf stdenv.isLinux {
+  systemd.user.sessionVariables = {
+    GNUPGHOME = "${config.home.homeDirectory}/.gnupg";
+  };
 }
+

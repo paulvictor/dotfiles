@@ -14,7 +14,7 @@ mkIf
     with pkgs;
     {
       services.gocryptfs = {
-        enable = true;
+        enable = pkgs.stdenv.isLinux;
         cryptDir = "${config.home.homeDirectory}/crypt";
         plainDir = "${config.home.homeDirectory}/plain";
         passCmd = "cat /run/secrets/crypt-mount-key";

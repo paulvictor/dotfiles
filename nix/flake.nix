@@ -70,6 +70,7 @@
         ql2nix-overlay
         inputs.portable-svc.overlay
         inputs.ngnk.overlay
+        emacsOverlay.overlay
       ];
       darwinOverlays = [
         neovim.overlay
@@ -82,8 +83,13 @@
         electron-apps
         inputs.nur.overlay
         inputs.mozilla.overlays.firefox
+        emacsOverlay.overlay
       ];
       pkgsFor = system:
+        let
+          stdenv = (import nixpkgs { inherit system; }).stdenv;
+          inherit (stdenv) isLinux;
+        in
         import nixpkgs {
           inherit system;
           config = {
@@ -96,20 +102,11 @@
               enableWideVine = true;
             };
           };
-          overlays = linuxOverlays;
+          overlays =
+            if isLinux
+            then linuxOverlays
+            else darwinOverlays;
       };
-      mkHomeConfig = extraArgs: inputs.homeManager.lib.homeManagerConfiguration (rec {
-        inherit (extraArgs) system;
-        pkgs = pkgsFor system;
-        configuration = {
-          imports = [
-            inputs.impermanence.nixosModules.home-manager.impermanence
-            ./userland/home-configuration.nix
-          ];
-        };
-        username = "viktor";
-        homeDirectory = "/home/viktor";
-      } // extraArgs);
 #         lib = nixpkgs.lib // import ./ip.nix { inherit pkgs; };
     in {
       nixosConfigurations =
@@ -123,37 +120,12 @@
           inherit (nixpkgs) lib;
           inherit inputs;
           overlays = darwinOverlays;
-	};
-      homeConfigurations =
-        let
-          system = flake-utils.lib.system.x86_64-linux;
-        in {
-        "viktor@uriel" = mkHomeConfig {
-          inherit system;
-          pkgs = pkgsFor system;
-          extraSpecialArgs = {
-            hostSpecificImports = [
-              ./userland/devices/uriel.nix
-            ];
-            withGUI = true; # Enable/disable gui programs
-            isDesktop = true; # Desktop environment setup. Roughly if any of the X related things should be enabled
-            isDevEnv = true; # For all dev packages
-            networkInterface = "wlp2s0";
-          };
-        };
-        "viktor@sarge" = mkHomeConfig {
-          inherit system;
-          pkgs = pkgsFor system;
-          extraSpecialArgs = {
-            hostSpecificImports = [
-              ./userland/devices/sarge.nix
-            ];
-            withGUI = true; # Enable/disable gui programs
-            isDesktop = true; # Desktop environment setup. Roughly if any of the X related things should be enabled
-            isDevEnv = true; # For all dev packages
-            networkInterface = "wlp2s0";
-          };
-        };
       };
+      homeConfigurations =
+        import ./userland/default.nix {
+          inherit pkgsFor;
+          inherit (nixpkgs) lib;
+          inherit (inputs) homeManager impermanence flake-utils;
+        };
     };
 }

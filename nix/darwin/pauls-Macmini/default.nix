@@ -21,15 +21,19 @@ let
       inherit overlays system;
     };
   };
+  machineSpecific = _: {
+    networking.hostName = "crash";
+    networking.computerName = "Crash";
+  };
 in
 darwin.lib.darwinSystem {
   inherit system;
-  hostName = "crash";
   inputs = {
     inherit nixpkgs darwin;
   };
   modules = [
     commonModules
+    machineSpecific
     ../services/sshd.nix
      # https://evilmartians.com/chronicles/stick-with-security-yubikey-ssh-gnupg-macos
     ../services/gpg-agent.nix
