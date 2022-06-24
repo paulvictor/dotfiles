@@ -35,5 +35,6 @@ darwin.lib.darwinSystem {
     ../services/gpg-agent.nix
     ../services/ln-ssh-auth-sock.nix
     ../services/tuns.nix
+    ../services/power-mgmt.nix
   ];
 }
