@@ -48,12 +48,8 @@ lib.mkIf
             cantarell-fonts
             customizedemacs
             custom-vieb
-            custom-vieb
             dejavu_fonts
-            deluge
-            discord
             electronApps
-            feh
             ferdi
             fira-code
             firacode-nerdfonts

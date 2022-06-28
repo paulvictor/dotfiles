@@ -14,18 +14,15 @@ in
 with pkgs;
 {
   home.packages = [
-    awscli2
     comma
     ddgr
     doctl
     ffmpeg-full
     fzf
-    haskellPackages.niv
     # jailed-firefox
     keybase
     lsof
     moreutils
-    mpc_cli
     ncmpcpp
     nix-bundle
     nix-index
@@ -33,24 +30,15 @@ with pkgs;
     openssh
     openssl
     pbgopy
-    #pCloudCC
-    pcsclite
-    pcsctools
     pms
     prettyping
     qrcp
-    rclone
-    rclone-browser
-    shareLink
     skim
     stow
     #texlive.combined.scheme-full
-    tomb
     tree
     unzip
     vifm
-    watchexec
-    weechat
     youtube-dl
     z-lua
   ] ++
@@ -62,12 +50,25 @@ with pkgs;
     tealdeer
     bandwhich
     grex
+  ] ++
+  lib.optionals (!python310Packages.pyopenssl.meta.broken) [
+    awscli2
+    haskellPackages.niv
+    mpc_cli
+  ] ++
+  lib.optionals (specialArgs.isLinux) [
+    pcsctools
+    pcsclite
+    rclone
+    rclone-browser
+    shareLink
+    tomb
+    watchexec # because of https://github.com/NixOS/nixpkgs/issues/160876
   ];
 
   imports = [
     ./zsh.nix
-    ./email.nix
-  ];
+  ] ++ lib.optional (!python310Packages.pyopenssl.meta.broken) ./email.nix;
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
@@ -152,8 +153,13 @@ with pkgs;
     };
   };
 
+  programs.emacs = {
+    enable = !specialArgs.isLinux;
+    package = customizedEmacs;
+  };
+
   programs.exa = {
-    enable = true;
+    enable = specialArgs.isLinux;
     enableAliases = true;
   };
 
