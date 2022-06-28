@@ -120,7 +120,7 @@ with pkgs;
   };
 
   programs.gpg = {
-    enable = pkgs.stdenv.isLinux;
+    enable = specialArgs.isLinux;
     settings = {
       default-key = "0xA96C9B89755DF7D2";
       default-recipient-self = true;
@@ -144,9 +144,9 @@ with pkgs;
   };
 
   services.emacs = {
-    enable = pkgs.stdenv.isLinux;
+    enable = specialArgs.isLinux;
     package = customizedEmacs;
-    client= {
+    client = {
       enable = true;
       arguments = [ "-c" "-n" "-a" "emacs" ];
     };
@@ -166,9 +166,9 @@ with pkgs;
       default = "gray(23) none / gray(20) none";
     };
   };
-} // lib.mkIf stdenv.isLinux {
-  systemd.user.sessionVariables = {
+  systemd.user.sessionVariables = lib.optionalAttrs specialArgs.isLinux {
     GNUPGHOME = "${config.home.homeDirectory}/.gnupg";
   };
+
 }
 
