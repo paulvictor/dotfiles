@@ -37,7 +37,7 @@ system:
       ];
       withGUI = false; # Enable/disable gui programs
       isDesktop = false; # Desktop environment setup. Roughly if any of the X related things should be enabled
-      isDevEnv = false; # For all dev packages
+      isDevEnv = true; # For all dev packages
       networkInterface = "wlp2s0";
       isLinux = false;
     };

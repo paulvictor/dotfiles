@@ -27,11 +27,9 @@ lib.mkIf
         };
         home.packages =
           [
-#             android-studio
             axel
             bind
             bindfs
-            #dyalog-nixos.dyalog #dyalog-nixos.ride
             enscript
             entr
             gnumake
@@ -43,12 +41,7 @@ lib.mkIf
             kube-prompt
             kubetail
             msgpack-tools
-            #     nixos-generators
             nodejs
-#             nodePackages.bower
-#             nodePackages.bower2nix
-#             nodePackages.node2nix
-#             nodePackages.purescript-language-server
             pv
             ql2nix
             ruby
