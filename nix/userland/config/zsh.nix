@@ -75,12 +75,11 @@ in
     zstyle ':completion:*:(ssh|scp|rsync):*:hosts-host' ignored-patterns '*(.|:)*' loopback ip6-loopback localhost ip6-localhost broadcasthost
     zstyle ':completion:*:(ssh|scp|rsync):*:hosts-ipaddr' ignored-patterns '^(<->.<->.<->.<->|(|::)([[:xdigit:].]##:(#c,2))##(|%*))' '127.0.0.<->' '255.255.255.255' '::1' 'fe80::*'
 
-# Allow for autocomplete to be case insensitive
+    # Allow for autocomplete to be case insensitive
     zstyle ':completion:*' matcher-list ' ' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+l:|?=** r:|?=**'
 
     autoload -U compinit && compinit
     zstyle ":completion:*:commands" rehash 1
-#     export NIX_PATH=easy-purescript-nix=https://github.com/justinwoo/easy-purescript-nix/tarball/master:$NIX_PATH
     SPACESHIP_NIX_SHELL_PREFIX="in "
     #SPACESHIP_NIX_SHELL_SUFFIX=""
     SPACESHIP_CHAR_SYMBOL="*> "
@@ -90,6 +89,7 @@ in
     SPACESHIP_EXIT_CODE_SUFFIX="]"
     ${nix-shell-spaceship-fn}
     SPACESHIP_PROMPT_ORDER=(
+      user
       dir
       git
       exit_code
@@ -97,7 +97,6 @@ in
       char
     )
     SPACESHIP_RPROMPT_ORDER=( nixShell )
-
 
     [[ $TERM = "rxvt-unicode-256color" ]] &&
       (for (( i=1; i<=$LINES; i++ )); do echo; done; clear)

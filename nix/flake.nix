@@ -83,6 +83,8 @@
         electron-apps
         inputs.nur.overlay
         inputs.mozilla.overlays.firefox
+        ql2nix-overlay
+        inputs.ngnk.overlay
         emacsOverlay.overlay
       ];
       pkgsFor = system:
