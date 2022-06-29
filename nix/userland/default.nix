@@ -15,11 +15,8 @@ let
   allDevices = import ./all-devices.nix flake-utils.lib.system;
 in
 builtins.mapAttrs(_: attrs:
-  let
-    system = attrs.system;
-  in
   mkHomeConfig {
-    inherit system;
-    pkgs = pkgsFor system;
+    inherit (attrs) system username homeDirectory;
+    pkgs = pkgsFor attrs.system;
     inherit (attrs) extraSpecialArgs;
   }) allDevices
