@@ -38,7 +38,6 @@ lib.mkIf
             kubectx
             kube-prompt
             kubetail
-            msgpack-tools
             nodejs
             pv
             ql2nix
