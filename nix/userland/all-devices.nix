@@ -12,6 +12,8 @@ system:
       networkInterface = "wlp2s0";
       isLinux = true;
     };
+    username = "viktor";
+    homeDirectory = "/home/viktor";
   };
   "viktor@uriel" = {
     system = system.x86_64-linux;
@@ -25,6 +27,8 @@ system:
       networkInterface = "wlp2s0";
       isLinux = true;
     };
+    username = "viktor";
+    homeDirectory = "/home/viktor";
   };
   "paul@crash" = {
     system = system.aarch64-darwin;
@@ -37,5 +41,7 @@ system:
       networkInterface = "wlp2s0";
       isLinux = false;
     };
+    username = "paul";
+    homeDirectory = "/Users/paul";
   };
 }

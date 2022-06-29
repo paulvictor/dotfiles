@@ -55,7 +55,6 @@
 [push]
   default = tracking
 [core]
-  excludesfile = /home/viktor/.gitignore
   #pager = diff-so-fancy | less --tabs=4 -RFX
 [filter "lfs"]
   smudge = git-lfs smudge -- %f

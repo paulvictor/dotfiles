@@ -11,8 +11,6 @@ let
         ./home-configuration.nix
       ];
     };
-    username = "viktor";
-    homeDirectory = "/home/viktor";
   } // extraArgs);
   allDevices = import ./all-devices.nix flake-utils.lib.system;
 in

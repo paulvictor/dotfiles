@@ -68,7 +68,7 @@ with pkgs;
 
   imports = [
     ./zsh.nix
-  ] ++ lib.optional (!python310Packages.pyopenssl.meta.broken) ./email.nix;
+  ] ++ lib.optional specialArgs.isLinux ./email.nix;
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
