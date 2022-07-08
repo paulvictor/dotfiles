@@ -1195,5 +1195,15 @@ Also move to the next line, since that's the most frequent action after"
                   (menu-bar-lines . nil)
                   (window-system . x))))
 
+(defun pvr/switch-to-last-buffer ()
+  (interactive)
+  (switch-to-buffer nil))
+
+(pvr/space-keys-def
+  "SPC" 'pvr/switch-to-last-buffer)
+
+(pvr/space-keys-def
+  "ESC" 'switch-to-buffer)
+
 ;; (use-package magit-delta
 ;;   :hook (magit-mode . magit-delta-mode))
