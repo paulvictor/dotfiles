@@ -41,6 +41,7 @@ with pkgs;
     vifm
     youtube-dl
     z-lua
+    pcloud-console-client
   ] ++
   [ procs
     bat
