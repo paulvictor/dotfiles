@@ -13,7 +13,6 @@ let
       build-users-group = nixbld
     '';
     environment.systemPackages = with pkgs;[
-      bashInteractive_5
       inputs.homeManager.packages."${system}".default
     ];
     nixpkgs = {
@@ -21,6 +20,7 @@ let
     };
 
     environment.shells = [ pkgs.bashInteractive_5 pkgs.zsh ];
+    environment.systemPath = [ "/run/current-system/sw/bin" ];
 
     programs.bash = {
       enable = true;
