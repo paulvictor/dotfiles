@@ -13,10 +13,17 @@ let
       build-users-group = nixbld
     '';
     environment.systemPackages = with pkgs;[
+      bashInteractive_5
       inputs.homeManager.packages."${system}".default
     ];
     nixpkgs = {
       inherit overlays system;
+    };
+
+    environment.shells = [ pkgs.bashInteractive_5 pkgs.zsh ];
+
+    programs.bash = {
+      enable = true;
     };
   };
   machineSpecific = _: {
@@ -25,11 +32,10 @@ let
   };
 
   setupNixPath = {config, lib, ...}: {
-    environment.etc =
-      mapAttrs'
-        (name: value: { name = "nix/inputs/${name}"; value = { source = value.outPath; }; })
+    nix.nixPath =
+      lib.mapAttrs'
+        (name: value: { inherit name; value = value.outPath; })
         inputs;
-    nix.nixPath = [ "/etc/nix/inputs" ];
   };
 
 in
