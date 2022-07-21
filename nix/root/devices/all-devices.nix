@@ -33,4 +33,8 @@
     format = "gce";
     system = "x86_64-linux";
   }
+  {
+    hostName = "patriot";
+    system = "x86_64-linux";
+  }
 ]

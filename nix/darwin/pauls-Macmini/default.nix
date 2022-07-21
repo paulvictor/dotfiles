@@ -13,8 +13,6 @@ let
       build-users-group = nixbld
     '';
     environment.systemPackages = with pkgs;[
-      openssh
-      gnupg
       inputs.homeManager.packages."${system}".default
     ];
     nixpkgs = {
@@ -25,6 +23,15 @@ let
     networking.hostName = "crash";
     networking.computerName = "Crash";
   };
+
+  setupNixPath = {config, lib, ...}: {
+    environment.etc =
+      mapAttrs'
+        (name: value: { name = "nix/inputs/${name}"; value = { source = value.outPath; }; })
+        inputs;
+    nix.nixPath = [ "/etc/nix/inputs" ];
+  };
+
 in
 darwin.lib.darwinSystem {
   inherit system;
@@ -32,6 +39,7 @@ darwin.lib.darwinSystem {
     inherit nixpkgs darwin;
   };
   modules = [
+    setupNixPath
     commonModules
     machineSpecific
     ../services/sshd.nix
