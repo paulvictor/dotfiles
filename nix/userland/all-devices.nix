@@ -1,4 +1,4 @@
-system:
+system: nixpkgs:
 {
   "viktor@sarge" = {
     system = system.x86_64-linux;
@@ -34,6 +34,13 @@ system:
     system = system.aarch64-darwin;
     extraSpecialArgs = {
       hostSpecificImports = [
+        ({config, pkgs, lib,...}: {
+          home.sessionPath = [ "/run/current-system/sw/bin" ];
+          home.sessionVariables = {
+            NIX_PATH = "${nixpkgs.outPath}";
+          };
+        })
+
       ];
       withGUI = false; # Enable/disable gui programs
       isDesktop = false; # Desktop environment setup. Roughly if any of the X related things should be enabled

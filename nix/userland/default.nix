@@ -1,7 +1,7 @@
 args:
 
 let
-  inherit (args) pkgsFor homeManager impermanence flake-utils lib;
+  inherit (args) pkgsFor homeManager impermanence flake-utils lib nixpkgs;
   mkHomeConfig = extraArgs: homeManager.lib.homeManagerConfiguration (rec {
     inherit (extraArgs) system;
     pkgs = pkgsFor system;
@@ -12,7 +12,7 @@ let
       ];
     };
   } // extraArgs);
-  allDevices = import ./all-devices.nix flake-utils.lib.system;
+  allDevices = import ./all-devices.nix flake-utils.lib.system nixpkgs;
 in
 builtins.mapAttrs(_: attrs:
   mkHomeConfig {

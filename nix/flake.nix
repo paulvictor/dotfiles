@@ -129,7 +129,7 @@
         import ./userland/default.nix {
           inherit pkgsFor;
           inherit (nixpkgs) lib;
-          inherit (inputs) homeManager impermanence flake-utils;
+          inherit (inputs) nixpkgs homeManager impermanence flake-utils;
         };
     };
 }
