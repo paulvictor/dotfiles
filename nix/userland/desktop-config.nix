@@ -38,6 +38,7 @@ mkIf
         passdo
 #         pasystray
         pavucontrol
+        pcloud-console-client
         pulseaudio-ctl
         rofiElectronAppsRunner
         wmctrl

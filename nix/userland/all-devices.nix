@@ -37,7 +37,7 @@ system: nixpkgs:
         ({config, pkgs, lib,...}: {
           home.sessionPath = [ "/run/current-system/sw/bin" ];
           home.sessionVariables = {
-            NIX_PATH = "${nixpkgs.outPath}";
+            NIX_PATH = "nixpkgs=${nixpkgs.outPath}";
           };
         })
 
