@@ -51,5 +51,6 @@ system: nixpkgs:
     };
     username = "paul";
     homeDirectory = "/Users/paul";
+    stateVersion = "22.05";
   };
 }
