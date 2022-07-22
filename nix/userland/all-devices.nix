@@ -14,6 +14,7 @@ system: nixpkgs:
     };
     username = "viktor";
     homeDirectory = "/home/viktor";
+    stateVersion = "21.05";
   };
   "viktor@uriel" = {
     system = system.x86_64-linux;
@@ -29,6 +30,7 @@ system: nixpkgs:
     };
     username = "viktor";
     homeDirectory = "/home/viktor";
+    stateVersion = "21.05";
   };
   "paul@crash" = {
     system = system.aarch64-darwin;
@@ -40,7 +42,6 @@ system: nixpkgs:
             NIX_PATH = "nixpkgs=${nixpkgs.outPath}";
           };
         })
-
       ];
       withGUI = false; # Enable/disable gui programs
       isDesktop = false; # Desktop environment setup. Roughly if any of the X related things should be enabled

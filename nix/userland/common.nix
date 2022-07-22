@@ -53,6 +53,7 @@ with pkgs;
   ] ++
   lib.optionals (!python310Packages.pyopenssl.meta.broken) [
     awscli2
+    qemu
     haskellPackages.niv
     mpc_cli
   ] ++

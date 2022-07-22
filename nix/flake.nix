@@ -4,8 +4,9 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/master";
     flake-utils.url = "github:numtide/flake-utils";
-    homeManager.url = "github:nix-community/home-manager";
+    homeManager.url = "github:nix-community/home-manager/master";
     homeManager.inputs.nixpkgs.follows = "nixpkgs";
+    homeManager.inputs.utils.follows = "flake-utils";
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     emacsOverlay.url = "github:nix-community/emacs-overlay";
@@ -48,7 +49,7 @@
       ql2nix-overlay = import ./overlays/ql2nix.nix;
       nyxt-overlay = import ./overlays/nyxt.nix;
       pcloudcc-overlay = import ./overlays/pcloud-console-client.nix;
-      pyopenssl-fix-hack = import ./overlays/pyopenssl-broken-fix-hack.nix
+      pyopenssl-fix-hack = import ./overlays/pyopenssl-broken-fix-hack.nix;
       #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
       linuxOverlays = [
         nyxt-overlay

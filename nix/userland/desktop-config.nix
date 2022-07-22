@@ -90,17 +90,18 @@ mkIf
 
       services.picom = {
         enable = true;
-        backend = "xrender";
-        blur = true;
-        fadeDelta = 0;
-        menuOpacity = "0.7";
-        noDockShadow = true;
-        inactiveDim = "0.2";
+        menuOpacity = 0.7;
         experimentalBackends = true;
-        extraOptions = ''
-      inactive-dim-fixed = true;
-      #focus-exclude = (x = 0 && y = 0 && override-redirect = true) || (_NET_WM_NAME@:s = "rofi");
-    '';
+        settings = {
+          extraOptions = ''
+            focus-exclude = (x = 0 && y = 0 && override-redirect = true) || (_NET_WM_NAME@:s = "rofi");
+          '';
+          noDockShadow = true;
+          inactive-dim-fixed = true;
+          inactive-dim = 0.4;
+          blur = true;
+          wintypes =  { dock = { shadow = false; clip-shadow-above = true; }; };
+        };
       };
 
       services.sxhkd = {
