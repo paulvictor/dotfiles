@@ -17,7 +17,6 @@ with pkgs;
     comma
     ddgr
     doctl
-    ffmpeg-full
     fzf
     # jailed-firefox
     keybase
@@ -32,7 +31,6 @@ with pkgs;
     pbgopy
     pms
     prettyping
-    qrcp
     skim
     stow
     #texlive.combined.scheme-full
@@ -58,8 +56,10 @@ with pkgs;
     mpc_cli
   ] ++
   lib.optionals (specialArgs.isLinux) [
+    ffmpeg-full
     pcsctools
     pcsclite
+    qrcp
     rclone
     rclone-browser
     shareLink

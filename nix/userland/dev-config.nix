@@ -36,7 +36,6 @@ lib.mkIf
             k9s
             kubectl
             kubectx
-            kube-prompt
             kubetail
             nodejs
             pv
