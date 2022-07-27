@@ -60,8 +60,8 @@ in
   "URxvt.keysym.C-KP_Subtract" = "font-size:decrease";
   "URxvt*scrollWithBuffer" = false;
   # color scheme which works
-  "URxvt*background" = "#002b36";
-  "URxvt*foreground" = "#839496";
+#   "URxvt*background" = "#002b36";
+#   "URxvt*foreground" = "#839496";
   "URxvt*transparent" = true;
   "URxvt.intensityStyles" = false;
   "URxvt*visualBell" = "true            ! blink window on bell";

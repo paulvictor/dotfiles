@@ -5,10 +5,8 @@ mkIf
   specialArgs.isDesktop
   (let
     rofiElectronAppsRunner = pkgs.callPackage ../overlays/electronApps/rofiRun.nix {};
-    onAttachMonitorScript = pkgs.callPackage ./scripts/onAttachMonitor.nix {};
     wmexit = pkgs.callPackage ./scripts/wmexit.nix {};
     passdo = pkgs.callPackage ./scripts/passdo.nix {};
-    quickswitch-for-i3 = pkgs.callPackage ./packages/quickswitch-for-i3 {};
     findWindowByTitle = pkgs.callPackage ./scripts/findWindowByTitle.nix {};
   in
     with pkgs;
@@ -22,8 +20,6 @@ mkIf
 
       services.flameshot.enable = true;
 
-#   services.network-manager-applet.enable = true;
-#   services.pasystray.enable = true;
       home.packages = [
         acpi # TODO : Install only on laptops
         gnome.adwaita-icon-theme

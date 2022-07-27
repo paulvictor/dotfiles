@@ -98,14 +98,13 @@ lib.mkIf
                                   }))
             (ungoogled-chromium.override { enableWideVine = true;})
           ];
-        xresources = {
-          extraConfig = builtins.readFile (
-            builtins.fetchurl {
-              url = https://github.com/chriskempson/base16-xresources/raw/master/xresources/base16-solarized-dark-256.Xresources;
-              sha256 = "14dzphqvw4djxy25y5yic87c1rmfc09kb7g5b2bp0y31jz18lg90";
-            });
-          properties = import ./config/Xresources;
-        };
+        xresources =
+          let
+            xresourcesFile = callPackage ./scripts/xresources.nix { template = "rxvt-unicode"; brightness = "dark"; scheme = "tomorrow"; };
+          in {
+            extraConfig = builtins.readFile "${xresourcesFile}/config";
+            properties = import ./config/Xresources;
+          };
         programs.firefox = {
           enable = true;
           package = firefox-beta-bin;
