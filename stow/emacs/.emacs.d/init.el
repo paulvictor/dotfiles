@@ -288,6 +288,7 @@
 (add-to-words-syntax 'org-mode-hook "_-")
 (add-to-words-syntax 'ess-r-mode-hook "_")
 (add-to-words-syntax 'lisp-mode-hook "_-")
+(add-to-words-syntax 'c++-mode-hook "_")
 
 (electric-indent-mode 1)
 
