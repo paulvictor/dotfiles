@@ -104,8 +104,7 @@ mkIf
         enable = true;
         extraOptions =  [ "-m" " -1" ];
         keybindings = {
-          #       "control + hyper + alt + Return" = "${alacritty}/bin/alacritty";
-          "control + hyper + alt + shift + Return" = "${alacritty}/bin/alacritty";
+          "control + hyper + alt + shift + Return" = "${rxvt-unicode}/bin/urxvt";
           "control + hyper + alt + e" = "emacsclient -c -n";
           "control + hyper + alt + d" = "rofi -show drun";
           #       "control + hyper + alt + g" = ''${wmfocus}/bin/wmfocus --fill -c asdf --textcolor red'';

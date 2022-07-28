@@ -44,6 +44,7 @@
       ffmpeg-overlay = import ./overlays/ffmpeg.nix;
       wallpaper-overlay = import ./overlays/wallpaper.nix;
       urxvt-perls-overlay = import ./overlays/urxvt-perls.nix;
+      urxvt-overlay = import ./overlays/urxvt-with-plugins.nix;
       electron-apps = import ./overlays/electronApps;
       surfraw-overlay = import ./overlays/surfraw.nix;
       ql2nix-overlay = import ./overlays/ql2nix.nix;
@@ -64,7 +65,7 @@
         pass-override-overlay
         pass-extensions-overlay
         ffmpeg-overlay
-        urxvt-perls-overlay
+        urxvt-overlay
         electron-apps
         wallpaper-overlay
         surfraw-overlay
