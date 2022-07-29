@@ -383,8 +383,8 @@ Repeated invocations toggle between the two most recently open buffers."
 (global-set-key (kbd "C-x b") 'ibuffer)
 
 ; kill current buffer instead of prompting
-(global-set-key (kbd "C-x K") 'kill-this-buffer)
-(global-set-key (kbd "C-x k") 'kill-buffer-and-window)
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
+(global-set-key (kbd "C-x K") 'kill-buffer-and-window)
 
 (add-hook 'term-mode-hook 'turn-off-evil-mode)
 (setq explicit-shell-file-name "zsh")
