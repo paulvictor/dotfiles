@@ -1,5 +1,8 @@
-{ config, pkgs, lib, specialArgs, ...}:
+args@{ config, pkgs, lib, ...}:
 
+let
+  inherit (args) isPhysicalDevice;
+in
 {
   nix.autoOptimiseStore = true;
   nix.extraOptions = ''
@@ -16,12 +19,12 @@
 
   boot.binfmt.emulatedSystems =
     lib.optionals
-      specialArgs.isPhysicalDevice
+      isPhysicalDevice
         [ "aarch64-linux" "armv7l-linux" "riscv64-linux" ];
 
-  services.guix.enable = specialArgs.isPhysicalDevice;
+  services.guix.enable = isPhysicalDevice;
 
-  boot.kernelPackages = pkgs.linuxPackages_5_15;
+  boot.kernelPackages = pkgs.linuxPackages_5_18;
 
   boot.postBootCommands = "
     [ -d /tomb/${config.networking.hostName}/ssh ] || \
@@ -29,7 +32,7 @@
   ";
 
   imports =
-    lib.optionals specialArgs.isPhysicalDevice [
+    lib.optionals isPhysicalDevice [
       ./modules/desktop-environment.nix
       ./modules/impermanence-zfs.nix
       ./modules/networking.nix

@@ -98,6 +98,23 @@
         "type": "github"
       }
     },
+    "goodbyeAds": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1655881407,
+        "narHash": "sha256-sJlKeeDSQCgzTtI9YnjOxMmkhJ6stjwwFBFwQwXSLmY=",
+        "owner": "jerryn70",
+        "repo": "GoodbyeAds",
+        "rev": "312d752489f5fbfb85c411362ec64728aa4818eb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jerryn70",
+        "ref": "master",
+        "repo": "GoodbyeAds",
+        "type": "github"
+      }
+    },
     "homeManager": {
       "inputs": {
         "nixpkgs": [
@@ -332,6 +349,7 @@
         "darwin": "darwin",
         "emacsOverlay": "emacsOverlay",
         "flake-utils": "flake-utils",
+        "goodbyeAds": "goodbyeAds",
         "homeManager": "homeManager",
         "impermanence": "impermanence",
         "mozilla": "mozilla",
@@ -341,7 +359,8 @@
         "nixpkgs": "nixpkgs",
         "nur": "nur",
         "portable-svc": "portable-svc",
-        "sops-nix": "sops-nix"
+        "sops-nix": "sops-nix",
+        "stevenBlack": "stevenBlack"
       }
     },
     "sops-nix": {
@@ -361,6 +380,23 @@
       "original": {
         "owner": "Mic92",
         "repo": "sops-nix",
+        "type": "github"
+      }
+    },
+    "stevenBlack": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1658930648,
+        "narHash": "sha256-C8JzwnzGbgvA5ExU3SBY6aWBcNmuM6y3PjmQnb3bMJU=",
+        "owner": "StevenBlack",
+        "repo": "hosts",
+        "rev": "fa41eaa31e8247b283ab04052df24511c8f0ce69",
+        "type": "github"
+      },
+      "original": {
+        "owner": "StevenBlack",
+        "ref": "master",
+        "repo": "hosts",
         "type": "github"
       }
     }

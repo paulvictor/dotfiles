@@ -28,6 +28,13 @@
     ngnk.inputs.flake-utils.follows = "flake-utils";
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Adblock hosts
+    stevenBlack.url = "github:StevenBlack/hosts/master";
+    stevenBlack.flake = false;
+    goodbyeAds.url = "github:jerryn70/GoodbyeAds/master";
+    goodbyeAds.flake = false;
+
   };
 
   outputs = { self, nixpkgs, emacsOverlay, neovim, flake-utils, darwin, ... }@inputs :
@@ -119,9 +126,8 @@
     in {
       nixosConfigurations =
         import ./root/devices/default.nix {
-          inherit nixpkgs self pkgsFor inputs;
+          inherit self pkgsFor inputs;
           inherit (nixpkgs) lib;
-          inherit (inputs) homeManager sops-nix nixos-generators flake-utils;
         };
       darwinConfigurations = import ./darwin/default.nix {
           inherit nixpkgs self pkgsFor;

@@ -1,11 +1,11 @@
-{ lib , homeManager , self, sops-nix, nixpkgs, pkgsFor, nixos-generators, flake-utils, inputs, ... }:
+{ self, pkgsFor, inputs, ... }:
 
 let
+  inherit (inputs) sops-nix nixos-generators flake-utils homeManager nixpkgs;
+
   inherit (builtins) attrNames isAttrs readDir listToAttrs elem;
 
-  inherit (lib) filterAttrs hasSuffix mapAttrs' nameValuePair removeSuffix;
-
-  inherit (lib) hasPrefix forEach;
+  inherit (nixpkgs.lib) filterAttrs hasSuffix mapAttrs' nameValuePair removeSuffix hasPrefix forEach mkIf optionals nixosSystem;
 
   setupNixPath = {config, lib, ...}: {
     environment.etc =
@@ -13,6 +13,10 @@ let
         (name: value: { name = "nix/inputs/${name}"; value = { source = value.outPath; }; })
         inputs;
     nix.nixPath = [ "/etc/nix/inputs" ];
+  };
+
+  moduleArgs = {
+    inherit (inputs) stevenBlack goodbyeAds;
   };
 
   mkModules = hostName: system:
@@ -23,7 +27,7 @@ let
           ../common-config.nix
         ];
 
-        system.configurationRevision = lib.mkIf (self ? rev) self.rev;
+        system.configurationRevision = mkIf (self ? rev) self.rev;
         networking.hostName = hostName;
         nixpkgs.pkgs = pkgsFor system;
         nix.registry.nixpkgs.flake = nixpkgs;
@@ -45,12 +49,10 @@ let
   mkNixosSystem = hostName: system:
     let
       pkgs = pkgsFor system;
-    in lib.nixosSystem {
+    in nixosSystem {
       inherit system pkgs;
       modules = mkModules hostName system;
-      specialArgs = {
-        isPhysicalDevice = true;
-      };
+      specialArgs = moduleArgs // {isPhysicalDevice = true;} ;
     };
 
   deviceConfigs = import ./all-devices.nix;
@@ -67,10 +69,8 @@ listToAttrs
           format = format;
           modules =
             mkModules hostName system
-            ++ (lib.optionals (deviceConfig ? extraModules) deviceConfig.extraModules);
-          specialArgs = {
-            isPhysicalDevice = elem format [ "iso" "install-iso" ];
-          };
+            ++ (optionals (deviceConfig ? extraModules) deviceConfig.extraModules);
+          specialArgs = moduleArgs // {isPhysicalDevice = false;};
         };
       in
         {

@@ -1,7 +1,7 @@
-{ config, lib, pkgs, specialArgs, ... } :
+args@{ config, lib, pkgs, ... } :
 
 let
-  inherit (specialArgs) isPhysicalDevice;
+  inherit (args) isPhysicalDevice;
   isCloudDevice = !isPhysicalDevice;
 in
 with pkgs;
