@@ -595,6 +595,9 @@ Repeated invocations toggle between the two most recently open buffers."
   (def-projectile-commander-method ?t
     "Counsel projectile eshell"
     (projectile-run-eshell))
+  (def-projectile-commander-method ?/
+    "Counsel projectile rg"
+    (counsel-projectile-rg))
   :bind
   (:map projectile-command-map ("p" . projectile-persp-switch-project))
   :init
