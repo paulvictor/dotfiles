@@ -50,7 +50,6 @@ lib.mkIf
             custom-vieb
             dejavu_fonts
             electronApps
-            ferdi
             fira-code
             firacode-nerdfonts
             font-awesome
