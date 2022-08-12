@@ -34,7 +34,7 @@
     };
 
   fileSystems."/gnu" =
-    { device = "master/safe/gnu";
+    { device = "master/local/gnu";
       fsType = "zfs";
     };
 
@@ -44,7 +44,7 @@
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/6A1D-C929";
+    { device = "/dev/disk/by-label/BOOT";
       fsType = "vfat";
     };
 

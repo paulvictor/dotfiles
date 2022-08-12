@@ -43,6 +43,5 @@ in
         devices = [ "uriel" "sarge" ];
       };
     };
-
   };
 }

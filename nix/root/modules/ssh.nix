@@ -6,9 +6,9 @@ let
       hostKeyPath = "/tomb/${config.networking.hostName}/ssh/ssh_host_rsa_key";
     in
     {
-      system.build.mkHostKeyDirPath = pkgs.runCommandLocal "etc" {} ''
+      system.build.mkHostKeyDirPath = pkgs.runCommandLocal "mkHostKeyPath" {} ''
         set -euo pipefail
-        mkdir -pv $(dirname ${hostKeyPath})
+        mkdir -pv $out/$(dirname ${hostKeyPath})
       '';
     };
   sshConfig = { config, lib, pkgs, ... }:
