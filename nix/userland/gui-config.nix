@@ -164,6 +164,7 @@ lib.mkIf
                 "privacy.popups.showBrowserMessage" = true;
                 "extensions.pocket.enabled" = false;
                 "extensions.screenshots.disabled" = true;
+                "extensions.autoDisableScopes" = 0;
                 "ui.prefersReducedMotion" = 1;
                 "browser.compactmode.show" = true;
               };
