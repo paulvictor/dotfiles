@@ -34,4 +34,9 @@
       user_allow_other
     '';
   };
+
+  system.build.mkViktorHomeCryptPath = pkgs.runCommandLocal "mkViktorHomeCryptPath" {} ''
+    mkdir -pv $out/persist/home/viktor/
+    chown -R 1000 $out/persist/home/viktor
+  '';
 }
