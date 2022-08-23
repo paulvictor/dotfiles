@@ -8,7 +8,7 @@
       introducer = true;
     };
     uriel = {
-      id = "IYLKTPE-SF5YCW4-XXC6C5H-JJF6IZL-NMXDFL5-G2JDDBE-3QS4GSD-I4J3IAC";
+      id = "YELHBGM-BI7EHRC-FOZ5GZS-VWT6BKO-IKFVAMP-XU5OC3C-ZYCDDVC-7RJUXAZ";
       name = "uriel";
       introducer = true;
     };
