@@ -7,7 +7,6 @@ let
     in
     {
       system.build.mkHostKeyDirPath = pkgs.runCommandLocal "mkHostKeyPath" {} ''
-        set -euo pipefail
         mkdir -pv $out/$(dirname ${hostKeyPath})
       '';
     };
