@@ -1,6 +1,10 @@
 { config, lib, pkgs, ... } :
 
 {
+
+  system.build.mkNMSystemConnectionsDirPath = pkgs.runCommandLocal "mkNMSystemConnectionsDirPath" {} ''
+    mkdir -pv $out/persist/etc/NetworkManager/system-connections/
+  '';
   environment.etc."NetworkManager/system-connections" = {
     source = "/persist/etc/NetworkManager/system-connections/";
   };
