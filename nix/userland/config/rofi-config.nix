@@ -91,7 +91,7 @@ kb-accept-entry: "Control+m,Return,KP_Enter"; /* Removed Control+j */
 /*	kb-mode-previous: "Shift+Left,Control+ISO_Left_Tab";*/
 /*	kb-row-left: "Control+Page_Up";*/
 /*	kb-row-right: "Control+Page_Down";*/
-kb-row-up: "Up,Control+p,Control+k,ISO_Left_Tab";
+kb-row-up: "Up,Control+p,Control+k";
 kb-row-down: "Down,Control+n,Control+j";
 /*	kb-row-tab: "Tab";*/
 /*	kb-page-prev: "Page_Up";*/
