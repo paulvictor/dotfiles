@@ -27,7 +27,7 @@
     #viktor ALL=(ALL) NOPASSWD: ${pkgs.tomb}/bin/tomb*, ${pkgs.systemd}/bin/systemctl*
   '';
 
-  nix.trustedUsers = [ "@wheel" "viktor" "root" ];
+  nix.settings.trusted-users = [ "@wheel" "viktor" "root" ];
 
   environment.etc."fuse.conf" = {
     text = ''

@@ -4,14 +4,14 @@ let
   inherit (args) isPhysicalDevice;
 in
 {
-  nix.autoOptimiseStore = true;
+  nix.settings.auto-optimise-store = true;
   nix.extraOptions = ''
     keep-outputs = true
     keep-derivations = true
     experimental-features = nix-command flakes
   '';
   nix.package = pkgs.nixFlakes;
-  nix.systemFeatures = [ "kvm" "big-parallel" ];
+  nix.settings.system-features = [ "kvm" "big-parallel" ];
 
   hardware.enableRedistributableFirmware = lib.mkDefault true;
 

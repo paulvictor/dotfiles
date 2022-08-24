@@ -13,11 +13,11 @@ in
 
   sops.gnupg.sshKeyPaths = [ "/tomb/${config.networking.hostName}/ssh/ssh_host_rsa_key" ];
   sops.secrets = {
-#    crypt-mount-key = {
-#      key = "home-persistence/key";
-#      owner = config.users.users.viktor.name;
-#      mode = "0400";
-#    };
+    crypt-mount-key = {
+      key = "home-persistence/key";
+      owner = config.users.users.viktor.name;
+      mode = "0400";
+    };
     syncthing-key = {
       key = "syncthing/key.pem";
       owner = config.users.users.viktor.name;
