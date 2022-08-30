@@ -32,7 +32,7 @@ mkIf
         pa_applet
         paprefs
         passdo
-#         pasystray
+        #         pasystray
         pavucontrol
         pcloud-console-client
         pulseaudio-ctl
@@ -207,7 +207,7 @@ mkIf
         };
       };
       xdg.configFile."kitty/kitty.conf".source = import ./config/kitty.nix { inherit pkgs; };
-#       xdg.configFile."pulse/default.pa".text = lib.readFile ./config/pulseaudio.conf;
+      #       xdg.configFile."pulse/default.pa".text = lib.readFile ./config/pulseaudio.conf;
       xdg.configFile."rofi/config.rasi".source = import ./config/rofi-config.nix {inherit pkgs; };
 
       # Not sure if we can run on darwin
@@ -225,23 +225,11 @@ mkIf
         ];
       };
 
-      systemd.user.services.xss-lock = {
-        Unit = {
-          Description = "xss-lock, session locker service";
-          After = [ "graphical-session-pre.target" ];
-          PartOf = [ "graphical-session.target" ];
-        };
-
-        Install = { WantedBy = [ "graphical-session.target" ]; };
-
-        Service = {
-          Environment="PATH=/run/wrappers/bin:${coreutils}/bin";
-          ExecStart =
-            lib.concatStringsSep " "
-              ([ "${pkgs.xss-lock}/bin/xss-lock" "-s \${XDG_SESSION_ID}" ]
-               ++ [ "--notifier" "${libnotify}/bin/notify-send" ]
-               ++ [ "-- ${wmexit}/bin/wmexit lock" ]);
-        };
+      services.screen-locker = {
+        enable = true;
+        inactiveInterval = 5;
+        lockCmd = "${xsecurelock}/bin/xsecurelock";
+        xautolock.enable = false;
       };
 
       xdg.configFile."zathura/zathurarc".text = ''
@@ -279,10 +267,16 @@ mkIf
         };
       };
       home.file.".urlview".text = ''
-    SHORTCUT
-    NOREVIEW
-    RAW_RESERVED
-  '';
+        SHORTCUT
+        NOREVIEW
+        RAW_RESERVED
+      '';
+
+      programs.autorandr = {
+        hooks.postswitch = {
+          change-background = "${feh}/bin/feh --bg-scale ${wall1} ${wall2} ${wall3}";
+        };
+      };
     }
   )
 

@@ -2,14 +2,12 @@
 with pkgs;
 writeShellScriptBin "wmexit" ''
   llock() {
-    gllock &
-    sleep 3
+    ${xsecurelock}/bin/xsecurelock
   }
 
   case "$1" in
     lock)
       llock
-      ${xorg.xset}/bin/xset -display :0.0 dpms force off
       ;;
     logout)
       s=$(${systemd}/bin/loginctl session-status | awk 'NR==1 {print $1}')
