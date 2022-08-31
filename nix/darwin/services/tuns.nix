@@ -14,7 +14,7 @@
         "0.0.0.0:8080:localhost:2224"
         "-l"
         "viktor"
-        "143.244.136.171"
+        "139.59.49.232"
       ];
       RunAtLoad = true;
       KeepAlive = true;
@@ -31,7 +31,7 @@
         "127.0.0.1:5900:localhost:5900"
         "-l"
         "viktor"
-        "143.244.136.171"
+        "139.59.49.232"
       ];
       RunAtLoad = true;
       KeepAlive = true;
