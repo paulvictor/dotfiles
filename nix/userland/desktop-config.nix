@@ -89,6 +89,7 @@ mkIf
       services.picom = {
         enable = true;
         menuOpacity = 0.7;
+        backend = "glx";
         experimentalBackends = true;
         settings = {
           extraOptions = ''

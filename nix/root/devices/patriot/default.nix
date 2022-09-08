@@ -24,9 +24,11 @@
   };
 
   virtualisation = {
-    diskSize = 1024; # MB
+    diskSize = 1024 * 4; # MB
     memorySize = 256; # MB
-    writableStoreUseTmpfs = true;
+#     writableStoreUseTmpfs = true;
+    writableStore = true;
+    useNixStoreImage = true;
     qemu.networkingOptions = [
 #       "-nic user,model=virtio"
 #       "-netdev user,id=user.0,net=192.168.76.0/24,dhcpstart=192.168.76.9"
