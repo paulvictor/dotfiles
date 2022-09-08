@@ -92,6 +92,7 @@ let
 
             nix-mode
             nix-modeline
+            nix-sandbox
             no-littering
             org-make-toc
             org-roam

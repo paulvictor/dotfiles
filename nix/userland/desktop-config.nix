@@ -8,6 +8,7 @@ mkIf
     wmexit = pkgs.callPackage ./scripts/wmexit.nix {};
     passdo = pkgs.callPackage ./scripts/passdo.nix {};
     findWindowByTitle = pkgs.callPackage ./scripts/findWindowByTitle.nix {};
+    popcorntime = pkgs.callPackage ./packages/popcorntime.nix {};
   in
     with pkgs;
     {
@@ -34,6 +35,7 @@ mkIf
         passdo
         #         pasystray
         pavucontrol
+        popcorntime
         pcloud-console-client
         pulseaudio-ctl
         rofiElectronAppsRunner

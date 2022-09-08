@@ -58,6 +58,7 @@
       pcloudcc-overlay = import ./overlays/pcloud-console-client.nix;
       pyopenssl-fix-hack = import ./overlays/pyopenssl-broken-fix-hack.nix;
       fish-docker-completion = import ./overlays/fish.nix;
+      xsecurelock-overlay = import ./overlays/xsecurelock.nix;
       #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
       linuxOverlays = [
         fish-docker-completion
@@ -83,6 +84,7 @@
         inputs.ngnk.overlay
         emacsOverlay.overlay
         pcloudcc-overlay
+        xsecurelock-overlay
       ];
       darwinOverlays = [
         pyopenssl-fix-hack
