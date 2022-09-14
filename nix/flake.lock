@@ -191,6 +191,29 @@
         "url": "https://codeberg.org/ngn/k.git"
       }
     },
+    "kmonad": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "dir": "nix",
+        "lastModified": 1661059282,
+        "narHash": "sha256-EDC2Dcn30UsPNfKGFY4c7vCZLtbmS8q7TBqrQmfbsWs=",
+        "owner": "kmonad",
+        "repo": "kmonad",
+        "rev": "296e463fe7761a919a2a3e39599293526ce55454",
+        "type": "github"
+      },
+      "original": {
+        "dir": "nix",
+        "owner": "kmonad",
+        "ref": "master",
+        "repo": "kmonad",
+        "type": "github"
+      }
+    },
     "mozilla": {
       "locked": {
         "lastModified": 1657214286,
@@ -373,6 +396,7 @@
         "goodbyeAds": "goodbyeAds",
         "homeManager": "homeManager",
         "impermanence": "impermanence",
+        "kmonad": "kmonad",
         "mozilla": "mozilla",
         "neovim": "neovim",
         "ngnk": "ngnk",

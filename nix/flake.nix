@@ -35,6 +35,11 @@
     goodbyeAds.url = "github:jerryn70/GoodbyeAds/master";
     goodbyeAds.flake = false;
 
+    kmonad = {
+      url = "github:kmonad/kmonad/master?dir=nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs = { self, nixpkgs, emacsOverlay, neovim, flake-utils, darwin, ... }@inputs :
@@ -104,10 +109,19 @@
       ];
       pkgsFor = system:
         let
-          stdenv = (import nixpkgs { inherit system; }).stdenv;
-          inherit (stdenv) isLinux;
+          _nixpkgs = import nixpkgs { inherit system; };
+          inherit (_nixpkgs.stdenv) isLinux;
+          patch = _nixpkgs.fetchpatch {
+            url = https://github.com/NixOS/nixpkgs/pull/184119.patch;
+            sha256 = "1f0gzhjm4v42svz07j5xqryprwl8bj5afsv1h97sy73v8y42ns5s";
+          };
+          patched-nixpkgs = _nixpkgs.applyPatches {
+            name = "nixpkgs-patched-184119";
+            src = nixpkgs;
+            patches = [ patch ];
+          };
         in
-        import nixpkgs {
+        import patched-nixpkgs {
           inherit system;
           config = {
             permittedInsecurePackages = [ "steghide-0.5.1" ];

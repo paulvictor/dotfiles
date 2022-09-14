@@ -1,7 +1,7 @@
 { self, pkgsFor, inputs, ... }:
 
 let
-  inherit (inputs) sops-nix nixos-generators flake-utils homeManager nixpkgs;
+  inherit (inputs) sops-nix nixos-generators flake-utils homeManager nixpkgs kmonad;
 
   inherit (builtins) attrNames isAttrs readDir listToAttrs elem;
 
@@ -16,7 +16,7 @@ let
   };
 
   moduleArgs = {
-    inherit (inputs) stevenBlack goodbyeAds;
+    inherit (inputs) stevenBlack goodbyeAds kmonad;
   };
 
   mkModules = hostName: system:
@@ -40,8 +40,10 @@ let
       common
       sops-nix.nixosModule
       homeManager.nixosModule
+      kmonad.nixosModules.default
       machine
       ../modules/viktor.nix
+      ../modules/kmonad.nix
       ../modules/workstations.nix
       ../modules/ssh.nix
     ];
