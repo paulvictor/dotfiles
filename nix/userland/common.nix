@@ -14,6 +14,7 @@ in
 with pkgs;
 {
   home.packages = [
+    awscli2
     comma
     ddgr
     doctl
@@ -31,6 +32,7 @@ with pkgs;
     pbgopy
     pms
     prettyping
+    qemu
     skim
     stow
     #texlive.combined.scheme-full
@@ -50,8 +52,6 @@ with pkgs;
     grex
   ] ++
   lib.optionals (!python310Packages.pyopenssl.meta.broken) [
-    awscli2
-    qemu
     haskellPackages.niv
     mpc_cli
   ] ++

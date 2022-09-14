@@ -7,7 +7,7 @@
       ProgramArguments = [
         "/bin/sh"
         "-c"
-	"/bin/ln -sf $HOME/.gnupg/S.gpg-agent.ssh $SSH_AUTH_SOCK"
+        "/bin/ln -sf $HOME/.gnupg/S.gpg-agent.ssh $SSH_AUTH_SOCK"
       ];
       RunAtLoad = true;
     };

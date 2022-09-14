@@ -6,14 +6,13 @@ let
     /usr/bin/pmset -a sleep 0
     /usr/bin/pmset -a disablesleep 1
   ";
+  programWrapper = import ./common.nix { inherit pkgs; };
 in
 {
   launchd.daemons = {
     nix-power-settings-change.serviceConfig = {
       Label = "daemon.nix.power-management";
-      ProgramArguments = [
-        "${script}"
-      ];
+      ProgramArguments = programWrapper { program = script; name = "power-mgmt"; };
       RunAtLoad = true;
     };
   };
