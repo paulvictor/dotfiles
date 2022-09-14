@@ -20,11 +20,7 @@
 
 (require 'term)
 
-;; Set ghcid-target to change the stack target
-(setq ghcid-target "")
-
 (setq ghcid-process-name "ghcid")
-
 
 (define-minor-mode ghcid-mode
   "A minor mode for ghcid terminals
@@ -87,7 +83,7 @@ recognize the new height until you manually restart it by calling
     (format "ghcid -c \"%s\" -h %s\n" (ghcid-cmd target) h))
 
 (defun ghcid-get-buffer (target)
-  "Create or reuse a ghcid buffer with the configured name and
+"Create or reuse a ghcid buffer with the configured name and
 display it. Return the window that shows the buffer.
 
 User configuration will influence where the buffer gets shown
@@ -101,6 +97,7 @@ exactly. See `ghcid-mode'."
 
     (setq next-error-last-buffer (current-buffer))
     (setq-local default-directory dir)
+    (setq-local ghcid-target target)
 
     ;; Only now we can figure out the height to pass along to the ghcid process
     (let ((height (- (window-body-size) 1)))
@@ -143,6 +140,13 @@ you ran this command from."
   (interactive "sTarget to stop : ")
   (ghcid-kill target)
   (kill-buffer (ghcid-buffer-name target)))
+
+(defun ghcid-restart (target)
+  "Stop ghcid"
+  (interactive "sTarget to stop : ")
+  (with-selected-window (ghcid-get-buffer target)
+    (ghcid-kill target)
+    (ghcid target)))
 
 (provide 'ghcid)
 
