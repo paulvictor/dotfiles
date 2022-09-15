@@ -18,9 +18,10 @@ set downloadmethod=confirm
 set downloadpath=${config.home.homeDirectory}/plain/Downloads
 set favicons=session
 set favoritepages=
-set firefoxmode=always
+" set firefoxmode=always
 set follownewtabswitch
-set fontsize=15
+set guifontsize=15
+set useragent=%default~%firefox
 set guifullscreennavbar=oninput
 set guifullscreentabbar=onupdate
 set guihidetimeout=2000
