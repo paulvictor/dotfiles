@@ -185,6 +185,7 @@ cmap <C-k> <commandHistoryNext>
 emap <C-j> <exploreHistoryPrevious>
 emap <C-k> <exploreHistoryNext>
 
+colorscheme dark_minimal
 '';
 in
 pkgs.runCommand "vieb" { buildInputs = [ pkgs.makeWrapper ]; }

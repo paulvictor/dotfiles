@@ -178,6 +178,7 @@ lib.mkIf
           "${tridactyl-native}/lib/mozilla/native-messaging-hosts/tridactyl.json";
         home.file.".vieb/colors/gruvbox.css".source = ./config/vieb/colors/gruvbox.css;
         home.file.".vieb/colors/smalltabs.css".source = ./config/vieb/colors/smalltabs.css;
+        home.file.".vieb/colors/dark_minimal.css".source = ./config/vieb/colors/dark_minimal.css;
         xdg.configFile."tridactyl/tridactylrc".text =
           import ./config/tridactylrc.nix { inherit pkgs; };
         xdg.configFile."tridactyl/themes".source = fetchFromGitHub {
