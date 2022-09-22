@@ -24,8 +24,6 @@ in
 
   services.guix.enable = isPhysicalDevice;
 
-  boot.kernelPackages = pkgs.linuxPackages_5_18;
-
   boot.postBootCommands = "
     [ -d /tomb/${config.networking.hostName}/ssh ] || \
       mkdir -pv /tomb/${config.networking.hostName}/ssh

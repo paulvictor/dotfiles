@@ -2,7 +2,7 @@
   description = "Meta Config";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/a7855f2235a1876f97473a76151fec2afa02b287";
+    nixpkgs.url = "github:NixOS/nixpkgs/d6490a0bd9dfb298fcd8382d3363b86870dc7340";
     flake-utils.url = "github:numtide/flake-utils";
     homeManager.url = "github:nix-community/home-manager/master";
     homeManager.inputs.nixpkgs.follows = "nixpkgs";
@@ -13,13 +13,10 @@
     emacsOverlay.inputs.nixpkgs.follows = "nixpkgs";
     neovim.url = "github:nix-community/neovim-nightly-overlay";
     neovim.inputs.nixpkgs.follows = "nixpkgs";
-    neovim.inputs.flake-utils.follows = "flake-utils";
     impermanence.url = "github:nix-community/impermanence";
-    impermanence.inputs.nixpkgs.follows = "nixpkgs";
     nixos-generators.url = "github:nix-community/nixos-generators";
     nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/nur";
-    nur.inputs.nixpkgs.follows = "nixpkgs";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
     portable-svc.url = "git+https://tulpa.dev/cadey/portable-svc.git?ref=main";
     portable-svc.inputs.nixpkgs.follows = "nixpkgs";
@@ -64,6 +61,7 @@
       pyopenssl-fix-hack = import ./overlays/pyopenssl-broken-fix-hack.nix;
       fish-docker-completion = import ./overlays/fish.nix;
       xsecurelock-overlay = import ./overlays/xsecurelock.nix;
+      nyxt-3-overlay = import ./overlays/nyxt.nix;
       #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
       linuxOverlays = [
         fish-docker-completion
@@ -90,6 +88,7 @@
         emacsOverlay.overlay
         pcloudcc-overlay
         xsecurelock-overlay
+        nyxt-3-overlay
       ];
       darwinOverlays = [
         pyopenssl-fix-hack
@@ -111,14 +110,10 @@
         let
           _nixpkgs = import nixpkgs { inherit system; };
           inherit (_nixpkgs.stdenv) isLinux;
-          patch = _nixpkgs.fetchpatch {
-            url = https://github.com/NixOS/nixpkgs/pull/184119.patch;
-            sha256 = "1f0gzhjm4v42svz07j5xqryprwl8bj5afsv1h97sy73v8y42ns5s";
-          };
           patched-nixpkgs = _nixpkgs.applyPatches {
-            name = "nixpkgs-patched-184119";
+            name = "nixpkgs-patched";
             src = nixpkgs;
-            patches = [ patch ];
+            patches = import ./patches.nix { pkgs = _nixpkgs; };
           };
         in
         import patched-nixpkgs {
