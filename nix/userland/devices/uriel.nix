@@ -13,9 +13,9 @@
           enable = true;
           crtc = 0;
           primary = true;
-          position = "0x560";
-          mode = "2560x1440";
-          rate = "59.95";
+          position = "0x0";
+          mode = "2048x1152";
+          rate = "60.00";
         };
       };
     };
