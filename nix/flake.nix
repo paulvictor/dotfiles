@@ -37,6 +37,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    log-processor = {
+      url = "path:/home/viktor/stuff/log-processor";
+    };
+
   };
 
   outputs = { self, nixpkgs, emacsOverlay, neovim, flake-utils, darwin, ... }@inputs :

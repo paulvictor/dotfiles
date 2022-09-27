@@ -3,6 +3,7 @@ args@{ config, lib, pkgs, ... } :
 let
   inherit (args) isPhysicalDevice;
   isCloudDevice = !isPhysicalDevice;
+  inherit (args) system;
 in
 with pkgs;
 {
@@ -25,6 +26,12 @@ with pkgs;
     patchelf
     psmisc
     wget
+    args.log-processor.defaultPackage.${system}
+    cassandra_3_11
+    kcat
+    jre
+    zookeeper
+    apacheKafka
   ] ++ lib.optionals isPhysicalDevice [
     virt-manager
     libnotify

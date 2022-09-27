@@ -16,7 +16,7 @@ let
   };
 
   moduleArgs = {
-    inherit (inputs) stevenBlack goodbyeAds kmonad;
+    inherit (inputs) stevenBlack goodbyeAds kmonad log-processor;
   };
 
   mkModules = hostName: system:
@@ -54,7 +54,7 @@ let
     in nixosSystem {
       inherit system pkgs;
       modules = mkModules hostName system;
-      specialArgs = moduleArgs // {isPhysicalDevice = true;} ;
+      specialArgs = moduleArgs // { inherit system; isPhysicalDevice = true;} ;
     };
 
   deviceConfigs = import ./all-devices.nix;
@@ -72,7 +72,7 @@ listToAttrs
           modules =
             mkModules hostName system
             ++ (optionals (deviceConfig ? extraModules) deviceConfig.extraModules);
-          specialArgs = moduleArgs // {isPhysicalDevice = false;};
+          specialArgs = moduleArgs // { inherit system; isPhysicalDevice = false;};
         };
       in
         {
