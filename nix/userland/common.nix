@@ -20,6 +20,7 @@ with pkgs;
     doctl
     fzf
     # jailed-firefox
+    ssm-session-manager-plugin
     keybase
     lsof
     moreutils
