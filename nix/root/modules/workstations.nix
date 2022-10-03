@@ -3,6 +3,7 @@ args@{ config, lib, pkgs, ... } :
 let
   inherit (args) isPhysicalDevice;
   isCloudDevice = !isPhysicalDevice;
+  inherit (args) system;
 in
 with pkgs;
 {
@@ -20,9 +21,10 @@ with pkgs;
     htop
     libnl
     man-pages
-    posix_man_pages
+    neovim
     nix-prefetch-github
     patchelf
+    posix_man_pages
     psmisc
     wget
   ] ++ lib.optionals isPhysicalDevice [

@@ -165,8 +165,6 @@ with pkgs;
     enableAliases = true;
   };
 
-  programs.neovim.enable = true;
-
   programs.broot = {
     enable = true;
     enableZshIntegration = true;
