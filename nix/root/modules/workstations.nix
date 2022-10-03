@@ -21,17 +21,12 @@ with pkgs;
     htop
     libnl
     man-pages
-    posix_man_pages
+    neovim
     nix-prefetch-github
     patchelf
+    posix_man_pages
     psmisc
     wget
-    args.log-processor.defaultPackage.${system}
-    cassandra_3_11
-    kcat
-    jre
-    zookeeper
-    apacheKafka
   ] ++ lib.optionals isPhysicalDevice [
     virt-manager
     libnotify
