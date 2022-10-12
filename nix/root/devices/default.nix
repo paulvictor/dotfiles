@@ -16,7 +16,7 @@ let
   };
 
   moduleArgs = {
-    inherit (inputs) stevenBlack goodbyeAds kmonad log-processor neovim;
+    inherit (inputs) stevenBlack goodbyeAds kmonad neovim;
   };
 
   mkModules = hostName: system:

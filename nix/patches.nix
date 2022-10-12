@@ -8,7 +8,7 @@ let
 #   };
   vieb-9-1-patch = pkgs.fetchpatch {
     url = https://github.com/NixOS/nixpkgs/pull/184119.patch;
-    sha256 = "sha256-CjpXit47f4wCKgpRhcShloHA+x/AC6B8msJkzr1QcTM=";
+    sha256 = "sha256-jJv/ZBwtEP3tv7PK12cW9CSyPqFp2IT1T7DffNiCUtk=";
   };
   quicklisp-22-07-08-patch = pkgs.fetchpatch {
     url = https://github.com/NixOS/nixpkgs/pull/191961.patch;

@@ -18,8 +18,8 @@
     nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/nur";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
-    portable-svc.url = "git+https://tulpa.dev/cadey/portable-svc.git?ref=main";
-    portable-svc.inputs.nixpkgs.follows = "nixpkgs";
+#     portable-svc.url = "git+https://tulpa.dev/cadey/portable-svc.git?ref=main";
+#     portable-svc.inputs.nixpkgs.follows = "nixpkgs";
     ngnk.url = "github:nathyong/ngnk-nix";
     ngnk.inputs.nixpkgs.follows = "nixpkgs";
     ngnk.inputs.flake-utils.follows = "flake-utils";
@@ -35,10 +35,6 @@
     kmonad = {
       url = "github:kmonad/kmonad/master?dir=nix";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    log-processor = {
-      url = "path:/home/viktor/stuff/log-processor";
     };
 
   };
@@ -87,7 +83,6 @@
         inputs.nur.overlay
         inputs.mozilla.overlays.firefox
         ql2nix-overlay
-        inputs.portable-svc.overlay
         inputs.ngnk.overlay
         emacsOverlay.overlay
         pcloudcc-overlay
