@@ -19,8 +19,9 @@ let
     inherit (inputs) stevenBlack goodbyeAds kmonad neovim;
   };
 
-  mkModules = hostName: system:
+  mkModules = args:
     let
+      inherit (args) hostName system isWorkMachine;
       common = {
         imports = [
           ../guix/modules/services/guix.nix
@@ -47,14 +48,14 @@ let
       ../modules/kmonad.nix
       ../modules/workstations.nix
       ../modules/ssh.nix
-    ];
+    ] ++ (optionals isWorkMachine [ inputs.juspay-config.nixosModules.${system}.juspay-cachix ]);
 
-  mkNixosSystem = hostName: system:
+  mkNixosSystem = hostName: system: isWorkMachine:
     let
       pkgs = pkgsFor system;
     in nixosSystem {
       inherit system pkgs;
-      modules = mkModules hostName system;
+      modules = mkModules {inherit hostName system isWorkMachine;};
       specialArgs = moduleArgs // { inherit system; isPhysicalDevice = true;} ;
     };
 
@@ -71,7 +72,7 @@ listToAttrs
           pkgs = pkgsFor system;
           format = format;
           modules =
-            mkModules hostName system
+            mkModules {inherit hostName system; isWorkMachine = deviceConfig.isWorkMachine or false;}
             ++ (optionals (deviceConfig ? extraModules) deviceConfig.extraModules);
           specialArgs = moduleArgs // { inherit system; isPhysicalDevice = false;};
         };
@@ -80,6 +81,6 @@ listToAttrs
           name = hostName;
           value =
             if !(deviceConfig ? format)
-            then mkNixosSystem hostName system
+            then mkNixosSystem hostName system (deviceConfig.isWorkMachine or false)
             else generatedImage;
         }))

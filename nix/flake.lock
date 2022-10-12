@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "cachix-src": {
+      "locked": {
+        "lastModified": 1664013959,
+        "narHash": "sha256-ImI1EOZCJ9f6avS+0MY+ITYwrIzvy2B0hPfeKCdCZxo=",
+        "owner": "cachix",
+        "repo": "cachix",
+        "rev": "3abb69595aa30b774b821efade3cb34da302440e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cachix",
+        "ref": "v1.0.1",
+        "repo": "cachix",
+        "type": "github"
+      }
+    },
     "darwin": {
       "inputs": {
         "nixpkgs": [
@@ -119,6 +135,21 @@
         "type": "github"
       }
     },
+    "flake-utils_4": {
+      "locked": {
+        "lastModified": 1659877975,
+        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "goodbyeAds": {
       "flake": false,
       "locked": {
@@ -173,6 +204,26 @@
         "owner": "nix-community",
         "repo": "impermanence",
         "type": "github"
+      }
+    },
+    "juspay-config": {
+      "inputs": {
+        "cachix-src": "cachix-src",
+        "flake-utils": "flake-utils_3",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1665575642,
+        "narHash": "sha256-oVFyQAyqJ55Hxc4UH9wTEU4l6F+I9LGt2FcVSdoeNnA=",
+        "ref": "refs/heads/main",
+        "rev": "4f53f4a50f5e10e4fc3d084ac42e2a99bc048eb7",
+        "revCount": 2,
+        "type": "git",
+        "url": "ssh://git@bitbucket.org/juspay/pauls-work-config.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@bitbucket.org/juspay/pauls-work-config.git"
       }
     },
     "k-git": {
@@ -253,7 +304,7 @@
     },
     "neovim-flake": {
       "inputs": {
-        "flake-utils": "flake-utils_3",
+        "flake-utils": "flake-utils_4",
         "nixpkgs": [
           "neovim",
           "nixpkgs"
@@ -338,17 +389,17 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1663761423,
-        "narHash": "sha256-bDLXl2BVq7eIQz/8CduZI1SLyhG9u/CrckHd6f7bwPE=",
+        "lastModified": 1665349835,
+        "narHash": "sha256-UK4urM3iN80UXQ7EaOappDzcisYIuEURFRoGQ/yPkug=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "d6490a0bd9dfb298fcd8382d3363b86870dc7340",
+        "rev": "34c5293a71ffdb2fe054eb5288adc1882c1eb0b1",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
-        "rev": "d6490a0bd9dfb298fcd8382d3363b86870dc7340",
         "type": "github"
       }
     },
@@ -365,6 +416,22 @@
         "owner": "NixOS",
         "ref": "release-22.05",
         "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1663761423,
+        "narHash": "sha256-bDLXl2BVq7eIQz/8CduZI1SLyhG9u/CrckHd6f7bwPE=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "d6490a0bd9dfb298fcd8382d3363b86870dc7340",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "d6490a0bd9dfb298fcd8382d3363b86870dc7340",
         "type": "github"
       }
     },
@@ -391,12 +458,13 @@
         "goodbyeAds": "goodbyeAds",
         "homeManager": "homeManager",
         "impermanence": "impermanence",
+        "juspay-config": "juspay-config",
         "kmonad": "kmonad",
         "mozilla": "mozilla",
         "neovim": "neovim",
         "ngnk": "ngnk",
         "nixos-generators": "nixos-generators",
-        "nixpkgs": "nixpkgs",
+        "nixpkgs": "nixpkgs_2",
         "nur": "nur",
         "sops-nix": "sops-nix",
         "stevenBlack": "stevenBlack"

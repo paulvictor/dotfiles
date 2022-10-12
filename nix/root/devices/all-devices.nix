@@ -2,10 +2,12 @@
   {
     hostName = "sarge";
     system = "x86_64-linux";
+    isWorkMachine = true;
   }
   {
     hostName = "uriel";
     system = "x86_64-linux";
+    isWorkMachine = true;
   }
   {
     hostName = "lucy";
