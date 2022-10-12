@@ -1,0 +1,8 @@
+* Tasks
+** TODO New tabs
+  [2022-09-30 Fri]
+  [[file:~/dotfiles/stow/nyxt/.config/nyxt/init.lisp][file:~/dotfiles/stow/nyxt/.config/nyxt/init.lisp]]
+** Should open next to the current tab
+** If the focused link is a text area, vi-insert mode
+** C-d should move down
+** Syncable bookmarks

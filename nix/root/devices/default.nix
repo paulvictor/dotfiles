@@ -25,6 +25,7 @@ let
         imports = [
           ../guix/modules/services/guix.nix
           ../common-config.nix
+          ../caches.nix
         ];
 
         system.configurationRevision = mkIf (self ? rev) self.rev;
