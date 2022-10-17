@@ -307,7 +307,6 @@
     (setq evil-search-module 'evil-search)
   :config
     (setq evil-want-keybinding nil)
-    ;(key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
 ;;     (evil-define-key '(insert normal) 'global (kbd "C-x C-x") 'previous-buffer)
 ;;     (evil-define-key '(insert normal) 'global (kbd "C-x ESC") 'next-buffer)
     (evil-define-key '(insert visual) 'global (kbd "C-g") 'evil-normal-state)
@@ -561,7 +560,7 @@ Repeated invocations toggle between the two most recently open buffers."
   :config
   (projectile-mode 1)
   :bind-keymap
-  ("C-x p" . projectile-command-map)
+  ("C-c p" . projectile-command-map)
   :bind
   ("C-x C-r" . projectile-recentf)
   ("C-x t" . pvr/split-term)
