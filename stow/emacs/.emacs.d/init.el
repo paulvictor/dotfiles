@@ -64,7 +64,6 @@
   (f-join pvr/persist-dir "emacs.d"))
 
 (use-package no-littering
-  :demand t
   :init
   (setq no-littering-etc-directory
         (f-join pvr/emacs-persist-dir "emacs/")
@@ -552,13 +551,11 @@ Repeated invocations toggle between the two most recently open buffers."
   :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup))
 
 (use-package ivy-prescient
-  :demand t
   :after (ivy counsel)
   :config
     (ivy-prescient-mode 1))
 
 (use-package projectile
-  :demand t
   :custom
   (projectile-switch-project-action #'projectile-commander)
   :config
@@ -574,8 +571,8 @@ Repeated invocations toggle between the two most recently open buffers."
   )
 
 (use-package perspective
-  :demand t
   :custom
+  (persp-mode-prefix-key (kbd "C-c p"))
   (persp-initial-frame-name "Main")
   :bind
   ([remap projectile-switch-project] . projectile-persp-switch-project)
@@ -772,7 +769,6 @@ Repeated invocations toggle between the two most recently open buffers."
   "l" 'counsel-find-library)
 
 (use-package which-key
-  :demand t
   :custom
   (which-key-show-docstrings t)
   (which-key-show-prefix 'mode-line)
@@ -1070,7 +1066,7 @@ Also move to the next line, since that's the most frequent action after"
   (direnv-mode))
 
 (use-package popper
-  :ensure t                             ; or :straight t
+  :after (perspective)
   :bind (("M-`" . popper-cycle)
          ("C-`" . popper-toggle-latest)
          ("C-M-`" . popper-toggle-type))
@@ -1124,7 +1120,6 @@ Also move to the next line, since that's the most frequent action after"
                           ("STUB" . "#1E90FF")))
 
 (use-package pulsar
-  :demand t
   :custom
   ((pulsar-pulse t)
    (pulsar-delay 0.055)
