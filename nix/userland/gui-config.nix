@@ -161,7 +161,7 @@ lib.mkIf
                 "browser.tabs.tabMinWidth" = 50;
                 "browser.urlbar.dnsResolveSingleWordsAfterSearch" = 0;
                 "browser.link.open_newwindow.restriction" = 0;
-                "privacy.popups.showBrowserMessage" = true;
+                "privacy.popups.showBrowserMessage" = false;
                 "extensions.pocket.enabled" = false;
                 "extensions.screenshots.disabled" = true;
                 "extensions.autoDisableScopes" = 0;

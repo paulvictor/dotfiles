@@ -41,9 +41,14 @@
       url = "git+ssh://git@bitbucket.org/juspay/pauls-work-config.git";
     };
 
+    nix-cl = {
+      url = "github:Uthar/nix-cl/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
-  outputs = { self, nixpkgs, emacsOverlay, neovim, flake-utils, darwin, juspay-config, ... }@inputs :
+  outputs = { self, nixpkgs, emacsOverlay, neovim, flake-utils, darwin, juspay-config, nix-cl, ... }@inputs :
     let
       gllock-overlay = import ./overlays/gllock.nix;
       tomb-overlay = import ./overlays/tomb.nix;
