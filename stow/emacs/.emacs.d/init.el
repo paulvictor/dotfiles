@@ -571,7 +571,7 @@ Repeated invocations toggle between the two most recently open buffers."
 
 (use-package perspective
   :custom
-  (persp-mode-prefix-key (kbd "C-c p"))
+  (persp-mode-prefix-key (kbd "C-c M-p"))
   (persp-initial-frame-name "Main")
   :bind
   ([remap projectile-switch-project] . projectile-persp-switch-project)
