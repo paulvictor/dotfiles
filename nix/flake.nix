@@ -48,7 +48,7 @@
 
   };
 
-  outputs = { self, nixpkgs, emacsOverlay, neovim, flake-utils, darwin, juspay-config, nix-cl, ... }@inputs :
+  outputs = { self, nixpkgs, emacsOverlay, neovim, flake-utils, darwin, nix-cl, ... }@inputs :
     let
       gllock-overlay = import ./overlays/gllock.nix;
       tomb-overlay = import ./overlays/tomb.nix;

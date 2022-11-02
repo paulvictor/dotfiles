@@ -21,7 +21,7 @@ let
 
   mkModules = args:
     let
-      inherit (args) hostName system isWorkMachine;
+      inherit (args) hostName system customisations;
       common = {
         imports = [
           ../guix/modules/services/guix.nix
@@ -48,15 +48,15 @@ let
       ../modules/kmonad.nix
       ../modules/workstations.nix
       ../modules/ssh.nix
-    ] ++ (optionals isWorkMachine [ inputs.juspay-config.nixosModules.${system}.juspay-cachix ]);
+    ] ++ (optionals customisations.isWorkMachine [ inputs.juspay-config.nixosModules.${system}.juspay-cachix ]);
 
-  mkNixosSystem = hostName: system: isWorkMachine:
+  mkNixosSystem = hostName: system: customisations:
     let
       pkgs = pkgsFor system;
     in nixosSystem {
       inherit system pkgs;
-      modules = mkModules {inherit hostName system isWorkMachine;};
-      specialArgs = moduleArgs // { inherit system; isPhysicalDevice = true;} ;
+      modules = mkModules {inherit hostName system customisations;};
+      specialArgs = moduleArgs // { inherit system customisations; isPhysicalDevice = true;} ;
     };
 
   deviceConfigs = import ./all-devices.nix;
@@ -72,7 +72,7 @@ listToAttrs
           pkgs = pkgsFor system;
           format = format;
           modules =
-            mkModules {inherit hostName system; isWorkMachine = deviceConfig.isWorkMachine or false;}
+            mkModules {inherit hostName system; customisations = deviceConfig.customisations or {};}
             ++ (optionals (deviceConfig ? extraModules) deviceConfig.extraModules);
           specialArgs = moduleArgs // { inherit system; isPhysicalDevice = false;};
         };
@@ -81,6 +81,6 @@ listToAttrs
           name = hostName;
           value =
             if !(deviceConfig ? format)
-            then mkNixosSystem hostName system (deviceConfig.isWorkMachine or false)
+            then mkNixosSystem hostName system (deviceConfig.customisations or {})
             else generatedImage;
         }))

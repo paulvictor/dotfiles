@@ -1,8 +1,9 @@
 args@{ config, pkgs, lib, ...}:
 
 let
-  inherit (args) isPhysicalDevice;
+  inherit (args) isPhysicalDevice customisations;
 in
+with lib;
 {
   nix.settings.auto-optimise-store = true;
   nix.extraOptions = ''
@@ -13,12 +14,12 @@ in
   nix.package = pkgs.nixFlakes;
   nix.settings.system-features = [ "kvm" "big-parallel" ];
 
-  hardware.enableRedistributableFirmware = lib.mkDefault true;
+  hardware.enableRedistributableFirmware = mkDefault true;
 
   users.mutableUsers = false;
 
   boot.binfmt.emulatedSystems =
-    lib.optionals
+    optionals
       isPhysicalDevice
         [ "aarch64-linux" "armv7l-linux" "riscv64-linux" ];
 
@@ -30,9 +31,11 @@ in
   ";
 
   imports =
-    lib.optionals isPhysicalDevice [
+    optionals isPhysicalDevice [
       ./modules/desktop-environment.nix
-      ./modules/impermanence-zfs.nix
       ./modules/networking.nix
+    ] ++
+    optionals (customisations.onZFS or false) [
+      ./modules/impermanence-zfs.nix
     ];
 }

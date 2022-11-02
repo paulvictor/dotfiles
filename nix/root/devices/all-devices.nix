@@ -2,12 +2,18 @@
   {
     hostName = "sarge";
     system = "x86_64-linux";
-    isWorkMachine = true;
+    customisations = {
+      isWorkMachine = true;
+      onZFS = true;
+    };
   }
   {
     hostName = "uriel";
     system = "x86_64-linux";
-    isWorkMachine = true;
+    customisations = {
+      isWorkMachine = true;
+      onZFS = true;
+    };
   }
   {
     hostName = "lucy";

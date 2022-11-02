@@ -16,7 +16,6 @@ with pkgs;
     file
     git
     gnupg
-    guix
     home-manager
     htop
     libnl
