@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "fira-code-nerdfonts-${version}";
-  version = "2.0.0";
+  version = "2.2.2";
 
   src = fetchzip {
     url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/FiraCode.zip";
-    sha256 = "1bnai3k3hg6sxbb1646ahd82dm2ngraclqhdygxhh7fqqnvc3hdy";
+    sha256 = "sha256-rXRHi5B867H25I1I2bD2idjbdv9kcQbkv4j00npREiU=";
     stripRoot = false;
   };
   buildCommand = ''
-    install --target $out/share/fonts/opentype -D $src/*Retina*Complete.otf
-    rm -Rf $out/share/fonts/opentype/*Windows\ Compatible.otf
+    install --target $out/share/fonts/opentype -D $src/*Mono*.ttf
+    rm -Rf $out/share/fonts/opentype/*Windows\ Compatible.ttf
   '';
 
   meta = with lib; {

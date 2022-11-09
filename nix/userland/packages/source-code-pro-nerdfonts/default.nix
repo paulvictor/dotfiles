@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "source-code-pro-nerdfonts-${version}";
-  version = "2.0.0";
+  version = "2.2.2";
 
   src = fetchzip {
     url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/SourceCodePro.zip";
-    sha256 = "1rf8ar4jnx6by4br46rcybzvh7mxp3vy6y9jn0y93j53p8j4cyv2";
+    sha256 = "sha256-aFKUlC94lAYWTcXuKhqAvJ0kbNZoBtvPknOeRGEnpV0=";
     stripRoot = false;
   };
   buildCommand = ''

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "victor-mono-nerdfonts-${version}";
-  version = "2.1.0";
+  version = "2.2.2";
 
   src = fetchzip {
     url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/VictorMono.zip";
-    sha256 = "0scjbwzxrmawbmrnh1ggsr8zxz5fp47g0mrdb0hv7hqb80zlzw1s";
+    sha256 = "sha256-TYDl421wyAOai/5Rjdj3IrxT9oo2kN4nlB7zv4MB1CQ=";
     stripRoot = false;
   };
   buildCommand = ''
