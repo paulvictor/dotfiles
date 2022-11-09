@@ -24,30 +24,17 @@
         }
       ];
     };
-    layout = "us,apl";
-    xkbOptions = "grp:win_space_toggle,terminate:ctrl_alt_bksp";
+    layout = "us";
     exportConfiguration = true;
-    xkbVariant = ",common";
+#     xkbVariant = ",common";
     xkbModel = "pc104";
-    videoDrivers = [ "intel" "vesa" "modesetting" ];
     updateDbusEnvironment = true;
-    enableCtrlAltBackspace = true;
+#     enableCtrlAltBackspace = true;
     #    extraLayouts.apl = {
     #      description = "Custom APL config";
     #      symbolsFile = "${fetchTarball https://www.x.org/releases/individual/data/xkeyboard-config/xkeyboard-config-2.28.tar.gz}/symbols/apl";
     #      languages = ["eng"];
     #    };
-  };
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-    # Only for intel
-    extraPackages = with pkgs; [
-      vaapiIntel
-      vaapiVdpau
-      libvdpau-va-gl
-      intel-media-driver
-    ];
   };
 
   programs.chromium = {
@@ -61,32 +48,11 @@
 
   programs.light.enable = true;
 
-  # Enable sound.
-#   sound.enable = true;
-#   systemd.services.pulseaudio.enable=false;
-#   systemd.sockets.pulseaudio.enable=false;
-#   hardware.pulseaudio = {
-#     enable = true;
-#     tcp = {
-#       enable = true;
-#       anonymousClients.allowAll = true;
-#     };
-#     package = pkgs.pulseaudioFull;
-# #     extraModules = [ pkgs.pulseaudio-modules-bt ];
-#     daemon.logLevel = "debug";
-#     daemon.config = {
-#       flat-volumes = "no";
-#       enable-lfe-remixing = "no";
-#       allow-module-loading = "yes";
-#       log-target = "journal";
-#     };
-#   };
-
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
     disabledPlugins = [ "sap" ];
-    hsphfpd.enable = true;
+#     hsphfpd.enable = true;
     package = pkgs.bluezFull;
   };
   environment.etc."bluetooth/audio.conf".text =

@@ -21,4 +21,4 @@
         (:abort (run-commands "echo Aborted."))
         (t (run-shell-command (format nil "wmexit ~(~a~)" command)))))))
 
-(set-keybindings "DEL" "session-menu" :where 'top)
+(set-keybindings "DEL" "session-menu")

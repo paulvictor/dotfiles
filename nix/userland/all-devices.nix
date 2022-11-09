@@ -32,6 +32,22 @@ system: nixpkgs:
     homeDirectory = "/home/viktor";
     stateVersion = "21.05";
   };
+  "viktor@sorlag" = {
+    system = system.x86_64-linux;
+    extraSpecialArgs = {
+      hostSpecificImports = [
+        ./devices/sorlag.nix
+      ];
+      withGUI = true; # Enable/disable gui programs
+      isDesktop = true; # Desktop environment setup. Roughly if any of the X related things should be enabled
+      isDevEnv = true; # For all dev packages
+      networkInterface = "wlp5s0";
+      isLinux = true;
+    };
+    username = "viktor";
+    homeDirectory = "/home/viktor";
+    stateVersion = "22.05";
+  };
   "paul@crash" = {
     system = system.aarch64-darwin;
     extraSpecialArgs = {

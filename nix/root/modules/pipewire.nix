@@ -5,6 +5,7 @@
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
+    systemWide = true;
     alsa.enable = true;
     #     alsa.support32Bit = true;
     pulse.enable = true;
@@ -34,14 +35,20 @@
 
   };
   environment.etc = {
+    # See https://pipewire.pages.freedesktop.org/wireplumber/configuration/bluetooth.html about WH 100XM3
     "wireplumber/bluetooth.lua.d/51-bluez-config.lua".text = ''
+    bluez_monitor.enabled = true;
     bluez_monitor.properties = {
       ["bluez5.enable-sbc-xq"] = true,
       ["bluez5.enable-msbc"] = true,
       ["bluez5.enable-hw-volume"] = true,
-      ["bluez5.codecs"] = "[ ldac sbc_xq sbc ]",
-      ["bluez5.headset-roles"] = "[ a2dp_sink hsp_hs hsp_ag hfp_hf hfp_ag ]"
+      ["bluez5.codecs"] = "[ ldac aptx_hd aptx sbc_xq sbc aac ]",
+      ["bluez5.headset-roles"] = "[ hsp_hs hfp_hf ]",
+      ["bluez5.a2dp.ldac.quality"] = "auto",
+      ["bluez5.a2dp.aac.bitratemode"] = 5
     }
 	'';
+#       ["device.profile"] = "a2dp-sink"
+#       ["bluez5.auto-connect"] = "[ hfp_hf hsp_hs a2dp_sink a2dp_source ]",
   };
 }

@@ -84,9 +84,9 @@ lib.mkIf
             yubico-piv-tool
             yubikey-manager
             yubikey-personalization
-#             zathura # Crashing.
+            zathura # Crashing.
             zoom-us
-#             (vivaldi.override { proprietaryCodecs = true; inherit vivaldi-ffmpeg-codecs vivaldi-widevine; enableWidevine = true;})
+            (vivaldi.override { proprietaryCodecs = true; enableWidevine = true;})
             (iosevka-bin.override { variant = "aile"; })
             (iosevka-bin.override { variant = "slab"; })
             ((pinentry.override({ enabledFlavors = ["curses"];})).overrideAttrs(oldAttrs: {

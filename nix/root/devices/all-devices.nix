@@ -1,5 +1,13 @@
 [
   {
+    hostName = "sorlag";
+    system = "x86_64-linux";
+    customisations = {
+      isWorkMachine = false;
+      onZFS = false;
+    };
+  }
+  {
     hostName = "sarge";
     system = "x86_64-linux";
     customisations = {

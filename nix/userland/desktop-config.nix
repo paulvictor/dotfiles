@@ -35,7 +35,7 @@ mkIf
         passdo
         #         pasystray
         pavucontrol
-        popcorntime
+#         popcorntime
         pcloud-console-client
         pulseaudio-ctl
         rofiElectronAppsRunner
@@ -52,7 +52,6 @@ mkIf
         allowOther = false;
         directories = [
           "Downloads"
-          "crypt"
         ];
       };
 
@@ -112,11 +111,11 @@ mkIf
           "control + hyper + alt + e" = "emacsclient -c -n";
           "control + hyper + alt + d" = "rofi -show drun";
           #       "control + hyper + alt + g" = ''${wmfocus}/bin/wmfocus --fill -c asdf --textcolor red'';
-          "control + hyper + alt + n" = "passdo --notify";
-          "control + hyper + alt + p" = "passdo --copy";
-          "control + hyper + alt + s" = "scrot -m";
-          "control + hyper + alt + shift + s" = "scrot -s";
-          "control + hyper + alt + shift + p" = "passdo --type";
+          "control + hyper + alt + n" = "${passdo}/bin/passdo --notify";
+          "control + hyper + alt + p" = "${passdo}/bin/passdo --copy";
+          "control + hyper + alt + s" = "${scrot}/bin/scrot -m";
+          "control + hyper + alt + shift + s" = "${scrot}/bin/scrot -s";
+          "control + hyper + alt + shift + p" = "${passdo}/bin/passdo --type";
           "control + hyper + alt + shift + slash" = "menu-surfraw";
           "control + hyper + alt + shift + d" = "${rofiElectronAppsRunner}/bin/rofiElectronAppsRunner";
           # OCR a screen selection
