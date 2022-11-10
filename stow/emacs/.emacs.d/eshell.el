@@ -70,12 +70,13 @@
    eshell-history-size 4096
    eshell-hist-ignoredups t)
   (with-eval-after-load 'em-term
-    (dolist (p '("alsamixer" "htop" "mpv" "watch" "vim" "nvim" "rtorrent" "bluetoothctl" "pscid" "ssh" "tail" "tmux" "screen" "nmtui"))
+    (dolist (p '("alsamixer" "htop" "mpv" "watch" "vim" "nvim" "rtorrent" "bluetoothctl" "pscid" "ssh" "tail" "tmux" "screen" "nmtui" "ghci"))
       (add-to-list 'eshell-visual-commands p))
     (setq eshell-visual-subcommands
           '(("git" "log" "diff" "show")
             ("sudo" "vi" "visudo")
             ("sudo" "su")
+            ("cabal" "repl")
             ("guix" "search"))))
   (with-eval-after-load 'em-alias
     (dolist

@@ -28,6 +28,10 @@
               (dow-str dow)
               date (mon-str mon)))))
 
+(defun should-show-bat-bar ()
+  (consp
+   (battery-portable::all-batteries (make-instance 'battery-portable::sysfs-method))))
+
 ;; (setf cpu::*cpu-modeline-fmt* " %C ")
 (setf mem::*mem-modeline-fmt* "%a %p %b")
 (setf *screen-mode-line-format*
@@ -38,7 +42,7 @@
             "| %M "
             "| %l "
             "| %I "
-            "| Bat: %B "
+            (if (should-show-bat-bar) "| Bat: %B " "")
             "| ^7*" '(:eval (pretty-time)); date
             ))
 
