@@ -13,6 +13,7 @@ in {
   options = {
     services.batteryAlert = {
       enable = mkEnableOption "Enable battery low warning";
+      default = false;
     };
   };
 
