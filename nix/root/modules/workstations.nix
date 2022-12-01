@@ -64,12 +64,12 @@ with pkgs;
   virtualisation.lxd.enable = isPhysicalDevice;
 
   security.wrappers = {
-    gllock = {
-      owner = "root";
-      group = "root";
-      setuid = true;
-      source = "${gllock}/bin/gllock";
-    };
+#     gllock = {
+#       owner = "root";
+#       group = "root";
+#       setuid = true;
+#       source = "${gllock}/bin/gllock";
+#     };
     cryptsetup = {
       owner = "root";
       group = "root";

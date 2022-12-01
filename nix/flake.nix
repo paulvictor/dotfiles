@@ -2,7 +2,7 @@
   description = "Meta Config";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/d6490a0bd9dfb298fcd8382d3363b86870dc7340";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     homeManager.url = "github:nix-community/home-manager/master";
     homeManager.inputs.nixpkgs.follows = "nixpkgs";
@@ -75,7 +75,7 @@
       linuxOverlays = [
         fish-docker-completion
         neovim.overlay
-        gllock-overlay
+#         gllock-overlay
         tomb-overlay
         guix-overlay
         xdotool-overlay

@@ -14,7 +14,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
 
-  boot.kernelPackages = pkgs.linuxPackages_5_19;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   services.logind.extraConfig = ''
     IdleAction=lock
@@ -25,5 +25,7 @@
   imports = [
     ./hardware-configuration.nix
   ];
+
+  hardware.video.hidpi.enable = true;
 
 }

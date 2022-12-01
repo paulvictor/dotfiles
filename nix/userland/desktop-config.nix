@@ -90,7 +90,6 @@ mkIf
         enable = true;
         menuOpacity = 0.7;
         backend = "glx";
-        experimentalBackends = true;
         settings = {
           extraOptions = ''
             focus-exclude = (x = 0 && y = 0 && override-redirect = true) || (_NET_WM_NAME@:s = "rofi");
