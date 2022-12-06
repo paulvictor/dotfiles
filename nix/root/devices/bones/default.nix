@@ -1,8 +1,6 @@
 { config, lib, pkgs, specialArgs, modulesPath, ...}:
 
 {
-  system.stateVersion = "22.05"; # Did you read the comment?
-
   # Allow packet forwarding
   # For wireguard
   boot.kernel.sysctl = {
@@ -33,5 +31,9 @@
     "${toString modulesPath}/profiles/headless.nix"
     ../../modules/viktor.nix
     ../../modules/workstations.nix
+  ];
+
+  users.users.viktor.openssh.authorizedKeys.keys = [
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDqO0CjHsgV+Vqhy0j5UzABRHEneZskMcMkiBlYFn14TZAYAHcxO8vBtbXhuLMoELj6P0uk64X15KceaxLCqDx5fLzKnbZ9Z++bMxEUBah/GagnJiirO1MUPS1vIIiYOjx2VgHg0a8e5qKIzs2RTQL12AgyHpbz2268HuymMykyaOyMVY5Ns9ZK0x9QRQ4uwNKHL4rhYG7U7vpEh78q+XSu3pD0cZp4Ih21d75YyLxSgpDNa65xTl/1IbvKTfZCztrlUnXFhByrq+pc+64kzITE1gLXCdhJfELl2MXrB1545YjMLC/T9YDt8MS1eH30NmgCtTbiQFA58s0WIHAwM6FG4vUfqEMPh0pbMAkSs95a1/meM/hefik4do1jT88QDiiHYrmp6mjx4Mabtwy5ks5K4YvWD6wicprLhLCWYSIMLuLVsQFN/zgfrWbRyEq5/dv7Yg1SX5VngbcAkQ6bdtFKwGodFwxTxHBgEfLgMRnGkBZiZwToUHldsxhxnJsIc68= paul@Ps-Mac-mini.local"
   ];
 }

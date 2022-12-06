@@ -76,6 +76,13 @@
     (file-exists-p custom-file)
   (load-file custom-file))
 
+
+(defun init-dashboard ()
+  (switch-to-buffer dashboard-buffer-name)
+  (dashboard-mode)
+  (dashboard-insert-startupify-lists)
+  (dashboard-refresh-buffer))
+
 (defun pvr/set-font-faces ()
   (set-mouse-color "white")
   (set-face-attribute 'default nil :font "VictorMono Nerd Font" :height 110 :weight 'bold)
@@ -88,7 +95,8 @@
                 (setq doom-modeline-icon t)
                 (with-selected-frame frame
                   (pvr/set-font-faces)
-                  (set-env-vars))))
+                  (set-env-vars)
+                  (init-dashboard))))
   (pvr/set-font-faces))
 (setq inhibit-startup-screen t)
 
@@ -123,11 +131,6 @@
 ;Show matching parens
 (show-paren-mode)
 
-(defun init-dashboard ()
-  (switch-to-buffer "*dashboard*")
-  (goto-char (point-min))
-  (redisplay))
-
 (use-package doom-themes
   :init
   (setq
@@ -157,19 +160,18 @@
   (doom-modeline-mode 1))
 
 (use-package dashboard
+;;   :ensure t
   :after projectile
   :config
   (dashboard-setup-startup-hook)
   (init-dashboard)
   :custom
-    (dashboard-projects-backend 'projectile)
-    (initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+    (initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
     (dashboard-startup-banner 'logo)
     (dashboard-set-heading-icons t)
-    (dashboard-set-file-icons t)
-    (dashboard-items '((recents . 5)
-                      (bookmarks . 5)
-                      (projects . 5))))
+    (dashboard-set-file-icons t))
+
+(setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
 
 (use-package auth-source-pass
   :init
@@ -609,27 +611,27 @@ Repeated invocations toggle between the two most recently open buffers."
   :config
   (setq ivy-format-function #'ivy-format-function-line))
 
-(use-package equake
-  ;; some examples of optional settings follow:
-  :custom
-  ;; set width a bit less than full-screen (prevent 'overflow' on multi-monitor):
-  (equake-size-width 0.99)
-  ;; set distinct face for Equake: white foreground with dark blue background, and different font:
-  ;;:custom-face
-  ;;(equake-buffer-face
-  ;; ((t (:inherit 'default :family "DejaVu Sans Mono" :background "#000022" :foreground "white"))))
-  ;;:config
-  ;; prevent accidental frame closure:
-  ;;(advice-add #'save-buffers-kill-terminal :before-while #'equake-kill-emacs-advice)
-  ;; binding to restore last Equake tab when viewing a non-Equake buffer
-  ;;(global-set-key (kbd "C-M-^") #'equake-restore-last-etab)
-  ;; set default shell
-  (setq equake-default-shell 'eshell)
-  ;; set list of available shells
-  (setq equake-available-shells
-   '("shell"
-     "vterm"
-     "eshell")))
+;; (use-package equake
+;;   ;; some examples of optional settings follow:
+;;   :custom
+;;   ;; set width a bit less than full-screen (prevent 'overflow' on multi-monitor):
+;;   (equake-size-width 0.99)
+;;   ;; set distinct face for Equake: white foreground with dark blue background, and different font:
+;;   ;;:custom-face
+;;   ;;(equake-buffer-face
+;;   ;; ((t (:inherit 'default :family "DejaVu Sans Mono" :background "#000022" :foreground "white"))))
+;;   ;;:config
+;;   ;; prevent accidental frame closure:
+;;   ;;(advice-add #'save-buffers-kill-terminal :before-while #'equake-kill-emacs-advice)
+;;   ;; binding to restore last Equake tab when viewing a non-Equake buffer
+;;   ;;(global-set-key (kbd "C-M-^") #'equake-restore-last-etab)
+;;   ;; set default shell
+;;   (setq equake-default-shell 'eshell)
+;;   ;; set list of available shells
+;;   (setq equake-available-shells
+;;    '("shell"
+;;      "vterm"
+;;      "eshell")))
 
 (use-package git-gutter
   :config
