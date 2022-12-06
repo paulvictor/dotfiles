@@ -52,7 +52,7 @@ mkIf
         allowOther = false;
         directories = [
           "Downloads"
-        ];
+        ] ++ (lib.optional (specialArgs.hostName != "sorlag") "crypt");
       };
 
       xdg.configFile.rofi = {

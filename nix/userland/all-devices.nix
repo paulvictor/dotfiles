@@ -11,6 +11,7 @@ system: nixpkgs:
       isDevEnv = true; # For all dev packages
       networkInterface = "wlp2s0";
       isLinux = true;
+      hostName = "sarge";
     };
     username = "viktor";
     homeDirectory = "/home/viktor";
@@ -25,8 +26,9 @@ system: nixpkgs:
       withGUI = true; # Enable/disable gui programs
       isDesktop = true; # Desktop environment setup. Roughly if any of the X related things should be enabled
       isDevEnv = true; # For all dev packages
-      networkInterface = "wlp2s0";
+      networkInterface = "wlp59s0";
       isLinux = true;
+      hostName = "uriel";
     };
     username = "viktor";
     homeDirectory = "/home/viktor";
@@ -43,6 +45,7 @@ system: nixpkgs:
       isDevEnv = true; # For all dev packages
       networkInterface = "wlp5s0";
       isLinux = true;
+      hostName = "sorlag";
     };
     username = "viktor";
     homeDirectory = "/home/viktor";
@@ -64,6 +67,7 @@ system: nixpkgs:
       isDevEnv = true; # For all dev packages
       networkInterface = "wlp2s0";
       isLinux = false;
+      hostName = "crash";
     };
     username = "paul";
     homeDirectory = "/Users/paul";
