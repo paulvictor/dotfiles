@@ -21,7 +21,8 @@ let
 
   mkModules = args:
     let
-      inherit (args) hostName system customisations;
+      inherit (args) hostName system ;
+      customisations = args.customisations or {};
       common = {
         imports = [
           ../guix/modules/services/guix.nix
@@ -48,7 +49,7 @@ let
       ../modules/kmonad.nix
       ../modules/workstations.nix
       ../modules/ssh.nix
-    ] ++ (optionals customisations.isWorkMachine [ inputs.juspay-config.nixosModules.${system}.juspay-cachix ]);
+    ] ++ (optionals (customisations.isWorkMachine or false) [ inputs.juspay-config.nixosModules.${system}.juspay-cachix ]);
 
   mkNixosSystem = hostName: system: customisations:
     let
