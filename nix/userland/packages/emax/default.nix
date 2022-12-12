@@ -121,6 +121,7 @@ let
             use-package
             use-package-chords
             # vimish-fold # Need keybindings but is good
+            embark orderless consult marginalia
             visual-fill-column
             vterm
             w3m
@@ -137,7 +138,7 @@ let
         ++
         [ (with epkgs; [ nano-theme ]) ]
         ++
-        [ (with epkgs.elpaPackages; [ undo-tree org ]) ]);
+        [ (with epkgs.elpaPackages; [ undo-tree org vertico ]) ]);
   myemacs = symlinkJoin {
     name = "Emacs";
     paths = [ customizedEmacs ];
