@@ -296,7 +296,6 @@
 (use-package evil
   :after (undo-tree)
   :custom
-    (evil-shift-width 2)
     (evil-vsplit-window-right t)
     (evil-split-window-below t)
     (evil-want-C-u-scroll t)
@@ -308,13 +307,12 @@
     (setq evil-want-integration t)
     (setq evil-search-module 'evil-search)
   :config
-    (setq evil-want-keybinding nil)
-;;     (evil-define-key '(insert normal) 'global (kbd "C-x C-x") 'previous-buffer)
-;;     (evil-define-key '(insert normal) 'global (kbd "C-x ESC") 'next-buffer)
-    (evil-define-key '(insert visual) 'global (kbd "C-g") 'evil-normal-state)
-    (evil-define-key 'normal 'global (kbd ", SPC") 'evil-ex-nohighlight)
-    (evil-select-search-module 'evil-search-module 'evil-search)
-    (evil-mode 1))
+  (setq evil-shift-width 2)
+  (setq evil-want-keybinding nil)
+  (evil-define-key '(insert visual) 'global (kbd "C-g") 'evil-normal-state)
+  (evil-define-key 'normal 'global (kbd ", SPC") 'evil-ex-nohighlight)
+  (evil-select-search-module 'evil-search-module 'evil-search)
+  (evil-mode 1))
 
 (use-package evil-collection
   :init
