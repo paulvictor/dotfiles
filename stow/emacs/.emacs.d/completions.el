@@ -1,26 +1,3 @@
-(use-package vertico
-  :bind (:map vertico-map
-         ("C-j" . vertico-next)
-         ("C-k" . vertico-previous)
-         ("C-f" . vertico-exit))
-  :custom
-  (vertico-cycle t)
-  :init
-  (vertico-mode))
-
-(use-package marginalia
-  :after vertico
-  :ensure t
-  :custom
-  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-  :init
-  (marginalia-mode))
-
-(use-package savehist
-  :init
-  (savehist-mode))
-
-
 (use-package emacs
   :init
   ;; Add prompt indicator to `completing-read-multiple'.
@@ -47,13 +24,48 @@
   ;; Enable recursive minibuffers
   (setq enable-recursive-minibuffers t))
 
-;; Optionally use the `orderless' completion style.
-(use-package orderless
+(use-package vertico
+  :bind (:map vertico-map
+              ("M-RET" . minibuffer-force-complete-and-exit)
+              ("C-j" . vertico-next)
+              ("C-k" . vertico-previous)
+              ("C-d" . vertico-scroll-down)
+              ("C-u" . vertico-scroll-up))
+  :custom
+  (vertico-cycle t)
   :init
-  ;; Configure a custom style dispatcher (see the Consult wiki)
-  ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
-  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
-  (setq completion-styles '(orderless basic)
-        completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion)))))
-(setq completion-styles '(basic substring partial-completion flex))
+  (vertico-mode))
+
+(use-package marginalia
+  :init
+  (marginalia-mode))
+
+(use-package savehist
+  :init
+  (setq history-length 100)
+  (savehist-mode))
+
+
+(defun first-initialism (pattern index _total)
+  (if (= index 0) 'orderless-initialism))
+(defun regex-if-any-special (pattern index tot)
+  (cond
+   ((string-prefix-p "RX" pattern) `(orderless-regexp . ,(substring pattern 2)))
+   ((string-prefix-p "!" pattern) `(orderless-without-literal . ,(substring pattern 1)))
+   (t `(orderless-flex . pattern))))
+
+;; TODO : Add a hydra to change between match dispatchers
+
+(use-package orderless
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides
+   '((file (styles . (basic partial-completion)))
+     (buffer (styles . (orderless basic)))))
+  (orderless-matching-styles nil)
+  (orderless-style-dispatchers '(regex-if-any-special))
+  (orderless-component-separator " +\\|/\\|-"))
+
+;; (setq read-file-name-completion-ignore-case t
+;;       read-buffer-completion-ignore-case t
+;;       completion-ignore-case t)
