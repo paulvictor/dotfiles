@@ -12,14 +12,12 @@
   (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
   ;; Do not allow the cursor in the minibuffer prompt
-  (setq minibuffer-prompt-properties
-        '(read-only t cursor-intangible t face minibuffer-prompt))
-  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
-
+  (setq minibuffer-prompt-properties '(read-only t cursor-intangible t face minibuffer-prompt)
+        read-extended-command-predicate #'command-completion-default-include-p
+        completions-detailed t)
   ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
   ;; Vertico commands are hidden in normal buffers.
-  (setq read-extended-command-predicate
-        #'command-completion-default-include-p)
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
   ;; Enable recursive minibuffers
   (setq enable-recursive-minibuffers t))
@@ -45,7 +43,6 @@
   (setq history-length 100)
   (savehist-mode))
 
-
 (defun first-initialism (pattern index _total)
   (if (= index 0) 'orderless-initialism))
 (defun regex-if-any-special (pattern index tot)
@@ -66,6 +63,16 @@
   (orderless-style-dispatchers '(regex-if-any-special))
   (orderless-component-separator " +\\|/\\|-"))
 
-;; (setq read-file-name-completion-ignore-case t
-;;       read-buffer-completion-ignore-case t
-;;       completion-ignore-case t)
+(setq read-file-name-completion-ignore-case t
+      read-buffer-completion-ignore-case t
+      completion-ignore-case t)
+
+;; TODO : Add a keybinding to consult-ripgrep
+;; consult-buffer instead counsel-switch-buffer
+;; consult-project-root-function
+
+;; Try embark
+(use-package project)
+(use-package consult
+  :bind
+  ("C-s" . consult-line))

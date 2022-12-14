@@ -76,9 +76,9 @@
     (file-exists-p custom-file)
   (load-file custom-file))
 
-
 (defun init-dashboard ()
-  (switch-to-buffer dashboard-buffer-name)
+  (require 'dashboard) ; Hack to get dashboard loaded
+  (switch-to-buffer "*dashboard*")
   (dashboard-mode)
   (dashboard-insert-startupify-lists)
   (dashboard-refresh-buffer))
@@ -160,7 +160,7 @@
   (doom-modeline-mode 1))
 
 (use-package dashboard
-;;   :ensure t
+  :ensure t
   :after projectile
   :config
   (dashboard-setup-startup-hook)
@@ -494,65 +494,65 @@ Repeated invocations toggle between the two most recently open buffers."
   (fset 'evil-redirect-digit-argument 'ignore)
   (add-hook 'org-mode-hook 'evil-org-mode))
 
-;; (use-package ivy
-;;   :config
-;;   (ivy-mode 1)
-;;   :custom
-;;   (ivy-re-builders-alist
-;;    '((read-file-name-internal . ivy--regex-fuzzy)
-;;      (read-file-name . ivy--regex-fuzzy)
-;;      (swiper . ivy--regex-ignore-order)
-;;      (counsel-M-x . ivy--regex-ignore-order)
-;;      ;; (persp-ivy-switch-buffer . ivy--regex-fuzzy)
-;;      ;; (find-file-in-project . ivy--regex-fuzzy)
-;;      (t . ivy--regex-plus)))
-;;   (ivy-use-virtual-buffers t)
-;;   (ivy-wrap t)
-;;   (ivy-count-format "(%d/%d) ")
-;;   (enable-recursive-minibuffers t)
-;;   (ivy-initial-inputs-alist nil)
-;;   (ivy-height 20)
-;;   :bind
-;;   (("C-x /" . swiper-isearch)
-;;    ("C-x *" . swiper-thing-at-point)
-;;    ("C-x 8" . swiper-all-thing-at-point)
-;;    :map ivy-minibuffer-map
-;;    ("<tab>" . ivy-alt-done)
-;;    ("C-l" . ivy-alt-done)
-;;    ("C-j" . ivy-next-line)
-;;    ("C-k" . ivy-previous-line)
-;;    ("C-<return>" . (lambda ()
-;;                      (interactive)
-;;                      (progn
-;;                        (ivy-call)
-;;                        (ivy-next-line))))
-;;    :map ivy-switch-buffer-map
-;;    ("C-k" . ivy-previous-line)
-;;    ("C-j" . ivy-next-line)
-;;    ("C-l" . ivy-done)
-;;    ("C-d" . ivy-switch-buffer-kill)))
+(use-package ivy
+  :config
+  (ivy-mode -1)
+  :custom
+  (ivy-re-builders-alist
+   '((read-file-name-internal . ivy--regex-fuzzy)
+     (read-file-name . ivy--regex-fuzzy)
+     (swiper . ivy--regex-ignore-order)
+     (counsel-M-x . ivy--regex-ignore-order)
+     ;; (persp-ivy-switch-buffer . ivy--regex-fuzzy)
+     ;; (find-file-in-project . ivy--regex-fuzzy)
+     (t . ivy--regex-plus)))
+  (ivy-use-virtual-buffers t)
+  (ivy-wrap t)
+  (ivy-count-format "(%d/%d) ")
+  (enable-recursive-minibuffers t)
+  (ivy-initial-inputs-alist nil)
+  (ivy-height 20)
+  :bind
+  (("C-x /" . swiper-isearch)
+   ("C-x *" . swiper-thing-at-point)
+   ("C-x 8" . swiper-all-thing-at-point)
+   :map ivy-minibuffer-map
+   ("<tab>" . ivy-alt-done)
+   ("C-l" . ivy-alt-done)
+   ("C-j" . ivy-next-line)
+   ("C-k" . ivy-previous-line)
+   ("C-<return>" . (lambda ()
+                     (interactive)
+                     (progn
+                       (ivy-call)
+                       (ivy-next-line))))
+   :map ivy-switch-buffer-map
+   ("C-k" . ivy-previous-line)
+   ("C-j" . ivy-next-line)
+   ("C-l" . ivy-done)
+   ("C-d" . ivy-switch-buffer-kill)))
 
-;; (use-package counsel
-;;   :config
-;;     (global-set-key [remap describe-function] 'counsel-describe-function)
-;;     (global-set-key [remap describe-variable] 'counsel-describe-variable)
-;;     (counsel-mode 1)
-;;   :bind
-;;     (("M-x" . counsel-M-x)
-;;      ("C-x '" . counsel-recentf)
-;;      ("M-y" . counsel-yank-pop)
-;;      ("C-x C-f" . counsel-find-file)
-;;      ("C-/" . counsel-rg)
-;;      :map minibuffer-local-map
-;;      ("C-r" . counsel-minibuffer-history)))
+(use-package counsel
+  :config
+    (global-set-key [remap describe-function] 'counsel-describe-function)
+    (global-set-key [remap describe-variable] 'counsel-describe-variable)
+    (counsel-mode -1)
+  :bind
+    (("M-x" . counsel-M-x)
+     ("C-x '" . counsel-recentf)
+     ("M-y" . counsel-yank-pop)
+     ("C-x C-f" . counsel-find-file)
+     ("C-/" . counsel-rg)
+     :map minibuffer-local-map
+     ("C-r" . counsel-minibuffer-history)))
 
-;; (use-package all-the-icons-ivy
-;;   :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup))
+(use-package all-the-icons-ivy
+  :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup))
 
-;; (use-package ivy-prescient
-;;   :after (ivy counsel)
-;;   :config
-;;     (ivy-prescient-mode 1))
+(use-package ivy-prescient
+  :after (ivy counsel)
+  :config
+    (ivy-prescient-mode -1))
 
 (use-package projectile
   :custom
@@ -583,31 +583,31 @@ Repeated invocations toggle between the two most recently open buffers."
   :bind
   ([remap projectile-switch-project] . projectile-persp-switch-project))
 
-;; (use-package counsel-projectile
-;;   :custom
-;;   (counsel-projectile-preview-buffers nil)
-;;   (counsel-projectile-mode t)
-;;   :config
-;;   (def-projectile-commander-method ?t
-;;     "Counsel projectile eshell"
-;;     (projectile-run-eshell))
-;;   (def-projectile-commander-method ?/
-;;     "Counsel projectile rg"
-;;     (counsel-projectile-rg))
-;;   :bind
-;;   (:map projectile-command-map ("p" . projectile-persp-switch-project))
-;;   :init
-;;   (counsel-projectile-mode 1))
+(use-package counsel-projectile
+  :custom
+  (counsel-projectile-preview-buffers nil)
+  (counsel-projectile-mode t)
+  :config
+  (def-projectile-commander-method ?t
+    "Counsel projectile eshell"
+    (projectile-run-eshell))
+  (def-projectile-commander-method ?/
+    "Counsel projectile rg"
+    (counsel-projectile-rg))
+  :bind
+  (:map projectile-command-map ("p" . projectile-persp-switch-project))
+  :init
+  (counsel-projectile-mode 1))
 
-;; (use-package all-the-icons-ivy-rich
-;;   :init (all-the-icons-ivy-rich-mode 1))
+(use-package all-the-icons-ivy-rich
+  :init (all-the-icons-ivy-rich-mode 1))
 
-;; (use-package ivy-rich
-;;   :init
-;;   (ivy-rich-mode 1)
-;;   :after counsel
-;;   :config
-;;   (setq ivy-format-function #'ivy-format-function-line))
+(use-package ivy-rich
+  :init
+  (ivy-rich-mode 1)
+  :after counsel
+  :config
+  (setq ivy-format-function #'ivy-format-function-line))
 
 ;; (use-package equake
 ;;   ;; some examples of optional settings follow:
@@ -737,16 +737,16 @@ Repeated invocations toggle between the two most recently open buffers."
       (add-hook 'lisp-mode-hook #'lispyville-mode)
       (add-hook 'emacs-lisp-mode-hook #'lispyville-mode))
 
-(use-package yequake
-  :config
-  (setq yequake-frames
-        '(("scratch" .
-          ((buffer-fns . ("*scratch*"))
-          (width . 0.75)
-          (height . 0.5)
-          (alpha . 0.75)
-          (window-system . x)
-          (frame-parameters . ((skip-taskbar . t) (sticky . t) (undecorated . t))))))))
+;; (use-package yequake
+;;   :config
+;;   (setq yequake-frames
+;;         '(("scratch" .
+;;           ((buffer-fns . ("*scratch*"))
+;;           (width . 0.75)
+;;           (height . 0.5)
+;;           (alpha . 0.75)
+;;           (window-system . x)
+;;           (frame-parameters . ((skip-taskbar . t) (sticky . t) (undecorated . t))))))))
 
 (use-package anzu)
 
