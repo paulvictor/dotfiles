@@ -142,7 +142,7 @@
 (use-package doom-modeline
   :custom
     (doom-modeline-window-width-limit fill-column)
-    (doom-modeline-project-detection 'projectile)
+    (doom-modeline-project-detection 'project)
     (doom-modeline-buffer-file-name-style 'truncate-with-project)
     (doom-modeline-icon (display-graphic-p))
     (doom-modeline-buffer-encoding t)
@@ -161,7 +161,7 @@
 
 (use-package dashboard
   :ensure t
-  :after projectile
+;;   :after projectile
   :config
   (dashboard-setup-startup-hook)
   (init-dashboard)
@@ -494,80 +494,84 @@ Repeated invocations toggle between the two most recently open buffers."
   (fset 'evil-redirect-digit-argument 'ignore)
   (add-hook 'org-mode-hook 'evil-org-mode))
 
-(use-package ivy
-  :config
-  (ivy-mode -1)
-  :custom
-  (ivy-re-builders-alist
-   '((read-file-name-internal . ivy--regex-fuzzy)
-     (read-file-name . ivy--regex-fuzzy)
-     (swiper . ivy--regex-ignore-order)
-     (counsel-M-x . ivy--regex-ignore-order)
-     ;; (persp-ivy-switch-buffer . ivy--regex-fuzzy)
-     ;; (find-file-in-project . ivy--regex-fuzzy)
-     (t . ivy--regex-plus)))
-  (ivy-use-virtual-buffers t)
-  (ivy-wrap t)
-  (ivy-count-format "(%d/%d) ")
-  (enable-recursive-minibuffers t)
-  (ivy-initial-inputs-alist nil)
-  (ivy-height 20)
-  :bind
-  (("C-x /" . swiper-isearch)
-   ("C-x *" . swiper-thing-at-point)
-   ("C-x 8" . swiper-all-thing-at-point)
-   :map ivy-minibuffer-map
-   ("<tab>" . ivy-alt-done)
-   ("C-l" . ivy-alt-done)
-   ("C-j" . ivy-next-line)
-   ("C-k" . ivy-previous-line)
-   ("C-<return>" . (lambda ()
-                     (interactive)
-                     (progn
-                       (ivy-call)
-                       (ivy-next-line))))
-   :map ivy-switch-buffer-map
-   ("C-k" . ivy-previous-line)
-   ("C-j" . ivy-next-line)
-   ("C-l" . ivy-done)
-   ("C-d" . ivy-switch-buffer-kill)))
+;; (use-package ivy
+;;   :diabled
+;;   :config
+;;   (ivy-mode -1)
+;;   :custom
+;;   (ivy-re-builders-alist
+;;    '((read-file-name-internal . ivy--regex-fuzzy)
+;;      (read-file-name . ivy--regex-fuzzy)
+;;      (swiper . ivy--regex-ignore-order)
+;;      (counsel-M-x . ivy--regex-ignore-order)
+;;      ;; (persp-ivy-switch-buffer . ivy--regex-fuzzy)
+;;      ;; (find-file-in-project . ivy--regex-fuzzy)
+;;      (t . ivy--regex-plus)))
+;;   (ivy-use-virtual-buffers t)
+;;   (ivy-wrap t)
+;;   (ivy-count-format "(%d/%d) ")
+;;   (enable-recursive-minibuffers t)
+;;   (ivy-initial-inputs-alist nil)
+;;   (ivy-height 20)
+;;   :bind
+;;   (("C-x /" . swiper-isearch)
+;;    ("C-x *" . swiper-thing-at-point)
+;;    ("C-x 8" . swiper-all-thing-at-point)
+;;    :map ivy-minibuffer-map
+;;    ("<tab>" . ivy-alt-done)
+;;    ("C-l" . ivy-alt-done)
+;;    ("C-j" . ivy-next-line)
+;;    ("C-k" . ivy-previous-line)
+;;    ("C-<return>" . (lambda ()
+;;                      (interactive)
+;;                      (progn
+;;                        (ivy-call)
+;;                        (ivy-next-line))))
+;;    :map ivy-switch-buffer-map
+;;    ("C-k" . ivy-previous-line)
+;;    ("C-j" . ivy-next-line)
+;;    ("C-l" . ivy-done)
+;;    ("C-d" . ivy-switch-buffer-kill)))
 
-(use-package counsel
-  :config
-    (global-set-key [remap describe-function] 'counsel-describe-function)
-    (global-set-key [remap describe-variable] 'counsel-describe-variable)
-    (counsel-mode -1)
-  :bind
-    (("M-x" . counsel-M-x)
-     ("C-x '" . counsel-recentf)
-     ("M-y" . counsel-yank-pop)
-     ("C-x C-f" . counsel-find-file)
-     ("C-/" . counsel-rg)
-     :map minibuffer-local-map
-     ("C-r" . counsel-minibuffer-history)))
+;; (use-package counsel
+;;   :disabled
+;;   :config
+;;     (global-set-key [remap describe-function] 'counsel-describe-function)
+;;     (global-set-key [remap describe-variable] 'counsel-describe-variable)
+;;     (counsel-mode -1)
+;;   :bind
+;;     (("M-x" . counsel-M-x)
+;;      ("C-x '" . counsel-recentf)
+;;      ("M-y" . counsel-yank-pop)
+;;      ("C-x C-f" . counsel-find-file)
+;;      ("C-/" . counsel-rg)
+;;      :map minibuffer-local-map
+;;      ("C-r" . counsel-minibuffer-history)))
 
-(use-package all-the-icons-ivy
-  :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup))
+;; (use-package all-the-icons-ivy
+;;   :disabled
+;;   :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup))
 
-(use-package ivy-prescient
-  :after (ivy counsel)
-  :config
-    (ivy-prescient-mode -1))
+;; (use-package ivy-prescient
+;;   :after (ivy counsel)
+;;   :disabled
+;;   :config
+;;     (ivy-prescient-mode -1))
 
-(use-package projectile
-  :custom
-  (projectile-switch-project-action #'projectile-commander)
-  :config
-  (projectile-mode 1)
-  :bind-keymap
-  ("C-c p" . projectile-command-map)
-  :bind
-  ("C-x C-r" . projectile-recentf)
-  ("C-x t" . pvr/split-term)
-  :init
-  (when (file-directory-p "~/stuff")
-    (setq projectile-project-search-path '("~/stuff")))
-  )
+;; (use-package projectile
+;;   :custom
+;;   (projectile-switch-project-action #'projectile-commander)
+;;   :config
+;;   (projectile-mode -1)
+;;   :bind-keymap
+;;   ("C-c p" . projectile-command-map)
+;;   :bind
+;;   ("C-x C-r" . projectile-recentf)
+;;   ("C-x t" . pvr/split-term)
+;;   :init
+;;   (when (file-directory-p "~/stuff")
+;;     (setq projectile-project-search-path '("~/stuff")))
+;;   )
 
 (use-package perspective
   :custom
@@ -578,36 +582,40 @@ Repeated invocations toggle between the two most recently open buffers."
   :config
   (persp-mode 1))
 
-(use-package persp-projectile
-  :after (perspective projectile)
-  :bind
-  ([remap projectile-switch-project] . projectile-persp-switch-project))
+;; (use-package persp-projectile
+;;   :disabled
+;;   :after (perspective projectile)
+;;   :bind
+;;   ([remap projectile-switch-project] . projectile-persp-switch-project))
 
-(use-package counsel-projectile
-  :custom
-  (counsel-projectile-preview-buffers nil)
-  (counsel-projectile-mode t)
-  :config
-  (def-projectile-commander-method ?t
-    "Counsel projectile eshell"
-    (projectile-run-eshell))
-  (def-projectile-commander-method ?/
-    "Counsel projectile rg"
-    (counsel-projectile-rg))
-  :bind
-  (:map projectile-command-map ("p" . projectile-persp-switch-project))
-  :init
-  (counsel-projectile-mode 1))
+;; (use-package counsel-projectile
+;;   :disabled
+;;   :custom
+;;   (counsel-projectile-preview-buffers nil)
+;;   (counsel-projectile-mode t)
+;;   :config
+;;   (def-projectile-commander-method ?t
+;;     "Counsel projectile eshell"
+;;     (projectile-run-eshell))
+;;   (def-projectile-commander-method ?/
+;;     "Counsel projectile rg"
+;;     (counsel-projectile-rg))
+;;   :bind
+;;   (:map projectile-command-map ("p" . projectile-persp-switch-project))
+;;   :init
+;;   (counsel-projectile-mode -1))
 
-(use-package all-the-icons-ivy-rich
-  :init (all-the-icons-ivy-rich-mode 1))
+;; (use-package all-the-icons-ivy-rich
+;;   :disabled
+;;   :init (all-the-icons-ivy-rich-mode -1))
 
-(use-package ivy-rich
-  :init
-  (ivy-rich-mode 1)
-  :after counsel
-  :config
-  (setq ivy-format-function #'ivy-format-function-line))
+;; (use-package ivy-rich
+;;   :disabled
+;;   :init
+;;   (ivy-rich-mode -1)
+;;   :after counsel
+;;   :config
+;;   (setq ivy-format-function #'ivy-format-function-line))
 
 ;; (use-package equake
 ;;   ;; some examples of optional settings follow:
@@ -641,54 +649,54 @@ Repeated invocations toggle between the two most recently open buffers."
   (setq magit-diff-refine-hunk t)
   :custom
   (evil-collection-magit-want-horizontal-movement t)
-  (evil-collection-magit-use-z-for-folds t)
-  :after (company company-prescient))
+  (evil-collection-magit-use-z-for-folds t))
+;;   :after (company company-prescient))
 
 ;; Implement a custom function for middle of the word completion like here :
 ;; https://github.com/company-mode/company-mode/issues/340
-(defun pvr/setup-company ()
-  (company-mode 1)
-  (company-prescient-mode 1)
-  (company-tng-mode 1)
-  (company-tng-configure-default))
+;; (defun pvr/setup-company ()
+;;   (company-mode 1)
+;;   (company-prescient-mode 1)
+;;   (company-tng-mode 1)
+;;   (company-tng-configure-default))
 
-(use-package company
-  :init
-    (setq tab-always-indent 'complete)
-    (add-hook 'prog-mode-hook #'pvr/setup-company)
-    (add-hook 'org-mode-hook #'pvr/setup-company)
-  :custom
-    (company-idle-delay 0.0)
-    (company-selection-wrap-around t)
-    (company-require-match nil)
-    (company-dabbrev-other-buffers 'all)
-    (company-dabbrev-time-limit 0.2)
-    (company-dabbrev-code-time-limit 0.2)
-    (company-dabbrev-downcase nil)
-    (company-dabbrev-char-regexp "\\(\\sw\\|\\s_\\|_\\|-\\)")
-    (company-minimum-prefix-length 1)
-  :bind
-    (:map company-active-map
-          ("TAB" . company-complete-common-or-cycle)
-          ("<backtab>" . company-select-previous)
-          ("RET" . company-complete-selection)
-          ("C-j" . company-select-next-or-abort)
-          ("C-k" . company-select-previous-or-abort)))
+;; (use-package company
+;;   :init
+;;     (setq tab-always-indent 'complete)
+;;     (add-hook 'prog-mode-hook #'pvr/setup-company)
+;;     (add-hook 'org-mode-hook #'pvr/setup-company)
+;;   :custom
+;;     (company-idle-delay 0.0)
+;;     (company-selection-wrap-around t)
+;;     (company-require-match nil)
+;;     (company-dabbrev-other-buffers 'all)
+;;     (company-dabbrev-time-limit 0.2)
+;;     (company-dabbrev-code-time-limit 0.2)
+;;     (company-dabbrev-downcase nil)
+;;     (company-dabbrev-char-regexp "\\(\\sw\\|\\s_\\|_\\|-\\)")
+;;     (company-minimum-prefix-length 1)
+;;   :bind
+;;     (:map company-active-map
+;;           ("TAB" . company-complete-common-or-cycle)
+;;           ("<backtab>" . company-select-previous)
+;;           ("RET" . company-complete-selection)
+;;           ("C-j" . company-select-next-or-abort)
+;;           ("C-k" . company-select-previous-or-abort)))
 
-(add-hook 'prog-mode-hook
-  (lambda ()
-    (setq company-backends
-          '(company-dabbrev
-            company-dabbrev-code
-            company-files
-            company-capf))))
+;; (add-hook 'prog-mode-hook
+;;   (lambda ()
+;;     (setq company-backends
+;;           '(company-dabbrev
+;;             company-dabbrev-code
+;;             company-files
+;;             company-capf))))
 
-(use-package prescient
-  :commands prescient-persist-mode
-  :init
-  (setq prescient-history-length 30))
+;; (use-package prescient
+;;   :commands prescient-persist-mode
+;;   :init
+;;   (setq prescient-history-length 30))
 
-(use-package company-prescient)
+;; (use-package company-prescient)
 
 (evil-define-key '(motion insert) 'slime-repl-mode (kbd "C-c s") 'slime-selector)
   (evil-define-key '(motion insert) 'slime-mode (kbd "C-c s") 'slime-selector)
@@ -1065,12 +1073,11 @@ Also move to the next line, since that's the most frequent action after"
   (direnv-mode))
 
 (use-package popper
-  :after (perspective)
   :bind (("M-`" . popper-cycle)
          ("C-`" . popper-toggle-latest)
          ("C-M-`" . popper-toggle-type))
   :custom
-  (popper-group-function #'popper-group-by-perspective)
+  (popper-group-function #'popper-group-by-project)
   :init
   (setq popper-window-height 25)
   ;; Match eshell, shell, term and/or vterm buffers

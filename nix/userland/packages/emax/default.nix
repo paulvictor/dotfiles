@@ -23,9 +23,11 @@ let
             all-the-icons-dired
             all-the-icons-ibuffer
             all-the-icons-ivy
+            all-the-icons-completion
             all-the-icons-ivy-rich
             anzu
             avy
+            cape
             company
             company-prescient
             copy-as-format
@@ -84,12 +86,6 @@ let
             lsp-ui
             macrostep
             magit
-#             (magit-delta.overrideAttrs(old: {
-#               propagatedBuildInputs = old.propagatedBuildInputs ++ [ delta ];
-#               propagatedNativeBuildInputs = [ delta ];
-#               nativeBuildInputs = old.nativeBuildInputs ++ [ delta ];
-#             }))
-
             nix-mode
             nix-modeline
             nix-sandbox
@@ -100,6 +96,7 @@ let
             origami
             page-break-lines
             paredit
+            pcmpl-args
             pdf-tools
             perspective
             persp-projectile
@@ -138,7 +135,7 @@ let
         ++
         [ (with epkgs; [ nano-theme ]) ]
         ++
-        [ (with epkgs.elpaPackages; [ undo-tree org vertico ]) ]);
+        [ (with epkgs.elpaPackages; [ undo-tree org vertico corfu ]) ]);
   myemacs = symlinkJoin {
     name = "Emacs";
     paths = [ customizedEmacs ];
