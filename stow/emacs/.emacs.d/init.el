@@ -48,6 +48,29 @@
 (use-package s)
 (use-package dash)
 
+(use-package emacs
+  :init
+  ;; Add prompt indicator to `completing-read-multiple'.
+  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+  (defun crm-indicator (args)
+    (cons (format "[CRM%s] %s"
+                  (replace-regexp-in-string
+                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                   crm-separator)
+                  (car args))
+          (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+  ;; Do not allow the cursor in the minibuffer prompt
+  (setq minibuffer-prompt-properties '(read-only t cursor-intangible t face minibuffer-prompt)
+        read-extended-command-predicate #'command-completion-default-include-p
+        completions-detailed t)
+  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+  ;; Enable recursive minibuffers
+  (setq enable-recursive-minibuffers t))
+
 (use-package use-package-chords
   :init
   (setq key-chord-two-keys-delay 0.2) ; default 0.1
@@ -161,7 +184,6 @@
 
 (use-package dashboard
   :ensure t
-  ;;   :after projectile
   :config
   (dashboard-setup-startup-hook)
   (init-dashboard)
@@ -605,8 +627,6 @@ Repeated invocations toggle between the two most recently open buffers."
   :custom
   (persp-mode-prefix-key (kbd "C-c M-p"))
   (persp-initial-frame-name "Main")
-;;   :bind
-;;   ([remap projectile-switch-project] . projectile-persp-switch-project)
   :config
   (advice-add 'project-switch-project :before #'pvr/create-or-switch-perspective)
   (persp-mode 1))

@@ -1,27 +1,3 @@
-(use-package emacs
-  :init
-  ;; Add prompt indicator to `completing-read-multiple'.
-  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
-  (defun crm-indicator (args)
-    (cons (format "[CRM%s] %s"
-                  (replace-regexp-in-string
-                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
-                   crm-separator)
-                  (car args))
-          (cdr args)))
-  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
-
-  ;; Do not allow the cursor in the minibuffer prompt
-  (setq minibuffer-prompt-properties '(read-only t cursor-intangible t face minibuffer-prompt)
-        read-extended-command-predicate #'command-completion-default-include-p
-        completions-detailed t)
-  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
-  ;; Vertico commands are hidden in normal buffers.
-  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
-
-  ;; Enable recursive minibuffers
-  (setq enable-recursive-minibuffers t))
-
 (defun pvr/minibuffer-backward-kill (arg)
   "When minibuffer is completing a file name delete up to parent
 folder, otherwise delete a word"
@@ -31,7 +7,7 @@ folder, otherwise delete a word"
       (if (string-match-p "/." (minibuffer-contents))
           (zap-up-to-char (- arg) ?/)
         (delete-minibuffer-contents))
-      (backward-kill-word arg)))
+      (backward-delete-char arg)))
 
 (use-package vertico
   :bind (:map vertico-map
@@ -40,7 +16,8 @@ folder, otherwise delete a word"
               ("C-j" . vertico-next)
               ("C-k" . vertico-previous))
   (:map minibuffer-local-map
-        ("<backspace>" . pvr/minibuffer-backward-kill))
+        ("<backspace>" . pvr/minibuffer-backward-kill)
+        ("C-w" . backward-kill-word))
   :custom
   (vertico-count 12)
   (vertico-cycle t)
@@ -119,12 +96,13 @@ folder, otherwise delete a word"
   (all-the-icons-completion-mode))
 
 (use-package corfu
-  :init (global-corfu-mode)
+  :init
+  (global-corfu-mode)
+
   :custom
   (corfu-cycle t)
   (corfu-on-exact-match 'insert)
-  (corfu-auto nil) ; Only use `corfu' when calling `completion-at-point' or
-                                        ; `indent-for-tab-command'
+  (corfu-auto nil) ; Only use `corfu' when calling `completion-at-point' or `indent-for-tab-command' ? Has problems with eshell mode
 
   (corfu-min-width 80)
   (corfu-max-width corfu-min-width)     ; Always have the same width
@@ -132,9 +110,6 @@ folder, otherwise delete a word"
   (corfu-scroll-margin 4)
   (corfu-preselect-first t)
 
-  (corfu-auto t)
-  (corfu-auto-prefix 2)
-  (corfu-auto-delay 0.25)
   :general
   (:keymaps 'corfu-map
             :states 'insert
