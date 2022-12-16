@@ -161,15 +161,21 @@
 
 (use-package dashboard
   :ensure t
-;;   :after projectile
+  ;;   :after projectile
   :config
   (dashboard-setup-startup-hook)
   (init-dashboard)
   :custom
-    (initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
-    (dashboard-startup-banner 'logo)
-    (dashboard-set-heading-icons t)
-    (dashboard-set-file-icons t))
+  (dashboard-footer-messages
+   ;; Taken from https://github.com/notepad-plus-plus/notepad-plus-plus/blob/master/PowerEditor/src/Notepad_plus.cpp
+   (s-lines
+    (f-read (concat user-emacs-directory "quotes.txt"))))
+  (initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+  (dashboard-startup-banner 'logo)
+  ;; (dashboard-startup-banner
+  ;;      (concat user-emacs-directory "emacs-e-template.svg"))
+  (dashboard-set-heading-icons t)
+  (dashboard-set-file-icons t))
 
 (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
 
@@ -573,13 +579,36 @@ Repeated invocations toggle between the two most recently open buffers."
 ;;     (setq projectile-project-search-path '("~/stuff")))
 ;;   )
 
+(defun pvr/create-or-switch-perspective (dir)
+  (persp-switch (f-filename dir)))
+
+(use-package project
+  :demand t
+  :commands (project-switch-project)
+  :custom
+  (project-switch-use-entire-map t)
+  :config
+  (use-package perspective)
+  (general-define-key
+   :keymaps 'project-prefix-map
+   :prefix "C-c"
+   "e" 'project-eshell
+   "v" 'projectile-run-vterm)
+  (general-define-key
+   :keymaps 'project-prefix-map
+   "b" 'consult-project-buffer
+   "/" 'consult-ripgrep
+   "g" 'magit))
+
 (use-package perspective
+  :after project
   :custom
   (persp-mode-prefix-key (kbd "C-c M-p"))
   (persp-initial-frame-name "Main")
-  :bind
-  ([remap projectile-switch-project] . projectile-persp-switch-project)
+;;   :bind
+;;   ([remap projectile-switch-project] . projectile-persp-switch-project)
   :config
+  (advice-add 'project-switch-project :before #'pvr/create-or-switch-perspective)
   (persp-mode 1))
 
 ;; (use-package persp-projectile
@@ -787,8 +816,6 @@ Repeated invocations toggle between the two most recently open buffers."
   :config
   (which-key-setup-side-window-bottom)
   (which-key-mode 1))
-
-(use-package wgrep)
 
 (use-package origami
   :custom
@@ -1216,3 +1243,9 @@ Also move to the next line, since that's the most frequent action after"
 
 (load-file (concat user-emacs-directory "completions.el"))
 
+(use-package wgrep
+  :defer t
+  :custom
+  (wgrep-enable-key "e")
+  (wgrep-auto-save-buffer t)
+  (wgrep-change-readonly-file t))

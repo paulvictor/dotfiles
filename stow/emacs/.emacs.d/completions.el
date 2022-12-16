@@ -100,21 +100,6 @@ folder, otherwise delete a word"
 ;; consult-project-root-function
 
 ;; Try embark
-(use-package project
-  :custom
-  (project-switch-use-entire-map t)
-  :config
-  (general-define-key
-   :keymaps 'project-prefix-map
-   :prefix "C-c"
-   "e" 'project-eshell
-   "v" 'projectile-run-vterm)
-  (general-define-key
-   :keymaps 'project-prefix-map
-   "b" 'consult-project-buffer
-   "/" 'consult-ripgrep
-   "g" 'magit))
-
 (use-package consult
   :bind
   (("C-M-j" . persp-switch-to-buffer)
