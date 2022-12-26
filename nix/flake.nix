@@ -43,7 +43,6 @@
 
     nix-cl = {
       url = "github:Uthar/nix-cl/master";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
   };

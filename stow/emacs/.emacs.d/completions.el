@@ -102,7 +102,9 @@ folder, otherwise delete a word"
   :custom
   (corfu-cycle t)
   (corfu-on-exact-match 'insert)
-  (corfu-auto nil) ; Only use `corfu' when calling `completion-at-point' or `indent-for-tab-command' ? Has problems with eshell mode
+  (corfu-auto t) ; Only use `corfu' when calling `completion-at-point' or `indent-for-tab-command' ? Has problems with eshell mode
+  (corfu-quit-at-boundary t)
+  (corfu-quit-no-match t)
 
   (corfu-min-width 80)
   (corfu-max-width corfu-min-width)     ; Always have the same width
@@ -122,12 +124,20 @@ folder, otherwise delete a word"
             "<return>" #'corfu-insert
             "C-d" #'corfu-show-documentation)
   :config
+  (add-hook 'eshell-mode-hook
+          (lambda ()
+            (setq-local corfu-auto nil)))
   (evil-collection-corfu-setup)
   (setq tab-always-indent 'complete
         completion-cycle-threshold nil))
 
 (use-package pcmpl-args)
 
+(defun pvr/add-company-backends ()
+  (cl-loop for backend in '(company-dabbrev-code company-dabbrev company-files company-capf)
+           do
+           (add-hook 'completion-at-point-functions
+                     (cape-company-to-capf backend))))
 ;; Add extensions
 (use-package cape
   ;; Bind dedicated completion commands
@@ -144,6 +154,55 @@ folder, otherwise delete a word"
          ("C-c c l" . cape-line)
          ("C-c c w" . cape-dict))
   :init
+  (setq tab-always-indent 'complete)
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-file)
-  (add-to-list 'completion-at-point-functions #'cape-keyword))
+  (require 'company)
+  (require 'company-dabbrev)
+  (require 'company-dabbrev-code)
+  (add-hook 'prog-mode-hook
+            (lambda ()
+              (add-hook 'completion-at-point-functions #'cape-keyword)
+              (add-hook 'completion-at-point-functions (cape-company-to-capf #'company-dabbrev-code)))))
+(add-hook 'completion-at-point-functions (cape-company-to-capf #'company-capf))
+;; (pvr/add-company-backends)
+
+
+;; Implement a custom function for middle of the word completion like here :
+;; https://github.com/company-mode/company-mode/issues/340
+;; (defun pvr/setup-company ()
+;;   (company-mode 1)
+;;   (company-prescient-mode 1)
+;;   (company-tng-mode 1)
+;;   (company-tng-configure-default))
+
+;; (use-package company
+;;   :init
+;;     (setq tab-always-indent 'complete)
+;;     (add-hook 'prog-mode-hook #'pvr/setup-company)
+;;     (add-hook 'org-mode-hook #'pvr/setup-company)
+;;   :custom
+;;     (company-idle-delay 0.0)
+;;     (company-selection-wrap-around t)
+;;     (company-require-match nil)
+;;     (company-dabbrev-other-buffers 'all)
+;;     (company-dabbrev-time-limit 0.2)
+;;     (company-dabbrev-code-time-limit 0.2)
+;;     (company-dabbrev-downcase nil)
+;;     (company-dabbrev-char-regexp "\\(\\sw\\|\\s_\\|_\\|-\\)")
+;;     (company-minimum-prefix-length 1)
+;;   :bind
+;;     (:map company-active-map
+;;           ("TAB" . company-complete-common-or-cycle)
+;;           ("<backtab>" . company-select-previous)
+;;           ("RET" . company-complete-selection)
+;;           ("C-j" . company-select-next-or-abort)
+;;           ("C-k" . company-select-previous-or-abort)))
+
+;; (add-hook 'prog-mode-hook
+;;   (lambda ()
+;;     (setq company-backends
+;;           '(company-dabbrev
+;;             company-dabbrev-code
+;;             company-files
+;;             company-capf))))

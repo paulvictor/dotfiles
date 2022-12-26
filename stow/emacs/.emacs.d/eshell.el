@@ -96,7 +96,8 @@
            ("gd" "magit-diff-unstaged")
            ("gds" "magit-diff-staged")
            ("d" "dired-other-window $1")
-           ("mkcd" "eshell/mkdir -p $* ; cd $1"))) ; TODO: '&&' does not work because mkdir exits with nil?
+           ("mkcd" "eshell/mkdir -p $* ; cd $1"); TODO: '&&' does not work because mkdir exits with nil?
+           ("less" "view-file $1")))
       (add-to-list 'eshell-command-aliases-list alias)))
   ;;   (eshell-write-aliases-list)
   (setq eshell-input-filter

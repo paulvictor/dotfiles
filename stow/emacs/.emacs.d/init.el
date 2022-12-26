@@ -701,45 +701,6 @@ Repeated invocations toggle between the two most recently open buffers."
   (evil-collection-magit-use-z-for-folds t))
 ;;   :after (company company-prescient))
 
-;; Implement a custom function for middle of the word completion like here :
-;; https://github.com/company-mode/company-mode/issues/340
-;; (defun pvr/setup-company ()
-;;   (company-mode 1)
-;;   (company-prescient-mode 1)
-;;   (company-tng-mode 1)
-;;   (company-tng-configure-default))
-
-;; (use-package company
-;;   :init
-;;     (setq tab-always-indent 'complete)
-;;     (add-hook 'prog-mode-hook #'pvr/setup-company)
-;;     (add-hook 'org-mode-hook #'pvr/setup-company)
-;;   :custom
-;;     (company-idle-delay 0.0)
-;;     (company-selection-wrap-around t)
-;;     (company-require-match nil)
-;;     (company-dabbrev-other-buffers 'all)
-;;     (company-dabbrev-time-limit 0.2)
-;;     (company-dabbrev-code-time-limit 0.2)
-;;     (company-dabbrev-downcase nil)
-;;     (company-dabbrev-char-regexp "\\(\\sw\\|\\s_\\|_\\|-\\)")
-;;     (company-minimum-prefix-length 1)
-;;   :bind
-;;     (:map company-active-map
-;;           ("TAB" . company-complete-common-or-cycle)
-;;           ("<backtab>" . company-select-previous)
-;;           ("RET" . company-complete-selection)
-;;           ("C-j" . company-select-next-or-abort)
-;;           ("C-k" . company-select-previous-or-abort)))
-
-;; (add-hook 'prog-mode-hook
-;;   (lambda ()
-;;     (setq company-backends
-;;           '(company-dabbrev
-;;             company-dabbrev-code
-;;             company-files
-;;             company-capf))))
-
 ;; (use-package prescient
 ;;   :commands prescient-persist-mode
 ;;   :init
