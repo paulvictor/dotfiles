@@ -319,8 +319,6 @@
 (add-to-words-syntax 'lisp-mode-hook "_-")
 (add-to-words-syntax 'c++-mode-hook "_")
 
-(electric-indent-mode 1)
-
 (use-package evil
   :after (undo-tree)
   :custom
@@ -1230,3 +1228,10 @@ Also move to the next line, since that's the most frequent action after"
   (wgrep-enable-key "e")
   (wgrep-auto-save-buffer t)
   (wgrep-change-readonly-file t))
+
+(use-package electric
+  :general
+  (:states 'insert
+           "RET" #'newline-and-indent)
+  :config
+  (electric-indent-mode 1))
