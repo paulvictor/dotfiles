@@ -11,16 +11,14 @@ with pkgs;
   time.timeZone = "Asia/Kolkata";
 
   environment.systemPackages = [
-    bc
     binutils
     file
     git
     gnupg
     home-manager
     htop
-    libnl
     man-pages
-    neovim
+    neovim-nightly
     nix-prefetch-github
     patchelf
     posix_man_pages
@@ -33,6 +31,8 @@ with pkgs;
     exfat
     pciutils
     wirelesstools
+    wally-cli
+
   ];
 
   services.upower.enable = isPhysicalDevice;
@@ -48,6 +48,8 @@ with pkgs;
       [ crda android-udev-rules yubikey-personalization ];
   services.pcscd.enable = isPhysicalDevice;
   programs.adb.enable = isPhysicalDevice;
+
+  hardware.keyboard.zsa.enable = isPhysicalDevice;
 
   # For SSD's
   services.fstrim.enable = lib.mkForce isPhysicalDevice;

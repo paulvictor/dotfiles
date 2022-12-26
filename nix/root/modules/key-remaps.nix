@@ -9,16 +9,16 @@ let
       DOUBLE_TAP_MILLISEC: 150
 
     MAPPINGS:
-      - KEY: KEY_ESC
-        TAP:  KEY_UNKNOWN
-        HOLD: KEY_UNKNOWN
+#       - KEY: KEY_ESC
+#         TAP:  KEY_UNKNOWN
+#         HOLD: KEY_UNKNOWN
       - KEY: KEY_SPACE
         TAP:  KEY_SPACE
         HOLD: KEY_LEFTALT
         HOLD_START: BEFORE_CONSUME
       - KEY: KEY_LEFTCTRL
         TAP:  [ KEY_LEFTCTRL, KEY_X ]
-        HOLD: KEY_UNKNOWN
+#         HOLD: KEY_UNKNOWN
         HOLD_START: BEFORE_CONSUME
       - KEY: KEY_RIGHTCTRL
         TAP:  [ KEY_LEFTALT, KEY_X ]
