@@ -1230,8 +1230,12 @@ Also move to the next line, since that's the most frequent action after"
   (wgrep-change-readonly-file t))
 
 (use-package electric
-  :general
-  (:states 'insert
-           "RET" #'newline-and-indent)
   :config
   (electric-indent-mode 1))
+
+(defun show-C-h-prompt ()
+  (interactive)
+  (message "Use C-h"))
+
+(global-set-key
+ [f1] #'show-C-h-prompt)

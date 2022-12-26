@@ -32,7 +32,7 @@ with pkgs;
     pciutils
     wirelesstools
     wally-cli
-
+    kmonad
   ];
 
   services.upower.enable = isPhysicalDevice;
@@ -79,4 +79,13 @@ with pkgs;
       capabilities = "cap_sys_admin+ep";
     };
   };
+
+  imports =
+    lib.optionals isPhysicalDevice
+      [
+        args.specialArgs.kmonad.nixosModules.default
+        ./kmonad.nix
+
+      ];
+
 }

@@ -43,10 +43,8 @@ let
       common
       sops-nix.nixosModule
       homeManager.nixosModule
-      kmonad.nixosModules.default
       machine
       ../modules/viktor.nix
-      ../modules/kmonad.nix
       ../modules/workstations.nix
       ../modules/ssh.nix
     ] ++ (optionals (customisations.isWorkMachine or false) [ inputs.juspay-config.nixosModules.${system}.juspay-cachix ]);

@@ -96,6 +96,7 @@
         pcloudcc-overlay
         xsecurelock-overlay
         nyxt-3-overlay
+        inputs.kmonad.overlays.default
       ];
       darwinOverlays = [
         pyopenssl-fix-hack
