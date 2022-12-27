@@ -53,7 +53,7 @@ in
 {
   config = {
     systemd.services.key-remaps = {
-      enable = true;
+      enable = false;
       wants = ["systemd-udev-settle.service"];
       after = ["systemd-udev-settle.service"];
       path = [ interception-tools interception-tools-plugins.dual-function-keys coreutils bash ];
