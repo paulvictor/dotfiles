@@ -1,15 +1,14 @@
 args@{ pkgs, specialArgs, lib, ...}:
 
+let
+  allKeyboardsConfigs = import ./keyboards/device-mappings.nix;
+  thisDeviceConfig = allKeyboardsConfigs.${specialArgs.hostName};
+in
 {
   services.kmonad = {
     enable = true;
     package = specialArgs.kmonad.packages.${specialArgs.system}.kmonad;
+    keyboards = thisDeviceConfig;
 #     extraArgs = [ "--log-level" "debug" ];
-    keyboards.microsoft-split-kdb = {
-#       device = "/dev/input/by-id/usb-Microsoft_Microsoft®_Nano_Transceiver_v2.1-event-kbd";
-      device = "/dev/input/by-path/platform-i8042-serio-0-event-kbd";
-      defcfg.enable = true;
-      config = builtins.readFile ./colemak-kmonad.lisp;
-    };
   };
 }

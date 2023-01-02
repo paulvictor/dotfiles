@@ -55,7 +55,7 @@ let
     in nixosSystem {
       inherit system pkgs;
       modules = mkModules {inherit hostName system customisations;};
-      specialArgs = moduleArgs // { inherit system customisations; isPhysicalDevice = true;} ;
+      specialArgs = moduleArgs // { inherit system customisations hostName; isPhysicalDevice = true;} ;
     };
 
   deviceConfigs = import ./all-devices.nix;

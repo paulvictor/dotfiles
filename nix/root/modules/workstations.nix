@@ -85,7 +85,6 @@ with pkgs;
       [
         args.specialArgs.kmonad.nixosModules.default
         ./kmonad.nix
-
       ];
 
 }
