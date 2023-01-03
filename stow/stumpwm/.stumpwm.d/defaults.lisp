@@ -6,8 +6,8 @@
 (setf *window-border-style* :thin)
 (setf *normal-border-width* 1)
 
-(setf *message-window-gravity* :top-right)
-(setf *input-window-gravity* :top-right)
+(setf *message-window-gravity* :center)
+(setf *input-window-gravity* :center)
 
 (setf *mouse-focus-policy* :click)
 (set-fg-color "green")
