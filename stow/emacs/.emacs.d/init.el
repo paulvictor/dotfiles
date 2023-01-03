@@ -318,6 +318,7 @@
 (add-to-words-syntax 'ess-r-mode-hook "_")
 (add-to-words-syntax 'lisp-mode-hook "_-")
 (add-to-words-syntax 'c++-mode-hook "_")
+(add-to-words-syntax 'sh-mode-hook "_-")
 
 (use-package evil
   :after (undo-tree)
