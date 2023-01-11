@@ -26,7 +26,6 @@ with pkgs;
     moreutils
     ncmpcpp
     nix-bundle
-    nix-index
     opensc
     openssh
     openssl

@@ -1,12 +1,13 @@
 args:
 
 let
-  inherit (args) pkgsFor homeManager impermanence flake-utils lib nixpkgs;
+  inherit (args) pkgsFor homeManager impermanence flake-utils lib nixpkgs nix-index-database;
   mkHomeConfig = extraArgs: homeManager.lib.homeManagerConfiguration (rec {
     pkgs = pkgsFor extraArgs.system;
     extraSpecialArgs = extraArgs.extraSpecialArgs;
     modules = [
       impermanence.nixosModules.home-manager.impermanence
+      nix-index-database.hmModules.nix-index
       ./home-configuration.nix
     ] ++ [
       {

@@ -45,6 +45,16 @@
       url = "github:Uthar/nix-cl/master";
     };
 
+    comma = {
+      url = "github:nix-community/comma/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.utils.follows = "flake-utils";
+    };
+
+    nix-index-database = {
+      url = "github:Mic92/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, emacsOverlay, neovim, flake-utils, darwin, nix-cl, ... }@inputs :
@@ -97,6 +107,7 @@
         xsecurelock-overlay
         nyxt-3-overlay
         inputs.kmonad.overlays.default
+        inputs.comma.overlays.default
       ];
       darwinOverlays = [
         pyopenssl-fix-hack
@@ -113,6 +124,7 @@
         ql2nix-overlay
         inputs.ngnk.overlay
         emacsOverlay.overlay
+        inputs.comma.overlays.default
       ];
       pkgsFor = system:
         let
@@ -158,7 +170,7 @@
         import ./userland/default.nix {
           inherit pkgsFor;
           inherit (nixpkgs) lib;
-          inherit (inputs) nixpkgs homeManager impermanence flake-utils;
+          inherit (inputs) nixpkgs homeManager impermanence flake-utils nix-index-database;
         };
     };
 }
