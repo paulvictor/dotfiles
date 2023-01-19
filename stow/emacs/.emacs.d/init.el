@@ -1240,3 +1240,9 @@ Also move to the next line, since that's the most frequent action after"
 
 (global-set-key
  [f1] #'show-C-h-prompt)
+
+
+;; Assuming the Guix checkout is in ~/guix.
+(with-eval-after-load 'geiser-guile
+  (add-to-list 'geiser-guile-load-path "~/guix")
+  (add-to-list 'geiser-guile-load-path "~/dotfiles/guix"))

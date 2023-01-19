@@ -142,7 +142,7 @@ let
     buildInputs = [ makeWrapper ripgrep fd w3m fish delta ];
     postBuild = ''
       wrapProgram $out/bin/emacs \
-        --prefix PATH : ${lib.makeBinPath [ ripgrep fd w3m fish delta ]} \
+        --prefix PATH : ${lib.makeBinPath [ ripgrep fd w3m fish delta guile_3_0 ]} \
         --add-flags --maximized
     '';
   };

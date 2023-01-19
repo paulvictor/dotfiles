@@ -5,6 +5,11 @@
       defcfg.enable = true;
       config = builtins.readFile ./colemak-kmonad.lisp;
     };
+    #     zsa = {
+    #       device = "/dev/input/by-id/usb-ZSA_Technology_Labs_Moonlander_Mark_I-event-kbd";
+    #       defcfg.enable = true;
+    #       config = builtins.readFile ./colemaked.lisp;
+    #     };
   };
   uriel = {
     laptop-kbd = {

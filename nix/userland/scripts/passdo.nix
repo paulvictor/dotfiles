@@ -26,7 +26,7 @@ writeShellScriptBin "passdo" ''
 
   if [[ -n $password ]]; then
     if [[ $typeit -eq 1 ]]; then
-      ${pass-with-extensions}/bin/pass $otp_prefix $password | tr -d '\n' | xdotool type --delay 100 --clearmodifiers --file -
+      ${pass-with-extensions}/bin/pass $otp_prefix $password | tr -d '\n' | xdotool type --delay 40 --clearmodifiers --file -
       ${libnotify}/bin/notify-send "Typed password of $password"
     elif [[ $notify -eq 1 ]]; then
       pass=`${pass-with-extensions}/bin/pass $otp_prefix $password`
