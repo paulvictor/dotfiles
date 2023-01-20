@@ -1246,3 +1246,8 @@ Also move to the next line, since that's the most frequent action after"
 (with-eval-after-load 'geiser-guile
   (add-to-list 'geiser-guile-load-path "~/guix")
   (add-to-list 'geiser-guile-load-path "~/dotfiles/guix"))
+(use-package geiser
+  :config
+  ;; (setq geiser-default-implementation 'gambit)
+  (setq geiser-default-implementation 'guile)
+  (setq geiser-active-implementations '(guile)))

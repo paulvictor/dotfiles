@@ -27,11 +27,28 @@ in
       in
         [ ghKey ];
   };
+  users.users.paul = {
+    createHome = true;
+    isNormalUser = true;
+    hashedPassword = mySuperStupidPasswdHashed;
+    uid = 1000;
+    shell = pkgs.bashInteractive_5;
+    openssh.authorizedKeys.keyFiles =
+      let
+        ghKey =
+            pkgs.fetchurl {
+              url = https://github.com/paulvictor.keys;
+              sha256 = "09xls7hcnas700p5jd1g1p91s9f12bar9hlygvbzjy3yyjn0zg9f";
+            };
+      in
+        [ ghKey ];
+  };
 
   security.sudo.enable = true;
   security.sudo.wheelNeedsPassword = true;
   security.sudo.extraConfig = ''
     viktor ALL=(ALL) NOPASSWD: ALL
+    paul ALL=(ALL) NOPASSWD: ALL
     #viktor ALL=(ALL) NOPASSWD: ${pkgs.tomb}/bin/tomb*, ${pkgs.systemd}/bin/systemctl*
   '';
 
