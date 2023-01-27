@@ -102,9 +102,11 @@ folder, otherwise delete a word"
   :custom
   (corfu-cycle t)
   (corfu-on-exact-match 'insert)
-  (corfu-auto t) ; Only use `corfu' when calling `completion-at-point' or `indent-for-tab-command' ? Has problems with eshell mode
-  (corfu-quit-at-boundary t)
-  (corfu-quit-no-match t)
+  (corfu-auto t)
+  (corfu-auto-prefix 2)
+  (corfu-auto-delay 0.2)
+  (corfu-quit-at-boundary nil)
+  (corfu-quit-no-match nil)
 
   (corfu-min-width 80)
   (corfu-max-width corfu-min-width)     ; Always have the same width
@@ -121,50 +123,46 @@ folder, otherwise delete a word"
             "C-p" #'corfu-previous
             "<escape>" #'corfu-quit
             "<tab>" #'corfu-insert
-            "<return>" #'corfu-insert
-            "C-d" #'corfu-show-documentation)
+            "<return>" #'corfu-insert)
   :config
   (add-hook 'eshell-mode-hook
           (lambda ()
             (setq-local corfu-auto nil)))
   (evil-collection-corfu-setup)
+  (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
+  (advice-add 'corfu--teardown :after 'evil-normalize-keymaps)
   (setq tab-always-indent 'complete
-        completion-cycle-threshold nil))
+        completion-cycle-threshold t))
 
 (use-package pcmpl-args)
 
-(defun pvr/add-company-backends ()
-  (cl-loop for backend in '(company-dabbrev-code company-dabbrev company-files company-capf)
-           do
-           (add-hook 'completion-at-point-functions
-                     (cape-company-to-capf backend))))
-;; Add extensions
 (use-package cape
-  ;; Bind dedicated completion commands
-  ;; Alternative prefix keys: C-c p, M-p, M-+, ...
-  :bind (("C-c c p" . completion-at-point) ;; capf
-         ("C-c c t" . complete-tag)        ;; etags
-         ("C-c c d" . cape-dabbrev)        ;; or dabbrev-completion
-         ("C-c c h" . cape-history)
-         ("C-c c f" . cape-file)
-         ("C-c c k" . cape-keyword)
-         ("C-c c s" . cape-symbol)
-         ("C-c c a" . cape-abbrev)
-         ("C-c c i" . cape-ispell)
-         ("C-c c l" . cape-line)
-         ("C-c c w" . cape-dict))
-  :init
-  (setq tab-always-indent 'complete)
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  (add-to-list 'completion-at-point-functions #'cape-file)
+  :after (corfu)
+  :config
   (require 'company)
   (require 'company-dabbrev)
   (require 'company-dabbrev-code)
+  (require 'company-capf)
+
+  (nconc completion-at-point-functions
+         (list #'cape-dabbrev #'cape-file))
+  ;;   (cl-loop for backend in '(list #'company-dabbrev-code #'company-files)
+  ;;            do
+  ;;            (add-to-list 'completion-at-point-functions
+  ;;                         (cape-company-to-capf backend)))
+  (add-hook 'emacs-lisp-mode
+            (lambda ()
+              (setq-local completion-at-point-functions (add-to-list 'completion-at-point-functions #'cape-symbol))))
+  (add-hook 'eshell-mode
+            (lambda ()
+              (setq-local completion-at-point-functions (add-to-list 'completion-at-point-functions #'cape-history))))
+
   (add-hook 'prog-mode-hook
             (lambda ()
-              (add-hook 'completion-at-point-functions #'cape-keyword)
-              (add-hook 'completion-at-point-functions (cape-company-to-capf #'company-dabbrev-code)))))
-(add-hook 'completion-at-point-functions (cape-company-to-capf #'company-capf))
+              (setq-local completion-at-point-functions
+                          (append completion-at-point-functions
+                                  (list #'cape-keyword (cape-company-to-capf #'company-dabbrev-code)))))))
+
 ;; (pvr/add-company-backends)
 
 

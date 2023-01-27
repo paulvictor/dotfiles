@@ -31,7 +31,7 @@ in
     createHome = true;
     isNormalUser = true;
     hashedPassword = mySuperStupidPasswdHashed;
-    uid = 1000;
+    uid = 1001;
     shell = pkgs.bashInteractive_5;
     openssh.authorizedKeys.keyFiles =
       let

@@ -148,7 +148,7 @@
 
 (add-hook
   'prog-mode-hook
-  '(lambda ()
+  (lambda ()
     (setq show-trailing-whitespace t)))
 
 ;Show matching parens
