@@ -132,36 +132,78 @@ folder, otherwise delete a word"
   (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
   (advice-add 'corfu--teardown :after 'evil-normalize-keymaps)
   (setq tab-always-indent 'complete
-        completion-cycle-threshold t))
+        completion-cycle-threshold 3
+        read-file-name-completion-ignore-case t))
 
 (use-package pcmpl-args)
+
+(use-package company
+;;   :init
+;;     (setq tab-always-indent 'complete)
+;;     (add-hook 'prog-mode-hook #'pvr/setup-company)
+;;     (add-hook 'org-mode-hook #'pvr/setup-company)
+  :custom
+;;     (company-idle-delay 0.0)
+;;     (company-selection-wrap-around t)
+;;     (company-require-match nil)
+    (company-dabbrev-other-buffers 'all)
+    (company-dabbrev-time-limit 0.2)
+    (company-dabbrev-code-time-limit 0.2)
+    (company-dabbrev-downcase nil)
+    (company-dabbrev-char-regexp "\\(\\sw\\|\\s_\\|_\\|-\\)")
+    (company-minimum-prefix-length 1)
+;;   :bind
+;;     (:map company-active-map
+;;           ("TAB" . company-complete-common-or-cycle)
+;;           ("<backtab>" . company-select-previous)
+;;           ("RET" . company-complete-selection)
+;;           ("C-j" . company-select-next-or-abort)
+  ;;           ("C-k" . company-select-previous-or-abort))
+  )
 
 (use-package cape
   :after (corfu)
   :config
-  (require 'company)
   (require 'company-dabbrev)
   (require 'company-dabbrev-code)
   (require 'company-capf)
+  (require 'company-files)
 
-  (nconc completion-at-point-functions
-         (list #'cape-dabbrev #'cape-file))
-  ;;   (cl-loop for backend in '(list #'company-dabbrev-code #'company-files)
-  ;;            do
-  ;;            (add-to-list 'completion-at-point-functions
-  ;;                         (cape-company-to-capf backend)))
+;;   (nconc completion-at-point-functions
+;;          (list #'cape-dabbrev #'cape-file))
   (add-hook 'emacs-lisp-mode
             (lambda ()
-              (setq-local completion-at-point-functions (add-to-list 'completion-at-point-functions #'cape-symbol))))
+              (make-local-variable 'completion-at-point-functions)
+
+              (setf (elt (cl-member 'elisp-completion-at-point completion-at-point-functions) 0)
+                    #'elisp-completion-at-point)
+              (add-to-list 'completion-at-point-functions #'cape-symbol)
+              ;; I prefer this being early/first in the list
+              (add-to-list 'completion-at-point-functions #'cape-file)))
   (add-hook 'eshell-mode
             (lambda ()
-              (setq-local completion-at-point-functions (add-to-list 'completion-at-point-functions #'cape-history))))
+              (setq-local completion-at-point-functions (append completion-at-point-functions
+                                                                (list pcomplete-completions-at-point #'cape-history #'cape-file)))))
 
   (add-hook 'prog-mode-hook
             (lambda ()
-              (setq-local completion-at-point-functions
+              (make-local-variable 'completion-at-point-functions)
+              (cl-loop for backend in (list #'company-dabbrev #'company-files #'company-dabbrev-code)
+                       do
+                       (add-to-list 'completion-at-point-functions
+                                    (cape-company-to-capf backend)))
+              (setq completion-at-point-functions
                           (append completion-at-point-functions
-                                  (list #'cape-keyword (cape-company-to-capf #'company-dabbrev-code)))))))
+                                  (list #'cape-keyword)))))
+  ;; For pcomplete. For now these two advices are strongly recommended to
+  ;; achieve a sane Eshell experience. See
+  ;; https://github.com/minad/corfu#completing-with-corfu-in-the-shell-or-eshell
+
+  ;; Silence the pcomplete capf, no errors or messages!
+  (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
+  ;; Ensure that pcomplete does not write to the buffer and behaves as a pure
+  ;; `completion-at-point-function'.
+  (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify))
 
 ;; (pvr/add-company-backends)
 
@@ -173,29 +215,6 @@ folder, otherwise delete a word"
 ;;   (company-prescient-mode 1)
 ;;   (company-tng-mode 1)
 ;;   (company-tng-configure-default))
-
-;; (use-package company
-;;   :init
-;;     (setq tab-always-indent 'complete)
-;;     (add-hook 'prog-mode-hook #'pvr/setup-company)
-;;     (add-hook 'org-mode-hook #'pvr/setup-company)
-;;   :custom
-;;     (company-idle-delay 0.0)
-;;     (company-selection-wrap-around t)
-;;     (company-require-match nil)
-;;     (company-dabbrev-other-buffers 'all)
-;;     (company-dabbrev-time-limit 0.2)
-;;     (company-dabbrev-code-time-limit 0.2)
-;;     (company-dabbrev-downcase nil)
-;;     (company-dabbrev-char-regexp "\\(\\sw\\|\\s_\\|_\\|-\\)")
-;;     (company-minimum-prefix-length 1)
-;;   :bind
-;;     (:map company-active-map
-;;           ("TAB" . company-complete-common-or-cycle)
-;;           ("<backtab>" . company-select-previous)
-;;           ("RET" . company-complete-selection)
-;;           ("C-j" . company-select-next-or-abort)
-;;           ("C-k" . company-select-previous-or-abort)))
 
 ;; (add-hook 'prog-mode-hook
 ;;   (lambda ()
