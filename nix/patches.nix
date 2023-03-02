@@ -15,4 +15,4 @@ let
     sha256 = "sha256-h3y7ZCyTvmNIN6s47RZwCrsJpmaYxDaUUFPXyLfMA5o=";
   };
 in
-[ vieb-9-4-patch ]
+[ ]

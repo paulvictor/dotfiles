@@ -42,6 +42,7 @@ lib.mkIf
       {
         home.packages =
           [
+            (nerdfonts.override { fonts = [ "Hack" "VictorMono" "Iosevka" "SourceCodePro" "DejaVuSansMono" "FiraCode" ]; })
             all-the-icons-fonts
             autorandr
             brotab
@@ -95,7 +96,7 @@ lib.mkIf
                                     postInstall = "";
                                     outputs = [ "out" ];
                                   }))
-            (ungoogled-chromium.override { enableWideVine = true;})
+#             (ungoogled-chromium.override { enableWideVine = true;})
           ];
         xresources =
           let
