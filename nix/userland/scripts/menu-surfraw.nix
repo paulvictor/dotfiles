@@ -8,8 +8,8 @@ writeShellScriptBin "menu-surfraw" ''
     ${gawk}/bin/awk '{$1=$1};1' | \
     ${coreutils}/bin/sort | \
     ${coreutils}/bin/uniq | \
-    ${rofi}/bin/rofi -dmenu -theme onedark -i -p "search: ")
+    ${rofi}/bin/rofi -dmenu -theme purple -i -p "search: ")
   #[[ $elvi -eq "" ]] && exit 0;
-  searchTerm=$(echo "" | ${rofi}/bin/rofi -dmenu -theme onedark -p "term: ")
+  searchTerm=$(echo "" | ${rofi}/bin/rofi -dmenu -theme purple -p "term: ")
   exec ${surfraw}/bin/surfraw $elvi $searchTerm
 ''

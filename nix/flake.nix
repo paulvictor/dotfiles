@@ -8,14 +8,14 @@
     homeManager.inputs.nixpkgs.follows = "nixpkgs";
     homeManager.inputs.utils.follows = "flake-utils";
     sops-nix.url = "github:Mic92/sops-nix";
-    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+#     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     emacsOverlay.url = "github:nix-community/emacs-overlay";
-    emacsOverlay.inputs.nixpkgs.follows = "nixpkgs";
+#     emacsOverlay.inputs.nixpkgs.follows = "nixpkgs";
     neovim.url = "github:nix-community/neovim-nightly-overlay";
-    neovim.inputs.nixpkgs.follows = "nixpkgs";
+#     neovim.inputs.nixpkgs.follows = "nixpkgs";
     impermanence.url = "github:nix-community/impermanence";
     nixos-generators.url = "github:nix-community/nixos-generators";
-    nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
+#     nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/nur";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
 #     portable-svc.url = "git+https://tulpa.dev/cadey/portable-svc.git?ref=main";
@@ -34,7 +34,7 @@
 
     kmonad = {
       url = "github:kmonad/kmonad/master?dir=nix";
-      inputs.nixpkgs.follows = "nixpkgs";
+#       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     juspay-config = {
@@ -47,8 +47,8 @@
 
     comma = {
       url = "github:nix-community/comma/master";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.utils.follows = "flake-utils";
+#       inputs.nixpkgs.follows = "nixpkgs";
+#       inputs.utils.follows = "flake-utils";
     };
 
     nix-index-database = {
@@ -80,6 +80,7 @@
       fish-docker-completion = import ./overlays/fish.nix;
       xsecurelock-overlay = import ./overlays/xsecurelock.nix;
       nyxt-3-overlay = import ./overlays/nyxt.nix;
+      rofi-theme-overlay = import ./overlays/rofi-theme-overlay.nix;
       #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
       linuxOverlays = [
         fish-docker-completion
@@ -108,6 +109,7 @@
         nyxt-3-overlay
         inputs.kmonad.overlays.default
         inputs.comma.overlays.default
+        rofi-theme-overlay
       ];
       darwinOverlays = [
         pyopenssl-fix-hack

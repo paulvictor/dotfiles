@@ -14,5 +14,9 @@ let
     url = https://github.com/NixOS/nixpkgs/pull/191961.patch;
     sha256 = "sha256-h3y7ZCyTvmNIN6s47RZwCrsJpmaYxDaUUFPXyLfMA5o=";
   };
+  var-output-fix = pkgs.fetchpatch {
+    url = https://github.com/NixOS/nixpkgs/pull/218407.patch;
+    sha256 = "sha256-0l9WJHaKW7qU5lAbwA8yf/+VLNVy3CP5lZrJbihZcQ8=";
+  };
 in
-[ ]
+[ var-output-fix ]

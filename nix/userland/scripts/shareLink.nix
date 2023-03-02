@@ -13,7 +13,7 @@ writeShellScriptBin "shareLink" ''
     fi
   }
   cd ${config.home.homeDirectory}/pcloud;
-  file=$(${findutils}/bin/find . | ${rofi}/bin/rofi -dmenu -theme onedark -i -p "Share: " | ${gnused}/bin/sed 's/^.//')
+  file=$(${findutils}/bin/find . | ${rofi}/bin/rofi -dmenu -theme purple -i -p "Share: " | ${gnused}/bin/sed 's/^.//')
   [[ $file -eq "" ]] && exit 0;
   [[ -d $file ]] && urlWithAccessToken folder || urlWithAccessToken file
   ${curl}/bin/curl $pcloudCodeUrl --data-urlencode "path=$file"
