@@ -107,7 +107,7 @@ mkIf
         extraOptions =  [ "-m" " -1" ];
         keybindings = {
           "control + hyper + alt + shift + Return" = "${rxvt-unicode}/bin/urxvt";
-          "control + hyper + alt + e" = "emacsclient -c -n";
+          "control + hyper + alt + e" = "emacsclient -c -n -d :0";
           "control + hyper + alt + d" = "rofi -show drun";
           #       "control + hyper + alt + g" = ''${wmfocus}/bin/wmfocus --fill -c asdf --textcolor red'';
           "control + hyper + alt + n" = "${passdo}/bin/passdo --notify";
