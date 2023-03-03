@@ -117,7 +117,7 @@
         ("C-d" . pvr/eshell-quit-or-delete-char)
         ("C-k" . eshell-previous-matching-input-from-input)
         ("C-j" . eshell-next-matching-input-from-input)
-        ("C-r" . pvr/esh-history)
+        ("C-r" . cape-history)
         ("C-a" . eshell-bol)))
 
 (use-package eshell-prompt-extras

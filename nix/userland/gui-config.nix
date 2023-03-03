@@ -6,10 +6,10 @@ lib.mkIf
   (
     let
       custom-vieb = import ./packages/vieb.nix { inherit pkgs config; };
-#       source-code-pro-nerdfonts = pkgs.callPackage ./packages/source-code-pro-nerdfonts {};
-#       hack-nerdfonts = pkgs.callPackage ./packages/hack-nerdfonts.nix {};
+      source-code-pro-nerdfonts = pkgs.callPackage ./packages/source-code-pro-nerdfonts {};
+      hack-nerdfonts = pkgs.callPackage ./packages/hack-nerdfonts.nix {};
 #       firacode-nerdfonts = pkgs.callPackage ./packages/fira-code-nerdfonts.nix {};
-#       victor-mono-nerdfonts = pkgs.callPackage ./packages/victor-mono-nerdfonts/default.nix {};
+      victor-mono-nerdfonts = pkgs.callPackage ./packages/victor-mono-nerdfonts/default.nix {};
       all-the-icons-fonts = pkgs.callPackage ./packages/all-the-icons-fonts.nix {};
       pursuit = pkgs.callPackage ./scripts/pursuit.nix {};
       menu-surfraw = pkgs.callPackage ./scripts/menu-surfraw.nix {};
@@ -42,7 +42,8 @@ lib.mkIf
       {
         home.packages =
           [
-            (nerdfonts.override { fonts = [ "Hack" "VictorMono" "Iosevka" "SourceCodePro" "DejaVuSansMono" "FiraCode" ]; })
+            # The right way to do things but doesn't work on urxvt
+            # (nerdfonts.override { fonts = [ "Hack" "VictorMono" "Iosevka" "SourceCodePro" "DejaVuSansMono" "FiraCode" ]; })
             all-the-icons-fonts
             autorandr
             brotab
@@ -58,7 +59,7 @@ lib.mkIf
             google-chrome
             googler
             gromit-mpx
-#             hack-nerdfonts
+            hack-nerdfonts
             hicolor-icon-theme
             league-of-moveable-type
             material-icons
@@ -74,12 +75,12 @@ lib.mkIf
             rxvt_unicode-with-plugins
             scrot
             siji
-#             source-code-pro-nerdfonts
+            source-code-pro-nerdfonts
             surf
             surfraw
             ubuntu_font_family
             unifont
-#             victor-mono-nerdfonts
+            victor-mono-nerdfonts
             vlc
             ytmdesktop
             yubico-piv-tool
@@ -88,8 +89,8 @@ lib.mkIf
             zathura # Crashing.
             zoom-us
             (vivaldi.override { proprietaryCodecs = true; enableWidevine = true;})
-#             (iosevka-bin.override { variant = "aile"; })
-#             (iosevka-bin.override { variant = "slab"; })
+            (iosevka-bin.override { variant = "aile"; })
+            (iosevka-bin.override { variant = "slab"; })
             ((pinentry.override({ enabledFlavors = ["curses"];})).overrideAttrs(oldAttrs: {
                                     buildInputs = oldAttrs.buildInputs ++ [ git ];
                                     #postInstall = "unlink $out/bin/pinentry";
@@ -107,7 +108,7 @@ lib.mkIf
           };
         programs.firefox = {
           enable = true;
-          package = firefox-beta-bin;
+          package = firefox-devedition-bin;
           #package = firefox-beta-bin ; # wrapFirefox (latest.firefox-beta-bin) { browserName = "firefox"; };
           extensions = [
             #nur.repos.rycee.firefox-addons.violentmonkey

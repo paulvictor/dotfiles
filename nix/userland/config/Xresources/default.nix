@@ -16,10 +16,10 @@ in
 
   "URxvt.perl-ext-common" = "default,matcher,tabbedex,keyboard-select,autocomplete-ALL-the-things,resize-font,-confirm-paste";
 
-  "URxvt*font" = "xft:VictorMono\\ Nerd\\ Font\\ Mono:antialias=true:hinting=true:style=SemiBold:size=12:minspace=False";
-  "URxvt*boldFont" = "xft:VictorMono\\ Nerd\\ Font\\ Mono:antialias=true:hinting=true:style=Bold:size=12:minspace=False";
-  "URxvt*italicFont" = "xft:VictorMono\\ Nerd\\ Font\\ Mono:antialias=true:hinting=true:style=Italic:size=12:minspace=False";
-  "URxvt*boldItalicFont" = "xft:VictorMono\\ Nerd\\ Font\\ Mono:antialias=true:hinting=true:style=Bold\\ Italic:size=12:minspace=False";
+  "URxvt.font" = "xft:VictorMono\ Nerd\ Font:antialias=true:hinting=true:style=SemiBold:size=12:minspace=False";
+  "URxvt.boldFont" = "xft:VictorMono\ Nerd\ Font:antialias=true:hinting=true:style=Bold:size=12:minspace=False";
+  "URxvt.italicFont" = "xft:VictorMono\ Nerd\ Font:antialias=true:hinting=true:style=Italic:size=12:minspace=False";
+  "URxvt.boldItalicFont" = "xft:VictorMono\ Nerd\ Font:antialias=true:hinting=true:style=Bold\ Italic:size=12:minspace=False";
   "rofi.font" = "Hack Nerd Font Mono 11";
 
   "URxvt*termName"  = "rxvt-unicode-256color";

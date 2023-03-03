@@ -109,8 +109,8 @@
 (defun pvr/set-font-faces ()
   (set-mouse-color "white")
   (set-face-attribute 'default nil :font "VictorMono Nerd Font" :height 110 :weight 'bold)
-  (set-face-attribute 'variable-pitch nil :font "Iosevka Slab" :height 100 :weight 'bold)
-  (set-face-attribute 'fixed-pitch nil :font "Iosevka Fixed Slab" :height 110 :weight 'bold)
+  (set-face-attribute 'variable-pitch nil :font "Iosevka Nerd Font" :height 100 :weight 'bold)
+  (set-face-attribute 'fixed-pitch nil :font "Iosevka Nerd Font" :height 110 :weight 'bold)
   (set-frame-parameter (selected-frame) 'alpha '(85 . 85)))
 (if (daemonp)
     (add-hook 'after-make-frame-functions
@@ -1067,10 +1067,12 @@ Also move to the next line, since that's the most frequent action after"
 (load-file (concat user-emacs-directory "eshell.el"))
 
 (defun pvr/new-eshell-window ()
+  (interactive)
   (let* ((name (pvr/random-name)))
     (progn
       (let ((shell-buffer (eshell "new")))
-        (rename-buffer (concat "*EsHeLl: " name "*"))))))
+        (rename-buffer (concat "*EsHeLl: " name "*"))
+        (switch-to-buffer shell-buffer)))))
 
 ;; keep this as last as possible after all the minor modes
 ;; (add-hook 'after-init-hook #'envrc-global-mode)

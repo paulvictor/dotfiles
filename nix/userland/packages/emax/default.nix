@@ -47,7 +47,7 @@ let
             # elscreen-separate-buffer-list
             engine-mode
             # envrc
-            equake
+            # equake
             #         esh-autosuggest
             eshell-prompt-extras
             eshell-syntax-highlighting
@@ -125,7 +125,7 @@ let
             wgrep
             which-key
             yaml-mode
-            yequake
+            # yequake
             zerodark-theme
             zoom-window
           ]
