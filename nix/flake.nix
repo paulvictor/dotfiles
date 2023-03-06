@@ -9,14 +9,14 @@
     homeManager.inputs.utils.follows = "flake-utils";
     sops-nix.url = "github:Mic92/sops-nix";
 #     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
-    emacsOverlay.url = "github:nix-community/emacs-overlay/545383bd7d";
+    emacsOverlay.url = "github:nix-community/emacs-overlay/master";
 #     emacsOverlay.inputs.nixpkgs.follows = "nixpkgs";
     neovim.url = "github:nix-community/neovim-nightly-overlay";
 #     neovim.inputs.nixpkgs.follows = "nixpkgs";
     impermanence.url = "github:nix-community/impermanence";
     nixos-generators.url = "github:nix-community/nixos-generators";
 #     nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
-    nur.url = "github:nix-community/nur";
+    nur.url = "github:nix-community/nur/19afadcbdbf2f970b3fa7f63fecb4d55cfae9c44";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
 #     portable-svc.url = "git+https://tulpa.dev/cadey/portable-svc.git?ref=main";
 #     portable-svc.inputs.nixpkgs.follows = "nixpkgs";

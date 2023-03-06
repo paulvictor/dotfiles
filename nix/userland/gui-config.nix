@@ -97,7 +97,7 @@ lib.mkIf
                                     postInstall = "";
                                     outputs = [ "out" ];
                                   }))
-#             (ungoogled-chromium.override { enableWideVine = true;})
+            (ungoogled-chromium.override { enableWideVine = true;})
           ];
         xresources =
           let
@@ -122,7 +122,7 @@ lib.mkIf
             nur.repos.rycee.firefox-addons.videospeed
             brotab-extension
             edit-with-emacs-extension
-            darkreader-extension
+#             darkreader-extension
           ];
           profiles = {
             "proxied" = {
