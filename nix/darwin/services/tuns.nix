@@ -9,16 +9,16 @@ in
 {
   launchd.daemons = {
     nix-tun0.serviceConfig = {
-      Label = "daemon.nix.tun-0";
+      Label = "daemon.nix.bar";
       UserName = "paul";
-      ProgramArguments = programWrapper { program = command tun-0; name = "tun-0"; };
+      ProgramArguments = programWrapper { program = command tun-0; name = "bar"; };
       RunAtLoad = true;
       KeepAlive = true;
     };
     nix-tun1.serviceConfig = {
-      Label = "daemon.nix.tun-1";
+      Label = "daemon.nix.bizz";
       UserName = "paul";
-      ProgramArguments = programWrapper { program = command tun-1; name = "tun-1"; };
+      ProgramArguments = programWrapper { program = command tun-1; name = "bizz"; };
       RunAtLoad = true;
       KeepAlive = true;
     };

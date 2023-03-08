@@ -7,9 +7,9 @@ in
 {
   launchd.daemons = {
     nix-sshd.serviceConfig = {
-      Label = "daemon.nix.sshd";
+      Label = "daemon.nix.foo";
       UserName = "paul";
-      ProgramArguments = programWrapper { program = command; name = "sshd";};
+      ProgramArguments = programWrapper { program = command; name = "foo";};
       RunAtLoad = true;
       KeepAlive = true;
     };

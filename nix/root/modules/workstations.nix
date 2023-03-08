@@ -11,28 +11,28 @@ with pkgs;
   time.timeZone = "Asia/Kolkata";
 
   environment.systemPackages = [
-    binutils
-    file
-    git
-    gnupg
-    home-manager
     htop
     man-pages
     neovim-nightly
-    nix-prefetch-github
-    patchelf
     posix_man_pages
     psmisc
     wget
   ] ++ lib.optionals isPhysicalDevice [
-    virt-manager
-    libnotify
+    binutils
     bluez
     exfat
-    pciutils
-    wirelesstools
-    wally-cli
+    file
+    git
+    gnupg
+    home-manager
     kmonad
+    libnotify
+    nix-prefetch-github
+    patchelf
+    pciutils
+    virt-manager
+    wally-cli
+    wirelesstools
   ];
 
   services.upower.enable = isPhysicalDevice;
