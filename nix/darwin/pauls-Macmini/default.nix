@@ -5,12 +5,14 @@ let
   inherit (inputs) darwin  flake-utils;
   commonModules = {pkgs,...}: {
     services.nix-daemon.enable = true;
-    nix.package = pkgs.nix;
+    nix.package = pkgs.nixStable;
     nix.extraOptions = ''
       experimental-features = nix-command flakes
       gc-keep-outputs = true
       gc-keep-derivations = true
       build-users-group = nixbld
+      keep-outputs = true;
+      keep-derivations = true;
     '';
     environment.systemPackages = with pkgs;[
       inputs.homeManager.packages."${system}".default
@@ -25,13 +27,17 @@ let
     programs.bash = {
       enable = true;
     };
+    documentation.enable = false;
+    documentation.man.enable = false;
+    documentation.doc.enable = false;
+    documentation.info.enable = false;
   };
   machineSpecific = _: {
     networking.hostName = "crash";
     networking.computerName = "Crash";
   };
 
-  setupNixPath = {config, lib, ...}: {
+  setupNixPath = {lib, ...}: {
     nix.nixPath =
       lib.mapAttrs'
         (name: value: { inherit name; value = value.outPath; })
