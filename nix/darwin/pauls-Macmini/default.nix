@@ -11,8 +11,6 @@ let
       gc-keep-outputs = true
       gc-keep-derivations = true
       build-users-group = nixbld
-      keep-outputs = true;
-      keep-derivations = true;
     '';
     environment.systemPackages = with pkgs;[
       inputs.homeManager.packages."${system}".default
