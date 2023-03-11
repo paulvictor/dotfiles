@@ -26,9 +26,9 @@
   {
     hostName = "lucy";
     format = "amazon";
-    system = "x86_64-linux";
+    system = "aarch64-linux";
     extraModules = [
-      (_: { amazonImage.sizeMB = 32 * 1024; })
+      (_: { amazonImage.sizeMB = 8 * 1024; })
     ];
   }
   {

@@ -17,17 +17,20 @@ let
     {
       services.openssh = {
         enable = true;
-        forwardX11 = true;
-        permitRootLogin = lib.mkDefault "yes";
-        gatewayPorts = "yes";
-        authorizedKeysCommand =
-          with pkgs;
-          let
-            script =
-              writeShellScript
-                "getMyKey"
-                "${curl}/bin/curl -L https://github.com/paulvictor.keys";
-          in lib.mkDefault (toString script); # Google cloud images may want to override this
+        settings = {
+#           ForwardX11 = true;
+          PermitRootLogin = lib.mkDefault "yes";
+          GatewayPorts = "yes";
+          PasswordAuthentication = false;
+        };
+#         authorizedKeysCommand =
+#           with pkgs;
+#           let
+#             script =
+#               writeShellScript
+#                 "getMyKey"
+#                 "${curl}/bin/curl -L https://github.com/paulvictor.keys";
+#           in lib.mkDefault (toString script); # Google cloud images may want to override this
         hostKeys =
           [
             {

@@ -1,8 +1,6 @@
 { config, lib, pkgs, specialArgs, modulesPath, ...}:
 
 {
-  system.stateVersion = "22.05"; # Did you read the comment?
-
   # Allow packet forwarding
   # For wireguard
   boot.kernel.sysctl = {

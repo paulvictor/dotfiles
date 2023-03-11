@@ -16,7 +16,7 @@
     impermanence.url = "github:nix-community/impermanence";
     nixos-generators.url = "github:nix-community/nixos-generators";
 #     nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
-    nur.url = "github:nix-community/nur/19afadcbdbf2f970b3fa7f63fecb4d55cfae9c44";
+    nur.url = "github:nix-community/nur";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
 #     portable-svc.url = "git+https://tulpa.dev/cadey/portable-svc.git?ref=main";
 #     portable-svc.inputs.nixpkgs.follows = "nixpkgs";

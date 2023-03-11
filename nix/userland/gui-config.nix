@@ -37,6 +37,14 @@ lib.mkIf
         sha256 = "sha256-9nCmbDfhOfPUD+ljsOnXfU+ErJLgLx+XQ0SAojy4W5Q=";
         meta = {};
       };
+      tridactyl = pkgs.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {
+        pname = "tridactyl";
+        version = "1.23.0pre6694";
+        addonId = "tridactyl.vim.betas@cmcaine.co.uk";
+        url = "https://tridactyl.cmcaine.co.uk/betas/tridactyl2-1.23.0pre6694.xpi";
+        sha256 = "1y8sfzsczhxgsh9js56yhhfw951qk4zws14bzm2zs8zs9j6jqrsd";
+        meta = {};
+      };
       customizedemacs = pkgs.callPackage ./packages/emax {};
     in
       {
@@ -110,20 +118,6 @@ lib.mkIf
           enable = true;
           package = firefox-devedition-bin;
           #package = firefox-beta-bin ; # wrapFirefox (latest.firefox-beta-bin) { browserName = "firefox"; };
-          extensions = [
-            #nur.repos.rycee.firefox-addons.violentmonkey
-            #nur.repos.rycee.firefox-addons.tree-style-tab
-            #nur.repos.rycee.firefox-addons.temporary-containers
-            #nur.repos.rycee.firefox-addons.refined-github
-            nur.repos.rycee.firefox-addons.i-dont-care-about-cookies
-            nur.repos.rycee.firefox-addons.https-everywhere
-            nur.repos.rycee.firefox-addons.tridactyl
-            nur.repos.rycee.firefox-addons.i-dont-care-about-cookies
-            nur.repos.rycee.firefox-addons.videospeed
-            brotab-extension
-            edit-with-emacs-extension
-#             darkreader-extension
-          ];
           profiles = {
             "proxied" = {
               id = 1;
@@ -171,6 +165,21 @@ lib.mkIf
                 "browser.compactmode.show" = true;
               };
               userChrome = import ./config/userChrome.nix { inherit pkgs; };
+              extensions = [
+                #nur.repos.rycee.firefox-addons.violentmonkey
+                #nur.repos.rycee.firefox-addons.tree-style-tab
+                #nur.repos.rycee.firefox-addons.temporary-containers
+                #nur.repos.rycee.firefox-addons.refined-github
+                nur.repos.rycee.firefox-addons.i-dont-care-about-cookies
+#                 nur.repos.rycee.firefox-addons.https-everywhere
+#                 nur.repos.rycee.firefox-addons.tridactyl
+                nur.repos.rycee.firefox-addons.i-dont-care-about-cookies
+#                 nur.repos.rycee.firefox-addons.videospeed
+                brotab-extension
+                edit-with-emacs-extension
+                tridactyl
+    #             darkreader-extension
+              ];
             };
           };
         };
