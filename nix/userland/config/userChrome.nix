@@ -18,13 +18,6 @@ let
   };
   makeImportStatement = repo: relPath:
     ''@import url('file://${repo}/${relPath}');'';
-  base16-tridactyl = fetchFromGitHub {
-    owner = "bezmi";
-    repo = "base16-tridactyl";
-    rev = "092a88c2233c10a1b28cad647b2bf3fd667aaa84";
-    sha256 = "19mqavlz713ilr0x8a6j7205irns069nx0a85f4h7xs0pc2kknhz";
-    fetchSubmodules = true;
-  };
 in
 
 (lib.concatMapStringsSep "\n" (makeImportStatement firefox-csshacks)

@@ -6,7 +6,7 @@
 
 (undefine-key *top-map* (kbd  "C-t"))
 
-(set-prefix-key (kbd "C-M-s-Up"))
+(set-prefix-key (kbd "C-M-s-g"))
 
 (defun set-keybindings (key command &key (where 'both))
   (case where
@@ -37,6 +37,7 @@
 (set-keybindings "\"" "frame-windowlist" :where 'top)
 (set-keybindings "/" "windowlist" :where 'top)
 (set-keybindings "`" "gother" :where 'top)
+(set-keybindings "0" "gother" :where 'top)
 ; Setup so that hitting Caps lock twice does this
 (set-keybindings "C-M-s-Up" "fother" :where 'local)
 (set-keybindings "-" "vsplit" :where 'top)
@@ -47,7 +48,7 @@
 (set-keybindings "C-M-s-{" "exchange-direction up" :where 'top)
 (set-keybindings "C-M-s-}" "exchange-direction down" :where 'top)
 
-(define-key *top-map* (kbd "C-M-s-Up") 'pvr/bindings)
+(define-key *top-map* (kbd "C-M-s-g") 'pvr/bindings)
 
 (define-key *menu-map* (kbd "C-j") 'menu-down)
 (define-key *menu-map* (kbd "C-k") 'menu-up)

@@ -32,6 +32,7 @@
         "support.*"       = "support/libspa-support";
       };
     };
+    wireplumber.enable = true;
 
   };
   environment.etc = {

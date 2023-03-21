@@ -50,6 +50,7 @@ lib.mkIf
         home.packages =
           [
             axel
+            cachix
             enscript
             entr
             gnumake
