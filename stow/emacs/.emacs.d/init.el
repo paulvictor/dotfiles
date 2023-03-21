@@ -260,10 +260,10 @@
 (use-package general
   :config
   (general-evil-setup t)
-  (general-define-key
-    :states 'motion ; Normal, visual, operator states
-    ";" 'evil-ex
-    ":" 'evil-repeat-find-char)
+;;   (general-define-key
+;;     :states 'motion ; Normal, visual, operator states
+;;     ";" 'evil-ex
+;;     ":" 'evil-repeat-find-char)
   (general-create-definer pvr/space-keys-def
     :keymaps '(normal visual insert emacs)
     :prefix "SPC"
