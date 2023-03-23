@@ -30,18 +30,20 @@
 
 (set-keybindings "?" '*help-map* :where 'top)
 (set-keybindings "q" "delete-window" :where 'top)
-(set-keybindings "Q" "quit-confirm" :where 'top)
+(set-keybindings "w" "delete-window" :where 'top)
+;; (set-keybindings "Q" "quit-confirm" :where 'top)
 (set-keybindings "o" "only" :where 'top)
 (set-keybindings "f" "fullscreen" :where 'top)
 (set-keybindings "F" "curframe" :where 'top)
 (set-keybindings "\"" "frame-windowlist" :where 'top)
 (set-keybindings "/" "windowlist" :where 'top)
 (set-keybindings "`" "gother" :where 'top)
-(set-keybindings "0" "gother" :where 'top)
+(set-keybindings "Tab" "gother" :where 'top)
 ; Setup so that hitting Caps lock twice does this
 (set-keybindings "C-M-s-Up" "fother" :where 'local)
 (set-keybindings "-" "vsplit" :where 'top)
 (set-keybindings "\\" "hsplit" :where 'top)
+(set-keybindings "|" "hsplit" :where 'top)
 
 (set-keybindings "C-M-s-[" "exchange-direction left" :where 'top)
 (set-keybindings "C-M-s-]" "exchange-direction right" :where 'top)
