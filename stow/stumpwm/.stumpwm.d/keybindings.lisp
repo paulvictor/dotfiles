@@ -45,10 +45,10 @@
 (set-keybindings "\\" "hsplit" :where 'top)
 (set-keybindings "|" "hsplit" :where 'top)
 
-(set-keybindings "C-M-s-[" "exchange-direction left" :where 'top)
-(set-keybindings "C-M-s-]" "exchange-direction right" :where 'top)
-(set-keybindings "C-M-s-{" "exchange-direction up" :where 'top)
-(set-keybindings "C-M-s-}" "exchange-direction down" :where 'top)
+(set-keybindings "C-M-s-Left" "exchange-direction left" :where 'top)
+(set-keybindings "C-M-s-Right" "exchange-direction right" :where 'top)
+(set-keybindings "C-M-s-Up" "exchange-direction up" :where 'top)
+(set-keybindings "C-M-s-Down" "exchange-direction down" :where 'top)
 
 (define-key *top-map* (kbd "C-M-s-g") 'pvr/bindings)
 
