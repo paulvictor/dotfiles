@@ -26,6 +26,6 @@
     ./hardware-configuration.nix
   ];
 
-  hardware.video.hidpi.enable = true;
+#   hardware.video.hidpi.enable = true;
 
 }

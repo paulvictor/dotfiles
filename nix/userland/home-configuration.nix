@@ -5,8 +5,9 @@
 {
   news.display = "silent";
   manual = {
-    html.enable = true;
-    json.enable = true;
+    html.enable = false;
+    json.enable = false;
+    manpages.enable = false;
   };
   imports =
     [

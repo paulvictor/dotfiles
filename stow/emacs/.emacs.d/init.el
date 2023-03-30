@@ -724,7 +724,7 @@ Repeated invocations toggle between the two most recently open buffers."
     :hook (lisp-mode . slime-mode)
     :init
     (setq inferior-lisp-program "sbcl") ; TODO : Move to dir specific config
-    (add-to-list 'slime-contribs 'slime-fancy)
+;;     (add-to-list 'slime-contribs 'slime-fancy)
     :config
     (advice-add 'hyperspec-lookup :around #'hyperspec-lookup--hyperspec-lookup-w3m)
     (add-hook 'slime-load-hook
@@ -1253,3 +1253,19 @@ Also move to the next line, since that's the most frequent action after"
   ;; (setq geiser-default-implementation 'gambit)
   (setq geiser-default-implementation 'guile)
   (setq geiser-active-implementations '(guile)))
+
+(use-package password-store)
+
+(use-package request)
+
+;; (defun eh (query)
+;;   (interactive)
+;;   (let* ((api-key (s-trim-right (password-store--run "show" "api.openapi.com/key")))
+;;         (url "https://api.openai.com/v1/chat/completions")
+;;         (output nil))
+;;     (request url
+;;       :type "POST"
+;;       :parser 'json-read
+;;       :success (cl-function
+;;                 (lambda (&key ))))))
+

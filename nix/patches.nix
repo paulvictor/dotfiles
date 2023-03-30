@@ -19,4 +19,4 @@ let
     sha256 = "sha256-0l9WJHaKW7qU5lAbwA8yf/+VLNVy3CP5lZrJbihZcQ8=";
   };
 in
-[ var-output-fix ]
+[ ]

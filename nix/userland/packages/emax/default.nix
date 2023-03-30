@@ -96,6 +96,7 @@ let
             origami
             page-break-lines
             paredit
+            password-store
             pcmpl-args
             pdf-tools
             perspective
@@ -107,6 +108,7 @@ let
             psci
             psc-ide
             rainbow-delimiters
+            request
             ripgrep
             s
             slack
