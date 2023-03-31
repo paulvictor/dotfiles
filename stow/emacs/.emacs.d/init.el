@@ -1258,14 +1258,25 @@ Also move to the next line, since that's the most frequent action after"
 
 (use-package request)
 
-;; (defun eh (query)
-;;   (interactive)
-;;   (let* ((api-key (s-trim-right (password-store--run "show" "api.openapi.com/key")))
+(defun eh (query)
+  (interactive "s\nQuery")
+  (let* ((api-key
+          ;; (s-trim-right (password-store--run "show" "api.openapi.com/key"))
+          "foobar"
+          )
 ;;         (url "https://api.openai.com/v1/chat/completions")
-;;         (output nil))
-;;     (request url
-;;       :type "POST"
-;;       :parser 'json-read
-;;       :success (cl-function
-;;                 (lambda (&key ))))))
+        (url "https://postman-echo.com/post")
+        (output nil))
+    (request url
+      :type "POST"
+      :headers '(("Content-Type" . "application/json")
+                 ("Authorization" . (concat "Bearer " api-key)))
+      :data (json-encode `(("model" . "gpt-3.5-turbo")
+                           ("messages" . ,(vector '(("role" . "user")
+                                                  ("content" . query))))
+                           ("temperature" . 0.8)))
+      :parser 'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (message "done %s" (assoc-default 'json data)))))))
 
