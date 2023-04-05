@@ -11,7 +11,7 @@ set findcase smart
 set autofocus false
 set hintdelay 100
 set hintnames uniform
-set hintchars gfdsahjkl
+set hintchars arstneio
 
 set hintfiltermode vimperator-reflow
 set hintuppercase false

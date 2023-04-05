@@ -118,6 +118,24 @@ with pkgs;
         user = "git";
         identityFile = "~/.ssh/id_rsa.pub";
       };
+      "setup-tunnel-1" = {
+        host = "setup-tunnel-1";
+        hostname = "paulvictor.xyz";
+        user = "viktor";
+        identityFile = "~/.ssh/id_rsa.pub";
+        extraOptions = {
+          "SessionType" = "none";
+          "LocalForward" = "8888 127.0.0.1:8080";
+          "RequestTTY" = "no";
+        };
+      };
+      "into-crash" = {
+        host = "into-crash";
+        hostname = "paulvictor.xyz";
+        user = "paul";
+        port = 8888;
+        identityFile = "~/.ssh/id_rsa.pub";
+      };
     };
   };
 
