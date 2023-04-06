@@ -136,6 +136,28 @@ with pkgs;
         port = 8888;
         identityFile = "~/.ssh/id_rsa.pub";
       };
+      "into-crash-directly" = {
+        host = "into-crash-directly";
+        hostname = "localhost";
+        user = "paul";
+        port = 8080;
+        forwardAgent = true;
+        identityFile = "~/.ssh/id_rsa.pub";
+        proxyJump = "viktor@paulvictor.xyz";
+      };
+      "setup-socks-proxy" = {
+        host = "setup-socks-proxy";
+        hostname = "localhost";
+        user = "paul";
+        port = 8888;
+        forwardAgent = true;
+        identityFile = "~/.ssh/id_rsa.pub";
+        extraOptions = {
+          "SessionType" = "none";
+          "DynamicForward" = "127.0.0.1:6565";
+          "RequestTTY" = "no";
+        };
+      };
     };
   };
 
