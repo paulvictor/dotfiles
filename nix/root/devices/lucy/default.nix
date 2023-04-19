@@ -33,4 +33,12 @@
     ../../modules/workstations.nix
   ];
 
+  documentation.enable = false;
+  documentation.doc.enable = false;
+  documentation.man.enable = false;
+  documentation.info.enable = false;
+  services.ssm-agent = {
+    enable = true;
+    package = pkgs.ssm-agent;
+  };
 }
