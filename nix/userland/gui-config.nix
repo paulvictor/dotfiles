@@ -45,6 +45,47 @@ lib.mkIf
         sha256 = "1y8sfzsczhxgsh9js56yhhfw951qk4zws14bzm2zs8zs9j6jqrsd";
         meta = {};
       };
+      tabfs = pkgs.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {
+        pname = "tabfs";
+        version = "1.0";
+        addonId = "tabfs@paulvictor.com";
+        url = "https://github.com/paulvictor/TabFS/releases/download/c01449e/TabFS-1.0.xpi";
+        sha256 = "sha256-23SwvUvX9d3/H+wwZoV17V6qgcORnvt0WEE+MORh/7Y=";
+        meta = {};
+      };
+      tabfs-native-manifest =
+        let
+          tabfs-src = fetchFromGitHub {
+            owner = "paulvictor";
+            repo = "tabfs";
+            rev = "c01449ee9b2e854b2f9ff214e4708ed7b63e2ef7";
+            sha256 = "K2wD14EFZ7La6J+UGfL8+RRGGAUHhRfkHcZj+smhcd4=";
+          };
+          tabfs-fuse = stdenv.mkDerivation {
+            name = "tabfs-fuse";
+            src = tabfs-src;
+            phases = [ "buildPhase" "installPhase" ];
+            buildInputs = [ fuse ];
+            nativeBuildInputs = [ makeWrapper ];
+            buildPhase = ''
+              mkdir -pv $out/bin
+              $CC -O2 -D_FILE_OFFSET_BITS=64 -DFUSE_USE_VERSION=26 -Wall -Wextra -Wno-unused-result -g $NIX_CFLAGS_COMPILE -o $out/bin/tabfs $src/fs/tabfs.c -pthread -lfuse
+            '';
+            installPhase = ''
+              wrapProgram $out/bin/tabfs \
+              --prefix PATH : ${lib.makeBinPath [ procps gnugrep findutils ]} \
+              --set TABFS_MOUNT_DIR ${config.home.homeDirectory}/tabs
+            '';
+          };
+        in
+          builtins.toJSON {
+            name = "com.paulvictor.tabfs";
+            description = "Tabfs";
+            path = "${tabfs-fuse}/bin/tabfs";
+            type = "stdio";
+            allowed_extensions = ["tabfs@paulvictor.com"];
+          };
+
       customizedemacs = pkgs.callPackage ./packages/emax {};
     in
       {
@@ -163,22 +204,15 @@ lib.mkIf
                 "extensions.autoDisableScopes" = 0;
                 "ui.prefersReducedMotion" = 1;
                 "browser.compactmode.show" = true;
+                "xpinstall.signatures.required" = false;
               };
               userChrome = import ./config/userChrome.nix { inherit pkgs; };
               extensions = [
-                #nur.repos.rycee.firefox-addons.violentmonkey
-                #nur.repos.rycee.firefox-addons.tree-style-tab
-                #nur.repos.rycee.firefox-addons.temporary-containers
-                #nur.repos.rycee.firefox-addons.refined-github
                 nur.repos.rycee.firefox-addons.i-dont-care-about-cookies
-#                 nur.repos.rycee.firefox-addons.https-everywhere
-#                 nur.repos.rycee.firefox-addons.tridactyl
-                nur.repos.rycee.firefox-addons.i-dont-care-about-cookies
-#                 nur.repos.rycee.firefox-addons.videospeed
                 brotab-extension
                 edit-with-emacs-extension
+                tabfs
                 tridactyl
-    #             darkreader-extension
               ];
             };
           };
@@ -187,6 +221,7 @@ lib.mkIf
           "${brotab.out}/config/firefox_mediator.json";
         home.file.".mozilla/native-messaging-hosts/tridactyl.json".source =
           "${tridactyl-native}/lib/mozilla/native-messaging-hosts/tridactyl.json";
+        home.file.".mozilla/native-messaging-hosts/com.paulvictor.tabfs.json".text = tabfs-native-manifest;
         home.file.".vieb/colors/gruvbox.css".source = ./config/vieb/colors/gruvbox.css;
         home.file.".vieb/colors/smalltabs.css".source = ./config/vieb/colors/smalltabs.css;
         home.file.".vieb/colors/dark_minimal.css".source = ./config/vieb/colors/dark_minimal.css;
