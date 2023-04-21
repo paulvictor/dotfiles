@@ -2,24 +2,18 @@
   description = "Meta Config";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/master";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     homeManager.url = "github:nix-community/home-manager/master";
     homeManager.inputs.nixpkgs.follows = "nixpkgs";
     homeManager.inputs.utils.follows = "flake-utils";
     sops-nix.url = "github:Mic92/sops-nix";
-#     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
-    emacsOverlay.url = "github:nix-community/emacs-overlay/3655d15";
-#     emacsOverlay.inputs.nixpkgs.follows = "nixpkgs";
+    emacsOverlay.url = "github:nix-community/emacs-overlay/master";
     neovim.url = "github:nix-community/neovim-nightly-overlay";
-#     neovim.inputs.nixpkgs.follows = "nixpkgs";
     impermanence.url = "github:nix-community/impermanence";
     nixos-generators.url = "github:nix-community/nixos-generators";
-#     nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/nur";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
-#     portable-svc.url = "git+https://tulpa.dev/cadey/portable-svc.git?ref=main";
-#     portable-svc.inputs.nixpkgs.follows = "nixpkgs";
     ngnk.url = "github:nathyong/ngnk-nix";
     ngnk.inputs.nixpkgs.follows = "nixpkgs";
     ngnk.inputs.flake-utils.follows = "flake-utils";
@@ -47,8 +41,6 @@
 
     comma = {
       url = "github:nix-community/comma/master";
-#       inputs.nixpkgs.follows = "nixpkgs";
-#       inputs.utils.follows = "flake-utils";
     };
 
     nix-index-database = {

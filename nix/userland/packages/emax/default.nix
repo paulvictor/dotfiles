@@ -11,7 +11,7 @@ let
     };
   };
   _emacs =
-    if specialArgs.withGUI then pkgs.emacsGit else pkgs.emacsUnstable-nox;
+    if specialArgs.withGUI then pkgs.emacsUnstable else pkgs.emacsUnstable-nox;
   customizedEmacs =
     (emacsPackagesFor (_emacs.override { withImageMagick = true; }))
       .emacsWithPackages(epkgs:
