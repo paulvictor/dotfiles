@@ -9,7 +9,7 @@
     homeManager.inputs.utils.follows = "flake-utils";
     sops-nix.url = "github:Mic92/sops-nix";
 #     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
-    emacsOverlay.url = "github:nix-community/emacs-overlay/master";
+    emacsOverlay.url = "github:nix-community/emacs-overlay/3655d15";
 #     emacsOverlay.inputs.nixpkgs.follows = "nixpkgs";
     neovim.url = "github:nix-community/neovim-nightly-overlay";
 #     neovim.inputs.nixpkgs.follows = "nixpkgs";
