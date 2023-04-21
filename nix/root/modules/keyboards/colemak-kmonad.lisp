@@ -31,7 +31,13 @@
   lctl-C-x (tap-hold-next 200 C-x lctl)
   spc-alt (tap-hold-next 200 spc lalt)
   rsft-C-c (tap-hold-next 200 C-c rsft)
-  lsft-esc (tap-hold-next 200 esc lsft))
+  lsft-esc (tap-hold-next 200 esc lsft)
+
+  dbl-quot (around lsft apos)
+  c-fx (tap-hold-next 500 C-M-A-g C-M-lalt)
+  num-1  (tap-hold-next 500 (layer-switch num-1) spc)
+  shifted-2  (tap-hold-next 500 (layer-switch shifted-2) spc)
+  shifted  (tap-hold-next 500 lsft bspc))
 
 (deflayer colemak-dh
   esc     @qwe   @col   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
@@ -40,3 +46,27 @@
   @fx      a    r    s    t    g    m    n    e    i    o    @apos-qwerty    @ret-ctl
   @lsft-esc       x    c    d    v    z    k    h    ,    .    /    @rsft-C-c     up
   @lctl-C-x     lmet lalt           @spc-alt            ralt rmet _    @rctl-M-x left down right)
+
+(deflayer customized-0
+  XX      XX     XX    XX    XX           XX     XX    XX           XX    XX    XX    XX       XX
+  XX      esc    w     f     p            b      XX    q            u     y     ret   bspc     XX    XX
+  XX      @c-fx   r     s     t            g      XX    m            n     e     i     o        XX    XX
+  XX      z      x     c     v            d      XX    -            h     j     k     l        XX
+  XX      XX     XX    XX    @num-1       XX     XX    @shifted     XX    XX    XX    XX       XX
+  XX      XX     XX          @shifted-2            XX    XX           XX    XX    XX    XX       XX)
+
+(deflayer num-1
+  XX      XX     XX    XX    XX           XX     XX    XX     XX      XX     XX    XX      XX
+  XX      ?      /     \\    |            `      XX    6      7       8      9     0       XX    XX
+  XX      <      ,     .     >            '      XX    1      2       3      4     5       XX    XX
+  XX      {      [     ]     }            ;      XX    =      left    down   up    right   XX
+  XX      XX     XX    XX    XX           XX     XX    XX     XX      XX     XX    XX      XX
+  XX      XX     XX          XX           XX     XX    XX     XX      XX     XX    XX)
+
+(deflayer shifted-2
+  XX      XX     XX    XX    XX           XX            XX    XX      XX      XX     XX    XX      XX
+  XX      XX     XX    XX    XX           ~             XX    ^       &       *      \(    \)      XX    XX
+  XX      XX     XX    XX    XX           @dbl-quot     XX    !       @       #      $     %       XX    XX
+  XX      XX     XX    XX    XX           :             XX    +       XX      XX     XX    XX      XX
+  XX      XX     XX    XX    XX           XX            XX    XX      XX      XX     XX    XX      XX
+  XX      XX     XX          XX           XX            XX    XX      XX      XX    XX     XX)
