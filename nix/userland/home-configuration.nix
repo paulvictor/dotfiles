@@ -16,7 +16,10 @@
       ./common.nix
     ]
     ++ (lib.optional specialArgs.withGUI ./gui-config.nix)
-    ++ (lib.optional specialArgs.isDevEnv ./dev-config.nix)
+    ++ (lib.optionals specialArgs.isDevEnv [
+      ./dev-config.nix
+      ./config/gitconfig.nix
+    ])
     ++ (lib.optional specialArgs.isDesktop ./desktop-config.nix)
     ++ specialArgs.hostSpecificImports;
 }

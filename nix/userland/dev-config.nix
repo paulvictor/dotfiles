@@ -20,7 +20,9 @@ lib.mkIf
           :def hoogle \s -> return $ ":! hoogle search --color --count=15 \"" ++ s ++ "\""
           :def doc \s -> return $ ":! hoogle search --color --info \"" ++ s ++ "\""
         '';
-        home.file.".gitconfig".text = builtins.readFile ./config/git-config;
+#         home.file.".gitconfig".text = builtins.readFile ./config/git-config;
+#         imports = [
+#         ];
         programs.fzf = {
           enable = true;
           enableZshIntegration = true;
