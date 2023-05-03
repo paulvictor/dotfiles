@@ -42,7 +42,7 @@
 
     includes = [
       {
-        condition = "gitdir:**/Juspay/*";
+        condition = "gitdir:Juspay/";
         contents = {
           user = {
             email = "paul.victor@juspay.in";
