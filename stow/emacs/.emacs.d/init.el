@@ -106,12 +106,50 @@
   (dashboard-insert-startupify-lists)
   (dashboard-refresh-buffer))
 
+(defun pvr/show-welcome-buffer ()
+  "Show *Welcome* buffer."
+  (with-current-buffer (get-buffer-create "*Welcome*")
+    (setq truncate-lines t)
+    (let* ((buffer-read-only)
+           (image-path (concat user-emacs-directory "emacs-e-template.svg"))
+           (image (create-image image-path))
+           (size (image-size image))
+           (height (cdr size))
+           (width (car size))
+           (top-margin (floor (/ (- (window-height) height) 2)))
+           (left-margin (floor (/ (- (window-width) width) 2)))
+           (prompt-title "Welcome to Emacs!"))
+      (erase-buffer)
+      (setq mode-line-format nil)
+      (goto-char (point-min))
+      (insert (make-string top-margin ?\n ))
+      (insert (make-string left-margin ?\ ))
+      (insert-image image)
+      (insert "\n\n\n")
+;;       (insert (make-string (floor (/ (- (window-width) (string-width prompt-title)) 2)) ?\ ))
+;;       (insert prompt-title)
+      )
+    (setq cursor-type nil)
+    (read-only-mode +1)
+    (switch-to-buffer (current-buffer))
+    (local-set-key (kbd "q") 'kill-this-buffer)
+    (current-buffer)))
+
+(setq initial-scratch-message nil)
+(setq inhibit-startup-screen t)
+
+;; (when (< (length command-line-args) 2)
+;;   (add-hook 'emacs-startup-hook (lambda ()
+;;                                   (when (display-graphic-p)
+;;                                     (pvr/show-welcome-buffer)))))
+
 (defun pvr/set-font-faces ()
   (set-mouse-color "white")
   (set-face-attribute 'default nil :font "VictorMono Nerd Font" :height 110 :weight 'bold)
   (set-face-attribute 'variable-pitch nil :font "Iosevka Slab" :height 100 :weight 'bold)
   (set-face-attribute 'fixed-pitch nil :font "Iosevka Fixed Slab" :height 110 :weight 'bold)
   (set-frame-parameter (selected-frame) 'alpha '(85 . 85)))
+
 (if (daemonp)
     (add-hook 'after-make-frame-functions
               (lambda (frame)
@@ -119,9 +157,10 @@
                 (with-selected-frame frame
                   (pvr/set-font-faces)
                   (set-env-vars)
-                  (init-dashboard))))
-  (pvr/set-font-faces))
-(setq inhibit-startup-screen t)
+                  (setq initial-buffer-choice #'pvr/show-welcome-buffer))))
+  (progn
+    (pvr/set-font-faces)
+    (setq initial-buffer-choice #'pvr/show-welcome-buffer)))
 
 ; if nil, italics is universally disabled
 (setq w32-enable-italics t)
@@ -182,24 +221,24 @@
   :config
   (doom-modeline-mode 1))
 
-(use-package dashboard
-  :ensure t
-  :config
-  (dashboard-setup-startup-hook)
-  (init-dashboard)
-  :custom
-  (dashboard-footer-messages
-   ;; Taken from https://github.com/notepad-plus-plus/notepad-plus-plus/blob/master/PowerEditor/src/Notepad_plus.cpp
-   (s-lines
-    (f-read (concat user-emacs-directory "quotes.txt"))))
-  (initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
-  (dashboard-startup-banner 'logo)
-  ;; (dashboard-startup-banner
-  ;;      (concat user-emacs-directory "emacs-e-template.svg"))
-  (dashboard-set-heading-icons t)
-  (dashboard-set-file-icons t))
+;; (use-package dashboard
+;;   :ensure t
+;;   :config
+;;   (dashboard-setup-startup-hook)
+;;   (init-dashboard)
+;;   :custom
+;;   (dashboard-footer-messages
+;;    ;; Taken from https://github.com/notepad-plus-plus/notepad-plus-plus/blob/master/PowerEditor/src/Notepad_plus.cpp
+;;    (s-lines
+;;     (f-read (concat user-emacs-directory "quotes.txt"))))
+;;   (initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+;;   (dashboard-startup-banner 'logo)
+;;   ;; (dashboard-startup-banner
+;;   ;;      (concat user-emacs-directory "emacs-e-template.svg"))
+;;   (dashboard-set-heading-icons t)
+;;   (dashboard-set-file-icons t))
 
-(setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+;; (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
 
 (use-package auth-source-pass
   :init
