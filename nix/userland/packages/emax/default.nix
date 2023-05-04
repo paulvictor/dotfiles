@@ -22,17 +22,17 @@ let
             all-the-icons
             all-the-icons-dired
             all-the-icons-ibuffer
-            all-the-icons-ivy
-            all-the-icons-completion
-            all-the-icons-ivy-rich
+#             all-the-icons-ivy
+#             all-the-icons-completion
+#             all-the-icons-ivy-rich
             anzu
             avy
             cape
             company
             company-prescient
             copy-as-format
-            counsel
-            counsel-projectile
+#             counsel
+#             counsel-projectile
             dash
             dashboard
             dired-single
@@ -72,9 +72,9 @@ let
             helpful
             hl-todo
             hydra
-            ivy
-            ivy-prescient
-            ivy-rich
+#             ivy
+#             ivy-prescient
+#             ivy-rich
             json-mode
             key-chord
             keyfreq
@@ -100,11 +100,11 @@ let
             pcmpl-args
             pdf-tools
             perspective
-            persp-projectile
+#             persp-projectile
             popper
             popup
             prescient
-            projectile
+#             projectile
             psci
             psc-ide
             rainbow-delimiters

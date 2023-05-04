@@ -652,8 +652,7 @@ Repeated invocations toggle between the two most recently open buffers."
   (general-define-key
    :keymaps 'project-prefix-map
    :prefix "C-c"
-   "e" 'project-eshell
-   "v" 'projectile-run-vterm)
+   "e" 'project-eshell)
   (general-define-key
    :keymaps 'project-prefix-map
    "b" 'consult-project-buffer

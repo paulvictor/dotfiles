@@ -14,10 +14,10 @@ writeShellScriptBin "wmexit" ''
       ${systemd}/bin/loginctl terminate-session $s
       ;;
     suspend)
-      llock && systemctl suspend
+      systemctl suspend
       ;;
     hibernate)
-      llock && systemctl hibernate
+      systemctl hibernate
       ;;
     reboot)
       systemctl reboot

@@ -116,7 +116,7 @@ lib.mkIf
             mpv
             networkmanagerapplet
             noto-fonts
-            nyxt-3
+#             nyxt-3
             pdftk
             pursuit
             rofi

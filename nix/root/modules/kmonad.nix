@@ -9,6 +9,6 @@ in
     enable = true;
     package = specialArgs.kmonad.packages.${specialArgs.system}.kmonad;
     keyboards = thisDeviceConfig;
-#     extraArgs = [ "--log-level" "debug" ];
+    extraArgs = [ "--log-level" "debug" ];
   };
 }
