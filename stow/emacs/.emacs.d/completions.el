@@ -113,6 +113,7 @@ folder, otherwise delete a word"
   (corfu-count 14)
   (corfu-scroll-margin 4)
   (corfu-preselect-first t)
+  (corfu-preview-current 'insert)
 
   :general
   (:keymaps 'corfu-map
@@ -135,32 +136,35 @@ folder, otherwise delete a word"
         completion-cycle-threshold 3
         read-file-name-completion-ignore-case t))
 
+(use-package kind-icon
+  :after corfu
+  :custom
+  (kind-icon-use-icons t)
+  (kind-icon-default-face 'corfu-default) ; Have background color be the same as `corfu' face background
+  (kind-icon-blend-background nil)  ; Use midpoint color between foreground and background colors ("blended")?
+  (kind-icon-blend-frac 0.08)
+
+  ;; NOTE 2022-02-05: `kind-icon' depends `svg-lib' which creates a cache
+  ;; directory that defaults to the `user-emacs-directory'. Here, I change that
+  ;; directory to a location appropriate to `no-littering' conventions, a
+  ;; package which moves directories of other packages to sane locations.
+  (svg-lib-icons-dir (no-littering-expand-var-file-name "svg-lib/cache/")) ; Change cache dir
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter) ; Enable `kind-icon'
+  )
+
 (use-package pcmpl-args)
 
 (use-package company
-;;   :init
-;;     (setq tab-always-indent 'complete)
-;;     (add-hook 'prog-mode-hook #'pvr/setup-company)
-;;     (add-hook 'org-mode-hook #'pvr/setup-company)
   :custom
-;;     (company-idle-delay 0.0)
-;;     (company-selection-wrap-around t)
-;;     (company-require-match nil)
     (company-dabbrev-other-buffers 'all)
     (company-dabbrev-time-limit 0.2)
     (company-dabbrev-code-time-limit 0.2)
     (company-dabbrev-downcase nil)
-;;     (company-dabbrev-char-regexp "\\(\\sw\\|\\s_\\|_\\|-\\)")
-    (company-minimum-prefix-length 1)
-;;   :bind
-;;     (:map company-active-map
-;;           ("TAB" . company-complete-common-or-cycle)
-;;           ("<backtab>" . company-select-previous)
-;;           ("RET" . company-complete-selection)
-;;           ("C-j" . company-select-next-or-abort)
-  ;;           ("C-k" . company-select-previous-or-abort))
-  )
+    (company-minimum-prefix-length 1))
 
+(general-create-definer completions-pre
+  :prefix "M-c")
 (use-package cape
   :after (corfu)
   :config
@@ -169,8 +173,6 @@ folder, otherwise delete a word"
   (require 'company-capf)
   (require 'company-files)
 
-;;   (nconc completion-at-point-functions
-;;          (list #'cape-dabbrev #'cape-file))
   (add-hook 'emacs-lisp-mode
             (lambda ()
               (make-local-variable 'completion-at-point-functions)
@@ -188,13 +190,13 @@ folder, otherwise delete a word"
   (add-hook 'prog-mode-hook
             (lambda ()
               (make-local-variable 'completion-at-point-functions)
+              (setq completion-at-point-functions
+                    (list #'cape-keyword #'cape-dabbrev))
               (cl-loop for backend in (list #'company-dabbrev #'company-files #'company-dabbrev-code)
                        do
                        (add-to-list 'completion-at-point-functions
                                     (cape-company-to-capf backend)))
-              (setq completion-at-point-functions
-                          (append completion-at-point-functions
-                                  (list #'cape-keyword)))))
+              ))
   ;; For pcomplete. For now these two advices are strongly recommended to
   ;; achieve a sane Eshell experience. See
   ;; https://github.com/minad/corfu#completing-with-corfu-in-the-shell-or-eshell
@@ -203,23 +205,12 @@ folder, otherwise delete a word"
   (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
   ;; Ensure that pcomplete does not write to the buffer and behaves as a pure
   ;; completion-at-point-function.
-  (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify))
+  (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify)
+  :general
+  (:prefix "M-c"
+           "TAB" 'completion-at-point
+           "k" 'cape-keyword
+           "f" 'cape-file
+           "s" 'cape-symbol
+           "h" 'cape-history))
 
-;; (pvr/add-company-backends)
-
-
-;; Implement a custom function for middle of the word completion like here :
-;; https://github.com/company-mode/company-mode/issues/340
-;; (defun pvr/setup-company ()
-;;   (company-mode 1)
-;;   (company-prescient-mode 1)
-;;   (company-tng-mode 1)
-;;   (company-tng-configure-default))
-
-;; (add-hook 'prog-mode-hook
-;;   (lambda ()
-;;     (setq company-backends
-;;           '(company-dabbrev
-;;             company-dabbrev-code
-;;             company-files
-;;             company-capf))))

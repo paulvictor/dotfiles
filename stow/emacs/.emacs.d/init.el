@@ -299,6 +299,7 @@
 (use-package general
   :config
   (general-evil-setup t)
+  (general-auto-unbind-keys)
 ;;   (general-define-key
 ;;     :states 'motion ; Normal, visual, operator states
 ;;     ";" 'evil-ex

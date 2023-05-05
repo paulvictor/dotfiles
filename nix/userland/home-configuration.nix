@@ -18,7 +18,6 @@
     ++ (lib.optional specialArgs.withGUI ./gui-config.nix)
     ++ (lib.optionals specialArgs.isDevEnv [
       ./dev-config.nix
-      ./config/gitconfig.nix
     ])
     ++ (lib.optional specialArgs.isDesktop ./desktop-config.nix)
     ++ specialArgs.hostSpecificImports;

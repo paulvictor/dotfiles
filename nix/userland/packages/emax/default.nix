@@ -137,7 +137,7 @@ let
         ++
         [ (with epkgs; [ nano-theme ]) ]
         ++
-        [ (with epkgs.elpaPackages; [ undo-tree org vertico corfu plz ]) ]);
+        [ (with epkgs.elpaPackages; [ undo-tree org vertico corfu plz kind-icon ]) ]);
   myemacs = symlinkJoin {
     name = "Emacs";
     paths = [ customizedEmacs ];
