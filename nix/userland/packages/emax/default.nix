@@ -23,7 +23,7 @@ let
             all-the-icons-dired
             all-the-icons-ibuffer
 #             all-the-icons-ivy
-#             all-the-icons-completion
+            all-the-icons-completion
 #             all-the-icons-ivy-rich
             anzu
             avy
