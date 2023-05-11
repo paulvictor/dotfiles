@@ -16,7 +16,7 @@ folder, otherwise delete a word"
               ("C-j" . vertico-next)
               ("C-k" . vertico-previous))
   (:map minibuffer-local-map
-        ("<backspace>" . pvr/minibuffer-backward-kill)
+;;         ("<backspace>" . pvr/minibuffer-backward-kill)
         ("C-w" . backward-kill-word))
   :custom
   (vertico-count 12)
