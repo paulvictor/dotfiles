@@ -6,7 +6,6 @@
     flake-utils.url = "github:numtide/flake-utils";
     homeManager.url = "github:nix-community/home-manager/master";
     homeManager.inputs.nixpkgs.follows = "nixpkgs";
-    homeManager.inputs.utils.follows = "flake-utils";
     sops-nix.url = "github:Mic92/sops-nix";
     emacsOverlay.url = "github:nix-community/emacs-overlay/master";
     neovim.url = "github:nix-community/neovim-nightly-overlay";

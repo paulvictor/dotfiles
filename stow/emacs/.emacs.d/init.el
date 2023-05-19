@@ -497,7 +497,7 @@ Repeated invocations toggle between the two most recently open buffers."
         org-src-preserve-indentation nil
         org-startup-folded 'content
         org-cycle-separator-lines 2)
-  (set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
+  (set-fringe-modeace-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
   (dolist (face '((org-level-1 . 1.3)
                   (org-level-2 . 1.2)
                   (org-level-3 . 1.1)
@@ -774,7 +774,14 @@ Repeated invocations toggle between the two most recently open buffers."
   (use-package lispyville
     :hook
       ;; Check if we can use prog-mode ?
-      ((slime-mode slime-repl-mode lisp-mode elisp-mode) . lispyville-mode)
+    ((slime-mode
+      slime-repl-mode
+      lisp-mode
+      elisp-mode
+      emacs-lisp-mode
+      geiser-repl-mode
+      ielm-mode
+      scheme-mode) . lispyville-mode)
     :custom
       (lispyville-key-theme '(operators c-w c-u prettify additional-motions commentary slurp/barf-cp wrap additional additional-insert))
     :config
@@ -788,10 +795,7 @@ Repeated invocations toggle between the two most recently open buffers."
                                                     "{" 'lispyville-previous-opening
                                                     "]" 'lispyville-next-closing
                                                     "}" 'lispyville-previous-closing)
-      (evil-define-key 'normal lispyville-mode-map (kbd "M-H") 'lispyville-beginning-of-next-defun)
-    :init
-      (add-hook 'lisp-mode-hook #'lispyville-mode)
-      (add-hook 'emacs-lisp-mode-hook #'lispyville-mode))
+      (evil-define-key 'normal lispyville-mode-map (kbd "M-H") 'lispyville-beginning-of-next-defun))
 
 ;; (use-package yequake
 ;;   :config
@@ -950,6 +954,9 @@ Also move to the next line, since that's the most frequent action after"
   (defengine hoogle "https://www.haskell.org/hoogle/?hoogle=%s"
     :keybinding "h"))
 
+(setq home-row-keys
+      (string-to-list "neio"))
+
 (use-package avy
   :config
   (general-define-key
@@ -958,7 +965,7 @@ Also move to the next line, since that's the most frequent action after"
    "C-." 'avy-goto-char-timer
    "C-;" 'avy-goto-line
    "C-," 'avy-goto-word-0)
-  (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+  (setq avy-keys home-row-keys)
   (setq avy-styles-alist
         '((avy-goto-char-2 . post)
           (avy-goto-line . pre)
@@ -966,7 +973,7 @@ Also move to the next line, since that's the most frequent action after"
 
 (use-package ace-window
   :init
-  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+  (setq aw-keys home-row-keys)
   :config
   (key-chord-define-global "``" 'aw-flip-window))
 

@@ -50,8 +50,9 @@ recognize the new height until you manually restart it by calling
 "
   :lighter " Ghcid"
   (when (fboundp 'nlinum-mode) (nlinum-mode -1))
-  (linum-mode -1)
-  (compilation-minor-mode))
+;;   (linum-mode -1)
+  (compilation-minor-mode)
+)
 
 
 ;; Compilation mode does some caching for markers in files, but it gets confused

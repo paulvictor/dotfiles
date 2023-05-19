@@ -141,7 +141,17 @@ let
   myemacs = symlinkJoin {
     name = "Emacs";
     paths = [ customizedEmacs ];
-    buildInputs = [ makeWrapper ripgrep fd w3m fish delta ];
+    buildInputs = [
+      makeWrapper
+      ripgrep
+      fd
+      w3m
+      fish
+      delta
+      (nerdfonts.override { fonts = [ "Hack" "VictorMono" "Iosevka" "SourceCodePro" "DejaVuSansMono" "FiraCode" "NerdFontsSymbolsOnly" ]; })
+      (iosevka-bin.override { variant = "aile"; })
+      (iosevka-bin.override { variant = "slab"; })
+    ];
     postBuild = ''
       wrapProgram $out/bin/emacs \
         --prefix PATH : ${lib.makeBinPath [ ripgrep fd w3m fish delta guile_3_0 ]} \
