@@ -27,6 +27,7 @@
   ctrl-or-o (tap-hold-next 200 o lctl)
   shift-or-s (tap-hold-next 200 s lsft)
   shift-or-e (tap-hold-next 200 e lsft)
+  lsft-or-ret (tap-hold-next 200 ret lsft)
   num-1  (tap-hold-next 200 spc (layer-toggle num-1))
   shifted-2  (tap-hold-next 200 tab (layer-toggle shifted-2)))
 
@@ -39,26 +40,26 @@
   @lctl-C-x lmet lalt           @spc-alt            ralt rmet cmp @rctl-M-x left down right)
 
 (deflayer customized-0
-  XX      XX       XX          XX              XX    XX     XX    XX    @qwe  XX              XX            XX            XX XX XX XX
-  XX      esc      w           f               p     b      XX    q     u     y               ret           bspc          XX    XX
-  XX      @c-fx    @alt-or-r   @shift-or-s     t     g      XX    m     n     @shift-or-e     @alt-or-i     @ctrl-or-o    XX    XX
-  XX      z        x           c               d     v      XX    -     h     j               k             l             XX
-  XX      XX       @num-1      XX              XX    XX     XX    lsft  XX   XX    XX              XX            XX
-  XX      XX       XX          @shifted-2      XX    XX           XX    XX    XX    XX              XX)
+  XX      XX       XX          XX              XX            XX     XX    XX            @qwe          XX              XX            XX            XX XX XX XX
+  XX      esc      w           f               p             b      XX    q             u             y               ;             apos          XX    XX
+  XX      @c-fx    @alt-or-r   @shift-or-s     t             g      XX    m             n             @shift-or-e     @alt-or-i     @ctrl-or-o    XX    XX
+  XX      z        x           c               d             v      XX    -             h             j               k             l             XX
+  XX      XX       XX          @num-1          @shifted-2    XX     XX    @lsft-or-ret  bspc          XX              XX            XX            XX
+  XX      XX       XX          XX              XX            XX     XX    XX    XX    XX              XX)
 
 (deflayer num-1
   XX      XX     XX    XX    XX      XX     XX    XX     XX      XX     XX    XX      XX XX XX XX
   XX      ?      /     \\    |       `      XX    6      7       8      9     0       XX    XX
-  XX      <      ,     .     >       '      XX    1      2       3      4     5       XX    XX
-  XX      {      [     ]     }       ;      XX    =      left    down   up    right   XX
+  XX      <      ,     .     >       XX     XX    1      2       3      4     5       XX    XX
+  XX      {      [     ]     }       XX     XX    =      left    down   up    right   XX
   XX      XX     XX    XX    XX      XX     XX    XX     XX      XX     XX    XX      XX
   XX      XX     XX          XX      XX     XX    XX     XX      XX     XX    XX)
 
 (deflayer shifted-2
   XX      XX     XX    XX    XX      XX           XX    XX      XX      XX     XX    XX      XX XX XX XX
   XX      f9     f10   f11   f12     ~            XX    ^       &       *      \(    \)      XX    XX
-  XX      f5     f6    f7    f8      @dbl-quot    XX    !       @       #      $     %       XX    XX
-  XX      f1     f2    f3    f4      :            XX    +       left    down   up    right   XX
+  XX      f5     f6    f7    f8      XX           XX    !       @       #      $     %       XX    XX
+  XX      f1     f2    f3    f4      XX           XX    +       left    down   up    right   XX
   XX      XX     XX    XX    XX      XX           XX    XX      XX      XX     XX    XX      XX
   XX      XX     XX          XX      XX           XX    XX      XX      XX    XX     XX)
 
