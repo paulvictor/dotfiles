@@ -45,6 +45,15 @@
                          (t "[no file]")))))
 
 (use-package f)
+
+(defvar pvr/persist-dir
+  (let ((d (or (getenv "PERSIST_DIR") "~/plain")))
+    (unless (f-dir? d)
+      (error "PERSIST_DIR not set"))
+    d))
+
+(defvar pvr/emacs-persist-dir
+  (f-join pvr/persist-dir "emacs.d"))
 (use-package s)
 (use-package dash)
 
@@ -76,15 +85,6 @@
   (setq key-chord-two-keys-delay 0.2) ; default 0.1
   :ensure t
   :config (key-chord-mode 1))
-
-(defvar pvr/persist-dir
-  (let ((d (or (getenv "PERSIST_DIR") "~/plain")))
-    (unless (f-dir? d)
-      (error "PERSIST_DIR not set"))
-    d))
-
-(defvar pvr/emacs-persist-dir
-  (f-join pvr/persist-dir "emacs.d"))
 
 (use-package no-littering
   :init
@@ -812,6 +812,9 @@ Repeated invocations toggle between the two most recently open buffers."
 
 (use-package undo-tree
   :init
+  :custom
+  (undo-tree-history-directory-alist
+   `(("." . ,(f-join pvr/emacs-persist-dir "undo"))))
   :config
   (global-undo-tree-mode 1))
 
@@ -964,7 +967,7 @@ Also move to the next line, since that's the most frequent action after"
    :states '(normal insert emacs)
    "C-." 'avy-goto-char-timer
    "C-;" 'avy-goto-line
-   "C-," 'avy-goto-word-0)
+   "C-," 'avy-goto-line)
   (setq avy-keys home-row-keys)
   (setq avy-styles-alist
         '((avy-goto-char-2 . post)

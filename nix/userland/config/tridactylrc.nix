@@ -55,7 +55,7 @@ bind ,<Space> nohlsearch
 
 bind 0 fillcmdline_notrail tabopen https://pursuit.purescript.org/search?q=
 bind = fillcmdline_notrail tabopen https://hoogle.haskell.org/?hoogle=
-bind c fillcmdline_notrail tabopen https://bitbucket.org/juspay/
+bind c fillcmdline_notrail tabopen https://bitbucket.juspay.net/dashboard
 " bind <Space> fillcmdline_notrail
 
 js tri.browserBg.runtime.getPlatformInfo().then(os=>{const editorcmd = os.os=="linux" ? "${alacritty}/bin/alacritty -e vim -t tridactyl-vim" : "auto"; tri.config.set("editorcmd", editorcmd)})

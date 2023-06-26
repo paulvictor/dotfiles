@@ -90,6 +90,7 @@ in
       [
         # The right way to do things but doesn't work on urxvt
         # (nerdfonts.override { fonts = [ "Hack" "VictorMono" "Iosevka" "SourceCodePro" "DejaVuSansMono" "FiraCode" ]; })
+        (nerdfonts.override { fonts = [ "Hack" "VictorMono" "Iosevka" "SourceCodePro" "DejaVuSansMono" "FiraCode" "NerdFontsSymbolsOnly" ]; })
         all-the-icons-fonts
         autorandr
         brotab

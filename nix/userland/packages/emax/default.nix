@@ -86,6 +86,7 @@ let
             lsp-ui
             macrostep
             magit
+            nerd-icons
             nix-mode
             nix-modeline
             nix-sandbox
@@ -148,9 +149,6 @@ let
       w3m
       fish
       delta
-      (nerdfonts.override { fonts = [ "Hack" "VictorMono" "Iosevka" "SourceCodePro" "DejaVuSansMono" "FiraCode" "NerdFontsSymbolsOnly" ]; })
-      (iosevka-bin.override { variant = "aile"; })
-      (iosevka-bin.override { variant = "slab"; })
     ];
     postBuild = ''
       wrapProgram $out/bin/emacs \
