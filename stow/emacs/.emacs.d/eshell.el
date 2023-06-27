@@ -58,7 +58,7 @@
 (use-package eshell
   :custom
   (eshell-history-file-name (no-littering-expand-var-file-name "eshell-history"))
-  (eshell-prefer-lisp-functions t)
+  (eshell-prefer-lisp-functions nil)
   (eshell-destroy-buffer-when-process-dies t)
   :config
   (setenv "PAGER" "cat") ; solves issues, such as with 'git log' and the default 'less'
