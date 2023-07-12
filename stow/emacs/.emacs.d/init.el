@@ -58,6 +58,8 @@
 (use-package dash)
 
 (use-package emacs
+  :custom
+  (tab-width 2)
   :init
   ;; Add prompt indicator to `completing-read-multiple'.
   ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
@@ -374,7 +376,6 @@
     (setq evil-want-integration t)
     (setq evil-search-module 'evil-search)
   :config
-  (setq evil-shift-width 2)
   (setq evil-want-keybinding nil)
   (evil-define-key '(insert visual) 'global (kbd "C-g") 'evil-normal-state)
   (evil-define-key 'normal 'global (kbd ", SPC") 'evil-ex-nohighlight)
