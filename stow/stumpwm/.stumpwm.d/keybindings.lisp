@@ -38,6 +38,7 @@
 (set-keybindings "\"" "frame-windowlist" :where 'top)
 (set-keybindings "/" "windowlist" :where 'top)
 (set-keybindings "`" "gother" :where 'top)
+(set-keybindings "n" "gother" :where 'top)
 (set-keybindings "Tab" "gother" :where 'top)
 ; Setup so that hitting Caps lock twice does this
 (set-keybindings "C-M-s-Up" "fother" :where 'local)
