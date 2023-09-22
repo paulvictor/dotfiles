@@ -2,16 +2,8 @@
 
 with pkgs;
 let
-  emacsPulsar = emacsPackages.trivialBuild {
-    pname = "pulsar";
-    src = fetchgit {
-      "url" = "https://gitlab.com/protesilaos/pulsar.git";
-      "rev" = "5ff2b816337c803053170dfd6d8038238d752dc0";
-      "sha256" = "0qa05v1lzn6h3sajih3qmm4zvx92f4chc7g0zwa1w5b8mhdhnvkd";
-    };
-  };
   _emacs =
-    if specialArgs.withGUI then pkgs.emacsUnstable else pkgs.emacsUnstable-nox;
+    if specialArgs.withGUI then pkgs.emacs-unstable else pkgs.emacsUnstable-nox;
   customizedEmacs =
     (emacsPackagesFor (_emacs.override { withImageMagick = true; }))
       .emacsWithPackages(epkgs:
@@ -42,7 +34,6 @@ let
             # eglot # Has some issue with project.el. Emacs 28 should fix this
             edit-server
             elisp-slime-nav
-            emacsPulsar
             # elscreen
             # elscreen-separate-buffer-list
             engine-mode
@@ -138,7 +129,7 @@ let
         ++
         [ (with epkgs; [ nano-theme ]) ]
         ++
-        [ (with epkgs.elpaPackages; [ undo-tree org vertico corfu plz kind-icon ]) ]);
+        [ (with epkgs.elpaPackages; [ undo-tree org vertico corfu plz kind-icon pulsar ]) ]);
   myemacs = symlinkJoin {
     name = "Emacs";
     paths = [ customizedEmacs ];

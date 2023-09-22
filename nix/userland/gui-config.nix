@@ -90,7 +90,7 @@ in
       [
         # The right way to do things but doesn't work on urxvt
         # (nerdfonts.override { fonts = [ "Hack" "VictorMono" "Iosevka" "SourceCodePro" "DejaVuSansMono" "FiraCode" ]; })
-        (nerdfonts.override { fonts = [ "Hack" "VictorMono" "Iosevka" "SourceCodePro" "DejaVuSansMono" "FiraCode" "NerdFontsSymbolsOnly" ]; })
+        (nerdfonts.override { fonts = [ "Hack" "VictorMono" "IosevkaTerm" "Iosevka" "SourceCodePro" "DejaVuSansMono" "FiraCode" "NerdFontsSymbolsOnly" ]; })
         all-the-icons-fonts
         autorandr
         brotab
@@ -106,7 +106,7 @@ in
         google-chrome
         googler
         gromit-mpx
-        hack-nerdfonts
+#         hack-nerdfonts
         hicolor-icon-theme
         league-of-moveable-type
         material-icons
@@ -121,12 +121,12 @@ in
         rxvt_unicode-with-plugins
         scrot
         siji
-        source-code-pro-nerdfonts
+#         source-code-pro-nerdfonts
         surf
         surfraw
         ubuntu_font_family
         unifont
-        victor-mono-nerdfonts
+#         victor-mono-nerdfonts
         vlc
         ytmdesktop
         yubico-piv-tool
@@ -149,7 +149,8 @@ in
       let
         xresourcesFile = callPackage ./scripts/xresources.nix { template = "rxvt-unicode"; brightness = "dark"; scheme = "tomorrow"; };
       in {
-        extraConfig = builtins.readFile "${xresourcesFile}/config";
+        extraConfig =
+          ''#define FONTSIZE 13'' + "\n" + builtins.readFile "${xresourcesFile}/config";
         properties = import ./config/Xresources/default.nix { inherit (pkgs) xclip; };
       };
     programs.firefox = {

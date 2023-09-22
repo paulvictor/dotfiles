@@ -70,7 +70,6 @@
       pyopenssl-fix-hack = import ./overlays/pyopenssl-broken-fix-hack.nix;
       fish-docker-completion = import ./overlays/fish.nix;
       xsecurelock-overlay = import ./overlays/xsecurelock.nix;
-      nyxt-3-overlay = import ./overlays/nyxt.nix;
       rofi-theme-overlay = import ./overlays/rofi-theme-overlay.nix;
       #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
       linuxOverlays = [
@@ -97,7 +96,6 @@
         emacsOverlay.overlay
         pcloudcc-overlay
         xsecurelock-overlay
-        nyxt-3-overlay
         inputs.kmonad.overlays.default
         inputs.comma.overlays.default
         rofi-theme-overlay

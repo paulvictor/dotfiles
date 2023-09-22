@@ -6,7 +6,6 @@ let
     SPACESHIP_NIX_SHELL_SHOW="''${SPACESHIP_NIX_SHELL_SHOW=true}"
     SPACESHIP_NIX_SHELL_PREFIX="''${SPACESHIP_NIX_SHELL_PREFIX="$SPACESHIP_PROMPT_DEFAULT_PREFIX"}"
     SPACESHIP_NIX_SHELL_SUFFIX="''${SPACESHIP_NIX_SHELL_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"}"
-    SPACESHIP_NIX_SHELL_SYMBOL="''${SPACESHIP_NIX_SHELL_SYMBOL=" "}"
     SPACESHIP_NIX_SHELL_COLOR="''${SPACESHIP_NIX_SHELL_COLOR="51"}"
 
     spaceship_nixShell() {
@@ -33,11 +32,27 @@ let
         --set LESS_TERMCAP_ue $(printf '\e[0m')  \
         --set LESS_TERMCAP_us $(printf '\e[04;36m')
     '';
+  pl-zsh-nix-shell = {
+    name = "zsh-nix-shell";
+    file = "nix-shell.plugin.zsh";
+    src = pkgs.zsh-nix-shell;
+  };
+  pl-nix-zsh-completions = {
+    name = "nix-zsh-completions";
+    file = "nix-zsh-completions.plugin.zsh";
+    src = pkgs.nix-zsh-completions;
+  };
+  pl-zsh-completions = {
+    name = "zsh-completions";
+    file = "zsh-completions.plugin.zsh";
+    src = pkgs.zsh-completions;
+  };
 in
 {
   enable = true;
   enableAutosuggestions = true;
   dotDir = ".zsh";
+  syntaxHighlighting.enable = true;
   history = {
     path = "${config.home.homeDirectory}/plain/zsh/zsh_history";
     expireDuplicatesFirst = true;
@@ -47,6 +62,13 @@ in
     share = true;
     size = 100000;
   };
+  plugins = [
+    pl-zsh-nix-shell
+    pl-zsh-completions
+    pl-nix-zsh-completions
+  ];
+
+
   initExtra = ''
     export MANPAGER="${manPager}/bin/lezz"
     export LESS="-QR"
@@ -80,23 +102,11 @@ in
 
     autoload -U compinit && compinit
     zstyle ":completion:*:commands" rehash 1
-    SPACESHIP_NIX_SHELL_PREFIX="in "
-    #SPACESHIP_NIX_SHELL_SUFFIX=""
     SPACESHIP_CHAR_SYMBOL="*> "
     SPACESHIP_PROMPT_ADD_NEWLINE=false
     SPACESHIP_EXIT_CODE_SHOW=true
     SPACESHIP_EXIT_CODE_PREFIX="["
     SPACESHIP_EXIT_CODE_SUFFIX="]"
-    ${nix-shell-spaceship-fn}
-    SPACESHIP_PROMPT_ORDER=(
-      user
-      dir
-      git
-      exit_code
-      line_sep
-      char
-    )
-    SPACESHIP_RPROMPT_ORDER=( nixShell )
 
     [[ $TERM = "rxvt-unicode-256color" ]] &&
       (for (( i=1; i<=$LINES; i++ )); do echo; done; clear)
@@ -124,7 +134,7 @@ in
   };
   oh-my-zsh = {
     enable = true;
-    plugins = [ "git" "zsh-completions" ];
+    plugins = [ "git" ];
     theme = "spaceship";
     custom = "$HOME/.config/zsh";
   };

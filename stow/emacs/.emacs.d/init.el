@@ -147,10 +147,10 @@
 
 (defun pvr/set-font-faces ()
   (set-mouse-color "white")
-  (set-face-attribute 'default nil :font "VictorMono Nerd Font" :height 110 :weight 'bold)
-  (set-face-attribute 'variable-pitch nil :font "Iosevka Slab" :height 100 :weight 'bold)
-  (set-face-attribute 'fixed-pitch nil :font "Iosevka Fixed Slab" :height 110 :weight 'bold)
-  (set-frame-parameter (selected-frame) 'alpha '(85 . 85)))
+  (set-face-attribute 'default nil :family "VictorMono Nerd Font" :height 110 :weight 'bold)
+  (set-face-attribute 'term nil :family "IosevkaTerm Nerd Font Mono" :height 60)
+;;   (set-face-attribute 'fixed-pitch nil :font "Iosevka Fixed Slab" :height 110 :weight 'bold)
+  (set-frame-parameter (selected-frame) 'alpha '(90 . 90)))
 
 (if (daemonp)
     (add-hook 'after-make-frame-functions
@@ -169,8 +169,6 @@
 ; This must be done before font settings!
 ; (set-frame-parameter (selected-frame) 'alpha '(85 . 70))
 ; (add-to-list 'default-frame-alist '(alpha . (85 . 70)))
-(when (display-graphic-p)
-  (add-to-list 'default-frame-alist '(font . "VictorMono Nerd Font-13")))
 (setq-default indent-tabs-mode nil)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
@@ -355,12 +353,12 @@
 
 (add-to-words-syntax 'emacs-lisp-mode-hook "-_")
 (add-to-words-syntax 'nix-mode-hook "-_")
-(add-to-words-syntax 'haskell-mode-hook "_")
+;; (add-to-words-syntax 'haskell-mode-hook "_")
 (add-to-words-syntax 'org-mode-hook "_-")
 (add-to-words-syntax 'ess-r-mode-hook "_")
 (add-to-words-syntax 'lisp-mode-hook "_-")
-(add-to-words-syntax 'c++-mode-hook "_")
-(add-to-words-syntax 'sh-mode-hook "_-")
+;; (add-to-words-syntax 'c++-mode-hook "_")
+;; (add-to-words-syntax 'sh-mode-hook "_-")
 
 (use-package evil
   :after (undo-tree)
@@ -418,6 +416,13 @@
 
 (use-package all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
+
+(use-package nerd-icons
+  :custom
+  ;; The Nerd Font you want to use in GUI
+  ;; "Symbols Nerd Font Mono" is the default and is recommended
+  ;; but you can use any other Nerd Font if you want
+  (nerd-icons-font-family "Symbols Nerd Font Mono"))
 
 (defun pvr/switch-to-previous-buffer ()
   "Switch to previously open buffer.
@@ -498,7 +503,7 @@ Repeated invocations toggle between the two most recently open buffers."
         org-src-preserve-indentation nil
         org-startup-folded 'content
         org-cycle-separator-lines 2)
-  (set-fringe-modeace-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
+;;   (set-fringe-modeace-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
   (dolist (face '((org-level-1 . 1.3)
                   (org-level-2 . 1.2)
                   (org-level-3 . 1.1)

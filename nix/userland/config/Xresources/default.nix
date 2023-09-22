@@ -10,16 +10,20 @@ in
   "Xft.autohint" = false;
   "Xft.dpi" = 96;
   "Xft.hinting" = true;
-  "Xft.hintstyle" = "hintslight";
+  "Xft.hintstyle" = "hintnone";
   "Xft.lcdfilter" = "lcddefault";
   "Xft.rgba" = "rgb";
 
   "URxvt.perl-ext-common" = "default,matcher,tabbedex,keyboard-select,autocomplete-ALL-the-things,resize-font,-confirm-paste";
 
-  "URxvt.font" = "xft:VictorMono\ Nerd\ Font:antialias=true:hinting=true:style=SemiBold:size=12:minspace=False";
-  "URxvt.boldFont" = "xft:VictorMono\ Nerd\ Font:antialias=true:hinting=true:style=Bold:size=12:minspace=False";
-  "URxvt.italicFont" = "xft:VictorMono\ Nerd\ Font:antialias=true:hinting=true:style=Italic:size=12:minspace=False";
-  "URxvt.boldItalicFont" = "xft:VictorMono\ Nerd\ Font:antialias=true:hinting=true:style=Bold\ Italic:size=12:minspace=False";
+  "URxvt.font" =
+    "xft:IosevkaTerm\ Nerd\ Font\ Mono:antialias=true:size=13:style=Regular:hinting=true:minspace=False,xft:Symbols\ Nerd\ Font:style=Regular:size=13:antialias=true:hinting=true";
+  "URxvt.boldFont" =
+    "xft:IosevkaTerm\ Nerd\ Font\ Mono:antialias=true:hinting=true:style=Bold:size=13:minspace=False,xft:Symbols\ Nerd\ Font:style=Regular:size=13:antialias=true:hinting=true";
+  "URxvt.italicFont" =
+    "xft:IosevkaTerm\ Nerd\ Font\ Mono:antialias=true:hinting=true:style=Italic:size=13:minspace=False,xft:Symbols\ Nerd\ Font:style=Regular:size=13:antialias=true:hinting=true";
+  "URxvt.boldItalicFont" =
+    "xft:IosevkaTerm\ Nerd\ Font\ Mono:antialias=true:hinting=true:style=Bold\ Italic:size=13:minspace=False,xft:Symbols\ Nerd\ Font:style=Regular:size=13:antialias=true:hinting=true";
   "rofi.font" = "Hack Nerd Font Mono 11";
 
   "URxvt*termName"  = "rxvt-unicode-256color";

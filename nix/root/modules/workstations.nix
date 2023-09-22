@@ -63,7 +63,7 @@ with pkgs;
 
   programs.firejail.enable = isPhysicalDevice;
 
-  virtualisation.lxd.enable = isPhysicalDevice;
+  virtualisation.lxd.enable = false;
 
   security.wrappers = {
 #     gllock = {

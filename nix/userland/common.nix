@@ -199,7 +199,7 @@ with pkgs;
     package = customizedEmacs;
   };
 
-  programs.exa = {
+  programs.eza = {
     enable = specialArgs.isLinux;
     enableAliases = true;
   };
@@ -207,7 +207,7 @@ with pkgs;
   programs.broot = {
     enable = true;
     enableZshIntegration = true;
-    skin = {
+    settings.skin = {
       default = "gray(23) none / gray(20) none";
     };
   };

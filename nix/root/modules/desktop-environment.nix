@@ -53,7 +53,7 @@
     powerOnBoot = true;
     disabledPlugins = [ "sap" ];
 #     hsphfpd.enable = true;
-    package = pkgs.bluezFull;
+    package = pkgs.bluez;
   };
   environment.etc."bluetooth/audio.conf".text =
     lib.generators.toINI {} {

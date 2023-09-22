@@ -1,7 +1,7 @@
 self: super:
 
 let
-  inherit (self) lib stdenv clangStdenv fuse zlib cmake boost autoPatchelfHook makeWrapper udev pkgconfig unzip;
+  inherit (self) lib stdenv clangStdenv fuse zlib cmake boost autoPatchelfHook makeWrapper udev pkg-config unzip;
   boostPkg = boost.override { enableShared = false; enabledStatic = true; };
   package = stdenv.mkDerivation rec {
     pname = "pcloudcc";
@@ -19,14 +19,14 @@ let
     nativeBuildInputs = [
       cmake
       boostPkg
-      pkgconfig
+      pkg-config
       autoPatchelfHook
       makeWrapper
     ];
 
     buildInputs = [
       stdenv.cc.cc.lib
-      pkgconfig
+      pkg-config
       fuse
       cmake
       zlib
