@@ -2,8 +2,15 @@
 
 with pkgs;
 let
+  emacs-webkit-src = fetchFromGitHub {
+    owner = "akirakyle";
+    repo = "emacs-webkit";
+    rev = "4c5caa8e2c2baa09400d3c4a467d4799d735d388";
+    hash = "sha256-bHrfc9bGKY57+KGDRH5CdRflWH5va4jzGkMzXRrapg4=";
+  };
+  emacs-webkit = callPackage "${emacs-webkit-src}/default.nix" { inherit pkgs; };
   _emacs =
-    if specialArgs.withGUI then pkgs.emacs-unstable else pkgs.emacsUnstable-nox;
+    if specialArgs.withGUI then emacs-unstable else emacsUnstable-nox;
   customizedEmacs =
     (emacsPackagesFor (_emacs.override { withImageMagick = true; }))
       .emacsWithPackages(epkgs:
@@ -34,6 +41,7 @@ let
             # eglot # Has some issue with project.el. Emacs 28 should fix this
             edit-server
             elisp-slime-nav
+            emacs-webkit
             # elscreen
             # elscreen-separate-buffer-list
             engine-mode

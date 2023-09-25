@@ -221,25 +221,6 @@
   :config
   (doom-modeline-mode 1))
 
-;; (use-package dashboard
-;;   :ensure t
-;;   :config
-;;   (dashboard-setup-startup-hook)
-;;   (init-dashboard)
-;;   :custom
-;;   (dashboard-footer-messages
-;;    ;; Taken from https://github.com/notepad-plus-plus/notepad-plus-plus/blob/master/PowerEditor/src/Notepad_plus.cpp
-;;    (s-lines
-;;     (f-read (concat user-emacs-directory "quotes.txt"))))
-;;   (initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
-;;   (dashboard-startup-banner 'logo)
-;;   ;; (dashboard-startup-banner
-;;   ;;      (concat user-emacs-directory "emacs-e-template.svg"))
-;;   (dashboard-set-heading-icons t)
-;;   (dashboard-set-file-icons t))
-
-;; (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
-
 (use-package auth-source-pass
   :init
   (setq auth-sources '(password-store)
@@ -567,85 +548,6 @@ Repeated invocations toggle between the two most recently open buffers."
   (fset 'evil-redirect-digit-argument 'ignore)
   (add-hook 'org-mode-hook 'evil-org-mode))
 
-;; (use-package ivy
-;;   :diabled
-;;   :config
-;;   (ivy-mode -1)
-;;   :custom
-;;   (ivy-re-builders-alist
-;;    '((read-file-name-internal . ivy--regex-fuzzy)
-;;      (read-file-name . ivy--regex-fuzzy)
-;;      (swiper . ivy--regex-ignore-order)
-;;      (counsel-M-x . ivy--regex-ignore-order)
-;;      ;; (persp-ivy-switch-buffer . ivy--regex-fuzzy)
-;;      ;; (find-file-in-project . ivy--regex-fuzzy)
-;;      (t . ivy--regex-plus)))
-;;   (ivy-use-virtual-buffers t)
-;;   (ivy-wrap t)
-;;   (ivy-count-format "(%d/%d) ")
-;;   (enable-recursive-minibuffers t)
-;;   (ivy-initial-inputs-alist nil)
-;;   (ivy-height 20)
-;;   :bind
-;;   (("C-x /" . swiper-isearch)
-;;    ("C-x *" . swiper-thing-at-point)
-;;    ("C-x 8" . swiper-all-thing-at-point)
-;;    :map ivy-minibuffer-map
-;;    ("<tab>" . ivy-alt-done)
-;;    ("C-l" . ivy-alt-done)
-;;    ("C-j" . ivy-next-line)
-;;    ("C-k" . ivy-previous-line)
-;;    ("C-<return>" . (lambda ()
-;;                      (interactive)
-;;                      (progn
-;;                        (ivy-call)
-;;                        (ivy-next-line))))
-;;    :map ivy-switch-buffer-map
-;;    ("C-k" . ivy-previous-line)
-;;    ("C-j" . ivy-next-line)
-;;    ("C-l" . ivy-done)
-;;    ("C-d" . ivy-switch-buffer-kill)))
-
-;; (use-package counsel
-;;   :disabled
-;;   :config
-;;     (global-set-key [remap describe-function] 'counsel-describe-function)
-;;     (global-set-key [remap describe-variable] 'counsel-describe-variable)
-;;     (counsel-mode -1)
-;;   :bind
-;;     (("M-x" . counsel-M-x)
-;;      ("C-x '" . counsel-recentf)
-;;      ("M-y" . counsel-yank-pop)
-;;      ("C-x C-f" . counsel-find-file)
-;;      ("C-/" . counsel-rg)
-;;      :map minibuffer-local-map
-;;      ("C-r" . counsel-minibuffer-history)))
-
-;; (use-package all-the-icons-ivy
-;;   :disabled
-;;   :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup))
-
-;; (use-package ivy-prescient
-;;   :after (ivy counsel)
-;;   :disabled
-;;   :config
-;;     (ivy-prescient-mode -1))
-
-;; (use-package projectile
-;;   :custom
-;;   (projectile-switch-project-action #'projectile-commander)
-;;   :config
-;;   (projectile-mode -1)
-;;   :bind-keymap
-;;   ("C-c p" . projectile-command-map)
-;;   :bind
-;;   ("C-x C-r" . projectile-recentf)
-;;   ("C-x t" . pvr/split-term)
-;;   :init
-;;   (when (file-directory-p "~/stuff")
-;;     (setq projectile-project-search-path '("~/stuff")))
-;;   )
-
 (defun pvr/create-or-switch-perspective (dir)
   (persp-switch (f-filename dir)))
 
@@ -675,63 +577,6 @@ Repeated invocations toggle between the two most recently open buffers."
   (advice-add 'project-switch-project :before #'pvr/create-or-switch-perspective)
   (persp-mode 1))
 
-;; (use-package persp-projectile
-;;   :disabled
-;;   :after (perspective projectile)
-;;   :bind
-;;   ([remap projectile-switch-project] . projectile-persp-switch-project))
-
-;; (use-package counsel-projectile
-;;   :disabled
-;;   :custom
-;;   (counsel-projectile-preview-buffers nil)
-;;   (counsel-projectile-mode t)
-;;   :config
-;;   (def-projectile-commander-method ?t
-;;     "Counsel projectile eshell"
-;;     (projectile-run-eshell))
-;;   (def-projectile-commander-method ?/
-;;     "Counsel projectile rg"
-;;     (counsel-projectile-rg))
-;;   :bind
-;;   (:map projectile-command-map ("p" . projectile-persp-switch-project))
-;;   :init
-;;   (counsel-projectile-mode -1))
-
-;; (use-package all-the-icons-ivy-rich
-;;   :disabled
-;;   :init (all-the-icons-ivy-rich-mode -1))
-
-;; (use-package ivy-rich
-;;   :disabled
-;;   :init
-;;   (ivy-rich-mode -1)
-;;   :after counsel
-;;   :config
-;;   (setq ivy-format-function #'ivy-format-function-line))
-
-;; (use-package equake
-;;   ;; some examples of optional settings follow:
-;;   :custom
-;;   ;; set width a bit less than full-screen (prevent 'overflow' on multi-monitor):
-;;   (equake-size-width 0.99)
-;;   ;; set distinct face for Equake: white foreground with dark blue background, and different font:
-;;   ;;:custom-face
-;;   ;;(equake-buffer-face
-;;   ;; ((t (:inherit 'default :family "DejaVu Sans Mono" :background "#000022" :foreground "white"))))
-;;   ;;:config
-;;   ;; prevent accidental frame closure:
-;;   ;;(advice-add #'save-buffers-kill-terminal :before-while #'equake-kill-emacs-advice)
-;;   ;; binding to restore last Equake tab when viewing a non-Equake buffer
-;;   ;;(global-set-key (kbd "C-M-^") #'equake-restore-last-etab)
-;;   ;; set default shell
-;;   (setq equake-default-shell 'eshell)
-;;   ;; set list of available shells
-;;   (setq equake-available-shells
-;;    '("shell"
-;;      "vterm"
-;;      "eshell")))
-
 (use-package git-gutter
   :config
   (global-git-gutter-mode t))
@@ -744,13 +589,6 @@ Repeated invocations toggle between the two most recently open buffers."
   (evil-collection-magit-want-horizontal-movement t)
   (evil-collection-magit-use-z-for-folds t))
 ;;   :after (company company-prescient))
-
-;; (use-package prescient
-;;   :commands prescient-persist-mode
-;;   :init
-;;   (setq prescient-history-length 30))
-
-;; (use-package company-prescient)
 
 (evil-define-key '(motion insert) 'slime-repl-mode (kbd "C-c s") 'slime-selector)
   (evil-define-key '(motion insert) 'slime-mode (kbd "C-c s") 'slime-selector)
@@ -802,17 +640,6 @@ Repeated invocations toggle between the two most recently open buffers."
                                                     "]" 'lispyville-next-closing
                                                     "}" 'lispyville-previous-closing)
       (evil-define-key 'normal lispyville-mode-map (kbd "M-H") 'lispyville-beginning-of-next-defun))
-
-;; (use-package yequake
-;;   :config
-;;   (setq yequake-frames
-;;         '(("scratch" .
-;;           ((buffer-fns . ("*scratch*"))
-;;           (width . 0.75)
-;;           (height . 0.5)
-;;           (alpha . 0.75)
-;;           (window-system . x)
-;;           (frame-parameters . ((skip-taskbar . t) (sticky . t) (undecorated . t))))))))
 
 (use-package anzu)
 
@@ -1335,3 +1162,4 @@ Also move to the next line, since that's the most frequent action after"
                 (lambda (&key data &allow-other-keys)
                   (message "done %s" (assoc-default 'json data)))))))
 
+(use-package webkit)
