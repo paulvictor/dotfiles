@@ -15,7 +15,8 @@
         enable = true;
         user = "viktor";
       };
-      lightdm.enable = true;
+#       lightdm.enable = true;
+      # disabled lightdm because it causes some problems for nyxt
       session = [
         {
           manage = "desktop";

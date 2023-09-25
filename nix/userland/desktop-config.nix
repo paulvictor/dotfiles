@@ -23,23 +23,22 @@ mkIf
 
       home.packages = [
         acpi # TODO : Install only on laptops
-        gnome.adwaita-icon-theme
         afuse
         arandr
         asciinema
         dunst
         findWindowByTitle
-        wmexit
+        gnome.adwaita-icon-theme
+        nyxt
         pa_applet
         paprefs
         passdo
-        #         pasystray
         pavucontrol
-#         popcorntime
         pcloud-console-client
         pulseaudio-ctl
         rofiElectronAppsRunner
         wmctrl
+        wmexit
         wmfocus
         xclip
         xdotool
