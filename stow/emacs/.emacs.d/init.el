@@ -16,7 +16,7 @@
 ;; optional. makes unpure packages archives unavailable
 (setq package-archives nil)
 
-(setq enable-recursive-minibuffers t)
+;; (setq enable-recursive-minibuffers t)
 
 (setq package-enable-at-startup nil)
 (package-initialize)
@@ -60,6 +60,8 @@
 (use-package emacs
   :custom
   (tab-width 2)
+  ;; Enable recursive minibuffers
+  (enable-recursive-minibuffer t)
   :init
   ;; Add prompt indicator to `completing-read-multiple'.
   ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
@@ -70,32 +72,33 @@
                    crm-separator)
                   (car args))
           (cdr args)))
+  (pulsar-global-mode 1)
+  (keyfreq-mode 1)
+  (keyfreq-autosave-mode 1)
+  (winner-mode 1)
   (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
   ;; Do not allow the cursor in the minibuffer prompt
-  (setq minibuffer-prompt-properties '(read-only t cursor-intangible t face minibuffer-prompt)
-        read-extended-command-predicate #'command-completion-default-include-p
-        completions-detailed t)
+  ;; (setq minibuffer-prompt-properties '(read-only t cursor-intangible t face minibuffer-prompt)
+  ;;         read-extended-command-predicate #'command-completion-default-include-p
+  ;;         completions-detailed t)
   ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
-  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+  ;; (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+  )
 
-  ;; Enable recursive minibuffers
-  (setq enable-recursive-minibuffers t))
-
-(use-package use-package-chords
-  :init
-  (setq key-chord-two-keys-delay 0.2) ; default 0.1
-  :ensure t
-  :config (key-chord-mode 1))
+;; (use-package use-package-chords
+;;   :init
+;;   (setq key-chord-two-keys-delay 0.2) ; default 0.1
+;;   :ensure t
+;;   :config (key-chord-mode 1))
 
 (use-package no-littering
   :init
   (setq no-littering-etc-directory
         (f-join pvr/emacs-persist-dir "emacs/")
         no-littering-var-directory
-         (f-join pvr/emacs-persist-dir "var/" )))
-
-(setf custom-file (no-littering-expand-etc-file-name "custom.el"))
+        (f-join pvr/emacs-persist-dir "var/" ))
+  (setq custom-file (no-littering-expand-etc-file-name "custom.el")))
 
 (when
     (file-exists-p custom-file)
@@ -129,7 +132,7 @@
       (insert-image image)
       (insert "\n\n\n")
 ;;       (insert (make-string (floor (/ (- (window-width) (string-width prompt-title)) 2)) ?\ ))
-;;       (insert prompt-title)
+      ;; (insert prompt-title)
       )
     (setq cursor-type nil)
     (read-only-mode +1)
@@ -249,6 +252,7 @@
 
 ;; Change "yes or no" to "y or n"
 (fset 'yes-or-no-p 'y-or-n-p)
+;; keymap-set and keymap-unset to bind keys in keymaps
 
 ;; Auto-revert to disk on file change
 (global-auto-revert-mode t)
@@ -856,13 +860,8 @@ Also move to the next line, since that's the most frequent action after"
 ;;                       visual-fill-column-center-text t)
 ;;                 (visual-fill-column-mode 1))))
 
-(keyfreq-mode 1)
-(keyfreq-autosave-mode 1)
-
 (define-key minibuffer-local-map (kbd "ESC") 'keyboard-escape-quit)
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-
-(winner-mode 1)
 
 (defun insert-after-lispy-right (&optional count)
   (interactive "p")
@@ -1019,7 +1018,7 @@ Also move to the next line, since that's the most frequent action after"
 (use-package pulsar
   :custom
   ((pulsar-pulse t)
-   (pulsar-delay 0.055)
+   (pulsar-delay 0.05)
    (pulsar-iterations 10)
    (pulsar-face 'pulsar-magenta)
    (pulsar-highlight-face 'pulsar-yellow)
@@ -1070,9 +1069,9 @@ Also move to the next line, since that's the most frequent action after"
       evil-scroll-up
       evil-scroll-down
       evil-scroll-page-up
-      evil-scroll-page-down)))
-  :config
-  (pulsar-global-mode 1)
+      evil-scroll-page-down
+      eshell-previous-prompt
+      eshell-next-prompt)))
   :bind
   (("C-c C-x" . pulsar-pulse-line)))
 

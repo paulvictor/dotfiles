@@ -1,3 +1,15 @@
+(general-define-key
+ :keymaps 'minibuffer-mode-map
+ "C-r" #'minibuffer-complete-history)
+
+(setq completion-auto-wrap t
+;;       completion-auto-help 'always
+      completion-show-help nil
+      completions-format 'one-column
+;;       completion-auto-select t
+      completion-auto-select 'second-tab
+      completions-max-height 10)
+
 (defun pvr/minibuffer-backward-kill (arg)
   "When minibuffer is completing a file name delete up to parent
 folder, otherwise delete a word"
@@ -8,6 +20,17 @@ folder, otherwise delete a word"
           (zap-up-to-char (- arg) ?/)
         (delete-minibuffer-contents))
       (backward-delete-char arg)))
+
+(use-package minibuffer
+  :custom
+;;   (completion-styles '(basic partial-completion emacs22 initials))
+;;   :config
+;;   (keymap-unset minibuffer-mode-map "<space>" t)
+  :bind (:map minibuffer-mode-map
+              ("<tab>" . minibuffer-next-completion)
+              ("S-<tab>" . minibuffer-previous-completion))
+  )
+
 
 (use-package vertico
   :bind (:map vertico-map
@@ -57,10 +80,10 @@ folder, otherwise delete a word"
 
 (use-package orderless
   :custom
-  (completion-styles '(orderless basic))
+  (completion-styles '(orderless basic partial-completion))
   (completion-category-overrides
    '((file (styles . (partial-completion)))
-     (buffer (styles . (orderless basic)))))
+     (buffer (styles . (orderless basic partial-completion)))))
   (orderless-matching-styles nil)
   (orderless-style-dispatchers
    '(pvr/orderless-literal-dispatch
@@ -98,6 +121,8 @@ folder, otherwise delete a word"
 (use-package corfu
   :init
   (global-corfu-mode)
+  :hook
+  (emacs-lisp-mode . corfu-mode)
 
   :custom
   (corfu-cycle t)
@@ -155,13 +180,13 @@ folder, otherwise delete a word"
 
 (use-package pcmpl-args)
 
-(use-package company
-  :custom
-    (company-dabbrev-other-buffers 'all)
-    (company-dabbrev-time-limit 0.2)
-    (company-dabbrev-code-time-limit 0.2)
-    (company-dabbrev-downcase nil)
-    (company-minimum-prefix-length 1))
+;; (use-package company
+;;   :custom
+;;     (company-dabbrev-other-buffers 'all)
+;;     (company-dabbrev-time-limit 0.2)
+;;     (company-dabbrev-code-time-limit 0.2)
+;;     (company-dabbrev-downcase nil)
+;;     (company-minimum-prefix-length 1))
 
 (general-create-definer completions-pre
   :prefix "M-c")
