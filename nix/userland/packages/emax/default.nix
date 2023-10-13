@@ -42,6 +42,7 @@ let
             edit-server
             elisp-slime-nav
             emacs-webkit
+            org-tree-slide
             # elscreen
             # elscreen-separate-buffer-list
             engine-mode

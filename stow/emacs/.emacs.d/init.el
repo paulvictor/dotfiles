@@ -645,6 +645,23 @@ Repeated invocations toggle between the two most recently open buffers."
                                                     "}" 'lispyville-previous-closing)
       (evil-define-key 'normal lispyville-mode-map (kbd "M-H") 'lispyville-beginning-of-next-defun))
 
+(use-package ielm
+  :bind
+  ("C-l" . comint-clear-buffer)
+  ("C-r" . consult-history)
+  :init
+  (let
+      ((history-path (no-littering-expand-etc-file-name "ielm/history")))
+    (make-directory (file-name-directory history-path) t)
+    (add-hook 'ielm-mode-hook #'(lambda ()
+                                  (setq-local comint-input-ring-file-name history-path)
+                                  (setq-local comint-input-ring-size 10000)
+                                  (setq-local comint-input-ignoredups t)
+                                  (comint-read-input-ring)))
+    (advice-add 'ielm-send-input :after #'(lambda (&rest args)
+                                            (with-file-modes #o600
+                                              (comint-write-input-ring))))))
+
 (use-package anzu)
 
 (use-package undo-tree
@@ -1162,3 +1179,8 @@ Also move to the next line, since that's the most frequent action after"
                   (message "done %s" (assoc-default 'json data)))))))
 
 (use-package webkit)
+
+(use-package org-tree-slide
+  :custom
+  (org-image-actual-width nil))
+
