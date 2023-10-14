@@ -35,13 +35,13 @@
    (override-map
     (let ((map (make-keymap "override-map")))
       (define-key map
-;;         "J"   'switch-buffer-previous
-;;         "K"   'switch-buffer-next
+        "J"   'switch-buffer-previous
+        "K"   'switch-buffer-next
 ;;         "; y" 'nyxt/web-mode:copy-hint-url
 ;;         "; d" 'nyxt/web-mode:download-hint-url
-;;         "x"   'delete-current-buffer
-;;         "b"   'switch-buffer
-        "M-c" 'execute-command)))))
+        "x"   'delete-current-buffer
+        "b"   'switch-buffer
+        "M-x" 'execute-command)))))
 
 (define-configuration web-buffer
   ((default-modes `(nyxt/emacs-mode:emacs-mode vi-normal-mode
