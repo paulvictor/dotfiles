@@ -1181,6 +1181,19 @@ Also move to the next line, since that's the most frequent action after"
 (use-package webkit)
 
 (use-package org-tree-slide
+  :bind (:map org-tree-slide-mode-map
+              ("<right>" . org-tree-slide-move-next-tree)
+              ("<left>" . org-tree-slide-move-previous-tree))
+  :init
+  (add-hook 'org-tree-slide-mode #'(lambda ()
+                                     (evil-local-mode -1)
+                                     (setq-local visual-fill-column-center-text t)
+                                     (setq-local visual-fill-column-extra-text-width (cons 10 10))
+                                     (keymap-set org-tree-slide-mode-map "<left>" #'org-tree-slide-move-previous-tree)
+                                     (keymap-set org-tree-slide-mode-map "<right>" #'org-tree-slide-move-next-tree)))
   :custom
   (org-image-actual-width nil))
 
+
+(keymap-set org-tree-slide-mode-map "<left>" #'org-tree-slide-move-previous-tree)
+(keymap-set org-tree-slide-mode-map "<right>" #'org-tree-slide-move-next-tree)
