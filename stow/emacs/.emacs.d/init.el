@@ -76,21 +76,8 @@
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1)
   (winner-mode 1)
-  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
-
-  ;; Do not allow the cursor in the minibuffer prompt
-  ;; (setq minibuffer-prompt-properties '(read-only t cursor-intangible t face minibuffer-prompt)
-  ;;         read-extended-command-predicate #'command-completion-default-include-p
-  ;;         completions-detailed t)
-  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
-  ;; (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+  ;; (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
   )
-
-;; (use-package use-package-chords
-;;   :init
-;;   (setq key-chord-two-keys-delay 0.2) ; default 0.1
-;;   :ensure t
-;;   :config (key-chord-mode 1))
 
 (use-package no-littering
   :init
@@ -143,11 +130,6 @@
 (setq initial-scratch-message nil)
 (setq inhibit-startup-screen t)
 
-;; (when (< (length command-line-args) 2)
-;;   (add-hook 'emacs-startup-hook (lambda ()
-;;                                   (when (display-graphic-p)
-;;                                     (pvr/show-welcome-buffer)))))
-
 (defun pvr/set-font-faces ()
   (set-mouse-color "white")
   (set-face-attribute 'default nil :family "VictorMono Nerd Font" :height 110 :weight 'bold)
@@ -190,7 +172,7 @@
 
 (add-hook
   'prog-mode-hook
-  (lambda ()
+  #'(lambda ()
     (setq show-trailing-whitespace t)))
 
 ;Show matching parens
@@ -202,6 +184,7 @@
    doom-themes-enable-bold t    ; if nil, bold is universally disabled
    doom-themes-enable-italic t)
   :config
+  (doom-themes-org-config)
   (load-theme 'doom-tomorrow-night t))
 
 (use-package doom-modeline
@@ -255,7 +238,7 @@
 ;; keymap-set and keymap-unset to bind keys in keymaps
 
 ;; Auto-revert to disk on file change
-(global-auto-revert-mode t)
+(global-auto-revert-mode 1)
 
 (defalias 'list-buffers 'ibuffer)
 
@@ -285,10 +268,6 @@
   :config
   (general-evil-setup t)
   (general-auto-unbind-keys)
-;;   (general-define-key
-;;     :states 'motion ; Normal, visual, operator states
-;;     ";" 'evil-ex
-;;     ":" 'evil-repeat-find-char)
   (general-create-definer pvr/space-keys-def
     :keymaps '(normal visual insert emacs)
     :prefix "SPC"
@@ -348,29 +327,25 @@
 (use-package evil
   :after (undo-tree)
   :custom
-    (evil-vsplit-window-right t)
-    (evil-split-window-below t)
-    (evil-want-C-u-scroll t)
-    (evil-disable-insert-state-bindings t)
-    (evil-flash-delay 5)
-    (evil-shift-width 2)
-    (evil-undo-system 'undo-tree)
-  :init
-    (setq evil-want-integration t)
-    (setq evil-search-module 'evil-search)
+  (evil-vsplit-window-right t)
+  (evil-split-window-below t)
+  (evil-want-C-u-scroll t)
+  (evil-disable-insert-state-bindings t)
+  (evil-flash-delay 5)
+  (evil-shift-width 2)
+  (evil-undo-system 'undo-tree)
+  (evil-want-integration t)
+  (evil-search-module 'evil-search)
+  (evil-want-keybinding nil)
   :config
-  (setq evil-want-keybinding nil)
   (evil-define-key '(insert visual) 'global (kbd "C-g") 'evil-normal-state)
   (evil-define-key 'normal 'global (kbd ", SPC") 'evil-ex-nohighlight)
   (evil-select-search-module 'evil-search-module 'evil-search)
   (evil-mode 1))
 
 (use-package evil-collection
-  :init
-    (setq evil-want-keybinding nil)
   :config
-    (setq evil-want-integration t)
-    (evil-collection-init (remq 'lispy evil-collection-mode-list)))
+  (evil-collection-init (remq 'lispy evil-collection-mode-list)))
 
 ;; (pvr/space-keys-def
 ;;   "SPC" 'lsp-keymap-prefix)
@@ -1183,17 +1158,20 @@ Also move to the next line, since that's the most frequent action after"
 (use-package org-tree-slide
   :bind (:map org-tree-slide-mode-map
               ("<right>" . org-tree-slide-move-next-tree)
-              ("<left>" . org-tree-slide-move-previous-tree))
+              ("<left>" . org-tree-slide-move-previous-tree)
+              ("l" . org-tree-slide-move-next-tree)
+              ("h" . org-tree-slide-move-previous-tree))
   :init
-  (add-hook 'org-tree-slide-mode #'(lambda ()
-                                     (evil-local-mode -1)
-                                     (setq-local visual-fill-column-center-text t)
-                                     (setq-local visual-fill-column-extra-text-width (cons 10 10))
-                                     (keymap-set org-tree-slide-mode-map "<left>" #'org-tree-slide-move-previous-tree)
-                                     (keymap-set org-tree-slide-mode-map "<right>" #'org-tree-slide-move-next-tree)))
+  (setq org-tree-slide-play-hook
+        #'(lambda ()
+            (turn-off-evil-mode)
+            (setq-local visual-fill-column-center-text t)
+            (setq-local visual-fill-column-extra-text-width (cons 10 10))
+            (visual-fill-column-mode 1)))
+  (setq org-tree-slide-stop-hook
+        #'(lambda ()
+            (turn-on-evil-mode)
+            (visual-fill-column-mode -1)))
+  (add-hook 'org-tree-slide-mode #'(lambda ()))
   :custom
   (org-image-actual-width nil))
-
-
-(keymap-set org-tree-slide-mode-map "<left>" #'org-tree-slide-move-previous-tree)
-(keymap-set org-tree-slide-mode-map "<right>" #'org-tree-slide-move-next-tree)
