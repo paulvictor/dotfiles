@@ -5,7 +5,7 @@ let
 
   inherit (builtins) attrNames isAttrs readDir listToAttrs elem;
 
-  inherit (nixpkgs.lib) filterAttrs hasSuffix mapAttrs' nameValuePair removeSuffix hasPrefix forEach mkIf optionals nixosSystem;
+  inherit (nixpkgs.lib) filterAttrs hasSuffix mapAttrs' nameValuePair removeSuffix hasPrefix forEach mkIf optionals nixosSystem mkForce;
 
   setupNixPath = {config, lib, ...}: {
     environment.etc =
@@ -32,7 +32,7 @@ let
 
         system.configurationRevision = mkIf (self ? rev) self.rev;
         networking.hostName = hostName;
-        nixpkgs.pkgs = pkgsFor system;
+        nixpkgs.pkgs = mkForce (pkgsFor system);
         nix.registry.nixpkgs.flake = nixpkgs;
       };
 
@@ -41,7 +41,7 @@ let
     in [
       setupNixPath
       common
-      sops-nix.nixosModule
+      sops-nix.nixosModules.sops
       homeManager.nixosModule
       machine
       ../modules/viktor.nix
