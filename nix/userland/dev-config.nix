@@ -46,6 +46,7 @@ in
         entr
         gnumake
         google-cloud-sdk
+        guile_3_0
         jq
         k9s
         kubectl

@@ -64,6 +64,7 @@ let
             flycheck
             geiser
             geiser-guile
+            geiser-chez
             general
             git-gutter
             guix
