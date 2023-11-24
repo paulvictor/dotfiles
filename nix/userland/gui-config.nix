@@ -109,6 +109,7 @@ in
 #         hack-nerdfonts
         hicolor-icon-theme
         league-of-moveable-type
+        localsend
         material-icons
         menu-surfraw
         mpv
