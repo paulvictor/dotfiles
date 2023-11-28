@@ -36,10 +36,10 @@ let
   };
   tridactyl = pkgs.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {
     pname = "tridactyl";
-    version = "1.23.0pre6760";
+    version = "1.23.0pre6895";
     addonId = "tridactyl.vim.betas@cmcaine.co.uk";
-    url = "https://tridactyl.cmcaine.co.uk/betas/tridactyl2-1.23.0pre6760.xpi";
-    sha256 = "sha256-NWuOIZqvPs+RX0yXa4MO7G8MftdR7rbWwDZhhCeqARQ=";
+    url = "https://tridactyl.cmcaine.co.uk/betas/tridactyl2-1.23.0pre6895.xpi";
+    sha256 = "sha256-gcnZGJmM3iLtuy0CH3PrxmVaYe+QTqMg3m/7OYt/kJw=";
     meta = {};
   };
   tabfs = pkgs.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {
@@ -212,6 +212,7 @@ in
           userChrome = import ./config/userChrome.nix { inherit pkgs; };
           extensions = [
             nur.repos.rycee.firefox-addons.i-dont-care-about-cookies
+            nur.repos.rycee.firefox-addons.bypass-paywalls-clean
             brotab-extension
             edit-with-emacs-extension
             tabfs
