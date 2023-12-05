@@ -46,6 +46,11 @@
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    firefox-nightly = {
+      url = "github:nix-community/flake-firefox-nightly";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, emacsOverlay, neovim, flake-utils, darwin, nix-cl, ... }@inputs :
@@ -161,7 +166,7 @@
         import ./userland/default.nix {
           inherit pkgsFor;
           inherit (nixpkgs) lib;
-          inherit (inputs) nixpkgs homeManager impermanence flake-utils nix-index-database;
+          inherit (inputs) nixpkgs homeManager impermanence flake-utils nix-index-database firefox-nightly;
         };
     };
 }

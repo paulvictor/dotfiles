@@ -1,7 +1,7 @@
 args:
 
 let
-  inherit (args) pkgsFor homeManager impermanence flake-utils lib nixpkgs nix-index-database;
+  inherit (args) pkgsFor homeManager impermanence flake-utils lib nixpkgs nix-index-database firefox-nightly;
   mkHomeConfig = extraArgs: homeManager.lib.homeManagerConfiguration (rec {
     pkgs = pkgsFor extraArgs.system;
     extraSpecialArgs = extraArgs.extraSpecialArgs;

@@ -212,7 +212,7 @@ in
           userChrome = import ./config/userChrome.nix { inherit pkgs; };
           extensions = [
             nur.repos.rycee.firefox-addons.i-dont-care-about-cookies
-            nur.repos.rycee.firefox-addons.bypass-paywalls-clean
+#             nur.repos.rycee.firefox-addons.bypass-paywalls-clean
             brotab-extension
             edit-with-emacs-extension
             tabfs
