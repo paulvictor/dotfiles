@@ -105,19 +105,16 @@ mkIf
         enable = true;
         extraOptions =  [ "-m" " -1" ];
         keybindings = {
-          "control + hyper + alt + shift + Return" = "${rxvt-unicode}/bin/urxvt";
-          "control + hyper + alt + e" = "emacsclient -c -n -d :0";
-          "control + hyper + alt + d" = "rofi -show drun";
-          #       "control + hyper + alt + g" = ''${wmfocus}/bin/wmfocus --fill -c asdf --textcolor red'';
-#           "control + hyper + alt + n" = "${passdo}/bin/passdo --notify";
-          "control + hyper + alt + p" = "${passdo}/bin/passdo --type";
-          "control + hyper + alt + s" = "${scrot}/bin/scrot -m";
-          "control + hyper + alt + shift + s" = "${scrot}/bin/scrot -s";
-#           "control + hyper + alt + shift + p" = "${passdo}/bin/passdo --type";
-          "control + hyper + alt + shift + slash" = "menu-surfraw";
-          "control + hyper + alt + shift + d" = "${rofiElectronAppsRunner}/bin/rofiElectronAppsRunner";
+          "hyper + shift + Return" = "${rxvt-unicode}/bin/urxvt";
+          "hyper + e" = "emacsclient -c -n -d :0";
+          "hyper + d" = "rofi -show drun";
+          "hyper + p" = "${passdo}/bin/passdo --type";
+          "hyper + s" = "${scrot}/bin/scrot -m";
+          "hyper + shift + s" = "${scrot}/bin/scrot -s";
+          "hyper + shift + slash" = "menu-surfraw";
+          "hyper + shift + d" = "${rofiElectronAppsRunner}/bin/rofiElectronAppsRunner";
           # OCR a screen selection
-          "control + hyper + alt + x" = "${imagemagick}/bin/convert x: -modulate 100,0 -resize 400% -set density 300 png:- | ${tesseract}/bin/tesseract stdin stdout | ${xclip}/bin/xclip -selection clipboard";
+          "hyper + x" = "${imagemagick}/bin/convert x: -modulate 100,0 -resize 400% -set density 300 png:- | ${tesseract}/bin/tesseract stdin stdout | ${xclip}/bin/xclip -selection clipboard";
           # Pulse Audio controls
           "XF86Audio{Raise,Lower}Volume" = "${pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ {+5%,-5%}"; #increase sound volume
           "XF86AudioMute" =  "${pulseaudio}/bin/pactl set-sink-mute  @DEFAULT_SINK@ toggle"; # mute sound
