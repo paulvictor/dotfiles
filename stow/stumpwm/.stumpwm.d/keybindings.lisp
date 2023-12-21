@@ -61,7 +61,7 @@
 
 
 (set-keybindings ";" "shell-exec" :where 'top)
-(set-keybindings "SPC" "toggle-float" :where 'top)
+(set-keybindings "SPC" "pull-hidden-next" :where 'top)
 (set-keybindings "=" "poison" :where 'top)
 (set-keybindings "RET" "eshell foo" :where 'top)
 (set-keybindings "u" "remove-split" :where 'both)
