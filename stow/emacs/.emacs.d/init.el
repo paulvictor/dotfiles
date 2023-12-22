@@ -72,6 +72,9 @@
                    crm-separator)
                   (car args))
           (cdr args)))
+  (when (f-dir? "~/.nix-profile/share/info")
+    (setq Info-additional-directory-list
+          (cons "~/.nix-profile/share/info" Info-additional-directory-list)))
   (pulsar-global-mode 1)
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1)
