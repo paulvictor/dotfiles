@@ -33,7 +33,7 @@ in
   };
 
   services.syncthing = {
-    enable = true;
+    enable = false;
     user = "viktor";
     key = syncthing-key-file;
     cert = syncthing-cert-file;
