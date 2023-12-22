@@ -12,7 +12,7 @@
   apos-colemak (tap-next apos (layer-toggle colemak-dh))
   apos-qwerty (tap-next apos (layer-toggle qwerty))
   ret-ctl (tap-hold-next 200 ret lctl)
-  fx (tap-hold-next 200 C-M-A-up C-M-lalt)
+  fx (tap-hold-next 200 M-Up lmet)
   rctl-M-x (tap-hold-next 200 A-x rctl)
   lctl-C-x (tap-hold-next 200 C-x lctl)
   spc-alt (tap-hold-next 200 spc lalt)

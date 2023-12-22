@@ -22,7 +22,7 @@ folder, otherwise delete a word"
       (backward-delete-char arg)))
 
 (use-package minibuffer
-  :custom
+;;   :custom
 ;;   (completion-styles '(basic partial-completion emacs22 initials))
 ;;   :config
 ;;   (keymap-unset minibuffer-mode-map "<space>" t)
