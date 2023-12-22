@@ -38,8 +38,8 @@ let
     pname = "tridactyl";
     version = "1.23.0pre6895";
     addonId = "tridactyl.vim.betas@cmcaine.co.uk";
-    url = "https://tridactyl.cmcaine.co.uk/betas/tridactyl2-1.23.0pre6895.xpi";
-    sha256 = "sha256-gcnZGJmM3iLtuy0CH3PrxmVaYe+QTqMg3m/7OYt/kJw=";
+    url = "https://tridactyl.cmcaine.co.uk/betas/tridactyl2-1.24.0pre6905.xpi";
+    sha256 = "sha256-GVFJSJkAcWYkn/mrX6fgWC0oLj3o2oh2LLCq+DLpQZY=";
     meta = {};
   };
   tabfs = pkgs.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {
