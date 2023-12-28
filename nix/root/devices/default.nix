@@ -25,7 +25,7 @@ let
       customisations = args.customisations or {};
       common = {
         imports = [
-          ../guix/modules/services/guix.nix
+#           ../guix/modules/services/guix.nix
           ../common-config.nix
           ../caches.nix
         ];

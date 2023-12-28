@@ -19,12 +19,15 @@ with lib;
 
   users.mutableUsers = false;
 
+  services.guix = {
+    enable = isPhysicalDevice;
+    gc.enable = true;
+  };
+
   boot.binfmt.emulatedSystems =
     optionals
       isPhysicalDevice
         [ "aarch64-linux" "armv7l-linux" "riscv64-linux" ];
-
-  services.guix.enable = isPhysicalDevice;
 
   boot.postBootCommands = "
     [ -d /tomb/${config.networking.hostName}/ssh ] || \

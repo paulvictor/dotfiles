@@ -82,7 +82,7 @@
         neovim.overlay
 #         gllock-overlay
         tomb-overlay
-        guix-overlay
+#         guix-overlay
         xdotool-overlay
         brotab-overlay
         ripgrep-overlay
