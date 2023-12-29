@@ -136,7 +136,7 @@
 (defun pvr/set-font-faces ()
   (set-mouse-color "white")
   (set-face-attribute 'default nil :family "VictorMono Nerd Font" :height 110 :weight 'bold)
-  (set-face-attribute 'term nil :family "IosevkaTerm Nerd Font Mono" :height 60)
+	;;(set-face-attribute 'term nil :family "IosevkaTerm Nerd Font Mono" :height 60)
 ;;   (set-face-attribute 'fixed-pitch nil :font "Iosevka Fixed Slab" :height 110 :weight 'bold)
   (set-frame-parameter (selected-frame) 'alpha '(90 . 90)))
 

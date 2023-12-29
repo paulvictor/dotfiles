@@ -5,8 +5,25 @@
     ./key-remaps.nix
     ./pipewire.nix
   ];
-  services.xserver = {
+  security.polkit.enable = true;
+  hardware.opengl.enable = true; # when using QEMU KVM
+  services.greetd = {
     enable = true;
+    settings = {
+     default_session.command = ''
+      ${pkgs.greetd.tuigreet}/bin/tuigreet \
+        --time \
+        --user-menu \
+        --cmd sway
+    '';
+    };
+  };
+
+  environment.etc."greetd/environments".text = ''
+    sway
+  '';
+  services.xserver = {
+    enable = false;
     libinput.enable = true;
     displayManager = {
       defaultSession = "xsession";
