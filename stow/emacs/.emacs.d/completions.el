@@ -123,7 +123,6 @@ folder, otherwise delete a word"
   (global-corfu-mode)
   :hook
   (emacs-lisp-mode . corfu-mode)
-
   :custom
   (corfu-cycle t)
   (corfu-on-exact-match 'insert)
@@ -132,34 +131,25 @@ folder, otherwise delete a word"
   (corfu-auto-delay 0.2)
   (corfu-quit-at-boundary nil)
   (corfu-quit-no-match nil)
-
   (corfu-min-width 80)
   (corfu-max-width corfu-min-width)     ; Always have the same width
   (corfu-count 14)
   (corfu-scroll-margin 4)
   (corfu-preselect-first t)
   (corfu-preview-current 'insert)
-
-  :general
-  (:keymaps 'corfu-map
-            :states 'insert
-            "C-j" #'corfu-next
-            "C-k" #'corfu-previous
-            "C-n" #'corfu-next
-            "C-p" #'corfu-previous
-            "<escape>" #'corfu-quit
-            "<tab>" #'corfu-insert
-            "<return>" #'corfu-insert)
   :config
   (add-hook 'eshell-mode-hook
           (lambda ()
             (setq-local corfu-auto nil)))
-  (evil-collection-corfu-setup)
-  (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
-  (advice-add 'corfu--teardown :after 'evil-normalize-keymaps)
   (setq tab-always-indent 'complete
         completion-cycle-threshold 3
         read-file-name-completion-ignore-case t))
+
+;; to use C-j/k for movement but doesnt work
+(use-package evil-collection-corfu
+  :after corfu
+  :custom evil-collection-corfu-key-themes '(default tab-n-go)
+  :config (evil-collection-corfu-setup))
 
 (use-package kind-icon
   :after corfu

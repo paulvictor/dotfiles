@@ -329,17 +329,19 @@
 
 (use-package evil
   :after (undo-tree)
+  :init
+  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (setq evil-want-keybinding nil)
   :custom
   (evil-vsplit-window-right t)
   (evil-split-window-below t)
   (evil-want-C-u-scroll t)
+  (evil-want-C-d-scroll t)
   (evil-disable-insert-state-bindings t)
   (evil-flash-delay 5)
   (evil-shift-width 2)
   (evil-undo-system 'undo-tree)
-  (evil-want-integration t)
   (evil-search-module 'evil-search)
-  (evil-want-keybinding nil)
   :config
   (evil-define-key '(insert visual) 'global (kbd "C-g") 'evil-normal-state)
   (evil-define-key 'normal 'global (kbd ", SPC") 'evil-ex-nohighlight)
