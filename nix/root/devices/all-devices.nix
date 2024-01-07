@@ -24,7 +24,7 @@
     };
   }
   {
-    hostName = "lucy";
+    hostName = "orbb";
     format = "amazon";
     system = "aarch64-linux";
     extraModules = [

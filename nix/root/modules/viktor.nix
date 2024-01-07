@@ -41,7 +41,6 @@ in
   security.sudo.wheelNeedsPassword = true;
   security.sudo.extraConfig = ''
     viktor ALL=(ALL) NOPASSWD: ALL
-    #viktor ALL=(ALL) NOPASSWD: ${pkgs.tomb}/bin/tomb*, ${pkgs.systemd}/bin/systemctl*
   '';
 
   nix.settings.trusted-users = [ "@wheel" "viktor" "root" ];

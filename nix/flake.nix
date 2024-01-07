@@ -13,7 +13,10 @@
     };
     neovim.url = "github:nix-community/neovim-nightly-overlay";
     impermanence.url = "github:nix-community/impermanence";
-    nixos-generators.url = "github:nix-community/nixos-generators";
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nur.url = "github:nix-community/nur";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
     ngnk.url = "github:nathyong/ngnk-nix";
@@ -56,11 +59,10 @@
     };
   };
 
-  outputs = { self, nixpkgs, emacsOverlay, neovim, flake-utils, darwin, nix-cl, ... }@inputs :
+  outputs = { self, nixpkgs, emacsOverlay, flake-utils, darwin, nix-cl, ... }@inputs :
     let
       gllock-overlay = import ./overlays/gllock.nix;
       tomb-overlay = import ./overlays/tomb.nix;
-      guix-overlay = import ./overlays/guix.nix;
       xdotool-overlay = import ./overlays/xdotool.nix;
       brotab-overlay = import ./overlays/brotab.nix;
       ripgrep-overlay = import ./overlays/ripgrep.nix;
@@ -82,7 +84,6 @@
       #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
       linuxOverlays = [
         fish-docker-completion
-        neovim.overlay
 #         gllock-overlay
         tomb-overlay
 #         guix-overlay
@@ -110,7 +111,6 @@
       ];
       darwinOverlays = [
         pyopenssl-fix-hack
-        neovim.overlay
         xdotool-overlay
         brotab-overlay
         ripgrep-overlay
@@ -135,10 +135,9 @@
             patches = import ./patches.nix { pkgs = _nixpkgs; };
           };
         in
-        import patched-nixpkgs {
+        import nixpkgs {
           inherit system;
           config = {
-            permittedInsecurePackages = [ "steghide-0.5.1" ];
             keep-derivations = true;
             keep-outputs = true;
             allowUnfree = true;

@@ -25,9 +25,10 @@ let
       customisations = args.customisations or {};
       common = {
         imports = [
-#           ../guix/modules/services/guix.nix
+          inputs.impermanence.nixosModules.impermanence
           ../common-config.nix
           ../caches.nix
+          ../tailscale.nix
         ];
 
         system.configurationRevision = mkIf (self ? rev) self.rev;

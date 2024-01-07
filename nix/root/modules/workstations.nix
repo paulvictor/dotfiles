@@ -11,9 +11,10 @@ with pkgs;
   time.timeZone = "Asia/Kolkata";
 
   environment.systemPackages = [
+    git
     htop
     man-pages
-    neovim-nightly
+    neovim
     posix_man_pages
     psmisc
     wget
