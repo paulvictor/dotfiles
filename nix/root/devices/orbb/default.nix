@@ -9,7 +9,7 @@
 
   networking.firewall = {
     enable = lib.mkForce true;
-    allowedTCPPorts = [ 22 443 5600 4443 ];
+    allowedTCPPorts = [ 22 80 443 5600 4443 ];
   };
 
   boot.growPartition = true;
@@ -52,6 +52,7 @@
       group = "nginx";
     };
   };
+
   services.nginx = {
     enable = true;
     virtualHosts = {
