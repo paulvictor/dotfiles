@@ -32,6 +32,19 @@
     ];
   }
   {
+    isPhysicalDevice = false;
+    hostName = "orbb-on-the-machine";
+    system = "aarch64-linux";
+    extraModules = [
+      ({ config, modulesPath, lib, pkgs, ...}: {
+        imports = [
+          "${modulesPath}/virtualisation/amazon-options.nix"
+          "${modulesPath}/virtualisation/amazon-image.nix"
+        ];
+      })
+    ];
+  }
+  {
     hostName = "bones";
     format = "do";
     system = "x86_64-linux";

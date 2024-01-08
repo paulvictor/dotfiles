@@ -1,5 +1,28 @@
 {
   "nodes": {
+    "actual-server-repo": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1704709272,
+        "narHash": "sha256-ruyPy3v4An5am65I2dpI2CAjyoNYa5Q3JS2d1HvGUAE=",
+        "owner": "paulvictor",
+        "repo": "actual-server",
+        "rev": "e0b600d92d9046db88ed10cc25fe7f692378b4e4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "paulvictor",
+        "repo": "actual-server",
+        "type": "github"
+      }
+    },
     "cachix": {
       "locked": {
         "lastModified": 1635350005,
@@ -955,6 +978,7 @@
     },
     "root": {
       "inputs": {
+        "actual-server-repo": "actual-server-repo",
         "comma": "comma",
         "darwin": "darwin",
         "emacsOverlay": "emacsOverlay",

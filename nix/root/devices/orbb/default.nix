@@ -26,6 +26,8 @@
     ext4.enable = true;
   };
 
+  services.actual-server.enable = true;
+
   imports = [
 #     "${toString modulesPath}/profiles/headless.nix"
     ../../modules/viktor.nix

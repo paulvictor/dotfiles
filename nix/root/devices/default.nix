@@ -16,7 +16,7 @@ let
   };
 
   moduleArgs = {
-    inherit (inputs) stevenBlack goodbyeAds kmonad neovim;
+    inherit (inputs) stevenBlack goodbyeAds kmonad neovim nixpkgs;
   };
 
   mkModules = args:
@@ -29,6 +29,7 @@ let
           ../common-config.nix
           ../caches.nix
           ../tailscale.nix
+          ../modules/actual-server.nix
         ];
 
         system.configurationRevision = mkIf (self ? rev) self.rev;
@@ -50,13 +51,14 @@ let
       ../modules/ssh.nix
     ] ++ (optionals (customisations.isWorkMachine or false) [ inputs.juspay-config.nixosModules.${system}.juspay-cachix ]);
 
-  mkNixosSystem = hostName: system: customisations:
+  mkNixosSystem = {hostName, system, customisations, isPhysicalDevice, extraModules}:
     let
       pkgs = pkgsFor system;
     in nixosSystem {
       inherit system pkgs;
-      modules = mkModules {inherit hostName system customisations;};
-      specialArgs = moduleArgs // { inherit system customisations hostName; isPhysicalDevice = true;} ;
+      modules = mkModules {inherit hostName system customisations;} ++ extraModules;
+      specialArgs =
+        moduleArgs // { inherit system customisations hostName isPhysicalDevice; } ;
     };
 
   deviceConfigs = import ./all-devices.nix;
@@ -81,6 +83,12 @@ listToAttrs
           name = hostName;
           value =
             if !(deviceConfig ? format)
-            then mkNixosSystem hostName system (deviceConfig.customisations or {})
+            then
+              mkNixosSystem {
+                inherit hostName system;
+                customisations = deviceConfig.customisations or {};
+                isPhysicalDevice = deviceConfig.isPhysicalDevice or true;
+                extraModules = deviceConfig.extraModules or [];
+              }
             else generatedImage;
         }))

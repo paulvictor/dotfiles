@@ -57,6 +57,14 @@
       url = "github:nix-community/flake-firefox-nightly";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    actual-server-repo = {
+      url = "github:paulvictor/actual-server";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
   };
 
   outputs = { self, nixpkgs, emacsOverlay, flake-utils, darwin, nix-cl, ... }@inputs :
@@ -81,6 +89,7 @@
       fish-docker-completion = import ./overlays/fish.nix;
       xsecurelock-overlay = import ./overlays/xsecurelock.nix;
       rofi-theme-overlay = import ./overlays/rofi-theme-overlay.nix;
+      actual-server-overlay = import ./overlays/actual-server.nix { inherit (inputs) actual-server-repo; };
       #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
       linuxOverlays = [
         fish-docker-completion
@@ -108,6 +117,7 @@
         inputs.kmonad.overlays.default
         inputs.comma.overlays.default
         rofi-theme-overlay
+        actual-server-overlay
       ];
       darwinOverlays = [
         pyopenssl-fix-hack
