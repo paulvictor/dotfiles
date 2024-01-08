@@ -42,4 +42,42 @@
     enable = true;
     package = pkgs.ssm-agent;
   };
+
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "paulvictor@gmail.com";
+    certs."paulvictor.xyz" = {
+      webroot = "/var/lib/acme/.challenges";
+      email = "paulvictor@gmail.com";
+      group = "nginx";
+    };
+  };
+  services.nginx = {
+    enable = true;
+    virtualHosts = {
+      "paulvictor.xyz" = {
+        forceSSL = true;
+        enableACME = true;
+        locations."/" = {
+          root = "/var/www";
+        };
+      };
+      "acmechallenge.paulvictor.xyz" = {
+        # Catchall vhost, will redirect users to HTTPS for all vhosts
+        serverAliases = [ "*.paulvictor.xyz" ];
+        locations."/.well-known/acme-challenge" = {
+          root = "/var/lib/acme/.challenges";
+        };
+        locations."/" = {
+          return = "301 https://$host$request_uri";
+        };
+      };
+    };
+  };
+
+  # /var/lib/acme/.challenges must be writable by the ACME user
+  # and readable by the Nginx user. The easiest way to achieve
+  # this is to add the Nginx user to the ACME group.
+  users.users.nginx.extraGroups = [ "acme" ];
+
 }
