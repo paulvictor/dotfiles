@@ -32,6 +32,7 @@
 #     "${toString modulesPath}/profiles/headless.nix"
     ../../modules/viktor.nix
     ../../modules/workstations.nix
+    ./proxy-to-actual.nix
   ];
 
   documentation.enable = false;
