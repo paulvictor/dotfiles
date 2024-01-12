@@ -1,14 +1,9 @@
 (define-module (passdo)
   #:use-module (ice-9 popen)
   #:use-module (ice-9 ftw)
+  #:use-module (ice-9 receive)
   #:use-module (ice-9 string-fun)
   #:use-module (ice-9 rdelim))
-
-
-(let* ((port (open-input-pipe "date --utc"))
-       (str  (read-line port))) ; from (ice-9 rdelim)
-  (close-pipe port)
-  str)
 
 (define (collect-gpg-files file-path)
   (let* ((enter? (lambda (name stat res)
@@ -26,10 +21,36 @@
                   (result))))
     (file-system-fold enter? leaf down down down error '() file-path)))
 
-(define (main)
-  (let* ((store-dir (getenv "PASSWORD_STORE_DIR"))
+(define (show-menu-and-get-selection)
+  (let* ((store-dir (or (getenv "PASSWORD_STORE_DIR")
+                        (string-append (getenv "HOME") "/" ".password-store")))
          (file-list (collect-gpg-files store-dir))
-         (rofi-command (string-append "rofi -i -matching fuzzy -dmenu")))
-    (display file-list)
-    (let* ((port (open-input-pipe (string-append rofi-command )))))
-    (open-input-output-pipe )))
+         (without-leading-/ (map
+                             (lambda (str) (string-drop str 1))
+                             file-list))
+         (file-list-str (string-join without-leading-/ "\n" 'suffix))
+         (rofi-command "rofi -i -matching fuzzy -dmenu")
+         (selected (let ((port
+                           (open-input-output-pipe rofi-command)))
+                     (display file-list-str port)
+                     (read-line port))))
+    selected))
+
+(define (surround str str2)
+  (string-append str2 str str2))
+
+(define (type-password)
+  (let ((selected-password (show-menu-and-get-selection)))
+    (unless (eof-object? selected-password)
+      (let* ((commands `(("pass"
+                          ,@(if (string-contains selected-password "TOTP") '("otp") '())
+                          ,selected-password)
+                         ("tr" "-d" "'\\n'")
+                         ("xdotool" "type" "--delay" "40" "--clearmodifiers" "--file" "-")
+                         )))
+        (display commands)
+
+        (receive (from to pids) (pipeline commands)
+          (close from)
+          (close to))
+        ))))
