@@ -36,21 +36,19 @@
                      (read-line port))))
     selected))
 
-(define (surround str str2)
-  (string-append str2 str str2))
+(define (get-password selected-password)
+  (let* ((otp-prefix
+          (if (string-contains selected-password "TOTP") "otp" ""))
+         (pass-command
+          (string-join (list "pass" otp-prefix selected-password)))
+         (port (open-input-pipe pass-command)))
+    (read-line port)))
+
+(define (type-out str)
+  (system* "xdotool" "type" "--delay" "40" "--clearmodifiers" str))
 
 (define (type-password)
   (let ((selected-password (show-menu-and-get-selection)))
     (unless (eof-object? selected-password)
-      (let* ((commands `(("pass"
-                          ,@(if (string-contains selected-password "TOTP") '("otp") '())
-                          ,selected-password)
-                         ("tr" "-d" "'\\n'")
-                         ("xdotool" "type" "--delay" "40" "--clearmodifiers" "--file" "-")
-                         )))
-        (display commands)
-
-        (receive (from to pids) (pipeline commands)
-          (close from)
-          (close to))
-        ))))
+      (let ((passwd (get-password selected-password)))
+        (type-out passwd)))))

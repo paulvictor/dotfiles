@@ -79,6 +79,7 @@
       fish-docker-completion = import ./overlays/fish.nix;
       xsecurelock-overlay = import ./overlays/xsecurelock.nix;
       rofi-theme-overlay = import ./overlays/rofi-theme-overlay.nix;
+      write-guile-executable-overlay = import ./overlays/write-scheme-overlay.nix;
       #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
       linuxOverlays = [
         fish-docker-completion
@@ -107,6 +108,7 @@
         inputs.kmonad.overlays.default
         inputs.comma.overlays.default
         rofi-theme-overlay
+        write-guile-executable-overlay
       ];
       darwinOverlays = [
         pyopenssl-fix-hack
@@ -124,6 +126,7 @@
         inputs.ngnk.overlay
         emacsOverlay.overlay
         inputs.comma.overlays.default
+        write-guile-executable-overlay
       ];
       pkgsFor = system:
         let
