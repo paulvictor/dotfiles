@@ -76,7 +76,6 @@
       ripgrep-overlay = import ./overlays/ripgrep.nix;
       rofi-fuzzy = import ./overlays/rofi-fuzzy.nix;
       pass-override-overlay = import ./overlays/pass-override.nix;
-      pass-extensions-overlay = import ./overlays/pass-extensions.nix;
       ffmpeg-overlay = import ./overlays/ffmpeg.nix;
       wallpaper-overlay = import ./overlays/wallpaper.nix;
       urxvt-perls-overlay = import ./overlays/urxvt-perls.nix;
@@ -101,7 +100,6 @@
         ripgrep-overlay
         rofi-fuzzy
         pass-override-overlay
-        pass-extensions-overlay
         ffmpeg-overlay
         urxvt-overlay
         electron-apps
@@ -125,7 +123,6 @@
         brotab-overlay
         ripgrep-overlay
         pass-override-overlay
-        pass-extensions-overlay
         ffmpeg-overlay
         electron-apps
         inputs.nur.overlay

@@ -1,9 +1,10 @@
-(define-module (passdo)
-  #:use-module (ice-9 popen)
-  #:use-module (ice-9 ftw)
-  #:use-module (ice-9 receive)
-  #:use-module (ice-9 string-fun)
-  #:use-module (ice-9 rdelim))
+;; (define-module (passdo))
+
+(use-modules (ice-9 popen))
+(use-modules (ice-9 ftw))
+(use-modules (ice-9 receive))
+(use-modules (ice-9 string-fun))
+(use-modules (ice-9 rdelim))
 
 (define (collect-gpg-files file-path)
   (let* ((enter? (lambda (name stat res)
@@ -47,8 +48,9 @@
 (define (type-out str)
   (system* "xdotool" "type" "--delay" "40" "--clearmodifiers" str))
 
-(define (type-password)
+(define type-password
   (let ((selected-password (show-menu-and-get-selection)))
     (unless (eof-object? selected-password)
       (let ((passwd (get-password selected-password)))
-        (type-out passwd)))))
+        (type-out passwd)
+        (exit #t)))))
