@@ -6,7 +6,7 @@ mkIf
   (let
     rofiElectronAppsRunner = pkgs.callPackage ../overlays/electronApps/rofiRun.nix {};
     wmexit = pkgs.callPackage ./scripts/wmexit.nix {};
-    passdo = pkgs.callPackage ./scripts/passdo.nix {};
+#     passdo = pkgs.callPackage ./scripts/passdo.nix {};
     findWindowByTitle = pkgs.callPackage ./scripts/findWindowByTitle.nix {};
     popcorntime = pkgs.callPackage ./packages/popcorntime.nix {};
   in
@@ -108,7 +108,7 @@ mkIf
           "hyper + shift + Return" = "${rxvt-unicode}/bin/urxvt";
           "hyper + e" = "emacsclient -c -n -d :0";
           "hyper + d" = "rofi -show drun";
-          "hyper + p" = "${passdo}/bin/passdo --type";
+          "hyper + p" = "${passdo}/bin/passdo";
           "hyper + s" = "${scrot}/bin/scrot -m";
           "hyper + shift + s" = "${scrot}/bin/scrot -s";
           "hyper + shift + slash" = "menu-surfraw";

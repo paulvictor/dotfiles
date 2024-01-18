@@ -11,6 +11,7 @@
   };
   imports =
     [
+      ./overlays.nix
       ./modules/services/gocryptfs.nix
       ./modules/services/battery-alert.nix
       ./common.nix
