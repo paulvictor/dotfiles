@@ -49,6 +49,7 @@
     defaults.email = "paulvictor@gmail.com";
     certs."paulvictor.xyz" = {
       dnsProvider = "googledomains";
+      extraDomainNames = "accounts.paulvictor.xyz";
       # Check https://go-acme.github.io/lego/dns/googledomains/ on how to set this up
       credentialsFile = "/var/lib/acme/paulvictor.xyz/google-domains.creds";
       webroot = null;
@@ -63,9 +64,6 @@
       "paulvictor.xyz" = {
         forceSSL = true;
         enableACME = true;
-        locations."/" = {
-          root = "/var/www";
-        };
       };
     };
   };
