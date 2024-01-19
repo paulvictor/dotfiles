@@ -10,11 +10,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1704709272,
-        "narHash": "sha256-ruyPy3v4An5am65I2dpI2CAjyoNYa5Q3JS2d1HvGUAE=",
+        "lastModified": 1705680893,
+        "narHash": "sha256-hjam6YnxF9m2bkFOPhtsCp8I7H0vYNR6EXPQ4BGjLoU=",
         "owner": "paulvictor",
         "repo": "actual-server",
-        "rev": "e0b600d92d9046db88ed10cc25fe7f692378b4e4",
+        "rev": "9d6011cc88bb9551f78a6b35c1f4237187f68e0b",
         "type": "github"
       },
       "original": {
