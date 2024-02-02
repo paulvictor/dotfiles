@@ -65,6 +65,14 @@
         flake-utils.follows = "flake-utils";
       };
     };
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        utils.follows = "flake-utils";
+      };
+    };
+
   };
 
   outputs = { self, nixpkgs, emacsOverlay, flake-utils, darwin, nix-cl, ... }@inputs :
@@ -165,6 +173,7 @@
           inherit self pkgsFor inputs;
           inherit (nixpkgs) lib;
         };
+      deploy.nodes = createNixDeploy self.nixosConfigurations;
       darwinConfigurations = import ./darwin/default.nix {
           inherit nixpkgs self pkgsFor;
           inherit (nixpkgs) lib;

@@ -54,6 +54,7 @@ let
             ess
             ess-R-data-view
             ess-smart-underscore
+            erc-colorize erc-yank
             evil
             evil-collection
             evil-org
@@ -139,7 +140,7 @@ let
         ++
         [ (with epkgs; [ nano-theme ]) ]
         ++
-        [ (with epkgs.elpaPackages; [ undo-tree org vertico corfu plz kind-icon pulsar ]) ]);
+        [ (with epkgs.elpaPackages; [ undo-tree org vertico corfu plz kind-icon pulsar erc ]) ]);
   myemacs = symlinkJoin {
     name = "Emacs";
     paths = [ customizedEmacs ];

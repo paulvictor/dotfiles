@@ -39,7 +39,7 @@
 (set-keybindings "/" "windowlist" :where 'top)
 (set-keybindings "i" "windowlist" :where 'top)
 (set-keybindings "y" "hsplit" :where 'both)
-(set-keybindings "z" "vsplit" :where 'both)
+(set-keybindings "q" "vsplit" :where 'both)
 (set-keybindings "`" "gother" :where 'top)
 (set-keybindings "n" "gother" :where 'top)
 (set-keybindings "Tab" "gother" :where 'top)

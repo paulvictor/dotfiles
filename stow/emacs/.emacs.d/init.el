@@ -87,12 +87,7 @@
   (setq no-littering-etc-directory
         (f-join pvr/emacs-persist-dir "emacs/")
         no-littering-var-directory
-        (f-join pvr/emacs-persist-dir "var/" ))
-  (setq custom-file (no-littering-expand-etc-file-name "custom.el")))
-
-(when
-    (file-exists-p custom-file)
-  (load-file custom-file))
+        (f-join pvr/emacs-persist-dir "var/" )))
 
 (defun init-dashboard ()
   (require 'dashboard) ; Hack to get dashboard loaded
@@ -1180,3 +1175,11 @@ Also move to the next line, since that's the most frequent action after"
   (add-hook 'org-tree-slide-mode #'(lambda ()))
   :custom
   (org-image-actual-width nil))
+
+(use-package erc
+  :custom
+  (erc-server "irc.libera.chat")
+  (erc-nick "paulvictor")
+  (erc-user-full-name "Paul Victor")
+  (erc-autojoin-channels '(("irc-libera.chat" "#systemcrafters" "#emacs")))
+  (erc-kill-buffer-on-part t))
