@@ -89,6 +89,9 @@ let
             macrostep
             magit
             nerd-icons
+            nerd-icons-completion
+            nerd-icons-corfu
+            nerd-icons-dired
             nix-mode
             nix-modeline
             nix-sandbox
