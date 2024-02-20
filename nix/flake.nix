@@ -173,7 +173,7 @@
           inherit self pkgsFor inputs;
           inherit (nixpkgs) lib;
         };
-      deploy.nodes = createNixDeploy self.nixosConfigurations;
+#       deploy.nodes = createNixDeploy self.nixosConfigurations;
       darwinConfigurations = import ./darwin/default.nix {
           inherit nixpkgs self pkgsFor;
           inherit (nixpkgs) lib;
