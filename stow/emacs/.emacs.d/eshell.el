@@ -64,6 +64,10 @@
   (setenv "PAGER" "cat") ; solves issues, such as with 'git log' and the default 'less'
   (setenv "GUIX_PROFILE" "/home/viktor/.config/guix/current")
   (add-to-list 'direnv-non-file-modes 'eshell-mode)
+  (add-hook 'eshell-mode-hook
+          (lambda ()
+            (setq-local corfu-auto nil)
+            (corfu-mode)))
   (require 'em-pred)
 ;;   (require 'nix-shell)
   (setq

@@ -1,50 +1,32 @@
 ;;; init.el -*- lexical-binding: t; -*-
-(setq gc-cons-threshold (* 20 1024 1024))
-;; Profile emacs startup
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (message "*** Emacs loaded in %s with %d garbage collections."
-                     (format "%.2f seconds"
-                             (float-time
-                              (time-subtract after-init-time before-init-time)))
-                     gcs-done)))
 
 (require 'package)
 (require 'man)
 (require 'ffap)
-
 ;; optional. makes unpure packages archives unavailable
+
 (setq package-archives nil)
 
-;; (setq enable-recursive-minibuffers t)
+(use-package package
+  :config
+  (package-initialize)
+  :custom
+  (setq package-enable-at-startup nil))
 
-(setq package-enable-at-startup nil)
-(package-initialize)
-
+(use-package f)
+(setq visual-bell t)
+(setq visible-bell t)
+(setq whitespace-style '(trailing tabs))
+(column-number-mode)
+(setq show-trailing-whitespace t)
+(add-hook 'before-save-hook
+  (lambda ()
+    (whitespace-cleanup)))
 (defun set-env-vars ()
   (setenv "SSH_AUTH_SOCK"
           (substring
            (shell-command-to-string "gpgconf --list-dirs agent-ssh-socket") 0 -1))
   (setenv "EDITOR" "emacsclient -c"))
-
-(load-file (concat user-emacs-directory "names.el"))
-
-(setq-default frame-title-format
-              '(:eval
-                (format "%s@%s: %s %s"
-                        (or (file-remote-p default-directory 'user)
-                            user-real-login-name)
-                        (or (file-remote-p default-directory 'host)
-                            system-name)
-                        (buffer-name)
-                        (cond
-                         (buffer-file-truename
-                          (concat "(" buffer-file-truename ")"))
-                         (dired-directory
-                          (concat "{" dired-directory "}"))
-                         (t "[no file]")))))
-
-(use-package f)
 
 (defvar pvr/persist-dir
   (let ((d (or (getenv "PERSIST_DIR") "~/plain")))
@@ -57,37 +39,81 @@
 (use-package s)
 (use-package dash)
 
+;;Do not save duplicates in kill ring
+(setq kill-do-not-save-duplicates t)
 (use-package emacs
   :custom
   (tab-width 2)
   ;; Enable recursive minibuffers
   (enable-recursive-minibuffer t)
+  (cursor-type 'bar)
+  (tab-always-indent 'complete)
   :init
-  ;; Add prompt indicator to `completing-read-multiple'.
-  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
-  (defun crm-indicator (args)
-    (cons (format "[CRM%s] %s"
-                  (replace-regexp-in-string
-                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
-                   crm-separator)
-                  (car args))
-          (cdr args)))
-  (when (f-dir? "~/.nix-profile/share/info")
-    (setq Info-additional-directory-list
-          (cons "~/.nix-profile/share/info" Info-additional-directory-list)))
-  (pulsar-global-mode 1)
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1)
-  (winner-mode 1)
-  ;; (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
-  )
+  (winner-mode 1))
+
+(use-package pulsar
+  :custom
+  ((pulsar-pulse t)
+   (pulsar-delay 0.05)
+   (pulsar-iterations 10)
+   (pulsar-face 'pulsar-magenta)
+   (pulsar-highlight-face 'pulsar-yellow)
+
+   (pulsar-pulse-functions
+    '(isearch-repeat-forward
+      isearch-repeat-backward
+      recenter-top-bottom
+      move-to-window-line-top-bottom
+      reposition-window
+      bookmark-jump
+      other-window
+      delete-window
+      delete-other-windows
+      forward-page
+      backward-page
+      scroll-up-command
+      scroll-down-command
+      windmove-right
+      windmove-left
+      windmove-up
+      windmove-down
+      windmove-swap-states-right
+      windmove-swap-states-left
+      windmove-swap-states-up
+      windmove-swap-states-down
+      tab-new
+      tab-close
+      tab-next
+      org-next-visible-heading
+      org-previous-visible-heading
+      org-forward-heading-same-level
+      org-backward-heading-same-level
+      outline-backward-same-level
+      outline-forward-same-level
+      outline-next-visible-heading
+      outline-previous-visible-heading
+      outline-up-heading
+      eshell-previous-prompt
+      eshell-next-prompt)))
+  :bind
+  (("C-c C-x" . pulsar-pulse-line)))
+
+(setq initial-scratch-message nil)
+(setq history-length 10000)
+
+;; Repeat maps to repeat commands. Check describe-repeat-modes
+;; Set minibuffer completion history length to 10000
+(setq suggest-key-bindings t)
+(setq inhibit-startup-screen t)
 
 (use-package no-littering
   :init
   (setq no-littering-etc-directory
         (f-join pvr/emacs-persist-dir "emacs/")
         no-littering-var-directory
-        (f-join pvr/emacs-persist-dir "var/" )))
+        (f-join pvr/emacs-persist-dir "var/")))
 
 (defun init-dashboard ()
   (require 'dashboard) ; Hack to get dashboard loaded
@@ -147,27 +173,6 @@
     (pvr/set-font-faces)
     (setq initial-buffer-choice #'pvr/show-welcome-buffer)))
 
-; if nil, italics is universally disabled
-(setq w32-enable-italics t)
-; This must be done before font settings!
-; (set-frame-parameter (selected-frame) 'alpha '(85 . 70))
-; (add-to-list 'default-frame-alist '(alpha . (85 . 70)))
-(setq-default indent-tabs-mode nil)
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(tooltip-mode -1)
-(set-fringe-mode 10)
-(scroll-bar-mode -1)
-(setq visual-bell t)
-(setq visible-bell t)
-(setq whitespace-style '(trailing tabs))
-(column-number-mode)
-(setq show-trailing-whitespace t)
-(add-hook 'before-save-hook
-  (lambda ()
-    (whitespace-cleanup)))
-(modify-all-frames-parameters '((fullscreen . maximized)))
-
 (add-hook
   'prog-mode-hook
   #'(lambda ()
@@ -176,11 +181,31 @@
 ;Show matching parens
 (show-paren-mode)
 
+
+(setq auto-save-timeout nil)
+(setq make-backup-files nil)
+(setq tab-width 2)
+(setq bookmark-save-flag 1)
+(setq bookmark-use-annotations t)
+(setq bookmark-size-search 100)
+;; (global-display-line-numbers-mode t)
+(setq comment-style "aligned")
+;; TODO : Save it in a proper sync'able place
+;; (setq savehist-file "~/git/.emacs.d/personal/emacs-history")
+
+;; Change "yes or no" to "y or n"
+(fset 'yes-or-no-p 'y-or-n-p)
+;; keymap-set and keymap-unset to bind keys in keymaps
+
+;; Auto-revert to disk on file change
+(global-auto-revert-mode 1)
+
+(defalias 'list-buffers 'ibuffer)
+
 (use-package doom-themes
-  :init
-  (setq
-   doom-themes-enable-bold t    ; if nil, bold is universally disabled
-   doom-themes-enable-italic t)
+  :custom
+  (doom-themes-enable-bold t)    ; if nil, bold is universally disbabled
+  (doom-themes-enable-italic t)
   :config
   (doom-themes-org-config)
   (load-theme 'doom-tomorrow-night t))
@@ -205,106 +230,286 @@
   :config
   (doom-modeline-mode 1))
 
-(use-package auth-source-pass
+(defun comment-dwim-line (&optional arg)
+  "Replacement for the comment-dwim command.
+If no region is selected and current line is not blank and we are not at the end of the line,
+then comment current line.
+Replaces default behaviour of comment-dwim, when it inserts comment at the end of the line.
+Also move to the next line, since that's the most frequent action after"
+  (interactive "*P")
+  (comment-normalize-vars)
+  (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
+      (comment-or-uncomment-region (line-beginning-position) (line-end-position))
+    (comment-dwim arg))
+  (next-line))
+
+(global-set-key  (kbd "M-;") #'comment-dwim-line)
+
+(use-package which-key
+  :custom
+  (which-key-show-docstrings t)
+  (which-key-show-prefix 'mode-line)
+  (which-key-idle-delay 0.2)
+  ;; max width of which-key frame: number of columns (an integer)
+  (which-key-frame-max-width 60)
+  ;; max height of which-key frame: number of lines (an integer)
+  (which-key-frame-max-height 20)
+  :config
+  (which-key-setup-side-window-bottom)
+  (which-key-mode 1))
+
+(use-package vertico
   :init
-  (setq auth-sources '(password-store)
-        auth-source-pass-filename "~/.password-store/non-yubikey")
+  (vertico-mode)
+  (vertico-multiform-mode)
+  :hook (minibuffer-setup . vertico-repeat-save) ; Make sure vertico state is saved for `vertico-repeat'
+  :bind
+  (("M-." . #'vertico-repeat) ; Perfectly return to the state of the last Vertico minibuffer usage
+   ("C-." . #'vertico-repeat-select)
+   :map vertico-map
+   ("C-M-n" . #'vertico-next-group)
+   ("C-M-p" . #'vertico-previous-group))
+  :custom
+  (vertico-multiform-commands
+   '((consult-imenu buffer indexed)
+     (consult-ripgrep buffer)
+     (consult-grep buffer)
+     (file grid)
+     (execute-extended-command reverse)))
+  (vertico-cycle t))
+
+;;(use-package vertico-buffer)
+(use-package savehist
+  :config
+  (setq savehist-file (no-littering-expand-var-file-name "savehist") )
+  (savehist-mode 1)
+  (setq history-length t
+        history-delete-duplicates t
+        savehist-save-minibuffer-history 1)
+  (setq savehist-additional-variables
+        '(kill-ring
+          search-ring
+          regexp-search-ring))
+  :init
+  (savehist-mode))
+
+(use-package marginalia
+  :init
+  (marginalia-mode))
+
+(use-package nerd-icons
+  :custom
+  (nerd-icons-font-family "Symbols Nerd Font Mono"))
+
+(use-package nerd-icons-completion
+  :init
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup)
+  :config
+  (nerd-icons-completion-mode))
+
+(use-package nerd-icons-dired
+  :hook
+  (dired-mode . nerd-icons-dired-mode))
+
+(use-package orderless
+  :custom
+  (orderless-matching-styles
+   '(orderless-literal
+     orderless-prefixes
+     orderless-initialism
+     orderless-regexp))
+  (completion-category-overrides '((file (styles basic partial-completion)))) ;; For tramp to work seamlessly
+  (completion-styles '(orderless)))
+
+(use-package project
+  :custom
+  (project-switch-use-entire-map t)
+  :config
+  (general-define-key
+   :keymaps 'project-prefix-map
+   "b" 'consult-project-buffer
+   "/" 'consult-ripgrep
+   "g" 'magit))
+
+;; Example configuration for Consult
+(use-package consult
+  ;; Replace bindings. Lazily loaded due by `use-package'.
+  :bind (;; C-c bindings in `mode-specific-map'
+         ("C-c M-x" . consult-mode-command)
+         ("C-c h" . consult-history)
+         ("C-c k" . consult-kmacro)
+         ("C-c m" . consult-man)
+         ("C-c i" . consult-info)
+         ([remap Info-search] . consult-info)
+         ;; C-x bindings in `ctl-x-map'
+         ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+         ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
+         ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+
+         ;; Custom M-# bindings for fast register access
+         ("M-#" . consult-register-load)
+         ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+         ("C-M-#" . consult-register)
+         ;; Other custom bindings
+         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+         ;; M-g bindings in `goto-map'
+         ("M-g e" . consult-compile-error)
+         ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
+         ("M-g g" . consult-goto-line)             ;; orig. goto-line
+         ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+         ("M-g m" . consult-mark)
+         ("M-g k" . consult-global-mark)
+         ("M-g i" . consult-imenu)
+         ("M-g I" . consult-imenu-multi)
+         ;; M-s bindings in `search-map'
+         ("M-s d" . consult-find)                  ;; Alternative: consult-fd
+         ("M-s c" . consult-locate)
+         ("M-s g" . consult-grep)
+         ("M-s G" . consult-git-grep)
+         ("M-s r" . consult-ripgrep)
+         ("M-s l" . consult-line)
+         ("M-s L" . consult-line-multi)
+         ("M-s k" . consult-keep-lines)
+         ("M-s u" . consult-focus-lines)
+         ;; Isearch integration
+         ("M-s e" . consult-isearch-history)
+         :map isearch-mode-map
+         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
+         ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
+         ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
+         ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+         ;; Minibuffer history
+         :map minibuffer-local-map
+         ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+         ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+
+  ;; Enable automatic preview at point in the *Completions* buffer. This is
+  ;; relevant when you use the default completion UI.
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+
+  ;; The :init configuration is always executed (Not lazy)
+  :init
+
+  ;; Optionally configure the register formatting. This improves the register
+  ;; preview for `consult-register', `consult-register-load',
+  ;; `consult-register-store' and the Emacs built-ins.
+  (setq register-preview-delay 0.5
+        register-preview-function #'consult-register-format)
+
+  ;; Optionally tweak the register preview window.
+  ;; This adds thin lines, sorting and hides the mode line of the window.
+  (advice-add #'register-preview :override #'consult-register-window)
+
+  ;; Use Consult to select xref locations with preview
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+
+  ;; Configure other variables and modes in the :config section,
+  ;; after lazily loading the package.
+  :config
+
+  ;; Optionally configure preview. The default value
+  ;; is 'any, such that any key triggers the preview.
+  ;; (setq consult-preview-key 'any)
+  ;; (setq consult-preview-key "M-.")
+  ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
+  ;; For some commands and buffer sources it is useful to configure the
+  ;; :preview-key on a per-command basis using the `consult-customize' macro.
+  (consult-customize
+   consult-theme :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-file-register
+   consult--source-recent-file consult--source-project-recent-file
+   ;; :preview-key "M-."
+   :preview-key '(:debounce 0.4 any))
+
+  ;; Optionally configure the narrowing key.
+  ;; Both < and C-+ work reasonably well.
+  (setq consult-narrow-key "<") ;; "C-+"
+
+  ;; Optionally make narrowing help available in the minibuffer.
+  ;; You may want to use `embark-prefix-help-command' or which-key instead.
+  ;; (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help)
+
+  ;; By default `consult-project-function' uses `project-root' from project.el.
+  ;; Optionally configure a different project root function.
+  ;;;; 1. project.el (the default)
+  ;; (setq consult-project-function #'consult--default-project--function)
+  ;;;; 2. vc.el (vc-root-dir)
+  ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
+  ;;;; 3. locate-dominating-file
+  ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
+  ;;;; 4. projectile.el (projectile-project-root)
+  ;; (autoload 'projectile-project-root "projectile")
+  ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
+  ;;;; 5. No project support
+  ;; (setq consult-project-function nil)
 )
 
-(setq auto-save-timeout nil)
-(setq make-backup-files nil)
-(setq tab-width 2)
-(setq bookmark-save-flag 1)
-(setq bookmark-use-annotations t)
-(setq bookmark-size-search 100)
-;; (global-display-line-numbers-mode t)
-(setq comment-style "aligned")
-;; TODO : Save it in a proper sync'able place
-;; (setq savehist-file "~/git/.emacs.d/personal/emacs-history")
-(setq savehist-file (no-littering-expand-var-file-name "savehist") )
-(savehist-mode 1)
-(setq history-length t
-      history-delete-duplicates t
-      savehist-save-minibuffer-history 1)
-(setq savehist-additional-variables
-      '(kill-ring
-        search-ring
-        regexp-search-ring))
+;; (use-package recentf
+;;   :config
+;;   (recentf-mode t)
+;;   (setq recentf-max-saved-items 500))
 
-;; Change "yes or no" to "y or n"
-(fset 'yes-or-no-p 'y-or-n-p)
-;; keymap-set and keymap-unset to bind keys in keymaps
-
-;; Auto-revert to disk on file change
-(global-auto-revert-mode 1)
-
-(defalias 'list-buffers 'ibuffer)
-
-(use-package org-make-toc
-    :hook (org-mode . org-make-toc-mode))
-
-(use-package recentf
+(use-package isearch
+  :bind
+  (:map isearch-mode-map
+        ([remap isearch-delete-char] . isearch-del-char))
   :config
-  (recentf-mode t)
-  (setq recentf-max-saved-items 500))
+  ;; Prevents issue where you have to press backspace twice when
+  ;; trying to remove the first character that fails a search
+;;   (define-key isearch-mode-map [remap isearch-delete-char] 'isearch-del-char)
 
+  (defadvice isearch-search (after isearch-no-fail activate)
+    (unless isearch-success
+      (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
+      (ad-activate 'isearch-search)
+      (isearch-repeat (if isearch-forward 'forward))
+      (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
+      (ad-activate 'isearch-search)))
+  :custom
+  (isearch-lazy-count t)
+  (lazy-count-prefix-format "(%s/%s) ")
+  (lazy-count-suffix-format nil))
+
+(use-package wgrep) ;; TODO fix the configs
 (use-package pdf-tools
   :config
     (pdf-tools-install t t nil nil)
     (setq-default pdf-view-display-size 'fit-width)
     (add-hook 'pdf-view-mode-hook
       (lambda ()
-        (set (make-local-variable 'evil-emacs-state-cursor) (list nil))
         (blink-cursor-mode -1)))
   :custom
     (pdf-annot-activate-created-annotations t "automatically annotate highlights"))
 
-;; enable eldoc for minibuffer evaluations use this snippet
-(add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
+(use-package replace
+  :custom
+  (list-matching-lines-default-context-lines 2))
 
-(use-package general
-  :config
-  (general-evil-setup t)
-  (general-auto-unbind-keys)
-  (general-create-definer pvr/space-keys-def
-    :keymaps '(normal visual insert emacs)
-    :prefix "SPC"
-    :non-normal-prefix "C-SPC"))
+(use-package eldoc
+  :hook
+  ;; enable eldoc for minibuffer evaluations use this snippet
+  ;; (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
+  (eval-expression-minibuffer-setup . eldoc-mode))
 
 (defun occur-dwim ()
   "Call `occur' with a sane default."
   (interactive)
   (push (if (region-active-p)
             (buffer-substring-no-properties
-            (region-beginning)
-            (region-end))
+             (region-beginning)
+             (region-end))
           (thing-at-point 'symbol))
         regexp-history)
   (call-interactively 'occur))
 
 (bind-key "M-s o" 'occur-dwim)
-
-; Not explicitly included in emax/default.nix, but pulled in as a dependency of `slack`
-(use-package alert
-  :commands (alert)
-  :init
-  (setq alert-default-style 'libnotify))
-
-(use-package slack
-  :commands (slack-start)
-  :init
-    (setq slack-buffer-emojify t) ;; if you want to enable emoji, default nil
-    (setq slack-prefer-current-team t)
-  :config
-    (slack-register-team
-      :name "juspay"
-      :default t
-      :token (auth-source-pick-first-password
-                :host "juspay.slack.com"
-                :user "paul.victor@juspay.in")
-      :full-and-display-names t))
-
-(setq auto-save-default nil)
 
 (defun add-to-words-syntax (mode-hook chars)
   (seq-do
@@ -322,44 +527,12 @@
 ;; (add-to-words-syntax 'c++-mode-hook "_")
 ;; (add-to-words-syntax 'sh-mode-hook "_-")
 
-(use-package evil
-  :after (undo-tree)
-  :init
-  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  (setq evil-want-keybinding nil)
-  :custom
-  (evil-vsplit-window-right t)
-  (evil-split-window-below t)
-  (evil-want-C-u-scroll t)
-  (evil-want-C-d-scroll t)
-  (evil-disable-insert-state-bindings t)
-  (evil-flash-delay 5)
-  (evil-shift-width 2)
-  (evil-undo-system 'undo-tree)
-  (evil-search-module 'evil-search)
-  :config
-  (evil-define-key '(insert visual) 'global (kbd "C-g") 'evil-normal-state)
-  (evil-define-key 'normal 'global (kbd ", SPC") 'evil-ex-nohighlight)
-  (evil-select-search-module 'evil-search-module 'evil-search)
-  (evil-mode 1))
-
-(use-package evil-collection
-  :config
-  (evil-collection-init (remq 'lispy evil-collection-mode-list)))
-
-;; (pvr/space-keys-def
-;;   "SPC" 'lsp-keymap-prefix)
-
 (use-package dired
   :ensure nil
   :commands (dired dired-jump)
-  :after (evil-collection)
   :custom
-  ((dired-listing-switches "-agho --group-directories-first"))
-  :config
-  (evil-collection-define-key 'normal 'dired-mode-map
-    "h" 'dired-single-up-directory
-    "l" 'dired-single-buffer))
+  ((dired-listing-switches "-agho --group-directories-first")
+   (dired-dwim-target t)))
 
 (use-package dired-x
   :ensure nil
@@ -374,16 +547,6 @@
   ([remap dired-up-directory] . dired-single-up-directory)
   :commands (dired dired-jump))
 
-(use-package all-the-icons-dired
-  :hook (dired-mode . all-the-icons-dired-mode))
-
-(use-package nerd-icons
-  :custom
-  ;; The Nerd Font you want to use in GUI
-  ;; "Symbols Nerd Font Mono" is the default and is recommended
-  ;; but you can use any other Nerd Font if you want
-  (nerd-icons-font-family "Symbols Nerd Font Mono"))
-
 (defun pvr/switch-to-previous-buffer ()
   "Switch to previously open buffer.
 Repeated invocations toggle between the two most recently open buffers."
@@ -392,160 +555,27 @@ Repeated invocations toggle between the two most recently open buffers."
 
 (use-package ibuffer
   :hook
-    (ibuffer-mode . hl-line-mode)
+  (ibuffer-mode . hl-line-mode)
   :custom
   (ibuffer-movement-cycle nil)
   (ibuffer-default-shrink-to-minimum-size nil)
   (ibuffer-formats
    '((mark modified read-only locked
-        " "
-        (name 40 40 :left :elide)
-        " "
-        (size 9 -1 :right)
-        " "
-        (mode 16 16 :left :elide)
-        " " filename-and-process)
+           " "
+           (name 40 40 :left :elide)
+           " "
+           (size 9 -1 :right)
+           " "
+           (mode 16 16 :left :elide)
+           " " filename-and-process)
      (mark " "
            (name 16 -1)
            " " filename)))
   (ibuffer-saved-filter-groups nil)
   (ibuffer-old-time 24))
 
-(global-set-key (kbd "C-x b") 'ibuffer)
-
-; kill current buffer instead of prompting
-(global-set-key (kbd "C-x k") 'kill-current-buffer)
-(global-set-key (kbd "C-x K") 'kill-buffer-and-window)
-
-(add-hook 'term-mode-hook 'turn-off-evil-mode)
-(setq explicit-shell-file-name "zsh")
-(setq term-prompt-regexp "^\*>")
-
-(use-package vterm :defer t)
-(defun pvr/split-term ()
-  "Split term below and switch to it"
-  (interactive)
-  (progn
-    (split-window-sensibly (selected-window))
-    (other-window 1)
-    (projectile-run-vterm nil)))
-
-(use-package org
-  :hook
-  (org-mode . (lambda ()
-                (org-indent-mode)
-                ;; (variable-pitch-mode 1)
-                (auto-fill-mode 0)
-;;                  Visual line mode messes up git gutter ;
-;;                 (visual-line-mode 1)
-                (setq evil-auto-indent nil)))
-  :custom
-  (org-directory "~/org-files")
-  :config
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((emacs-lisp . t)
-     (R . t)
-     (shell . t)
-     (lisp . t)))
-  (advice-add 'org-refile :after 'org-save-all-org-buffers)
-  (font-lock-add-keywords
-    'org-mode
-    '(("^ *\\([-]\\) "
-      (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-  (setq org-ellipsis " ▾"
-        org-hide-emphasis-markers t
-        org-src-fontify-natively t
-        org-fontify-quote-and-verse-blocks t
-        org-src-tab-acts-natively t
-        org-edit-src-content-indentation 2
-        org-hide-block-startup nil
-        org-src-preserve-indentation nil
-        org-startup-folded 'content
-        org-cycle-separator-lines 2)
-;;   (set-fringe-modeace-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
-  (dolist (face '((org-level-1 . 1.3)
-                  (org-level-2 . 1.2)
-                  (org-level-3 . 1.1)
-                  (org-level-4 . 1.0)
-                  (org-level-5 . 0.9)
-                  (org-level-6 . 0.8)
-                  (org-level-7 . 0.9)
-                  (org-level-8 . 0.8)))
-    (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face)))
-  (setq org-capture-templates
-        '(("l" "Useful Links" entry
-           (file+olp "Links.org" "Links")
-           "* %x :%^g")
-          ("t" "Tasks" entry
-           (file+olp "Tasks.org" "Tasks")
-           "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
-          ("s" "Snippets" entry
-           (file+olp "Snippets.org" "Snippets")
-           "* %? \n ** %i\n"))))
-
-(use-package org-tempo
-  :config
-  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
-
-(use-package org-indent)
-
-(use-package org-superstar
-  :custom
-    (org-superstar-remove-leading-stars t)
-    (org-superstar-headline-bullets-list
-     '(
-       ;;; Large
-       "◉" "○" "●" "✸"
-       ;;; Small
-       "►" "•" "★" "▸"
-       ))
-  :init
-    (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
-
-;; Ensure that anything that should be fixed-pitch in Org files appears that way
-(set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
-(set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
-(set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-(set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
-(set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
-(set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-(set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-(set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-(set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
-
-(use-package evil-org
-  :after (evil evil-collection)
-  :config
-;;   (add-to-list 'evil-digit-bound-motions 'evil-org-beginning-of-line)
-  (evil-define-key 'motion 'evil-org-mode
-    (kbd "0") 'evil-org-beginning-of-line)
-  :custom
-  (evil-org-use-additional-insert t)
-  :init
-  (fset 'evil-redirect-digit-argument 'ignore)
-  (add-hook 'org-mode-hook 'evil-org-mode))
-
 (defun pvr/create-or-switch-perspective (dir)
   (persp-switch (f-filename dir)))
-
-(use-package project
-  :demand t
-  :commands (project-switch-project)
-  :custom
-  (project-switch-use-entire-map t)
-  :config
-  (use-package perspective)
-  (general-define-key
-   :keymaps 'project-prefix-map
-   :prefix "C-c"
-   "e" 'project-eshell)
-  (general-define-key
-   :keymaps 'project-prefix-map
-   "b" 'consult-project-buffer
-   "/" 'consult-ripgrep
-   "g" 'magit))
 
 (use-package perspective
   :after project
@@ -563,62 +593,24 @@ Repeated invocations toggle between the two most recently open buffers."
 (use-package magit
   :config
   (setq magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
-  (setq magit-diff-refine-hunk t)
-  :custom
-  (evil-collection-magit-want-horizontal-movement t)
-  (evil-collection-magit-use-z-for-folds t))
-;;   :after (company company-prescient))
+  (setq magit-diff-refine-hunk t))
 
-(evil-define-key '(motion insert) 'slime-repl-mode (kbd "C-c s") 'slime-selector)
-  (evil-define-key '(motion insert) 'slime-mode (kbd "C-c s") 'slime-selector)
+(defun hyperspec-lookup--hyperspec-lookup-w3m (orig-fun &rest args)
+  (let ((browse-url-browser-function 'w3m-browse-url))
+    (apply orig-fun args)))
 
-  (defun hyperspec-lookup--hyperspec-lookup-w3m (orig-fun &rest args)
-    (let ((browse-url-browser-function 'w3m-browse-url))
-      (apply orig-fun args)))
 
-  ;; (use-package sly
-;;     :hook (lisp-mode . sly-mode)
-;;     :init
-;;     (setq inferior-lisp-program "sbcl"))
-                                        ; TODO : Move to dir specific config
-
-  (use-package slime
-    :hook (lisp-mode . slime-mode)
-    :init
-    (setq inferior-lisp-program "sbcl") ; TODO : Move to dir specific config
-;;     (add-to-list 'slime-contribs 'slime-fancy)
-    :config
-    (advice-add 'hyperspec-lookup :around #'hyperspec-lookup--hyperspec-lookup-w3m)
-    (add-hook 'slime-load-hook
-              (lambda ()
-                (define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)))
-    (require 'slime-autoloads))
-
-  (use-package lispyville
-    :hook
-      ;; Check if we can use prog-mode ?
-    ((slime-mode
-      slime-repl-mode
-      lisp-mode
-      elisp-mode
-      emacs-lisp-mode
-      geiser-repl-mode
-      ielm-mode
-      scheme-mode) . lispyville-mode)
-    :custom
-      (lispyville-key-theme '(operators c-w c-u prettify additional-motions commentary slurp/barf-cp wrap additional additional-insert))
-    :config
-      (evil-define-key '(insert visual) lispyville-mode-map "(" 'lispy-parens
-                                                            "[" 'lispy-brackets
-                                                            ; Works with emacs lisp but org mode has some problem with the escaped quotes
-                                                            (string #x22) 'lispy-quotes
-                                                            "{" 'lispy-braces)
-      ; Evil rebinds these on insert mode to normal mode switch and so am manually binding them
-      (evil-define-key 'normal lispyville-mode-map "[" 'lispyville-next-opening
-                                                    "{" 'lispyville-previous-opening
-                                                    "]" 'lispyville-next-closing
-                                                    "}" 'lispyville-previous-closing)
-      (evil-define-key 'normal lispyville-mode-map (kbd "M-H") 'lispyville-beginning-of-next-defun))
+(use-package slime
+  :hook (lisp-mode . slime-mode)
+  :init
+  (setq inferior-lisp-program "sbcl") ; TODO : Move to dir specific config
+;;      (add-to-list 'slime-contribs 'slime-fancy)
+  :config
+  (advice-add 'hyperspec-lookup :around #'hyperspec-lookup--hyperspec-lookup-w3m)
+  (add-hook 'slime-load-hook
+            (lambda ()
+              (define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)))
+  (require 'slime-autoloads))
 
 (use-package ielm
   :bind
@@ -637,7 +629,6 @@ Repeated invocations toggle between the two most recently open buffers."
                                             (with-file-modes #o600
                                               (comint-write-input-ring))))))
 
-(use-package anzu)
 
 (use-package undo-tree
   :init
@@ -647,144 +638,14 @@ Repeated invocations toggle between the two most recently open buffers."
   :config
   (global-undo-tree-mode 1))
 
-;; (pvr/space-keys-def
-;;   "l" '(:keymap lsp-command-map :wk "LSP"))
-
-(pvr/space-keys-def
-  :infix "h"
-  ""  '(nil :wk "Help")
-  "f" 'counsel-describe-function
-  "p" 'helpful-at-point
-  "b" 'counsel-descbinds
-  "v" 'counsel-describe-variable
-  "l" 'counsel-find-library)
-
-(use-package which-key
-  :custom
-  (which-key-show-docstrings t)
-  (which-key-show-prefix 'mode-line)
-  (which-key-idle-delay 0.2)
-  ;; max width of which-key frame: number of columns (an integer)
-  (which-key-frame-max-width 60)
-  ;; max height of which-key frame: number of lines (an integer)
-  (which-key-frame-max-height 20)
-  :config
-  (which-key-setup-side-window-bottom)
-  (which-key-mode 1))
-
-(use-package origami
-  :custom
-  (origami-fold-replacement " ▾")
-  :config
-  (dolist (mode-hook '(emacs-lisp-mode-hook
-                       nix-mode-hook
-                       haskell-mode-hook
-                       ess-r-mode-hook
-                       eshell-mode-hook))
-    (add-hook mode-hook
-              #'(lambda ()
-                  (origami-mode 1)))))
-
-(pvr/space-keys-def
-  :infix "z"
-  ""  '(nil :wk "Fold")
-  "o" 'origami-open-node
-  "O" 'origami-open-node-recursively
-  "c" 'origami-close-node
-  "C" 'origami-close-node-recursively
-  "t" 'origami-forward-toggle-node
-  "TAB" 'origami-recursively-toggle-node
-  "M-o" 'origami-open-all-nodes
-  "M-c" 'origami-close-all-nodes
-  "M-t" 'origami-toggle-all-nodes
-  "j" 'origami-forward-fold-same-level
-  "k" 'origami-backward-fold-same-level)
-
-(use-package ess
-  :custom
-  (ess-use-company nil)
-  :config
-  (add-hook 'inferior-ess-mode-hook 'turn-off-evil-mode)
-
-  (add-hook 'ess-r-help-mode
-            #'(lambda () (evil-mode 1)))
-
-  (setq ess-ask-for-ess-directory nil)
-
-  (add-hook 'inferior-ess-r-mode-hook
-            (lambda ()
-              (local-set-key (kbd "C-j") 'comint-next-input)
-              (local-set-key (kbd "C-k") 'comint-previous-input)))
-
-  (setq display-buffer-alist
-        `(("^\\*R Dired"
-           (display-buffer-reuse-window display-buffer-in-side-window)
-           (side . right)
-           (slot . -1)
-           (window-width . 0.33)
-           (reusable-frames . nil))
-          ("^\\*R"
-           (display-buffer-reuse-window display-buffer-at-bottom)
-           (window-width . 0.5)
-           (reusable-frames . nil))
-          ("^\\*help[R]"
-           (display-buffer-reuse-window display-buffer-in-side-window)
-           (side . right)
-           (slot . 1)
-           (window-width . 0.33)
-           (reusable-frames . nil)))))
-
-(defun comment-dwim-line (&optional arg)
-  "Replacement for the comment-dwim command.
-If no region is selected and current line is not blank and we are not at the end of the line,
-then comment current line.
-Replaces default behaviour of comment-dwim, when it inserts comment at the end of the line.
-Also move to the next line, since that's the most frequent action after"
-  (interactive "*P")
-  (comment-normalize-vars)
-  (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
-      (comment-or-uncomment-region (line-beginning-position) (line-end-position))
-    (comment-dwim arg))
-  (next-line))
-
-(evil-define-key '(visual normal insert) 'global (kbd "M-;") 'comment-dwim-line)
-
-(use-package guru-mode
-  :hook prog-mode)
-
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
-(use-package helpful
-  :after counsel
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
-  :bind
-  ([remap describe-symbol] . helpful-symbol)
-  ([remap describe-command] . helpful-command)
-  ([remap describe-key] . helpful-key))
-
 (use-package expand-region
   :config
-  (evil-define-key '(normal emacs) 'global (kbd "C-'") 'er/expand-region)
-  (evil-define-key '(normal emacs) 'global (kbd "C-\"") 'er/contract-region)
+  (global-set-key (kbd "C-'") 'er/expand-region)
+  (global-set-key (kbd "C-\"") 'er/contract-region)
   (set-variable 'expand-region-subword-enabled t))
-
-(pvr/space-keys-def
-  "e" 'pvr/expand/body)
-
-(use-package engine-mode
-  :defer t
-  :config
-  (engine-mode t)
-  (engine/set-keymap-prefix (kbd "C-c s"))
-  (defengine google "https://google.com/?q=%s"
-    :keybinding "s")
-  (defengine duckduckgo "https://duckduckgo.com/?q=%s"
-    :keybinding "d")
-  (defengine hoogle "https://www.haskell.org/hoogle/?hoogle=%s"
-    :keybinding "h"))
 
 (setq home-row-keys
       (string-to-list "neio"))
@@ -793,7 +654,6 @@ Also move to the next line, since that's the most frequent action after"
   :config
   (general-define-key
    :keymaps 'global
-   :states '(normal insert emacs)
    "C-." 'avy-goto-char-timer
    "C-;" 'avy-goto-line
    "C-," 'avy-goto-line)
@@ -810,101 +670,6 @@ Also move to the next line, since that's the most frequent action after"
   (key-chord-define-global "``" 'aw-flip-window))
 
 (use-package hydra)
-
-(defhydra pvr/expand (:timeout 4)
-  "Expand/Contract windows"
-  ("h" er/contract-region "Contract")
-  ("l" er/expand-region "Expand")
-  ("q" nil "Quit" :exit t))
-
-(defhydra pvr/window-ops (:timeout 4)
-  "Move to windows"
-  ("w" (ace-window))
-  ("h" (windmove-left) "Left")
-  ("j" (windmove-down) "Down")
-  ("k" (windmove-up) "Up")
-  ("l" (windmove-right) "Right")
-  ("p" (evil-window-prev) "Previous")
-  ("n" (evil-window-next) "Next")
-  ("+" (evil-window-increase-height 1) "Increase height")
-  ("-" (evil-window-decrease-height 1) "Decrease height")
-  ("<" (evil-window-decrease-width 1) "Decrease width")
-  (">" (evil-window-increase-width 1) "Increase width")
-  ("=" (balance-windows) "Increase width")
-  ("q" nil "Quit" :exit t))
-
-(use-package zoom-window
-  :custom
-  (zoom-window-use-persp nil)
-  (zoom-window-mode-line-color "Blue"))
-
-;; Messes up git gutter
-;; (use-package visual-fill-column
-;;   :custom
-;;   (fill-column 100)
-;;   :defer t
-;;   :hook
-;;   (prog-mode . (lambda ()
-;;                  (visual-line-mode 1)
-;;                  (visual-fill-column-mode 1)))
-;;   (org-mode . (lambda ()
-;;                 (setq visual-fill-column-width 110
-;;                       visual-fill-column-center-text t)
-;;                 (visual-fill-column-mode 1))))
-
-(define-key minibuffer-local-map (kbd "ESC") 'keyboard-escape-quit)
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-
-(defun insert-after-lispy-right (&optional count)
-  (interactive "p")
-  (let
-      ((regex (s-concat "\s*" lispy-right)))
-    (when (looking-at regex)
-      (re-search-forward regex nil nil (or count 1)))))
-(defun insert-before-lispy-left (&optional count)
-  (interactive "p")
-  (let
-      ((regex (s-concat "\s*" lispy-left)))
-    (when (looking-back regex)
-      (re-search-backward regex nil nil (or count 1)))))
-(evil-define-key '(insert) 'global
-  (kbd "C-h") 'insert-before-lispy-left
-  (kbd "C-l") 'insert-after-lispy-right)
-
-(pvr/space-keys-def
-  :infix ";"
-  ""  '(nil :wk "Avy Goto")
-  ";" 'avy-goto-char-timer
-  "'" 'avy-goto-char-2
-  "w" 'avy-goto-word-0
-  "W" 'avy-goto-word-1
-  "l" 'avy-goto-line)
-
-(pvr/space-keys-def
-  :infix "w"
-  ""  '(nil :wk "Windows")
-  "p" 'evil-window-prev
-  "h" 'windmove-left
-  "j" 'windmove-down
-  "k" 'windmove-up
-  "l" 'windmove-right
-  "n" 'evil-window-next
-  "w" 'ace-window
-  "+" 'evil-window-increase-height
-  "-" 'evil-window-decrease-height
-  "<" 'evil-window-decrease-width
-  ">" 'evil-window-increase-width
-  "x" 'evil-window-delete
-  "s" 'ace-swap-window
-  ";" 'pvr/window-ops/body
-  "TAB" 'aw-flip-window
-  "z" 'zoom-window-zoom
-  "u" 'winner-undo
-  "RET" 'split-window-horizontally
-  "M-RET" 'split-window-vertically)
-
-;; Risky, but I'm going to set it
-(setq enable-local-eval t)
 
 (defun eshell-persp ()
   "Crete a new persp for eshell"
@@ -936,8 +701,6 @@ Also move to the next line, since that's the most frequent action after"
               (psc-ide-mode)
               (psc-ide-flycheck-setup)
               (turn-on-purescript-indentation))))
-
-(load-file (concat user-emacs-directory "eshell.el"))
 
 (defun pvr/new-eshell-window ()
   (interactive)
@@ -990,114 +753,6 @@ Also move to the next line, since that's the most frequent action after"
   :ensure nix-mode
   :commands (nix-repl))
 
-(load-file (concat user-emacs-directory "ghcid.el"))
-(load-file (concat user-emacs-directory "utils.el"))
-
-(use-package org-roam
-  :custom
-  (org-roam-directory "~/plain/roam-notes"))
-
-(use-package hl-todo
-  :init
-  (global-hl-todo-mode)
-  :custom
-  hl-todo-keyword-faces '(("TODO" . "#FF0000")
-                          ("FIXME" . "#FF0000")
-                          ("DEBUG" . "#A020F0")
-                          ("GOTCHA" . "#FF4500")
-                          ("STUB" . "#1E90FF")))
-
-(use-package pulsar
-  :custom
-  ((pulsar-pulse t)
-   (pulsar-delay 0.05)
-   (pulsar-iterations 10)
-   (pulsar-face 'pulsar-magenta)
-   (pulsar-highlight-face 'pulsar-yellow)
-
-   (pulsar-pulse-functions
-    '(isearch-repeat-forward
-      isearch-repeat-backward
-      evil-ex-search-next
-      evil-ex-search-previous
-      evil-ex-search-forward
-      evil-ex-search-backward
-      evil-avy-goto-line
-      evil-avy-goto-char
-      evil-avy-goto-char-timer
-      evil-avy-goto-word-0
-      evil-avy-goto-word-1
-      recenter-top-bottom
-      move-to-window-line-top-bottom
-      reposition-window
-      bookmark-jump
-      other-window
-      delete-window
-      delete-other-windows
-      forward-page
-      backward-page
-      scroll-up-command
-      scroll-down-command
-      windmove-right
-      windmove-left
-      windmove-up
-      windmove-down
-      windmove-swap-states-right
-      windmove-swap-states-left
-      windmove-swap-states-up
-      windmove-swap-states-down
-      tab-new
-      tab-close
-      tab-next
-      org-next-visible-heading
-      org-previous-visible-heading
-      org-forward-heading-same-level
-      org-backward-heading-same-level
-      outline-backward-same-level
-      outline-forward-same-level
-      outline-next-visible-heading
-      outline-previous-visible-heading
-      outline-up-heading
-      evil-scroll-up
-      evil-scroll-down
-      evil-scroll-page-up
-      evil-scroll-page-down
-      eshell-previous-prompt
-      eshell-next-prompt)))
-  :bind
-  (("C-c C-x" . pulsar-pulse-line)))
-
-(use-package edit-server
-  :commands edit-server-start
-  :init (if after-init-time
-            (edit-server-start)
-          (add-hook 'after-init-hook
-                    #'(lambda () (edit-server-start))))
-  :config (setq edit-server-new-frame-alist
-                '((name . "Edit with Emacs FRAME")
-                  (top . 200)
-                  (left . 200)
-                  (width . 80)
-                  (height . 25)
-                  (minibuffer . t)
-                  (menu-bar-lines . nil)
-                  (window-system . x))))
-
-(defun pvr/switch-to-last-buffer ()
-  (interactive)
-  (switch-to-buffer nil))
-
-(pvr/space-keys-def
-  "SPC" 'pvr/switch-to-last-buffer)
-
-(pvr/space-keys-def
-  "ESC" 'switch-to-buffer)
-
-;; (use-package magit-delta
-;;   :hook (magit-mode . magit-delta-mode))
-
-(load-file (concat user-emacs-directory "completions.el"))
-
 (use-package wgrep
   :defer t
   :custom
@@ -1109,52 +764,6 @@ Also move to the next line, since that's the most frequent action after"
   :config
   (electric-indent-mode 1))
 
-(defun show-C-h-prompt ()
-  (interactive)
-  (message "Use C-h"))
-
-(global-set-key
- [f1] #'show-C-h-prompt)
-
-
-;; Assuming the Guix checkout is in ~/guix.
-(with-eval-after-load 'geiser-guile
-  (add-to-list 'geiser-guile-load-path "~/guix")
-  (add-to-list 'geiser-guile-load-path "~/dotfiles/guix"))
-(use-package geiser
-  :config
-  ;; (setq geiser-default-implementation 'gambit)
-  (setq geiser-default-implementation 'guile)
-  (setq geiser-active-implementations '(guile)))
-
-(use-package password-store)
-
-(use-package request)
-
-(defun eh (query)
-  (interactive "s\nQuery")
-  (let* ((api-key
-          ;; (s-trim-right (password-store--run "show" "api.openapi.com/key"))
-          "foobar"
-          )
-;;         (url "https://api.openai.com/v1/chat/completions")
-        (url "https://postman-echo.com/post")
-        (output nil))
-    (request url
-      :type "POST"
-      :headers '(("Content-Type" . "application/json")
-                 ("Authorization" . (concat "Bearer " api-key)))
-      :data (json-encode `(("model" . "gpt-3.5-turbo")
-                           ("messages" . ,(vector '(("role" . "user")
-                                                  ("content" . query))))
-                           ("temperature" . 0.8)))
-      :parser 'json-read
-      :success (cl-function
-                (lambda (&key data &allow-other-keys)
-                  (message "done %s" (assoc-default 'json data)))))))
-
-(use-package webkit)
-
 (use-package org-tree-slide
   :bind (:map org-tree-slide-mode-map
               ("<right>" . org-tree-slide-move-next-tree)
@@ -1164,13 +773,11 @@ Also move to the next line, since that's the most frequent action after"
   :init
   (setq org-tree-slide-play-hook
         #'(lambda ()
-            (turn-off-evil-mode)
             (setq-local visual-fill-column-center-text t)
             (setq-local visual-fill-column-extra-text-width (cons 10 10))
             (visual-fill-column-mode 1)))
   (setq org-tree-slide-stop-hook
         #'(lambda ()
-            (turn-on-evil-mode)
             (visual-fill-column-mode -1)))
   (add-hook 'org-tree-slide-mode #'(lambda ()))
   :custom
@@ -1183,3 +790,88 @@ Also move to the next line, since that's the most frequent action after"
   (erc-user-full-name "Paul Victor")
   (erc-autojoin-channels '(("irc-libera.chat" "#systemcrafters" "#emacs")))
   (erc-kill-buffer-on-part t))
+
+(use-package geiser
+  :config
+  ;; (setq geiser-default-implementation 'gambit)
+  (setq geiser-default-implementation 'guile)
+  (setq geiser-active-implementations '(guile)))
+
+(load-file (concat user-emacs-directory "ghcid.el"))
+(load-file (concat user-emacs-directory "utils.el"))
+
+(load-file (concat user-emacs-directory "names.el"))
+(load-file (concat user-emacs-directory "eshell.el"))
+
+(use-package corfu
+  :custom
+  (corfu-cycle t)
+  (corfu-on-exact-match 'insert)
+  (corfu-auto t)
+  (corfu-auto-prefix 2)
+  (corfu-auto-delay 0.2)
+  (corfu-quit-no-match 'separator)
+  (corfu-separator ?\s)
+  (corfu-min-width 80)
+  (corfu-max-width corfu-min-width)     ; Always have the same width
+  (corfu-count 14)
+  (corfu-scroll-margin 4)
+  (corfu-preselect 'prompt)
+  (corfu-preview-current 'insert)
+  :config
+  (add-hook 'eshell-mode-hook
+          (lambda ()
+            (setq-local corfu-auto nil)))
+  :init
+  (global-corfu-mode))
+
+(setq display-buffer-alist
+      (append display-buffer-alist
+      '(
+
+        ;; The added space is for didactic purposes
+
+        ;; Each entry in this list has this anatomy:
+
+        ;; ( BUFFER-MATCHING-RULE
+        ;;   LIST-OF-DISPLAY-BUFFER-FUNCTIONS
+        ;;   OPTIONAL-PARAMETERS)
+
+        ;; Match a buffer whose name is "*Occur*".  We have to escape
+        ;; the asterisks to match them literally and not as a special
+        ;; regular expression character.
+        ("\\*\\(Help\\|Occur\\)\\*"
+         ;; If a buffer with the matching major-mode exists in some
+         ;; window, then use that one.  Otherwise, display the buffer
+         ;; below the current window.
+         (display-buffer-reuse-mode-window display-buffer-below-selected)
+         ;; Then we have the parameters...
+         (window-height . 0.3)
+         (dedicated . t)))))
+
+;; (use-package lispy)                     ;
+
+;; (mapc)
+(add-hook ;; Can we use only the balancing feature in c mode
+  'prog-mode-hook
+  #'(lambda ()
+      (electric-pair-mode)))
+
+;; Move cursor to end of current line
+;; Insert new line below current line
+;; it will also indent newline
+(global-set-key (kbd "<C-return>") (lambda ()
+                   (interactive)
+                   (end-of-line)
+                   (newline-and-indent)))
+
+;; Move cursor to previous line
+;; Go to end of the line
+;; Insert new line below current line (So it actually insert new line above with indentation)
+;; it will also indent newline
+(global-set-key (kbd "<M-return>") (lambda ()
+                       (interactive)
+                       (previous-line)
+                       (end-of-line)
+                       (newline-and-indent)
+                       ))

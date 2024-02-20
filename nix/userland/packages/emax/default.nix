@@ -76,7 +76,8 @@ let
             hydra
 #             ivy
 #             ivy-prescient
-#             ivy-rich
+            #             ivy-rich
+            iedit
             json-mode
             key-chord
             keyfreq
