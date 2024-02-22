@@ -46,7 +46,7 @@ with pkgs;
   };
   services.udev.packages =
     lib.optionals isPhysicalDevice
-      [ crda android-udev-rules yubikey-personalization ];
+      [ android-udev-rules yubikey-personalization ];
   services.pcscd.enable = isPhysicalDevice;
   programs.adb.enable = isPhysicalDevice;
 
