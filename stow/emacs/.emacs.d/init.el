@@ -5,13 +5,9 @@
 (require 'ffap)
 ;; optional. makes unpure packages archives unavailable
 
-(setq package-archives nil)
-
 (use-package package
   :config
-  (package-initialize)
-  :custom
-  (setq package-enable-at-startup nil))
+  (package-initialize))
 
 (use-package f)
 (setq visual-bell t)
@@ -41,6 +37,13 @@
 
 ;;Do not save duplicates in kill ring
 (setq kill-do-not-save-duplicates t)
+(mapc (lambda (m)
+        (add-hook m
+                  (lambda ()
+                    (setq-local tab-width 2))
+                  ))
+      '(c-mode-hook haskell-mode-hook nix-mode-hook))
+
 (use-package emacs
   :custom
   (tab-width 2)
@@ -49,6 +52,7 @@
   (cursor-type 'bar)
   (tab-always-indent 'complete)
   :init
+  ;; Default modes to start by default
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1)
   (winner-mode 1))
@@ -101,12 +105,14 @@
   (("C-c C-x" . pulsar-pulse-line)))
 
 (setq initial-scratch-message nil)
-(setq history-length 10000)
+
 
 ;; Repeat maps to repeat commands. Check describe-repeat-modes
 ;; Set minibuffer completion history length to 10000
+(setq history-length 10000)
 (setq suggest-key-bindings t)
 (setq inhibit-startup-screen t)
+(setq initial-scratch-message nil)
 
 (use-package no-littering
   :init
@@ -150,9 +156,6 @@
     (switch-to-buffer (current-buffer))
     (local-set-key (kbd "q") 'kill-this-buffer)
     (current-buffer)))
-
-(setq initial-scratch-message nil)
-(setq inhibit-startup-screen t)
 
 (defun pvr/set-font-faces ()
   (set-mouse-color "white")
@@ -664,10 +667,12 @@ Repeated invocations toggle between the two most recently open buffers."
           (avy-goto-char-timer . at-full))))
 
 (use-package ace-window
-  :init
-  (setq aw-keys home-row-keys)
-  :config
-  (key-chord-define-global "``" 'aw-flip-window))
+  :bind
+  (("M-o" . ace-window))
+  :custom
+  (aw-keys home-row-keys)
+  (aw-scope 'frame)
+  (aw-ignore-current t))
 
 (use-package hydra)
 
@@ -754,7 +759,6 @@ Repeated invocations toggle between the two most recently open buffers."
   :commands (nix-repl))
 
 (use-package wgrep
-  :defer t
   :custom
   (wgrep-enable-key "e")
   (wgrep-auto-save-buffer t)
@@ -816,7 +820,7 @@ Repeated invocations toggle between the two most recently open buffers."
   (corfu-max-width corfu-min-width)     ; Always have the same width
   (corfu-count 14)
   (corfu-scroll-margin 4)
-  (corfu-preselect 'prompt)
+  (corfu-preselect 'directory)
   (corfu-preview-current 'insert)
   :config
   (add-hook 'eshell-mode-hook
@@ -873,5 +877,13 @@ Repeated invocations toggle between the two most recently open buffers."
                        (interactive)
                        (previous-line)
                        (end-of-line)
-                       (newline-and-indent)
+                       (newline-and-indenpt)
                        ))
+
+(global-set-key (kbd "C-x k") #'kill-this-buffer)
+
+(put 'upcase-region 'disabled nil)
+
+(use-package iedit
+  :custom
+  (iedit-toggle-key-default (kbd "C-:")))

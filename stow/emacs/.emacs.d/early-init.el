@@ -76,5 +76,21 @@
           (lambda ()
             (setq file-name-handler-alist file-name-handler-alist-old)))
 
-;; Disable `package' in favor of `straight'.
+;; Disable `package' since we are using nix to provision these
+(setq package-archives nil)
 (setq package-enable-at-startup nil)
+
+;; Ignore X resources
+(advice-add #'x-apply-session-resources :override #'ignore)
+;; TODO: Probably the better approach is:
+;; (setq inhibit-x-resources t)
+
+;; Do not resize the frame at this early stage.
+(setq frame-inhibit-implied-resize t)
+
+;; Prevent unwanted runtime builds; packages are compiled ahead-of-time when
+;; they are installed and site files are compiled when gccemacs is installed.
+;; (setq comp-deferred-compilation nil)
+(setq native-comp-jit-compilation nil)
+(startup-redirect-eln-cache
+ (concat (or (getenv "XDG_CACHE_HOME") "~/.cache") "/emacs"))
