@@ -171,7 +171,7 @@ with pkgs;
     };
     scdaemonSettings = {
       disable-ccid = true;
-      pcsc-driver = "${pkgs.pcsclite.out}/lib/libpcsclite.so";
+      pcsc-driver = "${pkgs.pcsclite.lib}/lib/libpcsclite.so";
       card-timeout = "1";
     };
   };

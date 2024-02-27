@@ -881,6 +881,8 @@ Repeated invocations toggle between the two most recently open buffers."
                        ))
 
 (global-set-key (kbd "C-x k") #'kill-this-buffer)
+(global-set-key (kbd "C-<tab>") #'next-buffer)
+(global-set-key (kbd "C-<iso-lefttab>") #'previous-buffer)
 
 (put 'upcase-region 'disabled nil)
 
