@@ -18,7 +18,7 @@
 
 (define-command-global delete-current-buffer ()
   "Delete current active buffer"
-  (delete-buffer :id (slot-value (current-buffer) 'id)))
+  (delete-buffer :buffers (list (current-buffer))))
 
 (setf (uiop:getenv "GTK_THEME") "Adwaita:dark")
 
@@ -43,10 +43,6 @@
 ;;         "b"   'switch-buffer
 ;;         "M-x" 'execute-command)))))
 
-(define-configuration buffer
-  ((default-modes
-    (pushnew 'nyxt/mode/emacs:emacs-mode %slot-value%))))
-
 ;; (define-configuration prompt-buffer
 ;;   ((keymap-scheme-name scheme:emacs)
 ;;    (override-map
@@ -55,14 +51,57 @@
 ;;         "C-j" 'nyxt/prompt-buffer-mode:select-next
 ;;         "C-k" 'nyxt/prompt-buffer-mode:select-previous)))))
 
-;; (define-command-global pvr/open-new-tab ()
-;;   "Open a new tab, prompting for the URL"
-;;   (set-url-new-buffer :prefill-current-url-p nil))
+(define-command-global pvr/open-new-tab ()
+  "Open a new tab, prompting for the URL"
+  (set-url-new-buffer :prefill-current-url-p nil))
 
-;; (define-command-global pvr/open-url ()
-;;   "Open a new tab, prompting for the URL"
-;;   (set-url :prefill-current-url-p nil))
+(define-command-global pvr/open-url ()
+  "Open a new tab, prompting for the URL"
+  (set-url :prefill-current-url-p nil))
 
+;; From https://discourse.atlas.engineer/t/change-keybinding/593
+(defmacro alter-keyscheme (keyscheme scheme-name &body bindings)
+  #+nyxt-2
+  `(let ((scheme ,keyscheme))
+     (keymap:define-key (gethash ,scheme-name scheme)
+       ,@bindings)
+     scheme)
+  #+nyxt-3
+  `(keymaps:define-keyscheme-map "custom" (list :import ,keyscheme)
+     ,scheme-name
+     (list ,@bindings)))
+
+(define-configuration hint-mode
+    "Customizing hint mode"
+  ((visible-in-status-p nil)
+   (show-hint-scope-p t)
+   (hinting-type :vi)
+   (hints-alphabet "neioarst")))
+
+(define-configuration base-mode
+    "Custom Rebind "
+  ((keyscheme-map
+    (alter-keyscheme %slot-value%
+                     nyxt/keyscheme:emacs
+                     "C-_" 'reopen-last-buffer
+;;                      "C-space" 'nothing
+                     "C-:" 'nyxt/mode/visual:visual-mode))))
+
+(define-configuration hint-mode
+    "Configure visual mode"
+  ((keyscheme-map
+    (alter-keyscheme %slot-value%
+                     nyxt/keyscheme:emacs
+                     "C-space" 'nyxt/mode/visual:toggle-mark))))
+
+(define-configuration buffer
+  ((default-modes
+    (pushnew 'nyxt/mode/emacs:emacs-mode %slot-value%))))
+
+(define-configuration input-buffer
+  ((override-map
+    (let ((map (make-keymap "override-map")))
+      (define-key map "M-x" 'execute-command "C-space" 'nothing)))))
 ;; ;; (define-configuration nyxt/hint-mode:hint-mode
 ;; ;;   ((auto-follow-hints-p t)))
 
