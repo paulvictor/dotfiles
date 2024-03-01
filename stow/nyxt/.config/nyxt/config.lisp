@@ -10,6 +10,7 @@
 (load "~/quicklisp/setup.lisp")
 
 (ql:quickload :slynk)
+(ql:quickload '("str" "cl-ppcre" "alexandria"))
 
 (define-command-global start-slynk (&optional (slynk-port slynk::default-server-port))
   "Start a Slynk server that can be connected to, for instance, in Emacs via SLY."
@@ -30,44 +31,60 @@
 ;;                   (make-autofill :name "Email" :fill "paulvictor@gmail.com")))
 ;;      (external-editor-program (or (uiop/os:getenv "EDITOR") "emacsclient -c"))))
 
-;; (define-configuration buffer
-;;   ((default-modes (append '(emacs-mode) %slot-default%))
-;;    (override-map
-;;     (let ((map (make-keymap "override-map")))
-;;       (define-key map
-;;         "J"   'switch-buffer-previous
-;;         "K"   'switch-buffer-next
-;; ;;         "; y" 'nyxt/web-mode:copy-hint-url
-;; ;;         "; d" 'nyxt/web-mode:download-hint-url
-;;         "x"   'delete-current-buffer
-;;         "b"   'switch-buffer
-;;         "M-x" 'execute-command)))))
+(define-configuration browser
+    ((external-editor-program (uiop:getenvp "EDITOR"))))
 
-;; (define-configuration prompt-buffer
-;;   ((keymap-scheme-name scheme:emacs)
-;;    (override-map
-;;     (let ((map (make-keymap "prompt-map")))
-;;       (define-key map
-;;         "C-j" 'nyxt/prompt-buffer-mode:select-next
-;;         "C-k" 'nyxt/prompt-buffer-mode:select-previous)))))
+(defvar *search-engines-with-google-completions*
+  (let ((ddg-completion nil
+         ;; (make-search-completion-function
+;;           :base-url "https://duckduckgo.com/ac/?q=~a"
+;;           ;; At some point try `curl "http://suggestqueries.google.com/complete/search?client=firefox&q=haskell"`
+;;           :processing-function
+;;           #'(lambda (results)
+;;               (when results
+;;                 (map 'list (lambda (hash-table)
+;;                              (first (alexandria:hash-table-values hash-table)))
+;;                      (j:decode results)))))
+         ))
+    (list  (make-instance 'search-engine
+                          :name "DuckDuckGo"
+                          :shortcut "ddg"
+                          :search-url "https://duckduckgo.com/?q=~a"
+                          :fallback-url (quri:uri "https://duckduckgo.com/")
+                          :completion-function ddg-completion)
+           (make-instance 'search-engine
+                          :name "Haskell Docs"
+                          :shortcut "hs"
+                          :search-url "https://hoogle.haskell.org/?hoogle=~a"
+                          :fallback-url (quri:uri "https://hoogle.haskell.org"))
+           (make-instance 'search-engine
+                          :name "Big G"
+                          :shortcut "g"
+                          :search-url "https://google.com/search?q=~a"
+                          :fallback-url (quri:uri "https://google.com")
+                          :completion-function ddg-completion))))
 
-(define-command-global pvr/open-new-tab ()
-  "Open a new tab, prompting for the URL"
-  (set-url-new-buffer :prefill-current-url-p nil))
+;; (define-configuration context-buffer
+;;     "Configure search engines manually"
+;;   ((search-engines *search-engines*)))
 
-(define-command-global pvr/open-url ()
-  "Open a new tab, prompting for the URL"
-  (set-url :prefill-current-url-p nil))
+;; (define-command-global pvr/open-new-tab ()
+;;   "Open a new tab, prompting for the URL"
+;;   (set-url-new-buffer :prefill-current-url-p nil))
+
+;; (define-command-global pvr/open-url ()
+;;   "Open a new tab, prompting for the URL"
+;;   (set-url :prefill-current-url-p nil))
 
 ;; From https://discourse.atlas.engineer/t/change-keybinding/593
-(defmacro alter-keyscheme (keyscheme scheme-name &body bindings)
+(defmacro alter-keyscheme (prefix keyscheme scheme-name &body bindings)
   #+nyxt-2
   `(let ((scheme ,keyscheme))
      (keymap:define-key (gethash ,scheme-name scheme)
        ,@bindings)
      scheme)
   #+nyxt-3
-  `(keymaps:define-keyscheme-map "custom" (list :import ,keyscheme)
+  `(keymaps:define-keyscheme-map ,prefix (list :import ,keyscheme)
      ,scheme-name
      (list ,@bindings)))
 
@@ -81,27 +98,34 @@
 (define-configuration base-mode
     "Custom Rebind "
   ((keyscheme-map
-    (alter-keyscheme %slot-value%
+    (alter-keyscheme "base-custom"
+                     %slot-value%
                      nyxt/keyscheme:emacs
                      "C-_" 'reopen-last-buffer
-;;                      "C-space" 'nothing
+                     "C-space" 'nyxt/mode/visual:toggle-mark
+                     "C-x k" 'delete-current-buffer
+                     "C-x C-k" 'delete-buffer
                      "C-:" 'nyxt/mode/visual:visual-mode))))
 
-(define-configuration hint-mode
+(define-configuration visual-mode
     "Configure visual mode"
-  ((keyscheme-map
-    (alter-keyscheme %slot-value%
-                     nyxt/keyscheme:emacs
-                     "C-space" 'nyxt/mode/visual:toggle-mark))))
+  ((keyscheme-map (alter-keyscheme "visual-override"
+                   %slot-value%
+                   nyxt/keyscheme:emacs
+                   "escape" 'visual-mode
+                   "C-g" 'clear-selection))))
 
 (define-configuration buffer
   ((default-modes
-    (pushnew 'nyxt/mode/emacs:emacs-mode %slot-value%))))
-
-(define-configuration input-buffer
-  ((override-map
+       (pushnew 'nyxt/mode/emacs:emacs-mode %slot-value%))
+   (override-map
     (let ((map (make-keymap "override-map")))
-      (define-key map "M-x" 'execute-command "C-space" 'nothing)))))
+      (define-key map "M-x" 'execute-command)))))
+
+;; (define-configuration input-buffer
+;;   ((override-map
+;;     (let ((map (make-keymap "override-map")))
+;;       (define-key map "M-x" 'execute-command)))))
 ;; ;; (define-configuration nyxt/hint-mode:hint-mode
 ;; ;;   ((auto-follow-hints-p t)))
 

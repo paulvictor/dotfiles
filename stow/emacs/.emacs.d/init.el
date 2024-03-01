@@ -877,7 +877,7 @@ Repeated invocations toggle between the two most recently open buffers."
                        (interactive)
                        (previous-line)
                        (end-of-line)
-                       (newline-and-indenpt)
+                       (newline-and-indent)
                        ))
 
 (global-set-key (kbd "C-x k") #'kill-this-buffer)
