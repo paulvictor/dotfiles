@@ -55,9 +55,9 @@ let
             ess-R-data-view
             ess-smart-underscore
             erc-colorize erc-yank
-            evil
-            evil-collection
-            evil-org
+#             evil
+#             evil-collection
+#             evil-org
             expand-region
             f
             # fancy-dabbrev
@@ -120,7 +120,8 @@ let
             s
             slack
             slime
-            slime-company
+            sly
+#             slime-company
 #             sly
             swiper
             transient

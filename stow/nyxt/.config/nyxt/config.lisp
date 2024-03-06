@@ -10,7 +10,7 @@
 (load "~/quicklisp/setup.lisp")
 
 (ql:quickload :slynk)
-(ql:quickload '("str" "cl-ppcre" "alexandria"))
+(ql:quickload '("str" "cl-ppcre" "alexandria" "njson"))
 
 (define-command-global start-slynk (&optional (slynk-port slynk::default-server-port))
   "Start a Slynk server that can be connected to, for instance, in Emacs via SLY."
@@ -35,16 +35,16 @@
     ((external-editor-program (uiop:getenvp "EDITOR"))))
 
 (defvar *search-engines-with-google-completions*
-  (let ((ddg-completion nil
-         ;; (make-search-completion-function
-;;           :base-url "https://duckduckgo.com/ac/?q=~a"
-;;           ;; At some point try `curl "http://suggestqueries.google.com/complete/search?client=firefox&q=haskell"`
-;;           :processing-function
-;;           #'(lambda (results)
-;;               (when results
-;;                 (map 'list (lambda (hash-table)
-;;                              (first (alexandria:hash-table-values hash-table)))
-;;                      (j:decode results)))))
+  (let ((ddg-completion
+         (make-search-completion-function
+          :base-url "https://duckduckgo.com/ac/?q=~a"
+          ;; At some point try `curl "http://suggestqueries.google.com/complete/search?client=firefox&q=haskell"`
+          :processing-function
+          #'(lambda (results)
+              (when results
+                (map 'list (lambda (hash-table)
+                             (first (alexandria:hash-table-values hash-table)))
+                     (njson:decode results)))))
          ))
     (list  (make-instance 'search-engine
                           :name "DuckDuckGo"
@@ -58,15 +58,15 @@
                           :search-url "https://hoogle.haskell.org/?hoogle=~a"
                           :fallback-url (quri:uri "https://hoogle.haskell.org"))
            (make-instance 'search-engine
-                          :name "Big G"
+                          :name "Google"
                           :shortcut "g"
                           :search-url "https://google.com/search?q=~a"
                           :fallback-url (quri:uri "https://google.com")
                           :completion-function ddg-completion))))
 
-;; (define-configuration context-buffer
-;;     "Configure search engines manually"
-;;   ((search-engines *search-engines*)))
+(define-configuration context-buffer
+    "Configure search engines manually"
+  ((search-engines *search-engines-with-google-completions*)))
 
 ;; (define-command-global pvr/open-new-tab ()
 ;;   "Open a new tab, prompting for the URL"
