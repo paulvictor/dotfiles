@@ -463,20 +463,23 @@ Also move to the next line, since that's the most frequent action after"
   :bind
   (:map isearch-mode-map
         ([remap isearch-delete-char] . isearch-del-char))
-  :config
-  ;; Prevents issue where you have to press backspace twice when
-  ;; trying to remove the first character that fails a search
-;;   (define-key isearch-mode-map [remap isearch-delete-char] 'isearch-del-char)
+;;   :config
+;;   ;; Prevents issue where you have to press backspace twice when
+;;   ;; trying to remove the first character that fails a search
+;; ;;   (define-key isearch-mode-map [remap isearch-delete-char] 'isearch-del-char)
 
-  (defadvice isearch-search (after isearch-no-fail activate)
-    (unless isearch-success
-      (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
-      (ad-activate 'isearch-search)
-      (isearch-repeat (if isearch-forward 'forward))
-      (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
-      (ad-activate 'isearch-search)))
+;;   (defadvice isearch-search (after isearch-no-fail activate)
+;;     (unless isearch-success
+;;       (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
+;;       (ad-activate 'isearch-search)
+;;       (isearch-repeat (if isearch-forward 'forward))
+;;       (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
+;;       (ad-activate 'isearch-search)))
   :custom
+  (isearch-repeat-on-direction-change t)
   (isearch-lazy-count t)
+  (isearch-wrap-pause 'no-ding)
+  (search-ring-max 100)
   (lazy-count-prefix-format "(%s/%s) ")
   (lazy-count-suffix-format nil))
 
