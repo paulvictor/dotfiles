@@ -16,56 +16,41 @@ let
       .emacsWithPackages(epkgs:
         [ (with epkgs.melpaPackages;
           [
-            # ace-jump-mode
             ace-window
             all-the-icons
+            all-the-icons-completion
             all-the-icons-dired
             all-the-icons-ibuffer
-#             all-the-icons-ivy
-            all-the-icons-completion
-#             all-the-icons-ivy-rich
             anzu
             avy
             cape
             company
             company-prescient
             copy-as-format
-#             counsel
-#             counsel-projectile
             dash
             dashboard
             dired-single
             direnv
             doom-modeline
             doom-themes
-            # eglot # Has some issue with project.el. Emacs 28 should fix this
             edit-server
             elisp-slime-nav
             emacs-webkit
-            org-tree-slide
-            # elscreen
-            # elscreen-separate-buffer-list
+            embark orderless consult marginalia
             engine-mode
-            # envrc
-            # equake
-            #         esh-autosuggest
+            erc-colorize erc-yank
             eshell-prompt-extras
             eshell-syntax-highlighting
             ess
             ess-R-data-view
             ess-smart-underscore
-            erc-colorize erc-yank
-#             evil
-#             evil-collection
-#             evil-org
             expand-region
             f
-            # fancy-dabbrev
             fish-completion
             flycheck
             geiser
-            geiser-guile
             geiser-chez
+            geiser-guile
             general
             git-gutter
             guix
@@ -74,16 +59,12 @@ let
             helpful
             hl-todo
             hydra
-#             ivy
-#             ivy-prescient
-            #             ivy-rich
             iedit
             json-mode
             key-chord
             keyfreq
             linum-relative
             lispy
-            lispyville
             lsp-haskell
             lsp-mode
             lsp-ui
@@ -100,6 +81,7 @@ let
             org-make-toc
             org-roam
             org-superstar
+            org-tree-slide
             origami
             page-break-lines
             paredit
@@ -107,11 +89,9 @@ let
             pcmpl-args
             pdf-tools
             perspective
-#             persp-projectile
             popper
             popup
             prescient
-#             projectile
             psci
             psc-ide
             rainbow-delimiters
@@ -121,23 +101,19 @@ let
             slack
             slime
             sly
-#             slime-company
-#             sly
             swiper
             transient
             use-package
             use-package-chords
-            # vimish-fold # Need keybindings but is good
-            embark orderless consult marginalia
             visual-fill-column
             vterm
             w3m
             wgrep
             which-key
             yaml-mode
-            # yequake
             zerodark-theme
             zoom-window
+
           ]
           ++ [ flim apel ] # Needed only from w3m atm
         )

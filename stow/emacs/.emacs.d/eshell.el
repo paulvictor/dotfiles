@@ -27,25 +27,6 @@
               (point))))
     (kill-ring-save beg end)))
 
-(defun pvr/esh-history ()
-  "Interactive search eshell history."
-  (interactive)
-  (require 'em-hist)
-  (save-excursion
-    (let* ((start-pos (save-excursion (eshell-bol)))
-            (end-pos (point-at-eol))
-            (input (buffer-substring-no-properties start-pos end-pos))
-            (command (ivy-read "Execute : "
-                               (delete-dups
-                                (when (> (ring-size eshell-history-ring) 0)
-                                  (ring-elements eshell-history-ring)))
-                               :initial-input input
-                               :preselect 0
-                               :require-match nil)))
-      (kill-region start-pos end-pos)
-      (insert command)))
-  (end-of-line))
-
 (defun pvr/eshell-quit-or-delete-char (arg)
   (interactive "p")
   (if (and (eolp) (looking-back eshell-prompt-regexp))
@@ -55,33 +36,43 @@
           (delete-window)))
     (delete-forward-char arg)))
 
+(use-package em-term
+  :custom
+  (eshell-visual-commands
+   '("alsamixer" "htop" "mpv" "watch" "vim" "nvim" "rtorrent" "bluetoothctl" "pscid" "ssh" "tail" "tmux" "screen" "nmtui" "ghci"))
+  (eshell-visual-subcommands
+   '(("git" "log" "diff" "show")
+            ("sudo" "vi" "visudo")
+            ("sudo" "su")
+            ("cabal" "repl")
+            ("guix" "search"))))
+
+(use-package em-hist
+  :custom
+  (eshell-history-file-name (no-littering-expand-var-file-name "eshell/history"))
+  (eshell-history-size 10000)
+  (eshell-hist-ignoredups t)
+  (eshell-input-filter
+        (lambda (str)
+          (not (or
+                (string= "" str)
+                (string= "cd" str)
+                (string-prefix-p "cd " str)
+                (string-prefix-p " " str))))))
+
 (use-package eshell
   :custom
-  (eshell-history-file-name (no-littering-expand-var-file-name "eshell-history"))
   (eshell-prefer-lisp-functions nil)
   (eshell-destroy-buffer-when-process-dies t)
   :config
   (setenv "PAGER" "cat") ; solves issues, such as with 'git log' and the default 'less'
-  (setenv "GUIX_PROFILE" "/home/viktor/.config/guix/current")
   (add-to-list 'direnv-non-file-modes 'eshell-mode)
   (add-hook 'eshell-mode-hook
           (lambda ()
             (setq-local corfu-auto nil)
             (corfu-mode)))
   (require 'em-pred)
-;;   (require 'nix-shell)
-  (setq
-   eshell-history-size 4096
-   eshell-hist-ignoredups t)
-  (with-eval-after-load 'em-term
-    (dolist (p '("alsamixer" "htop" "mpv" "watch" "vim" "nvim" "rtorrent" "bluetoothctl" "pscid" "ssh" "tail" "tmux" "screen" "nmtui" "ghci"))
-      (add-to-list 'eshell-visual-commands p))
-    (setq eshell-visual-subcommands
-          '(("git" "log" "diff" "show")
-            ("sudo" "vi" "visudo")
-            ("sudo" "su")
-            ("cabal" "repl")
-            ("guix" "search"))))
+
   (with-eval-after-load 'em-alias
     (dolist
         (alias
@@ -104,18 +95,6 @@
            ("less" "view-file $1")))
       (add-to-list 'eshell-command-aliases-list alias)))
   ;;   (eshell-write-aliases-list)
-  (setq eshell-input-filter
-        (lambda (str)
-          (not (or
-                (string= "" str)
-                (string= "cd" str)
-                (string-prefix-p "cd " str)
-                (string-prefix-p " " str)))))
-  ;; (with-eval-after-load 'eshell-mode
-  ;;     (general-define-key
-  ;;      :keymaps 'eshell-mode-map
-  ;;      :states '(insert normal emacs)
-  ;;      "C-r" #'pvr/esh-history))
   :bind
   (:map eshell-mode-map
         ("C-d" . pvr/eshell-quit-or-delete-char)

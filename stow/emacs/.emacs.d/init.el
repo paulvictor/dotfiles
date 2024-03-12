@@ -934,3 +934,16 @@ point reaches the beginning or end of the buffer, stop there."
 ;; Really this works with
 ;; M-j
 (global-set-key (kbd "C-^") 'top-join-line)
+
+;; https://amitp.blogspot.com/2007/03/emacs-move-autosave-and-backup-files.html
+(let
+    ((user-temp-file-directory (f-join temporary-file-directory user-login-name "emacs")))
+  (f-mkdir-full-path user-temp-file-directory)
+  (setq backup-by-copying t)
+  (setq backup-directory-alist
+        `(("." . ,user-temp-file-directory)
+          (,tramp-file-name-regexp nil)))
+  (setq auto-save-list-file-prefix
+        (concat user-temp-file-directory ".auto-saves-"))
+  (setq auto-save-file-name-transforms
+        `((".*" ,user-temp-file-directory t))))
