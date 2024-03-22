@@ -91,7 +91,6 @@
 (define-configuration hint-mode
     "Customizing hint mode"
   ((visible-in-status-p nil)
-   (show-hint-scope-p t)
    (hinting-type :vi)
    (hints-alphabet "neioarst")))
 

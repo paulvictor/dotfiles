@@ -136,8 +136,9 @@ in
         zathura # Crashing.
         zoom-us
         (vivaldi.override { proprietaryCodecs = true; enableWidevine = true;})
-        (iosevka-bin.override { variant = "aile"; })
-        (iosevka-bin.override { variant = "slab"; })
+        (iosevka-bin.override { variant = "Aile"; })
+        (iosevka-bin.override { variant = "Slab"; })
+        (iosevka-bin.override { variant = "Curly"; })
         ((pinentry.override({ enabledFlavors = ["curses"];})).overrideAttrs(oldAttrs: {
                                 buildInputs = oldAttrs.buildInputs ++ [ git ];
                                 #postInstall = "unlink $out/bin/pinentry";

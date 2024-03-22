@@ -242,11 +242,9 @@ mkIf
         Install.WantedBy = [ "default.target" ];
         Unit.Description = "Detects when your YubiKey is waiting for a touch";
         Service =
-          let
-            ytd = pkgs.callPackage ./packages/ytd {};
-          in {
+          {
             Environment="PATH=${pkgs.gnupg}/bin:/run/wrappers/bin";
-            ExecStart = "${ytd}/bin/yubikey-touch-detector --libnotify";
+            ExecStart = "${yubikey-touch-detector}/bin/yubikey-touch-detector --libnotify";
             Type = "simple";
           };
       };

@@ -25,10 +25,10 @@
         }
       ];
     };
-    layout = "us";
+    xkb.layout = "us";
     exportConfiguration = true;
 #     xkbVariant = ",common";
-    xkbModel = "pc104";
+    xkb.model = "pc104";
     updateDbusEnvironment = true;
 #     enableCtrlAltBackspace = true;
     #    extraLayouts.apl = {
