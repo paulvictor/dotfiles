@@ -129,7 +129,6 @@ in
         unifont
 #         victor-mono-nerdfonts
         vlc
-        ytmdesktop
         yubico-piv-tool
         yubikey-manager
         yubikey-personalization
@@ -139,12 +138,6 @@ in
         (iosevka-bin.override { variant = "Aile"; })
         (iosevka-bin.override { variant = "Slab"; })
         (iosevka-bin.override { variant = "Curly"; })
-        ((pinentry.override({ enabledFlavors = ["curses"];})).overrideAttrs(oldAttrs: {
-                                buildInputs = oldAttrs.buildInputs ++ [ git ];
-                                #postInstall = "unlink $out/bin/pinentry";
-                                postInstall = "";
-                                outputs = [ "out" ];
-                              }))
         (ungoogled-chromium.override { enableWideVine = true;})
       ];
     xresources =

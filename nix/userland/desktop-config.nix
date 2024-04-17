@@ -217,7 +217,7 @@ mkIf
         defaultCacheTtlSsh = 3600;
         maxCacheTtl = 6 * 3600;
         maxCacheTtlSsh = 6 * 3600;
-        pinentryFlavor = "qt";
+        pinentryPackage = pinentry-qt;
         sshKeys = [
           "# id_rsa"
           "1F525695DC054E59E3D357E2F76F05DE63F2AD0D"

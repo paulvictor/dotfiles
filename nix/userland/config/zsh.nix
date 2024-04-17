@@ -50,7 +50,7 @@ let
 in
 {
   enable = true;
-  enableAutosuggestions = true;
+  autosuggestion.enable = true;
   dotDir = ".zsh";
   syntaxHighlighting.enable = true;
   history = {

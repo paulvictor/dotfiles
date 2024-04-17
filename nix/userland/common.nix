@@ -63,7 +63,6 @@ with pkgs;
     rclone
     rclone-browser
     shareLink
-    tomb
     watchexec # because of https://github.com/NixOS/nixpkgs/issues/160876
   ];
 
@@ -201,7 +200,6 @@ with pkgs;
 
   programs.eza = {
     enable = specialArgs.isLinux;
-    enableAliases = true;
   };
 
   programs.broot = {
