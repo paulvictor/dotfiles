@@ -536,14 +536,14 @@ Also move to the next line, since that's the most frequent action after"
 (use-package dired
   :ensure nil
   :commands (dired dired-jump)
+  :bind
+  (("C-x D" . dired-jump))
   :custom
   ((dired-listing-switches "-agho --group-directories-first")
+   (dired-isearch-filenames 'dwim)
+   (dired-kill-when-opening-new-dired-buffer t)
+   (dired-create-destination-dirs t)
    (dired-dwim-target t)))
-
-(use-package dired-x
-  :ensure nil
-  :bind
-  (("C-x D" . dired-jump)))
 
 (use-package dired-single
   :after (dired dired-jump)

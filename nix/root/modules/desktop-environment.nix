@@ -52,16 +52,7 @@
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
-    disabledPlugins = [ "sap" ];
-#     hsphfpd.enable = true;
-    package = pkgs.bluez;
   };
-  environment.etc."bluetooth/audio.conf".text =
-    lib.generators.toINI {} {
-      General = {
-        Enable= "Source,Sink,Media,Socket";
-      };
-    };
 
   services.journald.rateLimitInterval = "0";
   services.journald.rateLimitBurst = 0;

@@ -68,14 +68,6 @@
     "Configure search engines manually"
   ((search-engines *search-engines-with-google-completions*)))
 
-;; (define-command-global pvr/open-new-tab ()
-;;   "Open a new tab, prompting for the URL"
-;;   (set-url-new-buffer :prefill-current-url-p nil))
-
-;; (define-command-global pvr/open-url ()
-;;   "Open a new tab, prompting for the URL"
-;;   (set-url :prefill-current-url-p nil))
-
 ;; From https://discourse.atlas.engineer/t/change-keybinding/593
 (defmacro alter-keyscheme (prefix keyscheme scheme-name &body bindings)
   #+nyxt-2
