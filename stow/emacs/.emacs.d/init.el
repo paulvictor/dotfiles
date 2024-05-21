@@ -68,6 +68,10 @@
   (pulsar-pulse-functions
    '(isearch-repeat-forward
      isearch-repeat-backward
+     isearch-forward
+     isearch-backward
+     isearch-forward-regexp
+     isearch-backward-regexp
      recenter-top-bottom
      move-to-window-line-top-bottom
      reposition-window
@@ -101,6 +105,8 @@
      outline-up-heading
      eshell-previous-prompt
      eshell-next-prompt))
+  :config
+  (global-pulsar-mode)
   :bind
   (("C-c C-x" . pulsar-pulse-line)))
 
@@ -619,9 +625,9 @@ Repeated invocations toggle between the two most recently open buffers."
   (require 'slime-autoloads))
 
 (use-package ielm
-  :bind
-  ("C-l" . comint-clear-buffer)
-  ("C-r" . consult-history)
+;;   :bind
+;;   ("C-l" . comint-clear-buffer)
+;;   ("C-r" . consult-history)
   :init
   (let
       ((history-path (no-littering-expand-etc-file-name "ielm/history")))
