@@ -73,6 +73,7 @@ let
             nerd-icons
             nerd-icons-completion
             nerd-icons-corfu
+            nov
             nerd-icons-dired
             nix-mode
             nix-modeline

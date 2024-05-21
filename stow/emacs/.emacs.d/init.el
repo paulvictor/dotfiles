@@ -59,48 +59,48 @@
 
 (use-package pulsar
   :custom
-  ((pulsar-pulse t)
-   (pulsar-delay 0.05)
-   (pulsar-iterations 10)
-   (pulsar-face 'pulsar-magenta)
-   (pulsar-highlight-face 'pulsar-yellow)
+  (pulsar-pulse t)
+  (pulsar-delay 0.05)
+  (pulsar-iterations 10)
+  (pulsar-face 'pulsar-magenta)
+  (pulsar-highlight-face 'pulsar-yellow)
 
-   (pulsar-pulse-functions
-    '(isearch-repeat-forward
-      isearch-repeat-backward
-      recenter-top-bottom
-      move-to-window-line-top-bottom
-      reposition-window
-      bookmark-jump
-      other-window
-      delete-window
-      delete-other-windows
-      forward-page
-      backward-page
-      scroll-up-command
-      scroll-down-command
-      windmove-right
-      windmove-left
-      windmove-up
-      windmove-down
-      windmove-swap-states-right
-      windmove-swap-states-left
-      windmove-swap-states-up
-      windmove-swap-states-down
-      tab-new
-      tab-close
-      tab-next
-      org-next-visible-heading
-      org-previous-visible-heading
-      org-forward-heading-same-level
-      org-backward-heading-same-level
-      outline-backward-same-level
-      outline-forward-same-level
-      outline-next-visible-heading
-      outline-previous-visible-heading
-      outline-up-heading
-      eshell-previous-prompt
-      eshell-next-prompt)))
+  (pulsar-pulse-functions
+   '(isearch-repeat-forward
+     isearch-repeat-backward
+     recenter-top-bottom
+     move-to-window-line-top-bottom
+     reposition-window
+     bookmark-jump
+     other-window
+     delete-window
+     delete-other-windows
+     forward-page
+     backward-page
+     scroll-up-command
+     scroll-down-command
+     windmove-right
+     windmove-left
+     windmove-up
+     windmove-down
+     windmove-swap-states-right
+     windmove-swap-states-left
+     windmove-swap-states-up
+     windmove-swap-states-down
+     tab-new
+     tab-close
+     tab-next
+     org-next-visible-heading
+     org-previous-visible-heading
+     org-forward-heading-same-level
+     org-backward-heading-same-level
+     outline-backward-same-level
+     outline-forward-same-level
+     outline-next-visible-heading
+     outline-previous-visible-heading
+     outline-up-heading
+     eshell-previous-prompt
+     eshell-next-prompt))
   :bind
   (("C-c C-x" . pulsar-pulse-line)))
 
@@ -183,7 +183,6 @@
 
 ;Show matching parens
 (show-paren-mode)
-
 
 (setq auto-save-timeout nil)
 (setq make-backup-files nil)
@@ -476,6 +475,7 @@ Also move to the next line, since that's the most frequent action after"
 ;;       (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
 ;;       (ad-activate 'isearch-search)))
   :custom
+  (isearch-allow-motion t)
   (isearch-repeat-on-direction-change t)
   (isearch-lazy-count t)
   (isearch-wrap-pause 'no-ding)
@@ -950,3 +950,9 @@ point reaches the beginning or end of the buffer, stop there."
         (concat user-temp-file-directory ".auto-saves-"))
   (setq auto-save-file-name-transforms
         `((".*" ,user-temp-file-directory t))))
+
+(use-package nov
+  :custom
+  (nov-variable-pitch nil)
+  :config
+  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))

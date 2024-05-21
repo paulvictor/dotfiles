@@ -56,7 +56,6 @@ in
         kubetail
         nodejs
         pv
-        ql2nix
         ruby
         sbcl
         silver-searcher
