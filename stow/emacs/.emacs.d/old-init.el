@@ -622,8 +622,9 @@ Repeated invocations toggle between the two most recently open buffers."
 
 (use-package ielm
   :bind
-  ("C-l" . comint-clear-buffer)
-  ("C-r" . consult-history)
+  (:map inferior-emacs-lisp-mode-map
+        ("C-l" . comint-clear-buffer)
+        ("C-r" . consult-history))
   :init
   (let
       ((history-path (no-littering-expand-etc-file-name "ielm/history")))

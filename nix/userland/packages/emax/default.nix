@@ -111,10 +111,10 @@ let
             w3m
             wgrep
             which-key
+            whole-line-or-region
             yaml-mode
             zerodark-theme
             zoom-window
-
           ]
           ++ [ flim apel ] # Needed only from w3m atm
         )
@@ -123,9 +123,26 @@ let
         [ (with epkgs; [ nano-theme ]) ]
         ++
         [ (with epkgs.elpaPackages; [ undo-tree org vertico corfu plz kind-icon pulsar erc ]) ]);
+  gstBuildInputs = with gst_all_1; [
+    gstreamer gst-libav
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+  ];
+  webkitDeps = with pkgs; [
+    webkitgtk
+    glib gtk3
+    glib-networking
+    gsettings-desktop-schemas
+  ] ++ gstBuildInputs;
+
   myemacs = symlinkJoin {
     name = "Emacs";
     paths = [ customizedEmacs ];
+
+    # GIO_EXTRA_MODULES = "${pkgs.glib-networking}/lib/gio/modules:${pkgs.dconf.lib}/lib/gio/modules";
+#   GST_PLUGIN_SYSTEM_PATH_1_0 = pkgs.lib.concatMapStringsSep ":" (p: "${p}/lib/gstreamer-1.0") gstBuildInputs;
     buildInputs = [
       makeWrapper
       ripgrep
@@ -133,10 +150,12 @@ let
       w3m
       fish
       delta
-    ];
+    ] ++ webkitDeps;
     postBuild = ''
       wrapProgram $out/bin/emacs \
         --prefix PATH : ${lib.makeBinPath [ ripgrep fd w3m fish delta guile_3_0 ]} \
+        --set GIO_EXTRA_MODULES "${pkgs.glib-networking}/lib/gio/modules:${pkgs.dconf.lib}/lib/gio/modules" \
+        --set GST_PLUGIN_SYSTEM_PATH_1_0 "${pkgs.lib.concatMapStringsSep ":" (p: "${p}/lib/gstreamer-1.0") gstBuildInputs}" \
         --add-flags --maximized
     '';
   };

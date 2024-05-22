@@ -66,13 +66,7 @@
   (pulsar-highlight-face 'pulsar-yellow)
 
   (pulsar-pulse-functions
-   '(isearch-repeat-forward
-     isearch-repeat-backward
-     isearch-forward
-     isearch-backward
-     isearch-forward-regexp
-     isearch-backward-regexp
-     recenter-top-bottom
+   '(recenter-top-bottom
      move-to-window-line-top-bottom
      reposition-window
      bookmark-jump
@@ -106,9 +100,9 @@
      eshell-previous-prompt
      eshell-next-prompt))
   :config
-  (global-pulsar-mode)
-  :bind
-  (("C-c C-x" . pulsar-pulse-line)))
+  (pulsar-global-mode 1)
+  (setq isearch-update-post-hook
+        '(pulsar-pulse-line)))
 
 (setq initial-scratch-message nil)
 
@@ -625,9 +619,10 @@ Repeated invocations toggle between the two most recently open buffers."
   (require 'slime-autoloads))
 
 (use-package ielm
-;;   :bind
-;;   ("C-l" . comint-clear-buffer)
-;;   ("C-r" . consult-history)
+  :bind
+  (:map inferior-emacs-lisp-mode-map
+        ("C-l" . comint-clear-buffer)
+        ("C-r" . consult-history))
   :init
   (let
       ((history-path (no-littering-expand-etc-file-name "ielm/history")))
@@ -641,9 +636,11 @@ Repeated invocations toggle between the two most recently open buffers."
                                             (with-file-modes #o600
                                               (comint-write-input-ring))))))
 
+(use-package whole-line-or-region
+  :config
+  (whole-line-or-region-global-mode 1))
 
 (use-package undo-tree
-  :init
   :custom
   (undo-tree-history-directory-alist
    `(("." . ,(f-join pvr/emacs-persist-dir "undo"))))
@@ -904,8 +901,6 @@ Repeated invocations toggle between the two most recently open buffers."
   (proced-auto-update-interval 2)
   (proced-auto-update-flag t)
   (proced-format 'medium))
-
-(bookmark-prop-set "init.el" 'filename user-init-file)
 
 ;; From https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
 (defun smarter-move-beginning-of-line (arg)
