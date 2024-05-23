@@ -145,12 +145,6 @@ folder, otherwise delete a word"
         completion-cycle-threshold 3
         read-file-name-completion-ignore-case t))
 
-;; to use C-j/k for movement but doesnt work
-(use-package evil-collection-corfu
-  :after corfu
-  :custom evil-collection-corfu-key-themes '(default tab-n-go)
-  :config (evil-collection-corfu-setup))
-
 (use-package kind-icon
   :after corfu
   :custom

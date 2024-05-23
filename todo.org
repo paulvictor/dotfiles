@@ -1,0 +1,15 @@
+#+STARTUP: content
+
+* Emacs
+* Nyxt
+** fix search engine optimization
+*** google -> DDG
+* Nix
+** warpd
+** tailscale
+** darwin and start a vm to run tailscaled
+** nix on droid
+* Guile
+* General productivity
+* Guix
+* example

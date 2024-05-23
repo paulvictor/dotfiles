@@ -105,8 +105,6 @@
         '(pulsar-pulse-line)))
 
 (setq initial-scratch-message nil)
-
-
 ;; Repeat maps to repeat commands. Check describe-repeat-modes
 ;; Set minibuffer completion history length to 10000
 (setq history-length 10000)
@@ -774,6 +772,14 @@ Repeated invocations toggle between the two most recently open buffers."
   :config
   (electric-indent-mode 1))
 
+(use-package org
+  :custom
+  (org-special-ctrl-a/e t)
+  (org-M-RET-may-split-line
+   '((headline . nil)
+     (item . nil)
+     (default . t))))
+
 (use-package org-tree-slide
   :bind (:map org-tree-slide-mode-map
               ("<right>" . org-tree-slide-move-next-tree)
@@ -879,12 +885,13 @@ Repeated invocations toggle between the two most recently open buffers."
 ;; Go to end of the line
 ;; Insert new line below current line (So it actually insert new line above with indentation)
 ;; it will also indent newline
-(global-set-key (kbd "<M-return>") (lambda ()
-                       (interactive)
-                       (previous-line)
-                       (end-of-line)
-                       (newline-and-indent)
-                       ))
+;; Disabling this as it conflicts with org mode
+(global-set-key
+ (kbd "<M-i>")
+ (lambda ()
+   (previous-line)
+   (end-of-line)
+   (newline-and-indent)))
 
 (global-set-key (kbd "C-x k") #'kill-this-buffer)
 (global-set-key (kbd "C-<tab>") #'next-buffer)
@@ -957,3 +964,7 @@ point reaches the beginning or end of the buffer, stop there."
   (nov-variable-pitch nil)
   :config
   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
+
+(use-package info
+  :custom
+  (Info-isearch-search nil))
