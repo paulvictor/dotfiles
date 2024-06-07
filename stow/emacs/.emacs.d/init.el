@@ -324,6 +324,7 @@ Also move to the next line, since that's the most frequent action after"
 (use-package project
   :custom
   (project-switch-use-entire-map t)
+  (project-key-prompt-style 'brackets)
   :config
   (general-define-key
    :keymaps 'project-prefix-map

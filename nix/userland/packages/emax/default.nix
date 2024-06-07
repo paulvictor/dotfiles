@@ -10,9 +10,9 @@ let
   };
   emacs-webkit = callPackage "${emacs-webkit-src}/default.nix" { inherit pkgs; };
   _emacs =
-    if specialArgs.withGUI then emacs-unstable else emacsUnstable-nox;
+    if specialArgs.withGUI then emacs-unstable.override({withGTK3 = true; withImageMagick = true; }) else emacs-unstable-nox;
   customizedEmacs =
-    (emacsPackagesFor (_emacs.override { withImageMagick = true; }))
+    (emacsPackagesFor _emacs)
       .emacsWithPackages(epkgs:
         [ (with epkgs.melpaPackages;
           [
