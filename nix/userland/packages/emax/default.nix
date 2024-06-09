@@ -24,6 +24,8 @@ let
             anzu
             avy
             cape
+            clojure-mode
+            cider
             company
             company-prescient
             copy-as-format

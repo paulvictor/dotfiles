@@ -62,6 +62,7 @@ in
         tmate
         tmuxWithConfig
         pscid
+        leiningen clojure
       ] ++
       (lib.optionals specialArgs.isLinux [ bindfs msgpack-tools k ]);
   }
