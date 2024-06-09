@@ -105,6 +105,7 @@
       xsecurelock-overlay = import ./overlays/xsecurelock.nix;
       rofi-theme-overlay = import ./overlays/rofi-theme-overlay.nix;
       actual-server-overlay = import ./overlays/actual-server.nix { inherit (inputs) actual-server-repo; };
+      keyd-overlay = import ./overlays/keyd.nix;
       #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
       linuxOverlays = [
         fish-docker-completion

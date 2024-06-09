@@ -85,7 +85,7 @@ with pkgs;
     lib.optionals isPhysicalDevice
       [
         args.specialArgs.kmonad.nixosModules.default
-        ./kmonad.nix
+        ./keyd.nix
       ];
 
 }
