@@ -180,7 +180,7 @@
     (setq show-trailing-whitespace t)))
 
 ;Show matching parens
-(show-paren-mode)
+(show-paren-mode t)
 
 (setq auto-save-timeout nil)
 (setq make-backup-files nil)
