@@ -66,7 +66,7 @@ let
             key-chord
             keyfreq
             linum-relative
-            lispy
+#             lispy
             lsp-haskell
             lsp-mode
             lsp-ui
@@ -101,6 +101,7 @@ let
             request
             ripgrep
             s
+            smartparens
             slack
             slime
             sly

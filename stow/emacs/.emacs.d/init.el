@@ -866,33 +866,44 @@ Repeated invocations toggle between the two most recently open buffers."
          (window-height . 0.3)
          (dedicated . t)))))
 
-;; (use-package lispy)                     ;
+;; (use-package lispy)
+(use-package smartparens-config
+  :custom
+  (sp-base-key-bindings 'paredit)
+  (sp-override-key-bindings
+   '(("M-s" . nil)
+     ("M-r" . nil)))
+  :config
+  (show-smartparens-global-mode 1))
 
-;; (mapc)
-(add-hook ;; Can we use only the balancing feature in c mode
-  'prog-mode-hook
-  #'(lambda ()
-      (electric-pair-mode)))
+(add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
+(add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 
 ;; Move cursor to end of current line
 ;; Insert new line below current line
 ;; it will also indent newline
-(global-set-key (kbd "<C-return>") (lambda ()
-                   (interactive)
-                   (end-of-line)
-                   (newline-and-indent)))
+(defun add-line-below ()
+  (interactive)
+  (end-of-line)
+  (newline-and-indent))
+
+(defun add-line-above ()
+  (interactive)
+  (previous-line)
+  (end-of-line)
+  (newline-and-indent))
 
 ;; Move cursor to previous line
 ;; Go to end of the line
 ;; Insert new line below current line (So it actually insert new line above with indentation)
 ;; it will also indent newline
 ;; Disabling this as it conflicts with org mode
-(global-set-key
- (kbd "<M-i>")
- (lambda ()
-   (previous-line)
-   (end-of-line)
-   (newline-and-indent)))
+(add-hook ;; Can we use only the balancing feature in c mode
+  'prog-mode-hook
+  #'(lambda ()
+      (local-set-key (kbd "C-<return>" ) 'add-line-below)
+      (local-set-key (kbd "M-<return>") 'add-line-above)
+      (electric-pair-mode)))
 
 (global-set-key (kbd "C-x k") #'kill-this-buffer)
 (global-set-key (kbd "C-<tab>") #'next-buffer)
