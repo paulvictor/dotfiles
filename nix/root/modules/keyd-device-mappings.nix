@@ -4,6 +4,7 @@ let
     chord_timeout = 100;
     layer_indicator = true;
   };
+
   main = {
     capslock = "layer(meta)";
     enter = "overload(control, enter)";
@@ -13,6 +14,7 @@ let
     rightcontrol = "overload(control, C-c)";
     esc = "toggle(base)";
   };
+
   commonBindings = {
     "c" = "overload(numbers, space)";  "m" = "overload(controlAlt,enter)";
     "v" = "overload(symbols, tab)";    "," = "backspace";
@@ -21,6 +23,7 @@ let
     "v+m" = "semicolon";
     "c+," = ":";
   };
+
   base = {
     esc = "toggle(main)";
     "1" = "-";                             "7" = "z";
@@ -30,9 +33,9 @@ let
     "5" = "b";                             "-" = "'";
 
     q = "overload(meta, a)";         u = "m";
-    w = "overload(alt, r)";          i = "overload(shift, n)";
+    w = "overload(alt, r)";          i = "overload(pseudoShift, n)";
     e = "s";                         o = "e";
-    r = "overload(shift, t)";        p = "overload(alt, i)";
+    r = "overload(pseudoShift, t)";        p = "overload(alt, i)";
     t = "g";                         "leftbrace" = "overload(control, o)";
 
     a = "overload(control, C-x)";     j = ".";
@@ -89,6 +92,9 @@ in {
     };
     extraConfig = ''
       [controlAlt:C-A]
+
+      [pseudoShift:S]
+      j=,
     '';
   };
 
