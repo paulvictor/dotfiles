@@ -3,7 +3,27 @@
 (require 'package)
 (require 'man)
 (require 'ffap)
-;; optional. makes unpure packages archives unavailable
+;; Setup straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name
+        "straight/repos/straight.el/bootstrap.el"
+        (or (bound-and-true-p straight-base-dir)
+            user-emacs-directory)))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+;; Use straight.el for use-package expressions
+(straight-use-package 'use-package)
+
+;; (setq straight-use-package-by-default t) ;; like setting :straight t forall use-package forms
 
 (use-package package
   :config
@@ -264,8 +284,8 @@ Also move to the next line, since that's the most frequent action after"
   (vertico-multiform-mode)
   :hook (minibuffer-setup . vertico-repeat-save) ; Make sure vertico state is saved for `vertico-repeat'
   :bind
-  (("M-." . #'vertico-repeat) ; Perfectly return to the state of the last Vertico minibuffer usage
-   ("C-." . #'vertico-repeat-select)
+  (;; ("M-." . #'vertico-repeat) ; Perfectly return to the state of the last Vertico minibuffer usage
+;;    ("C-." . #'vertico-repeat-select)
    :map vertico-map
    ("C-M-n" . #'vertico-next-group)
    ("C-M-p" . #'vertico-previous-group))
@@ -659,14 +679,16 @@ Repeated invocations toggle between the two most recently open buffers."
       (string-to-list "neio"))
 
 (use-package avy
-  :config
-  (general-define-key
-   :keymaps 'global
-   "C-." 'avy-goto-char-timer
-   "C-;" 'avy-goto-line
-   "C-," 'avy-goto-line)
-  (setq avy-keys home-row-keys)
-  (setq avy-styles-alist
+  :bind
+  (("M-g c" . avy-goto-char-2)
+   ("M-g M-c" . avy-goto-char-2)
+   ("M-g l" . avy-goto-line)
+   ("M-g M-l" . avy-goto-line)
+   ("M-g w" . avy-goto-word-1)
+   ("M-g M-w" . avy-goto-word-1))
+  :custom
+  (avy-keys home-row-keys)
+  (avy-styles-alist
         '((avy-goto-char-2 . post)
           (avy-goto-line . pre)
           (avy-goto-char-timer . at-full))))
@@ -857,7 +879,7 @@ Repeated invocations toggle between the two most recently open buffers."
         ;; Match a buffer whose name is "*Occur*".  We have to escape
         ;; the asterisks to match them literally and not as a special
         ;; regular expression character.
-        ("\\*\\(Help\\|Occur\\)\\*"
+        ("\\*\\(Help\\|Occur\\|cider-apropos\\|cider-doc\\)\\*"
          ;; If a buffer with the matching major-mode exists in some
          ;; window, then use that one.  Otherwise, display the buffer
          ;; below the current window.
@@ -866,15 +888,27 @@ Repeated invocations toggle between the two most recently open buffers."
          (window-height . 0.3)
          (dedicated . t)))))
 
-;; (use-package lispy)
+(defun indent-between-pair (&rest _ignored)
+  (newline)
+  (indent-according-to-mode)
+  (forward-line -1)
+  (indent-according-to-mode))
+
 (use-package smartparens-config
   :custom
   (sp-base-key-bindings 'paredit)
   (sp-override-key-bindings
    '(("M-s" . nil)
-     ("M-r" . nil)))
+     ("M-r" . nil)
+     ("C-M-s" . sp-splice-sexp) ;; This removes the regex isearch which can strill be gotten with M-s r in isearch
+     ("C-M-r" . sp-raise-sexp)
+     ("C-M-j" . sp-join-sexp)
+     ("C-M-J" . sp-split-sexp)))
   :config
-  (show-smartparens-global-mode 1))
+  (show-smartparens-global-mode 1)
+  (sp-local-pair 'prog-mode "{" nil :post-handlers '((indent-between-pair "RET")))
+  (sp-local-pair 'prog-mode "[" nil :post-handlers '((indent-between-pair "RET")))
+  (sp-local-pair 'prog-mode "(" nil :post-handlers '((indent-between-pair "RET"))))
 
 (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
 (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
@@ -902,8 +936,7 @@ Repeated invocations toggle between the two most recently open buffers."
   'prog-mode-hook
   #'(lambda ()
       (local-set-key (kbd "C-<return>" ) 'add-line-below)
-      (local-set-key (kbd "M-<return>") 'add-line-above)
-      (electric-pair-mode)))
+      (local-set-key (kbd "M-<return>") 'add-line-above)))
 
 (global-set-key (kbd "C-x k") #'kill-this-buffer)
 (global-set-key (kbd "C-<tab>") #'next-buffer)
@@ -980,3 +1013,11 @@ point reaches the beginning or end of the buffer, stop there."
 (use-package info
   :custom
   (Info-isearch-search nil))
+
+(use-package ts-fold
+  :straight (ts-fold :type git :host github :repo "emacs-tree-sitter/ts-fold"))
+;; (straight-use-package
+;;  '(webkit :type git :host github :repo "akirakyle/emacs-webkit"
+;;           :branch "main"
+;;           :files (:defaults "*.js" "*.css" "*.so")
+;;           :pre-build ("make")))

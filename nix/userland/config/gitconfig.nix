@@ -4,6 +4,8 @@
   programs.git = {
     enable = true;
     package = pkgs.gitAndTools.gitFull;
+
+
     aliases = {
       br = ''branch'';
       cb = ''"!echo \"$(git rev-parse --abbrev-ref HEAD 2>/dev/null)\""'';
@@ -33,6 +35,7 @@
       pull.rebase = true;
       format.pretty = "format:%C(yellow)%h %Cblue%>(12)%ad %Cgreen%<(7)%aN%Cred%d %Creset%s";
       help.autocorrect = 1;
+      init.defaultBranch = "main";
 
     };
     signing.key = "3264D1648F8FB1A4A3F74C9318497AC961BB2FB6";
@@ -53,4 +56,5 @@
 
   };
 }
+
 

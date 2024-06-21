@@ -37,7 +37,7 @@ let
             doom-themes
             edit-server
             elisp-slime-nav
-            emacs-webkit
+#             emacs-webkit
             embark orderless consult marginalia
             engine-mode
             erc-colorize erc-yank
@@ -139,6 +139,16 @@ let
     glib-networking
     gsettings-desktop-schemas
   ] ++ gstBuildInputs;
+  treeSitters = with pkgs.tree-sitter-grammars; [
+    tree-sitter-nix
+    tree-sitter-json
+    tree-sitter-haskell
+    tree-sitter-clojure
+    tree-sitter-commonlisp
+    tree-sitter-scheme
+    tree-sitter-elisp
+    tree-sitter-bash
+  ];
 
   myemacs = symlinkJoin {
     name = "Emacs";
@@ -153,7 +163,7 @@ let
       w3m
       fish
       delta
-    ] ++ webkitDeps;
+    ] ++ webkitDeps ++ treeSitters;
     postBuild = ''
       wrapProgram $out/bin/emacs \
         --prefix PATH : ${lib.makeBinPath [ ripgrep fd w3m fish delta guile_3_0 ]} \
