@@ -838,7 +838,7 @@ Repeated invocations toggle between the two most recently open buffers."
 
 (load-file (concat user-emacs-directory "ghcid.el"))
 (load-file (concat user-emacs-directory "utils.el"))
-
+(load-file (concat user-emacs-directory "completions.el"))
 (load-file (concat user-emacs-directory "names.el"))
 (load-file (concat user-emacs-directory "eshell.el"))
 
@@ -1021,3 +1021,5 @@ point reaches the beginning or end of the buffer, stop there."
 ;;           :branch "main"
 ;;           :files (:defaults "*.js" "*.css" "*.so")
 ;;           :pre-build ("make")))
+
+

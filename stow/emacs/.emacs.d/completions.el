@@ -28,16 +28,12 @@ folder, otherwise delete a word"
 ;;   (keymap-unset minibuffer-mode-map "<space>" t)
   :bind (:map minibuffer-mode-map
               ("<tab>" . minibuffer-next-completion)
-              ("S-<tab>" . minibuffer-previous-completion))
-  )
-
+              ("S-<tab>" . minibuffer-previous-completion)))
 
 (use-package vertico
   :bind (:map vertico-map
               ("<tab>" . vertico-insert)
-              ("M-RET" . minibuffer-force-complete-and-exit)
-              ("C-j" . vertico-next)
-              ("C-k" . vertico-previous))
+              ("M-RET" . minibuffer-force-complete-and-exit))
   (:map minibuffer-local-map
 ;;         ("<backspace>" . pvr/minibuffer-backward-kill)
         ("C-w" . backward-kill-word))
@@ -174,38 +170,38 @@ folder, otherwise delete a word"
 
 (general-create-definer completions-pre
   :prefix "M-c")
+
+(defun buffers-with-same-major-mode ()
+  (interactive)
+  (let ((current-major-mode major-mode))
+    (seq-filter
+     (lambda (b)
+       (with-current-buffer b
+         (eq major-mode current-major-mode)))
+     (buffer-list))))
+
+(defun cape-dabbrev-dict-keyword ()
+  (cape-wrap-super #'cape-dabbrev #'cape-dict #'cape-keyword))
+
 (use-package cape
-  :after (corfu)
   :config
-  (require 'company-dabbrev)
-  (require 'company-dabbrev-code)
-  (require 'company-capf)
-  (require 'company-files)
-
-  (add-hook 'emacs-lisp-mode
+  (add-hook 'emacs-lisp-mode-hook
             (lambda ()
-              (make-local-variable 'completion-at-point-functions)
+              (setq-local
+               completion-at-point-functions `(,(cape-capf-super #'elisp-completion-at-point #'cape-dabbrev) cape-file)
+               cape-dabbrev-min-length 3
+               )))
+;;   (add-hook 'eshell-mode-hook
+;;             (lambda ()
+;;               (setq-local completion-at-point-functions
+;;                           (append completion-at-point-functions
+;;                                   (list pcomplete-completions-at-point #'cape-history #'cape-file)))))
 
-              (setf (elt (cl-member 'elisp-completion-at-point completion-at-point-functions) 0)
-                    #'elisp-completion-at-point)
-              (add-to-list 'completion-at-point-functions #'cape-symbol)
-              ;; I prefer this being early/first in the list
-              (add-to-list 'completion-at-point-functions #'cape-file)))
-  (add-hook 'eshell-mode
-            (lambda ()
-              (setq-local completion-at-point-functions (append completion-at-point-functions
-                                                                (list pcomplete-completions-at-point #'cape-history #'cape-file)))))
 
-  (add-hook 'prog-mode-hook
-            (lambda ()
-              (make-local-variable 'completion-at-point-functions)
-              (setq completion-at-point-functions
-                    (list #'cape-keyword #'cape-dabbrev))
-              (cl-loop for backend in (list #'company-dabbrev #'company-files #'company-dabbrev-code)
-                       do
-                       (add-to-list 'completion-at-point-functions
-                                    (cape-company-to-capf backend)))
-              ))
+;;   (add-hook 'prog-mode-hook
+;;             (lambda ()
+;;               (setq-local completion-at-point-functions
+;;                           (list #'cape-dabbrev-dict-keyword))))
   ;; For pcomplete. For now these two advices are strongly recommended to
   ;; achieve a sane Eshell experience. See
   ;; https://github.com/minad/corfu#completing-with-corfu-in-the-shell-or-eshell
@@ -214,12 +210,4 @@ folder, otherwise delete a word"
   (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
   ;; Ensure that pcomplete does not write to the buffer and behaves as a pure
   ;; completion-at-point-function.
-  (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify)
-  :general
-  (:prefix "M-c"
-           "TAB" 'completion-at-point
-           "k" 'cape-keyword
-           "f" 'cape-file
-           "s" 'cape-symbol
-           "h" 'cape-history))
-
+  (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify))
