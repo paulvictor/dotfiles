@@ -60,22 +60,75 @@
                 (string-prefix-p "cd " str)
                 (string-prefix-p " " str))))))
 
+(defun corfu-send-shell (&rest _)
+  "Send completion candidate when inside comint/eshell."
+  (cond
+   ((and (derived-mode-p 'eshell-mode) (fboundp 'eshell-send-input))
+    (eshell-send-input))
+   ((and (derived-mode-p 'comint-mode)  (fboundp 'comint-send-input))
+    (comint-send-input))))
+
+(defun eshell/less (&rest args)
+  "Invoke `view-file' on a file (ARGS).
+\"less +42 foo\" will go to line 42 in the buffer for foo."
+  (while args
+    (if (string-match "\\`\\+\\([0-9]+\\)\\'" (car args))
+        (let* ((line (string-to-number (match-string 1 (pop args))))
+               (file (pop args)))
+          (eshell-view-file file)
+          (forward-line line))
+      (eshell-view-file (pop args)))))
+
+;;;###autoload
+(defun eshell/quit-and-close (&rest _)
+  "Quit the current eshell buffer and close the window it's in."
+  (delete-frame))
+
+;;;###autoload
+(defun eshell/mcd (dir)
+  "Create a directory (DIR) then cd into it."
+  (make-directory dir t)
+  (eshell/cd dir))
+
 (use-package eshell
   :custom
   (eshell-prefer-lisp-functions nil)
   (eshell-destroy-buffer-when-process-dies t)
   :config
   (setenv "PAGER" "cat") ; solves issues, such as with 'git log' and the default 'less'
+  (setq-mode-local eshell-mode
+                   corfu-auto nil
+                   corfu-quit-at-boundary t
+                   corfu-quit-no-match t
+                   completion-at-point-functions (list
+                                                  (cape-capf-buster (cape-capf-super
+                                                                     #'pcomplete-completions-at-point
+                                                                     #'pcmpl-args-pcomplete-on-man
+                                                                     #'cape-abbrev))
+                                                  #'cape-file))
+
   (add-to-list 'direnv-non-file-modes 'eshell-mode)
   (add-hook 'eshell-mode-hook
-          (lambda ()
-            (setq-local corfu-auto nil)
-            (corfu-mode)))
-  (require 'em-pred)
+            (lambda ()
+              (setq-local corfu-auto nil)
+              (advice-add #'corfu-insert :after #'corfu-send-shell)
+              (corfu-mode)))
+  ;; (add-hook 'eshell-mode-hook
+  ;;             (lambda ()
+  ;;               (setq-local completion-at-point-functions
+  ;;                           (append completion-at-point-functions
+  ;;                                   (list pcomplete-completions-at-point #'cape-history #'cape-file)))))
+  :bind
+  (:map eshell-mode-map
+        ("C-d" . pvr/eshell-quit-or-delete-char)
+        ("C-k" . eshell-previous-matching-input-from-input)
+        ("C-j" . eshell-next-matching-input-from-input)
+        ("C-r" . cape-history)
+        ("C-a" . eshell-bol)))
 
-  (with-eval-after-load 'em-alias
-    (dolist
-        (alias
+(use-package em-pred)
+
+(defvar pvr/eshell-aliases
          '(("l" "ls -1 $*")
            ("la" "ls -lAh $*")
            ("ll" "ls -lh $*")
@@ -91,17 +144,31 @@
            ("gd" "magit-diff-unstaged")
            ("gds" "magit-diff-staged")
            ("d" "dired-other-window $1")
-           ("mkcd" "eshell/mkdir -p $* ; cd $1"); TODO: '&&' does not work because mkdir exits with nil?
-           ("less" "view-file $1")))
-      (add-to-list 'eshell-command-aliases-list alias)))
-  ;;   (eshell-write-aliases-list)
-  :bind
-  (:map eshell-mode-map
-        ("C-d" . pvr/eshell-quit-or-delete-char)
-        ("C-k" . eshell-previous-matching-input-from-input)
-        ("C-j" . eshell-next-matching-input-from-input)
-        ("C-r" . cape-history)
-        ("C-a" . eshell-bol)))
+           (".." "cd ..")
+
+           ("quit" "quit-and-close")
+           ("q"  "quit-and-close")
+           ("f"  "find-file $1")
+           ("ff" "find-file-other-window $1")
+           ("d"  "dired $1")
+           ("gg" "magit-status")
+           ("proj" "project-switch-project")
+           ("rg" "rg --color=always $*")
+
+           ("clear" "clear-scrollback")))
+(use-package em-alias
+  :ensure nil
+  :defer t
+  :preface
+
+  :config
+  (advice-add #'eshell-write-aliases-list :override #'ignore)
+
+  (defalias 'eshell/more #'eshell/less)
+
+  (setq eshell-command-aliases-list
+        (append eshell-command-aliases-list
+                pvr/eshell-aliases)))
 
 (use-package eshell-prompt-extras
   :demand t
@@ -166,3 +233,16 @@ directory to make multiple eshell windows easier."
   (let ((name (pvr/random-name)))
     (eshell "new")
     (rename-buffer (concat "*eshell " name " *"))))
+
+;;;; Smarter EShell
+;;;;
+
+(use-package em-smart
+  :ensure nil
+  :defer t
+  :custom
+  (eshell-where-to-jump 'begin)
+  (eshell-review-quick-commands nil)
+  (eshell-smart-space-goes-to-end t)
+  :config
+  (eshell-smart-initialize))

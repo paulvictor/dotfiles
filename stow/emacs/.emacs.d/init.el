@@ -172,7 +172,6 @@
     (setq cursor-type nil)
     (read-only-mode +1)
     (switch-to-buffer (current-buffer))
-    (local-set-key (kbd "q") 'kill-this-buffer)
     (current-buffer)))
 
 (defun pvr/set-font-faces ()
@@ -842,27 +841,6 @@ Repeated invocations toggle between the two most recently open buffers."
 (load-file (concat user-emacs-directory "names.el"))
 (load-file (concat user-emacs-directory "eshell.el"))
 
-(use-package corfu
-  :custom
-  (corfu-cycle t)
-  (corfu-on-exact-match 'insert)
-  (corfu-auto t)
-  (corfu-auto-prefix 2)
-  (corfu-auto-delay 0.2)
-  (corfu-quit-no-match 'separator)
-  (corfu-separator ?\s)
-  (corfu-min-width 80)
-  (corfu-max-width corfu-min-width)     ; Always have the same width
-  (corfu-count 14)
-  (corfu-scroll-margin 4)
-  (corfu-preselect 'directory)
-  (corfu-preview-current 'insert)
-  :config
-  (add-hook 'eshell-mode-hook
-          (lambda ()
-            (setq-local corfu-auto nil)))
-  :init
-  (global-corfu-mode))
 
 (setq display-buffer-alist
       (append display-buffer-alist

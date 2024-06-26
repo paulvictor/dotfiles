@@ -1,14 +1,11 @@
-(general-define-key
- :keymaps 'minibuffer-mode-map
- "C-r" #'minibuffer-complete-history)
-
 (setq completion-auto-wrap t
-;;       completion-auto-help 'always
+      ;;       completion-auto-help 'always
       completion-show-help nil
       completions-format 'one-column
-;;       completion-auto-select t
+      ;;       completion-auto-select t
       completion-auto-select 'second-tab
-      completions-max-height 10)
+      completions-max-height 10
+      tab-always-indent 'complete)
 
 (defun pvr/minibuffer-backward-kill (arg)
   "When minibuffer is completing a file name delete up to parent
@@ -25,7 +22,12 @@ folder, otherwise delete a word"
 ;;   :custom
 ;;   (completion-styles '(basic partial-completion emacs22 initials))
 ;;   :config
-;;   (keymap-unset minibuffer-mode-map "<space>" t)
+  ;;   (keymap-unset minibuffer-mode-map "<space>" t)
+  :custom
+  (read-file-name-completion-ignore-case t)
+  (read-buffer-completion-ignore-case t)
+  (completion-ignore-case t)
+  (completion-cycle-threshold 3)
   :bind (:map minibuffer-mode-map
               ("<tab>" . minibuffer-next-completion)
               ("S-<tab>" . minibuffer-previous-completion)))
@@ -41,19 +43,19 @@ folder, otherwise delete a word"
   (vertico-count 12)
   (vertico-cycle t)
   :init
-  (vertico-mode))
+  (vertico-mode 1))
 
 (use-package marginalia
   :custom
   (marginalia-max-relative-age 0)
   (marginalia-align 'right)
   :init
-  (marginalia-mode))
+  (marginalia-mode 1))
 
 (use-package savehist
   :init
   (setq history-length 100)
-  (savehist-mode))
+  (savehist-mode 1))
 
 (defun first-initialism (pattern index _total)
   (if (= index 0) 'orderless-initialism))
@@ -68,7 +70,7 @@ folder, otherwise delete a word"
 
 (defun regex-if-any-special (pattern index tot)
   (cond
-   ((string-prefix-p "RX" pattern) `(orderless-regexp . ,(substring pattern 2)))
+   ((string-prefix-p "~~" pattern) `(orderless-regexp . ,(substring pattern 2)))
    ((string-prefix-p "!" pattern) `(orderless-without-literal . ,(substring pattern 1)))
    (t `(orderless-flex . pattern))))
 
@@ -87,10 +89,6 @@ folder, otherwise delete a word"
      regex-if-any-special))
   (orderless-component-separator 'orderless-escapable-split-on-space))
 
-(setq read-file-name-completion-ignore-case t
-      read-buffer-completion-ignore-case t
-      completion-ignore-case t)
-
 ;; TODO : Add a keybinding to consult-ripgrep
 ;; consult-buffer instead counsel-switch-buffer
 ;; consult-project-root-function
@@ -101,45 +99,38 @@ folder, otherwise delete a word"
   (("C-M-j" . persp-switch-to-buffer)
    :map minibuffer-local-map
         ("C-r" . consult-history))
-  :general
-  (:states 'normal
-           "C-M-l"  #'consult-imenu
-           "C-s" #'consult-line
-           "C-x C-b" #'consult-buffer
-           "C-y" #'consult-yank-from-kill-ring))
+;;   :general'
+;;   (:states 'normal
+;;            "C-M-l"  #'consult-imenu
+;;            "C-s" #'consult-line
+;;            "C-x C-b" #'consult-buffer
+;;            "C-y" #'consult-yank-from-kill-ring)
+  )
 
 (use-package all-the-icons-completion
   :after (marginalia all-the-icons)
-  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+  :hook
+  (marginalia-mode . all-the-icons-completion-marginalia-setup)
   :init
   (all-the-icons-completion-mode))
 
 (use-package corfu
   :init
   (global-corfu-mode)
-  :hook
-  (emacs-lisp-mode . corfu-mode)
   :custom
   (corfu-cycle t)
   (corfu-on-exact-match 'insert)
   (corfu-auto t)
   (corfu-auto-prefix 2)
   (corfu-auto-delay 0.2)
-  (corfu-quit-at-boundary nil)
-  (corfu-quit-no-match nil)
+  (corfu-quit-at-boundary 'separator)
+  (corfu-quit-no-match 'separator)
   (corfu-min-width 80)
   (corfu-max-width corfu-min-width)     ; Always have the same width
   (corfu-count 14)
   (corfu-scroll-margin 4)
-  (corfu-preselect-first t)
-  (corfu-preview-current 'insert)
-  :config
-  (add-hook 'eshell-mode-hook
-          (lambda ()
-            (setq-local corfu-auto nil)))
-  (setq tab-always-indent 'complete
-        completion-cycle-threshold 3
-        read-file-name-completion-ignore-case t))
+  (corfu-preselect 'prompt)
+  (corfu-preview-current 'insert))
 
 (use-package kind-icon
   :after corfu
@@ -158,18 +149,8 @@ folder, otherwise delete a word"
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter) ; Enable `kind-icon'
   )
 
-(use-package pcmpl-args)
-
-;; (use-package company
-;;   :custom
-;;     (company-dabbrev-other-buffers 'all)
-;;     (company-dabbrev-time-limit 0.2)
-;;     (company-dabbrev-code-time-limit 0.2)
-;;     (company-dabbrev-downcase nil)
-;;     (company-minimum-prefix-length 1))
-
-(general-create-definer completions-pre
-  :prefix "M-c")
+(use-package pcmpl-args
+  :after pcomplete)
 
 (defun buffers-with-same-major-mode ()
   (interactive)
@@ -191,13 +172,6 @@ folder, otherwise delete a word"
                completion-at-point-functions `(,(cape-capf-super #'elisp-completion-at-point #'cape-dabbrev) cape-file)
                cape-dabbrev-min-length 3
                )))
-;;   (add-hook 'eshell-mode-hook
-;;             (lambda ()
-;;               (setq-local completion-at-point-functions
-;;                           (append completion-at-point-functions
-;;                                   (list pcomplete-completions-at-point #'cape-history #'cape-file)))))
-
-
 ;;   (add-hook 'prog-mode-hook
 ;;             (lambda ()
 ;;               (setq-local completion-at-point-functions
