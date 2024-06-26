@@ -23,11 +23,10 @@ let
             all-the-icons-ibuffer
             anzu
             avy
+            avy-zap
             cape
             clojure-mode
             cider
-            company
-            company-prescient
             copy-as-format
             dash
             dashboard
