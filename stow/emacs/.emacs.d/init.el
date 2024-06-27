@@ -677,6 +677,43 @@ Repeated invocations toggle between the two most recently open buffers."
 (setq home-row-keys
       (string-to-list "neio"))
 
+(defun avy-action-mark-to-char (pt)
+  (activate-mark)
+  (goto-char pt))
+
+(defun avy-action-kill-whole-line (pt)
+  (save-excursion
+    (goto-char pt)
+    (kill-whole-line))
+  (select-window
+   (cdr
+    (ring-ref avy-ring 0)))
+  t)
+
+(defun avy-action-copy-whole-line (pt)
+  (save-excursion
+    (goto-char pt)
+    (cl-destructuring-bind (start . end)
+        (bounds-of-thing-at-point 'line)
+      (copy-region-as-kill start end)))
+  (select-window
+   (cdr
+    (ring-ref avy-ring 0)))
+  t)
+
+(defun avy-action-yank-whole-line (pt)
+  (avy-action-copy-whole-line pt)
+  (save-excursion (yank))
+  t)
+
+(defun avy-action-mark-to-char (pt)
+  (activate-mark)
+  (goto-char pt))
+
+(defun avy-action-teleport-whole-line (pt)
+    (avy-action-kill-whole-line pt)
+    (save-excursion (yank)) t)
+
 (use-package avy
   :bind
   (("M-g c" . avy-goto-char-2)
@@ -684,13 +721,35 @@ Repeated invocations toggle between the two most recently open buffers."
    ("M-g l" . avy-goto-line)
    ("M-g M-l" . avy-goto-line)
    ("M-g w" . avy-goto-word-1)
-   ("M-g M-w" . avy-goto-word-1))
+   ("M-g M-w" . avy-goto-word-1)
+   ("M-l" . avy-goto-char-timer))
   :custom
   (avy-keys home-row-keys)
+  (avy-background t)
   (avy-styles-alist
-        '((avy-goto-char-2 . post)
-          (avy-goto-line . pre)
-          (avy-goto-char-timer . at-full))))
+   '((avy-goto-char-2 . post)
+     (avy-goto-line . pre)
+     (avy-goto-char-timer . at-full)))
+  :config
+  (setf (alist-get ?k avy-dispatch-alist) 'avy-action-kill-stay
+        (alist-get ?K avy-dispatch-alist) 'avy-action-kill-whole-line
+        (alist-get ?  avy-dispatch-alist) 'avy-action-mark-to-char
+        (alist-get ?y avy-dispatch-alist) 'avy-action-yank
+        (alist-get ?w avy-dispatch-alist) 'avy-action-copy
+        (alist-get ?W avy-dispatch-alist) 'avy-action-copy-whole-line
+        (alist-get ?Y avy-dispatch-alist) 'avy-action-yank-whole-line
+
+        (alist-get ?t avy-dispatch-alist) 'avy-action-teleport
+        (alist-get ?T avy-dispatch-alist) 'avy-action-teleport-whole-line
+
+        (alist-get ?  avy-dispatch-alist) 'avy-action-mark-to-char))
+
+(use-package avy-zap
+  :bind
+  (("M-z" . avy-zap-to-char)
+   ("C-z" . avy-zap-up-to-char))
+  :init
+  (setq avy-zap-dwim-prefer-avy t))
 
 (use-package ace-window
   :bind
