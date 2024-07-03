@@ -117,6 +117,13 @@ folder, otherwise delete a word"
 (use-package corfu
   :init
   (global-corfu-mode)
+  ;; Use TAB for cycling, default is `corfu-complete'.
+  :bind
+  (:map corfu-map
+        ("TAB" . corfu-next)
+        ([tab] . corfu-next)
+        ("S-TAB" . corfu-previous)
+        ([backtab] . corfu-previous))
   :custom
   (corfu-cycle t)
   (corfu-on-exact-match 'insert)
@@ -161,8 +168,8 @@ folder, otherwise delete a word"
          (eq major-mode current-major-mode)))
      (buffer-list))))
 
-(defun cape-dabbrev-dict-keyword ()
-  (cape-wrap-super #'cape-dabbrev #'cape-dict #'cape-keyword))
+(setq non-lisp-prog-modes
+      '(haskell-mode nix-mode javascript-mode java-mode json-mode shell-mode))
 
 (use-package cape
   :config
@@ -170,8 +177,12 @@ folder, otherwise delete a word"
             (lambda ()
               (setq-local
                completion-at-point-functions `(,(cape-capf-super #'elisp-completion-at-point #'cape-dabbrev) cape-file)
-               cape-dabbrev-min-length 3
-               )))
+               cape-dabbrev-min-length 3)))
+  (dolist (mode non-lisp-prog-modes)
+    (add-hook (derived-mode-hook-name mode)
+              (lambda ()
+                (setq-local
+                 completion-at-point-functions `(,(cape-capf-super #'cape-dabbrev #'cape-keyword))))))
 ;;   (add-hook 'prog-mode-hook
 ;;             (lambda ()
 ;;               (setq-local completion-at-point-functions
@@ -185,3 +196,5 @@ folder, otherwise delete a word"
   ;; Ensure that pcomplete does not write to the buffer and behaves as a pure
   ;; completion-at-point-function.
   (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify))
+
+

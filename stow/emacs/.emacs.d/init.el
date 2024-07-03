@@ -77,6 +77,12 @@
   (keyfreq-autosave-mode 1)
   (winner-mode 1))
 
+(use-package repeat
+  :hook (after-init . repeat-mode)
+  :custom
+  (repeat-exit-key "<return>")
+  (repeat-exit-timeout 5))
+
 (use-package pulsar
   :custom
   (pulsar-pulse t)
@@ -231,21 +237,22 @@
 
 (use-package doom-modeline
   :custom
-    (doom-modeline-window-width-limit fill-column)
-    (doom-modeline-project-detection 'project)
-    (doom-modeline-buffer-file-name-style 'truncate-with-project)
-    (doom-modeline-icon (display-graphic-p))
-    (doom-modeline-buffer-encoding t)
-    (doom-modeline-modal-icon t)
-    (doom-modeline-major-mode-icon t)
-    (doom-modeline-major-mode-color-icon t)
-    (doom-modeline-buffer-state-icon t)
-    (doom-modeline-buffer-modification-icon t)
-    (doom-modeline-persp-name t)
-    (doom-modeline-display-default-persp-name nil)
-    (doom-modeline-persp-icon t)
-    (doom-modeline-lsp t)
-    (doom-modeline-modal-icon t)
+  (doom-modeline-vcs-icon t)
+  (doom-modeline-minor-modes t)
+  (doom-modeline-window-width-limit 100)
+  (doom-modeline-project-detection 'project)
+  (doom-modeline-buffer-file-name-style 'truncate-with-project)
+  (doom-modeline-icon (display-graphic-p))
+  (doom-modeline-buffer-encoding t)
+  (doom-modeline-modal-icon t)
+  (doom-modeline-major-mode-icon t)
+  (doom-modeline-major-mode-color-icon t)
+  (doom-modeline-buffer-state-icon t)
+  (doom-modeline-buffer-modification-icon t)
+  (doom-modeline-persp-name t)
+  (doom-modeline-display-default-persp-name nil)
+  (doom-modeline-persp-icon t)
+  (doom-modeline-modal-icon t)
   :config
   (doom-modeline-mode 1))
 
@@ -610,19 +617,21 @@ Repeated invocations toggle between the two most recently open buffers."
   (advice-add 'project-switch-project :before #'pvr/create-or-switch-perspective)
   (persp-mode 1))
 
-(use-package git-gutter
-  :config
-  (global-git-gutter-mode t))
-
 (use-package magit
   :config
   (setq magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
   (setq magit-diff-refine-hunk t))
 
+(defun sm-try-smerge ()
+  (save-excursion
+ 	  (goto-char (point-min))
+ 	  (when (re-search-forward "^<<<<<<< " nil t)
+ 	    (smerge-mode 1))))
+(add-hook 'find-file-hook 'sm-try-smerge t)
+
 (defun hyperspec-lookup--hyperspec-lookup-w3m (orig-fun &rest args)
   (let ((browse-url-browser-function 'w3m-browse-url))
     (apply orig-fun args)))
-
 
 (use-package slime
   :hook (lisp-mode . slime-mode)
@@ -661,7 +670,11 @@ Repeated invocations toggle between the two most recently open buffers."
 (use-package undo-tree
   :custom
   (undo-tree-history-directory-alist
-   `(("." . ,(f-join pvr/emacs-persist-dir "undo"))))
+   `(("." . ,(f-join pvr/emacs-persist-dir "undo")))
+   (undo-tree-visualizer-timestamps t)
+   (undo-tree-visualizer-diff t))
+  :bind (("C-x u" . undo-tree-undo)
+         ("C-x U" . undo-tree-visualize))
   :config
   (global-undo-tree-mode 1))
 

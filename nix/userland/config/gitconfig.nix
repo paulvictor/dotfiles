@@ -26,6 +26,7 @@
       up = ''"!git pull origin \"$(git rev-parse --abbrev-ref HEAD)\""'';
     };
     diff-so-fancy.enable = true;
+    merge.conflictstyle = "diff3";
     extraConfig = {
       core = {
         whitespace = "trailing-space,space-before-tab";
