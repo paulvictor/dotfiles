@@ -41,10 +41,9 @@
 (set-keybindings "y" "hsplit" :where 'both)
 (set-keybindings "q" "vsplit" :where 'both)
 (set-keybindings "`" "gother" :where 'top)
-(set-keybindings "n" "gother" :where 'top)
+(set-keybindings "n" "pull-hidden-next" :where 'top)
+(set-keybindings "t" "pull-hidden-previous" :where 'top)
 (set-keybindings "Tab" "gother" :where 'top)
-; Setup so that hitting Caps lock twice does this
-(set-keybindings "s-Up" "fother" :where 'local)
 (set-keybindings "-" "vsplit" :where 'top)
 (set-keybindings "\\" "hsplit" :where 'top)
 (set-keybindings "|" "hsplit" :where 'top)
@@ -56,12 +55,8 @@
 
 (define-key *top-map* (kbd "s-g") 'pvr/bindings)
 
-(define-key *menu-map* (kbd "C-j") 'menu-down)
-(define-key *menu-map* (kbd "C-k") 'menu-up)
-
-
 (set-keybindings ";" "shell-exec" :where 'top)
-(set-keybindings "SPC" "pull-hidden-next" :where 'top)
+(set-keybindings "SPC" "pull-hidden-previous" :where 'top)
 (set-keybindings "=" "poison" :where 'top)
 (set-keybindings "RET" "eshell foo" :where 'top)
 (set-keybindings "u" "remove-split" :where 'both)
