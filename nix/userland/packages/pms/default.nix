@@ -1,7 +1,7 @@
 # Got this from https://github.com/ejpcmac/config_files
 { stdenv, fetchFromGitHub, buildGoPackage }:
 
-buildGoPackage rec {
+buildGoModule rec {
   name = "pms-${version}";
   version = "2018-11-23";
   goPackagePath = "github.com/ambientsound/pms";

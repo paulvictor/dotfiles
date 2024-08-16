@@ -5,16 +5,17 @@
     ./key-remaps.nix
     ./pipewire.nix
   ];
+  services.libinput.enable = true;
+
+  services.displayManager.defaultSession = "xsession";
+  services.displayManager.autoLogin = {
+    # This is because the safe partition is anyway zfs encrypted and so would need a passphrase to mount
+    enable = true;
+    user = "viktor";
+  };
   services.xserver = {
     enable = true;
-    libinput.enable = true;
     displayManager = {
-      defaultSession = "xsession";
-      autoLogin = {
-        # This is because the safe partition is anyway zfs encrypted and so would need a passphrase to mount
-        enable = true;
-        user = "viktor";
-      };
 #       lightdm.enable = true;
       # disabled lightdm because it causes some problems for nyxt
       session = [

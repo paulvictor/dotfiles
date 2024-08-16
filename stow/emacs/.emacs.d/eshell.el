@@ -47,19 +47,6 @@
             ("cabal" "repl")
             ("guix" "search"))))
 
-(use-package em-hist
-  :custom
-  (eshell-history-file-name (no-littering-expand-var-file-name "eshell/history"))
-  (eshell-history-size 10000)
-  (eshell-hist-ignoredups t)
-  (eshell-input-filter
-        (lambda (str)
-          (not (or
-                (string= "" str)
-                (string= "cd" str)
-                (string-prefix-p "cd " str)
-                (string-prefix-p " " str))))))
-
 (defun corfu-send-shell (&rest _)
   "Send completion candidate when inside comint/eshell."
   (cond
@@ -79,7 +66,6 @@
           (forward-line line))
       (eshell-view-file (pop args)))))
 
-;;;###autoload
 (defun eshell/quit-and-close (&rest _)
   "Quit the current eshell buffer and close the window it's in."
   (delete-frame))
@@ -89,10 +75,26 @@
   "Create a directory (DIR) then cd into it."
   (make-directory dir t)
   (eshell/cd dir))
+;;;###autoload
+(use-package em-hist
+  :custom
+  (eshell-history-file-name (no-littering-expand-var-file-name "eshell/history"))
+  (eshell-history-size 10000)
+  (eshell-hist-ignoredups t)
+  (eshell-input-filter
+        (lambda (str)
+          (not (or
+                (string= "" str)
+                (string= "cd" str)
+                (string-prefix-p "cd " str)
+                (string-prefix-p " " str)))))
+  :bind
+  (:map eshell-hist-mode-map
+        ("M-r" . cape-history)))
 
 (use-package eshell
   :custom
-  (eshell-prefer-lisp-functions nil)
+  (eshell-prefer-lisp-functions t)
   (eshell-destroy-buffer-when-process-dies t)
   :config
   (setenv "PAGER" "cat") ; solves issues, such as with 'git log' and the default 'less'
@@ -121,9 +123,6 @@
   :bind
   (:map eshell-mode-map
         ("C-d" . pvr/eshell-quit-or-delete-char)
-        ("C-k" . eshell-previous-matching-input-from-input)
-        ("C-j" . eshell-next-matching-input-from-input)
-        ("C-r" . cape-history)
         ("C-a" . eshell-bol)))
 
 (use-package em-pred)

@@ -645,6 +645,11 @@ Repeated invocations toggle between the two most recently open buffers."
               (define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)))
   (require 'slime-autoloads))
 
+;; (use-package sly
+;;   :hook
+;;   (lisp-mode . sly-mode)
+;;   :custom
+;;   (inferior-lisp-program "sbcl"))
 (use-package ielm
   :bind
   (:map inferior-emacs-lisp-mode-map
