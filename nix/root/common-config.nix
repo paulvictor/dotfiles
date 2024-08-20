@@ -21,7 +21,7 @@ with lib;
   users.mutableUsers = false;
 
   services.guix = {
-    enable = isPhysicalDevice;
+    enable = false;
     gc.enable = true;
   };
 

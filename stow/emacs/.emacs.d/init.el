@@ -1071,6 +1071,7 @@ point reaches the beginning or end of the buffer, stop there."
 
 (use-package ts-fold
   :straight (ts-fold :type git :host github :repo "emacs-tree-sitter/ts-fold"))
+
 ;; (straight-use-package
 ;;  '(webkit :type git :host github :repo "akirakyle/emacs-webkit"
 ;;           :branch "main"
@@ -1078,3 +1079,31 @@ point reaches the beginning or end of the buffer, stop there."
 ;;           :pre-build ("make")))
 
 
+;; (use-package exwm
+;;   :init
+;;   (require 'exwm-config)
+;;   (setq exwm-workspace-number 5)
+;;   (add-hook 'exwm-update-class-hook #'(lambda ()
+;;                                         (exwm-workspace-rename-buffer exwm-class-name)))
+;;   (setq exwm-input-global-keys
+;;         `(([?\s-w] . exwm-workspace-switch)
+;;           ([?\s-r] . exwm-reset)
+;;           ([?\s-h] . windmove-left)
+;;           ([?\s-j] . windmove-down)
+;;           ([?\s-k] . windmove-up)
+;;           ([?\s-l] . windmove-right)
+;;           ((kbd "s-<return>") . (lambda () (eshell)))
+;;           ,@(mapcar (lambda (i)
+;;                       `(,(kbd (format "s-%d" i)) .
+;;                         (lambda ()
+;;                           (interactive)
+;;                           (exwm-workspace-switch-create ,i))))
+;;                     (number-sequence 0 9))
+;;           ([\?s-&] . (lambda (command)
+;;                        (interactive (list (read-shell-command "$ ")))
+;;                        (start-process-shell-command command nil command)))))
+;;   :config
+;;   (require 'exwm-randr)
+;;   (with-eval-after-load 'exwm-randr
+;;     (exwm-enable)
+;;     (exwm-randr-mode 1)))
