@@ -6,15 +6,31 @@
     ./pipewire.nix
   ];
   services.libinput.enable = true;
+  security.polkit.enable = true;
+  hardware.opengl.enable = true; # when using QEMU KVM
+  services.greetd = {
+    enable = true;
+    settings = {
+     default_session.command = ''
+      ${pkgs.greetd.tuigreet}/bin/tuigreet \
+        --time \
+        --user-menu \
+        --cmd sway
+    '';
+    };
+  environment.etc."greetd/environments".text = ''
+    sway
+  '';
 
-  services.displayManager.defaultSession = "xsession";
+
+#   services.displayManager.defaultSession = "xsession";
   services.displayManager.autoLogin = {
     # This is because the safe partition is anyway zfs encrypted and so would need a passphrase to mount
     enable = true;
     user = "viktor";
   };
   services.xserver = {
-    enable = true;
+    enable = false;
     displayManager = {
 #       lightdm.enable = true;
       # disabled lightdm because it causes some problems for nyxt
