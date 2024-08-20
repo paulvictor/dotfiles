@@ -30,7 +30,7 @@ with pkgs;
     openssh
     openssl
     pbgopy
-    pms
+#     pms
     prettyping
     qemu
     skim
