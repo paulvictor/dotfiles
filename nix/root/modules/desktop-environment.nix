@@ -1,4 +1,13 @@
 { config, lib, pkgs, ... } :
+let
+  swayWithEnv = pkgs.writeShellScript "sway-with-env" ''
+    export XDG_SESSION_TYPE=wayland
+    export XDG_SESSION_DESKTOP=sway
+    export XDG_CURRENT_DESKTOP=sway
+
+    export MOZ_ENABLE_WAYLAND=1
+    exec ${pkgs.sway}/bin/sway "$@"
+  '';
 
 {
   imports = [
@@ -8,16 +17,19 @@
   services.libinput.enable = true;
   security.polkit.enable = true;
   hardware.opengl.enable = true; # when using QEMU KVM
+  hardware.opengl.driSupport = true;
   services.greetd = {
     enable = true;
     settings = {
-     default_session.command = ''
-      ${pkgs.greetd.tuigreet}/bin/tuigreet \
-        --time \
-        --user-menu \
-        --cmd sway
-    '';
+      default_session.command = ''
+        ${pkgs.greetd.tuigreet}/bin/tuigreet \
+          --time \
+          --user-menu \
+          --remember \
+          --cmd ${swayWithEnv}
+      '';
     };
+  };
   environment.etc."greetd/environments".text = ''
     sway
   '';
