@@ -9,7 +9,7 @@ let
     exec ${pkgs.sway}/bin/sway "$@"
   '';
 
-{
+in {
   imports = [
     ./key-remaps.nix
     ./pipewire.nix
@@ -17,7 +17,8 @@ let
   services.libinput.enable = true;
   security.polkit.enable = true;
   hardware.opengl.enable = true; # when using QEMU KVM
-  hardware.opengl.driSupport = true;
+  security.pam.services.swaylock.text = "auth include login";
+
   services.greetd = {
     enable = true;
     settings = {

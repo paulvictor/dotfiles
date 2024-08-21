@@ -9,6 +9,7 @@ let
 in
 with pkgs;
 {
+  imports = [ ./wayland.nix ];
   services.gocryptfs = {
     enable = pkgs.stdenv.isLinux;
     cryptDir = "${config.home.homeDirectory}/crypt";
@@ -26,7 +27,7 @@ with pkgs;
     dunst
     findWindowByTitle
     gnome.adwaita-icon-theme
-    nyxt
+#     nyxt
     pa_applet
     paprefs
     passdo

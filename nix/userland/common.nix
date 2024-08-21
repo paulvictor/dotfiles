@@ -39,7 +39,7 @@ with pkgs;
     tree
     unzip
     vifm
-    youtube-dl
+    yt-dlp
     z-lua
   ] ++
   [ procs
