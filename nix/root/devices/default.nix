@@ -28,7 +28,7 @@ let
           inputs.impermanence.nixosModules.impermanence
           ../common-config.nix
           ../caches.nix
-          ../tailscale.nix
+#           ../tailscale.nix
           ../modules/actual-server.nix
         ];
 

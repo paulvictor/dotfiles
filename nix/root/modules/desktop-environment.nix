@@ -16,8 +16,9 @@ in {
   ];
   services.libinput.enable = true;
   security.polkit.enable = true;
-  hardware.opengl.enable = true; # when using QEMU KVM
+  hardware.graphics.enable = true; # when using QEMU KVM
   security.pam.services.swaylock.text = "auth include login";
+  programs.ydotool.enable = true;
 
   services.greetd = {
     enable = true;

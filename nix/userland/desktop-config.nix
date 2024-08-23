@@ -84,7 +84,7 @@ with pkgs;
   fonts.fontconfig.enable = true;
 
   services.picom = {
-    enable = true;
+    enable = false;
     menuOpacity = 0.7;
     backend = "glx";
     settings = {
@@ -127,7 +127,6 @@ with pkgs;
       window.startup_mode = "Maximized";
       window.decorations = "none";
       window.title = "Alacritty";
-      window.gtk_theme_variant = "dark";
       scrolling.multiplier = 10;
       font.normal.family = "VictorMono Nerd Font Mono";
       font.normal.style = "SemiBold";
@@ -140,11 +139,12 @@ with pkgs;
       font.size = 12.0;
       bell.animation = "EaseOutSine";
       selection.save_to_clipboard = true;
-      cursor.style = "Block";
-      cursor.blinking = "Always";
+      cursor.style.shape = "Block";
+      cursor.style.blinking = "Always";
       cursor.blink_interval = 500;
-      cursor.vi_mode_style = "Block";
-      key_bindings = [
+      cursor.blink_timeout = 10;
+      cursor.vi_mode_style.shape = "Beam";
+      keyboard.bindings = [
         { key = "V"; mods = "Control|Shift"; action = "Paste"; }
         { key = "C"; mods = "Control|Shift"; action = "Copy"; }
         { key = "Space"; mods = "Control"; action = "ToggleViMode"; }
@@ -168,9 +168,9 @@ with pkgs;
         { key = "N"; mods = "Shift"; mode = "Vi"; action = "SearchPrevious"; }
         { key = "N"; mode = "Vi"; action = "SearchNext"; }
       ];
-      draw_bold_text_with_bright_colors = true;
+      colors.draw_bold_text_with_bright_colors = true;
       window.opacity = 0.8;
-      colors1 = {
+      colors = {
         primary = {
           background = "0x181818";
           foreground = "0xd8d8d8";
