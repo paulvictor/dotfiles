@@ -13,3 +13,10 @@
 * General productivity
 * Guix
 * example
+
+* sway
+** waybar get useful information
+** get waybar and swaybg to start at startup
+** fix terminal / use emacs client
+** fix typepass to use fuzzel
+** use guile-swayer

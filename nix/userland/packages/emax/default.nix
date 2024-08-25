@@ -24,6 +24,7 @@ let
             anzu
             avy
             avy-zap
+            browse-at-remote
             cape
             clojure-mode
             cider

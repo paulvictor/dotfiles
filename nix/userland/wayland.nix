@@ -69,6 +69,8 @@ in
   services.mako.enable = true;
   programs.waybar = {
     enable = true;
+    systemd.enable = true;
+    systemd.target = "sway-session.target";
     settings = {
       mainBar = {
         layer = "top";
@@ -77,13 +79,39 @@ in
         output = [ "eDP-1" ];
         modules-left = [ "sway/workspaces" "sway/mode" "wlr/taskbar" ];
         modules-center = [ "sway/window" ];
-        modules-right = [ "network" "clock" "battery"];
+        modules-right = [ "cpu" "network" "clock" "battery" ];
         clock = {
           interval = 5;
-          tooltip = true;
-          format = "{:%H.%M}";
-          tooltip-format = "{:%d-%m-%Y}";
+          tooltip = false;
+          format = "{:%d-%m-%Y | %a | %R %p}";
         };
+        "sway/mode" = {
+          format = "<span style=\"italic\">{}</span>";
+        };
+        cpu = {
+          interval = 10;
+          max-length = 10;
+          "format" = "{usage}% ";
+
+        };
+        "battery" =  {
+            "bat" =  "BAT0";
+            "states" = {
+                "good" =  95;
+                "warning" =  30;
+                "critical" =  15;
+            };
+            "format" = "{capacity}% {icon}";
+            "format-icons" =  ["" "" "" "" ""];
+        };
+        "network" = {
+#             // "interface" =  "wlp2s0"; // (Optional) To force the use of this interface
+            "format-wifi" =  "{essid} ({signalStrength}%) ";
+            "format-ethernet" =  "{ifname} =  {ipaddr}/{cidr} ";
+            "format-disconnected" =  "Disconnected ⚠";
+        };
+
+
       };
     };
   };

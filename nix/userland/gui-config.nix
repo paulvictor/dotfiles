@@ -66,7 +66,15 @@ let
         nativeBuildInputs = [ makeWrapper ];
         buildPhase = ''
           mkdir -pv $out/bin
-          $CC -O2 -D_FILE_OFFSET_BITS=64 -DFUSE_USE_VERSION=26 -Wall -Wextra -Wno-unused-result -g $NIX_CFLAGS_COMPILE -o $out/bin/tabfs $src/fs/tabfs.c -pthread -lfuse
+          $CC -O2 \
+            -D_FILE_OFFSET_BITS=64 \
+            -DFUSE_USE_VERSION=26 \
+            -Wall \
+            -Wextra \
+            -Wno-unused-result \
+            -g $NIX_CFLAGS_COMPILE \
+            -o $out/bin/tabfs $src/fs/tabfs.c \
+            -pthread -lfuse
         '';
         installPhase = ''
           wrapProgram $out/bin/tabfs \
@@ -88,25 +96,19 @@ in
   {
     home.packages =
       [
-        # The right way to do things but doesn't work on urxvt
-        # (nerdfonts.override { fonts = [ "Hack" "VictorMono" "Iosevka" "SourceCodePro" "DejaVuSansMono" "FiraCode" ]; })
         (nerdfonts.override { fonts = [ "Hack" "VictorMono" "IosevkaTerm" "Iosevka" "SourceCodePro" "DejaVuSansMono" "FiraCode" "NerdFontsSymbolsOnly" ]; })
         all-the-icons-fonts
         autorandr
         brotab
         cantarell-fonts
-        customizedemacs
         custom-vieb
         dejavu_fonts
         electronApps
-#             fira-code
-#             firacode-nerdfonts
         font-awesome
-        font-awesome_5
         google-chrome
         googler
         gromit-mpx
-#         hack-nerdfonts
+
         hicolor-icon-theme
         league-of-moveable-type
         localsend
@@ -122,12 +124,12 @@ in
         rxvt_unicode-with-plugins
         scrot
         siji
-#         source-code-pro-nerdfonts
+
         surf
         surfraw
         ubuntu_font_family
         unifont
-#         victor-mono-nerdfonts
+
         vlc
         yubico-piv-tool
         yubikey-manager

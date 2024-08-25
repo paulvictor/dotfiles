@@ -26,7 +26,7 @@ with pkgs;
     asciinema
     dunst
     findWindowByTitle
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
 #     nyxt
     pa_applet
     paprefs
