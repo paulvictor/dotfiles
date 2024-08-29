@@ -25,11 +25,12 @@ in
     isNormalUser = true;
     hashedPassword = mySuperStupidPasswdHashed;
     uid = 1000;
-    extraGroups = [ "networkmanager" "audio" "wheel" "tty" "lp" "fuse" "docker" "adbusers" "netdev" "lxd" "disk" "video" "keys" "libvirtd" "qemu-libvirtd" "pipewire" ];
+    extraGroups = [ "networkmanager" "audio" "wheel" "tty" "lp" "fuse" "docker" "adbusers" "netdev" "lxd" "disk" "video" "keys" "libvirtd" "qemu-libvirtd" "pipewire" "ydotool" ];
     shell = pkgs.zsh;
     openssh.authorizedKeys.keyFiles =
         [ ghKey ];
   };
+
 
   users.users.ghost = {
     isNormalUser = true;

@@ -63,6 +63,7 @@ with pkgs;
     rclone
     rclone-browser
     shareLink
+    customizedEmacs
     watchexec # because of https://github.com/NixOS/nixpkgs/issues/160876
   ];
 

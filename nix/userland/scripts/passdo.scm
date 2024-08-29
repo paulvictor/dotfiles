@@ -30,7 +30,7 @@
                              (lambda (str) (string-drop str 1))
                              file-list))
          (file-list-str (string-join without-leading-/ "\n" 'suffix))
-         (rofi-command "rofi -i -matching fuzzy -dmenu")
+         (rofi-command "fuzzel -dmenu")
          (selected (let ((port
                            (open-input-output-pipe rofi-command)))
                      (display file-list-str port)

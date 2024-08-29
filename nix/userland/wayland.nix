@@ -53,10 +53,14 @@ in
     enable = true;
     timeouts = [
       { timeout = 300; command = "${lockPackage}/bin/swaylock-fancy"; }
-      { timeout = 500; command = "${sway}/bin/swaymsg \"output * dpms off\""; }
+      {
+        timeout = 500;
+        command = "${sway}/bin/swaymsg \"output * dpms off\"";
+        resumeCommand = "${sway}/bin/swaymsg \"output * dpms on\"";
+      }
+      { timeout = 600; command = "systemctl suspend"; }
     ];
     events = [
-      { event = "after-resume"; command = "${sway}/bin/swaymsg \"output * dpms on\""; }
       { event = "before-sleep"; command = "${lockPackage}/bin/swaylock-fancy";}
       { event = "lock"; command = "${lockPackage}/bin/swaylock-fancy";}
     ];
@@ -75,8 +79,7 @@ in
       mainBar = {
         layer = "top";
         position = "top";
-        height = 20;
-        output = [ "eDP-1" ];
+        height = 15;
         modules-left = [ "sway/workspaces" "sway/mode" "wlr/taskbar" ];
         modules-center = [ "sway/window" ];
         modules-right = [ "cpu" "network" "clock" "battery" ];
@@ -110,8 +113,6 @@ in
             "format-ethernet" =  "{ifname} =  {ipaddr}/{cidr} ";
             "format-disconnected" =  "Disconnected ⚠";
         };
-
-
       };
     };
   };

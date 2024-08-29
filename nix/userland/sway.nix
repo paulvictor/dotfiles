@@ -10,7 +10,11 @@ let
     "Shift+Return" = "exec ${pkgs.alacritty}/bin/alacritty";
     "Tab" = "workspace back_and_forth";
     "w" = "kill";
-    "e" = "${config.programs.emacs.package}/bin/emacsclient -c -n";
+    "e" = "exec ${config.programs.emacs.package}/bin/emacsclient -c -n";
+    "BackSpace" = "exec swaylock-fancy";
+    "Shift+space" = "focus mode_toggle";
+    "space" = "layout toggle stacking tabbed split";
+    "t" = "layout toggle split";
   };
 in
 {

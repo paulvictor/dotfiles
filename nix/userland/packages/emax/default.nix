@@ -66,7 +66,6 @@ let
             key-chord
             keyfreq
             linum-relative
-#             lispy
             lsp-haskell
             lsp-mode
             lsp-ui
@@ -107,8 +106,6 @@ let
             sly
             swiper
             transient
-            use-package
-            use-package-chords
             visual-fill-column
             vterm
             w3m
