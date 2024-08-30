@@ -5,6 +5,7 @@
 (use-modules (ice-9 receive))
 (use-modules (ice-9 string-fun))
 (use-modules (ice-9 rdelim))
+(use-modules (srfi srfi-1))
 
 (define (collect-gpg-files file-path)
   (let* ((enter? (lambda (name stat res)
