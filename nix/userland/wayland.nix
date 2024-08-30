@@ -36,7 +36,7 @@ in
         width = 25;
         "inner-pad" = 0;
       };
-      border= {width = 3;};
+      border = { width = 3; };
       colors = {
         background = "#2d2d329b";
         text = "#f0f0f0ff";
