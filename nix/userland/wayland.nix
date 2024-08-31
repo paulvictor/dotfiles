@@ -32,9 +32,7 @@ in
     settings = {
       main = {
         terminal = "${pkgs.alacritty}/bin/alacritty";
-        "dpi-aware" = "auto";
-        width = 25;
-        "inner-pad" = 0;
+        width = 30;
       };
       border = { width = 3; };
       colors = {

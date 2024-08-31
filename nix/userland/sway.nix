@@ -16,8 +16,10 @@ let
     "space" = "layout toggle stacking tabbed split";
     "t" = "layout toggle split";
   };
+
 in
 {
+  imports = [ ./services/sxhkd.nix ];
   wayland.windowManager.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
