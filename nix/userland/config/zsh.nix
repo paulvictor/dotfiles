@@ -138,7 +138,5 @@ in
     theme = "spaceship";
     custom = "$HOME/.config/zsh";
   };
-  sessionVariables = {
-    GNUPGHOME = "${config.home.homeDirectory}/.gnupg";
-  };
+
 }

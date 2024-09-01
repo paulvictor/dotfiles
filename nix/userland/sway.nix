@@ -3,6 +3,8 @@
 # Use https://git.sr.ht/~sircmpwn/sway/commit/0d5aaf5359c671a51bd319bd7972e0f5e7bcde84 and implement something like reduce the brightness for inactive windows
 let
   modifier = config.wayland.windowManager.sway.config.modifier;
+  rofiElectronAppsRunner = pkgs.callPackage ../overlays/electronApps/rofiRun.nix {};
+
   prefixWithHelper =
     prefix: lib.mapAttrs'
       (n: v: {name = "${prefix}${n}"; value = v;});
@@ -15,6 +17,19 @@ let
     "Shift+space" = "focus mode_toggle";
     "space" = "layout toggle stacking tabbed split";
     "t" = "layout toggle split";
+    "p" = "exec ${pkgs.passdo}/bin/passdo";
+    "s" = "exec ${pkgs.scrot}/bin/scrot -m";
+    "Shift+s" = "exec ${pkgs.scrot}/bin/scrot -s";
+#     "Shift+slash" = "menu-surfraw";
+    "Shift+d" = "exec ${rofiElectronAppsRunner}/bin/rofiElectronAppsRunner";
+    # OCR a screen selection
+#     "hyper + x" = "${pkgs.imagemagick}/bin/convert x: -modulate 100,0 -resize 400% -set density 300 png:- | ${pkgs.tesseract}/bin/tesseract stdin stdout | ${pkgs.xclip}/bin/xclip -selection clipboard";
+    # Pulse Audio controls
+#     "XF86Audio{Raise,Lower}Volume" = "${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ {+5%,-5%}"; #increase sound volume
+#     "XF86AudioMute" =  "${pkgs.pulseaudio}/bin/pactl set-sink-mute  @DEFAULT_SINK@ toggle"; # mute sound
+    # "XF86MicMute" =  "pulseaudio-ctl mute-input"; # mute mic
+    # Sreen brightness controls
+#     "XF86MonBrightness{Up,Down}" = "${light}/bin/light -{A,U} 5";
   };
 
 in

@@ -31,7 +31,9 @@
                              (lambda (str) (string-drop str 1))
                              file-list))
          (file-list-str (string-join without-leading-/ "\n" 'suffix))
-         (rofi-command "fuzzel --dmenu --fuzzy-max-distance=100 --fuzzy-min-length=2 --fuzzy-max-length-discrepancy=100")
+         (rofi-command "rofi -i -matching fuzzy -dmenu")
+
+;;          (rofi-command "fuzzel --dmenu --fuzzy-max-distance=100 --fuzzy-min-length=2 --fuzzy-max-length-discrepancy=100")
          (selected (let ((port
                            (open-input-output-pipe rofi-command)))
                      (display file-list-str port)

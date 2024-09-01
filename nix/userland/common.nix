@@ -207,7 +207,7 @@ with pkgs;
   };
   systemd.user.sessionVariables = lib.optionalAttrs specialArgs.isLinux {
     GNUPGHOME = "${config.home.homeDirectory}/.gnupg";
+    EDITOR = "emacsclient -c -n";
   };
-
 }
 

@@ -10,8 +10,8 @@ in lib.mkIf cfg.enable
       systemd.user.services.sxhkd = {
         Unit = {
           Description = "SXHKD";
-          BindsTo = [ "graphical-session.target" ];
-          After = [ "graphical-session-pre.target" ];
+#           BindsTo = [ "graphical-session.target" ];
+          After = [ "sway-session.target" ];
         };
 
         Install = {
@@ -19,7 +19,6 @@ in lib.mkIf cfg.enable
         };
 
         Service = {
-          #       ExecStartPre = "${pkgs.coreutils}/bin/sleep 2";
           ExecStart = sxhkdCommand;
         };
       };
