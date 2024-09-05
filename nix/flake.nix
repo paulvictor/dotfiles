@@ -106,12 +106,11 @@
       rofi-theme-overlay = import ./overlays/rofi-theme-overlay.nix;
       actual-server-overlay = import ./overlays/actual-server.nix { inherit (inputs) actual-server-repo; };
       keyd-overlay = import ./overlays/keyd.nix;
+      warpd-overlay = import ./overlays/warpd.nix;
       #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
       linuxOverlays = [
         fish-docker-completion
-#         gllock-overlay
         tomb-overlay
-#         guix-overlay
         xdotool-overlay
         brotab-overlay
         ripgrep-overlay
@@ -133,6 +132,7 @@
         inputs.comma.overlays.default
         rofi-theme-overlay
         actual-server-overlay
+        warpd-overlay
       ];
       darwinOverlays = [
         pyopenssl-fix-hack
