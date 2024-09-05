@@ -9,7 +9,9 @@ let
 in
 with pkgs;
 {
-  imports = [ ./wayland.nix ];
+  imports =
+    [ ./wayland.nix
+      ./config/warpd.nix ];
   services.gocryptfs = {
     enable = pkgs.stdenv.isLinux;
     cryptDir = "${config.home.homeDirectory}/crypt";

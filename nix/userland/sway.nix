@@ -20,8 +20,11 @@ let
     "p" = "exec ${pkgs.passdo}/bin/passdo";
     "s" = "exec ${pkgs.scrot}/bin/scrot -m";
     "Shift+s" = "exec ${pkgs.scrot}/bin/scrot -s";
-#     "Shift+slash" = "menu-surfraw";
     "Shift+d" = "exec ${rofiElectronAppsRunner}/bin/rofiElectronAppsRunner";
+    "Mod1+space" = "exec ${pkgs.warpd}/bin/warpd --hint2";
+    "Mod1+tab" = "exec ${pkgs.warpd}/bin/warpd --grid";
+    "Mod1+Backspace" = "exec ${pkgs.warpd}/bin/warpd --normal";
+#     "Shift+slash" = "menu-surfraw";
     # OCR a screen selection
 #     "hyper + x" = "${pkgs.imagemagick}/bin/convert x: -modulate 100,0 -resize 400% -set density 300 png:- | ${pkgs.tesseract}/bin/tesseract stdin stdout | ${pkgs.xclip}/bin/xclip -selection clipboard";
     # Pulse Audio controls
