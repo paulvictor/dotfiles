@@ -2,8 +2,10 @@
 
 # Use https://git.sr.ht/~sircmpwn/sway/commit/0d5aaf5359c671a51bd319bd7972e0f5e7bcde84 and implement something like reduce the brightness for inactive windows
 let
-  modifier = config.wayland.windowManager.sway.config.modifier;
-  rofiElectronAppsRunner = pkgs.callPackage ../overlays/electronApps/rofiRun.nix {};
+  modifier =
+    config.wayland.windowManager.sway.config.modifier;
+  rofiElectronAppsRunner =
+    pkgs.callPackage ../overlays/electronApps/rofiRun.nix {};
 
   prefixWithHelper =
     prefix: lib.mapAttrs'
@@ -12,18 +14,22 @@ let
     "Shift+Return" = "exec ${pkgs.alacritty}/bin/alacritty";
     "Tab" = "workspace back_and_forth";
     "w" = "kill";
-    "e" = "exec ${config.programs.emacs.package}/bin/emacsclient -c -n";
     "BackSpace" = "exec swaylock-fancy";
     "Shift+space" = "focus mode_toggle";
+    "u" = "focus parent";
+    "Shift+u" = "focus child";
     "space" = "layout toggle stacking tabbed split";
     "t" = "layout toggle split";
+    "e" ="exec ${config.programs.emacs.package}/bin/emacsclient -c -n";
     "p" = "exec ${pkgs.passdo}/bin/passdo";
     "s" = "exec ${pkgs.scrot}/bin/scrot -m";
     "Shift+s" = "exec ${pkgs.scrot}/bin/scrot -s";
     "Shift+d" = "exec ${rofiElectronAppsRunner}/bin/rofiElectronAppsRunner";
-    "Mod1+space" = "exec ${pkgs.warpd}/bin/warpd --hint2";
-    "Mod1+tab" = "exec ${pkgs.warpd}/bin/warpd --grid";
-    "Mod1+Backspace" = "exec ${pkgs.warpd}/bin/warpd --normal";
+    "Ctrl+semicolon" = "exec ${pkgs.warpd}/bin/warpd --oneshot --hint2";
+    "Ctrl+colon" = "exec ${pkgs.warpd}/bin/warpd --oneshot --grid";
+    "Ctrl+Backspace" = "exec ${pkgs.warpd}/bin/warpd --normal";
+    "Ctrl+Return" = "exec ${pkgs.warpd}/bin/warpd --screen";
+
 #     "Shift+slash" = "menu-surfraw";
     # OCR a screen selection
 #     "hyper + x" = "${pkgs.imagemagick}/bin/convert x: -modulate 100,0 -resize 400% -set density 300 png:- | ${pkgs.tesseract}/bin/tesseract stdin stdout | ${pkgs.xclip}/bin/xclip -selection clipboard";
