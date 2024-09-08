@@ -73,14 +73,15 @@ in
     enable = true;
     systemd.enable = true;
     systemd.target = "sway-session.target";
+#     style = builtins.readFile ./config/waybar-style.css;
     settings = {
       mainBar = {
         layer = "top";
         position = "top";
-        height = 15;
+        height = 20;
         modules-left = [ "sway/workspaces" "sway/mode" "wlr/taskbar" ];
         modules-center = [ "sway/window" ];
-        modules-right = [ "cpu" "network" "clock" "battery" ];
+        modules-right = [ "cpu" "memory" "network" "clock" "battery" ];
         clock = {
           interval = 5;
           tooltip = false;
@@ -95,7 +96,10 @@ in
           "format" = "{usage}% ";
 
         };
-        "battery" =  {
+        memory = {
+		      "format" = "💾 {used:0.1f}G";
+	      };
+        battery =  {
             "bat" =  "BAT0";
             "states" = {
                 "good" =  95;
@@ -105,11 +109,13 @@ in
             "format" = "{capacity}% {icon}";
             "format-icons" =  ["" "" "" "" ""];
         };
-        "network" = {
-#             // "interface" =  "wlp2s0"; // (Optional) To force the use of this interface
-            "format-wifi" =  "{essid} ({signalStrength}%) ";
-            "format-ethernet" =  "{ifname} =  {ipaddr}/{cidr} ";
-            "format-disconnected" =  "Disconnected ⚠";
+        network = {
+		      "format-wifi" = "<span color='#589df6'></span> <span color='gray'>{essid}</span> {frequency} <span color='#589df6'> {signalStrength} % </span> <span color='#589df6'>⇵</span> {bandwidthUpBits}/{bandwidthDownBits}";
+#           "format-wifi" =  "{essid} ({signalStrength}%) ";
+#           "format-ethernet" =  "{ifname} =  {ipaddr}/{cidr} ";
+          "format-ethernet" = "{ifname}: {ipaddr}/{cidr} ";
+		      "format-linked" = "{ifname} (No IP) ";
+          "format-disconnected" =  "Disconnected ⚠";
         };
       };
     };

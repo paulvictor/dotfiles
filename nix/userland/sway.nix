@@ -10,6 +10,8 @@ let
   prefixWithHelper =
     prefix: lib.mapAttrs'
       (n: v: {name = "${prefix}${n}"; value = v;});
+  warpdCommand =
+    "${pkgs.warpd}/bin/warpd -c ${config.xdg.configFile."warpd/config".target} ";
   keybindings = prefixWithHelper "${modifier}+" {
     "Shift+Return" = "exec ${pkgs.alacritty}/bin/alacritty";
     "Tab" = "workspace back_and_forth";
@@ -26,9 +28,9 @@ let
     "Shift+s" = "exec ${pkgs.scrot}/bin/scrot -s";
     "Shift+d" = "exec ${rofiElectronAppsRunner}/bin/rofiElectronAppsRunner";
     "Ctrl+semicolon" = "exec ${pkgs.warpd}/bin/warpd --oneshot --hint2";
-    "Ctrl+colon" = "exec ${pkgs.warpd}/bin/warpd --oneshot --grid";
-    "Ctrl+Backspace" = "exec ${pkgs.warpd}/bin/warpd --normal";
-    "Ctrl+Return" = "exec ${pkgs.warpd}/bin/warpd --screen";
+    "Ctrl+colon" = "exec ${warpdCommand} --oneshot --grid";
+    "Ctrl+Backspace" = "exec ${warpdCommand} --normal";
+    "Ctrl+Return" = "exec ${warpdCommand} --screen";
 
 #     "Shift+slash" = "menu-surfraw";
     # OCR a screen selection

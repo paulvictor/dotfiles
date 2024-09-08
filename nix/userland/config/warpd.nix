@@ -9,15 +9,15 @@ in
   xdg.configFile."warpd/config" = {
     enable = true;
     text = ''
+      buttons: unbind
+      oneshot_buttons: unbind
       buttons: 1 2 3
-      hint: x
-      hint2: X
-      grid: g
+      oneshot_buttons: exclam at numbersign
+
       grid_exit: esc
       hint_chars: neiohjkluyq
       hint2_chars: uyqneihjk
       screen_chars: hljk
-      oneshot_buttons: unbind
 
       scroll_down: unbind
       scroll_down: J
@@ -44,7 +44,6 @@ in
 
       indicator: topright
       normal_system_cursor: 1
-
     '';
   };
 
