@@ -73,31 +73,35 @@ in
     enable = true;
     systemd.enable = true;
     systemd.target = "sway-session.target";
-#     style = builtins.readFile ./config/waybar-style.css;
+    style = builtins.readFile ./config/waybar-style.css;
     settings = {
       mainBar = {
         layer = "top";
         position = "top";
-        height = 20;
-        modules-left = [ "sway/workspaces" "sway/mode" "wlr/taskbar" ];
+        height = 30;
+        modules-left = [ "sway/workspaces" "sway/mode" ];
         modules-center = [ "sway/window" ];
         modules-right = [ "cpu" "memory" "network" "clock" "battery" ];
         clock = {
           interval = 5;
           tooltip = false;
-          format = "{:%d-%m-%Y | %a | %R %p}";
+          format = "{:%a, %d/%m/%Y %R}";
         };
         "sway/mode" = {
-          format = "<span style=\"italic\">{}</span>";
+          "format" = " {}";
+          "max-length" = 50;
         };
+#       "sway/mode" = {
+#           format = "<span style=\"italic\">{}</span>";
+#         };
+
         cpu = {
           interval = 10;
           max-length = 10;
-          "format" = "{usage}% ";
-
+          "format" = "   {usage}%";
         };
         memory = {
-		      "format" = "💾 {used:0.1f}G";
+		      "format" = " 💾 {used:0.1f}G";
 	      };
         battery =  {
             "bat" =  "BAT0";
@@ -106,11 +110,11 @@ in
                 "warning" =  30;
                 "critical" =  15;
             };
-            "format" = "{capacity}% {icon}";
+            "format" = "{icon} {capacity}%";
             "format-icons" =  ["" "" "" "" ""];
         };
         network = {
-		      "format-wifi" = "<span color='#589df6'></span> <span color='gray'>{essid}</span> {frequency} <span color='#589df6'> {signalStrength} % </span> <span color='#589df6'>⇵</span> {bandwidthUpBits}/{bandwidthDownBits}";
+		      "format-wifi" = "<span color='#589df6'></span> <span color='gray'>{essid}</span> <span color='#589df6'> {signalStrength} % </span> <span color='#589df6'>⇵</span> {bandwidthUpBits}/{bandwidthDownBits}";
 #           "format-wifi" =  "{essid} ({signalStrength}%) ";
 #           "format-ethernet" =  "{ifname} =  {ipaddr}/{cidr} ";
           "format-ethernet" = "{ifname}: {ipaddr}/{cidr} ";
