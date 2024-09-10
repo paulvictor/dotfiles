@@ -32,6 +32,10 @@ let
     "Ctrl+Backspace" = "exec ${warpdCommand} --normal";
     "Ctrl+Return" = "exec ${warpdCommand} --screen";
 
+    "Alt+h" = "move workspace to output left";
+    "Alt+j" = "move workspace to output down";
+    "Alt+k" = "move workspace to output up";
+    "Alt+l" = "move workspace to output right";
 #     "Shift+slash" = "menu-surfraw";
     # OCR a screen selection
 #     "hyper + x" = "${pkgs.imagemagick}/bin/convert x: -modulate 100,0 -resize 400% -set density 300 png:- | ${pkgs.tesseract}/bin/tesseract stdin stdout | ${pkgs.xclip}/bin/xclip -selection clipboard";
@@ -78,6 +82,8 @@ in
       bars = [];
       startup = [
         { command = "systemctl --user restart waybar"; always = true; }
+        { command = "systemctl --user restart emacs.service"; always = false; }
+
       ];
     };
   };

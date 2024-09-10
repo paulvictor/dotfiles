@@ -88,38 +88,34 @@ in
           format = "{:%a, %d/%m/%Y %R}";
         };
         "sway/mode" = {
-          "format" = " {}";
-          "max-length" = 50;
+          format = " {}";
+          max-length = 20;
         };
-#       "sway/mode" = {
-#           format = "<span style=\"italic\">{}</span>";
-#         };
-
         cpu = {
           interval = 10;
           max-length = 10;
-          "format" = "   {usage}%";
+          format = "   {usage}%";
         };
         memory = {
-		      "format" = " 💾 {used:0.1f}G";
+		      format = " 💾 {used:0.1f}G";
 	      };
         battery =  {
-            "bat" =  "BAT0";
-            "states" = {
-                "good" =  95;
-                "warning" =  30;
-                "critical" =  15;
+          bat =  "BAT0";
+          states = {
+            good =  95;
+            warning =  30;
+            critical =  15;
             };
-            "format" = "{icon} {capacity}%";
-            "format-icons" =  ["" "" "" "" ""];
+          format = "{icon} {capacity}%";
+          format-icons =  ["" "" "" "" ""];
         };
         network = {
-		      "format-wifi" = "<span color='#589df6'></span> <span color='gray'>{essid}</span> <span color='#589df6'> {signalStrength} % </span> <span color='#589df6'>⇵</span> {bandwidthUpBits}/{bandwidthDownBits}";
+		      format-wifi = "<span color='#589df6'></span> <span color='gray'>{essid}</span> <span color='#589df6'> {signalStrength} % </span> <span color='#589df6'>⇵</span> {bandwidthUpBits}/{bandwidthDownBits}";
 #           "format-wifi" =  "{essid} ({signalStrength}%) ";
 #           "format-ethernet" =  "{ifname} =  {ipaddr}/{cidr} ";
-          "format-ethernet" = "{ifname}: {ipaddr}/{cidr} ";
-		      "format-linked" = "{ifname} (No IP) ";
-          "format-disconnected" =  "Disconnected ⚠";
+          format-ethernet = "{ifname}: {ipaddr}/{cidr} ";
+		      format-linked = "{ifname} (No IP) ";
+          format-disconnected =  "Disconnected ⚠";
         };
       };
     };
