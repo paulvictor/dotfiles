@@ -27,10 +27,8 @@ let
     "s" = "exec ${pkgs.scrot}/bin/scrot -m";
     "Shift+s" = "exec ${pkgs.scrot}/bin/scrot -s";
     "Shift+d" = "exec ${rofiElectronAppsRunner}/bin/rofiElectronAppsRunner";
-    "Ctrl+semicolon" = "exec ${pkgs.warpd}/bin/warpd --oneshot --hint2";
-    "Ctrl+colon" = "exec ${warpdCommand} --oneshot --grid";
-    "Ctrl+Backspace" = "exec ${warpdCommand} --normal";
-    "Ctrl+Return" = "exec ${warpdCommand} --screen";
+
+    "o" =  "exec ${warpdCommand} --normal";
 
     "Alt+h" = "move workspace to output left";
     "Alt+j" = "move workspace to output down";

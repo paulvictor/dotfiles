@@ -10,14 +10,21 @@ in
     enable = true;
     text = ''
       buttons: unbind
-      oneshot_buttons: unbind
-      buttons: 1 2 3
-      oneshot_buttons: exclam at numbersign
+      oneshot_buttons: S-backspace M O
+      buttons: backspace m o
 
+      exit: C-g
+      hint_exit: esc
       grid_exit: esc
-      hint_chars: neiohjkluyq
+      drag: v
+
+      hint: colon
+      hint2: Return
+      grid: Tab
+      screen: space
+      hint_chars: naerisot
       hint2_chars: uyqneihjk
-      screen_chars: hljk
+      screen_chars: arst
 
       scroll_down: unbind
       scroll_down: J
@@ -32,17 +39,22 @@ in
       grid_down: unbind
       grid_left: unbind
       grid_right: unbind
+      grid_border_color: #00ff00
+      grid_border_size: 2
 
-      grid_cut_up: I
-      grid_cut_down: E
-      grid_cut_left: N
-      grid_cut_right: O
-      grid_up: i
-      grid_down: e
-      grid_left: n
-      grid_right: o
+      grid_keys: unbind
+      grid_cut_up: k
+      grid_cut_down: j
+      grid_cut_left: h
+      grid_cut_right: l
+      grid_up: K
+      grid_down: J
+      grid_right: L
+      grid_left: H
 
       indicator: topright
+      indicator_color: #ffff55
+      indicator_size: 25
       normal_system_cursor: 1
     '';
   };
@@ -57,4 +69,5 @@ in
   # up: i
 #       down: e
 #       left: n
-#       right: o
+  #       right: o
+  # oneshot_buttons: S-backspace M O
