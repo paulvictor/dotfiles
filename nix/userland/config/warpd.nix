@@ -10,8 +10,8 @@ in
     enable = true;
     text = ''
       buttons: unbind
-      oneshot_buttons: S-backspace M O
-      buttons: backspace m o
+      oneshot_buttons: S-Return M O
+      buttons: Return m o
 
       exit: C-g
       hint_exit: esc
@@ -19,9 +19,9 @@ in
       drag: v
 
       hint: colon
-      hint2: Return
-      grid: Tab
-      screen: space
+      hint2: ;
+      grid: space
+      screen: Tab
       hint_chars: naerisot
       hint2_chars: uyqneihjk
       screen_chars: arst
