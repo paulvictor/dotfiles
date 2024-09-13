@@ -110,6 +110,7 @@
       #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
       linuxOverlays = [
         fish-docker-completion
+        keyd-overlay
         tomb-overlay
         xdotool-overlay
         brotab-overlay
