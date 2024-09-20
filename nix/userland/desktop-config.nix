@@ -65,7 +65,7 @@ with pkgs;
   };
 
   services.dunst = {
-    enable = true;
+    enable = false;
     settings = import ./config/dunstrc.nix;
     iconTheme = {
       name = "Numix";

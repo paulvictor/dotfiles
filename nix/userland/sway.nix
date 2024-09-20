@@ -24,11 +24,11 @@ let
     "t" = "layout toggle split";
     "e" ="exec ${config.programs.emacs.package}/bin/emacsclient -c -n";
     "p" = "exec ${pkgs.passdo}/bin/passdo";
-    "s" = "exec ${pkgs.scrot}/bin/scrot -m";
-    "Shift+s" = "exec ${pkgs.scrot}/bin/scrot -s";
+#     "s" = "exec ${pkgs.scrot}/bin/scrot -m";
+#     "Shift+s" = "exec ${pkgs.scrot}/bin/scrot -s";
     "Shift+d" = "exec ${rofiElectronAppsRunner}/bin/rofiElectronAppsRunner";
 
-    "o" =  "exec ${warpdCommand} --normal";
+    "o" =  "exec ${pkgs.warpd} --normal";
 
     "Alt+h" = "move workspace to output left";
     "Alt+j" = "move workspace to output down";
@@ -48,6 +48,7 @@ let
 in
 {
   imports = [ ./services/sxhkd.nix ];
+  home.packages = with pkgs;[ slurp grim wl-clipboard flameshot wlay ];
   wayland.windowManager.sway = {
     enable = true;
     wrapperFeatures.gtk = true;

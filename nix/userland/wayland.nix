@@ -20,7 +20,10 @@ in
     shotman
   ];
 
-  imports = [ ./sway.nix ];
+  imports = [
+    ./sway.nix
+    ./mako.nix
+  ];
 
   programs.swaylock = {
     enable = true;
