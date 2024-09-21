@@ -9,7 +9,6 @@ let
   };
 in
 {
-  # This still doesnt build the man pages properly, investigate
   keyd = prev.keyd.overrideAttrs(f: p:
     {
       version = "v2.5.0";
@@ -17,6 +16,8 @@ in
       postPatch = builtins.replaceStrings ["keyd.service"] ["keyd.service.in"] p.postPatch;
       postInstall = ''
         ln -sv $out/local/bin $out
+        ln -sv $out/local/share $out
+
         rm -rf $out/etc
       '';
     });

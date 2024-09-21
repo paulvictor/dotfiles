@@ -36,7 +36,7 @@ let
     q = "overload(meta, a)";         u = "m";
     w = "overload(alt, r)";
     # i = "lettermod(n, pseudoShift, 200, 300)";
-    i = "overloadi(n, overloadt(pseudoShift, n, 250), 150)";
+    i = "overloadi(n, overloadt(pseudoShift, n, 250), 150)"; # allows for quick tap and tap and hold. See the discussion on https://github.com/rvaiya/keyd/issues/608
 #     i = "overload(pseudoShift, n)";
     e = "s";                         o = "e";
     r = "overload(pseudoShift, t)";        p = "overload(alt, i)";
