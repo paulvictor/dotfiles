@@ -81,6 +81,11 @@
       };
     };
 
+    guile-swayer = {
+      url = "github:paulvictor/guile-swayer";
+      flake = false;
+    };
+
   };
 
   outputs = { self, nixpkgs, emacsOverlay, flake-utils, darwin, nix-cl, ... }@inputs :
@@ -194,7 +199,7 @@
         import ./userland/default.nix {
           inherit pkgsFor;
           inherit (nixpkgs) lib;
-          inherit (inputs) nixpkgs homeManager impermanence flake-utils nix-index-database firefox-nightly;
+          inherit (inputs) nixpkgs homeManager impermanence flake-utils nix-index-database firefox-nightly guile-swayer;
         };
     };
 }

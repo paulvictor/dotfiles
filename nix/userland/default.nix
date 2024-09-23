@@ -1,10 +1,10 @@
 args:
 
 let
-  inherit (args) pkgsFor homeManager impermanence flake-utils lib nixpkgs nix-index-database firefox-nightly;
+  inherit (args) pkgsFor homeManager impermanence flake-utils lib nixpkgs nix-index-database firefox-nightly guile-swayer;
   mkHomeConfig = extraArgs: homeManager.lib.homeManagerConfiguration (rec {
     pkgs = pkgsFor extraArgs.system;
-    extraSpecialArgs = extraArgs.extraSpecialArgs;
+    extraSpecialArgs = extraArgs.extraSpecialArgs // {inherit guile-swayer;};
     modules = [
       impermanence.nixosModules.home-manager.impermanence
       nix-index-database.hmModules.nix-index
