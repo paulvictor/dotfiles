@@ -1,3 +1,11 @@
+#!/usr/bin/env guile
+!#
+
+(let* ((path (dirname (current-filename)))
+       (modules-path (string-join path "/guile-swayer")))
+  (format #t "adding ~a to load path \n" modules-path)
+  (add-to-load-path modules-path))
+
 (use-modules (oop goops)
              (srfi srfi-18)
              (modules workspace-groups)

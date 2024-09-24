@@ -442,6 +442,22 @@
         "type": "github"
       }
     },
+    "guile-swayer": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1727116192,
+        "narHash": "sha256-wjqMikjTnbqVXdqNBL4jm3wUrp21+bNOAidORcyTAtE=",
+        "owner": "paulvictor",
+        "repo": "guile-swayer",
+        "rev": "bc26ca8e62eede095af705fc0c4c10bd139031c6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "paulvictor",
+        "repo": "guile-swayer",
+        "type": "github"
+      }
+    },
     "hercules-ci-effects": {
       "inputs": {
         "flake-parts": "flake-parts_2",
@@ -1010,6 +1026,7 @@
         "firefox-nightly": "firefox-nightly",
         "flake-utils": "flake-utils_3",
         "goodbyeAds": "goodbyeAds",
+        "guile-swayer": "guile-swayer",
         "homeManager": "homeManager",
         "impermanence": "impermanence",
         "juspay-config": "juspay-config",

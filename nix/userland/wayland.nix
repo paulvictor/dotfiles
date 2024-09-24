@@ -21,6 +21,7 @@ in
   ];
 
   imports = [
+    ./services/guile-swayer.nix
     ./sway.nix
     ./mako.nix
   ];
@@ -123,4 +124,6 @@ in
       };
     };
   };
+  services.stumpwm-like.enable = true;
 }
+

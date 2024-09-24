@@ -1,25 +1,31 @@
 {config, lib, pkgs, ...}:
-
+with lib;
 let
-  cfg = config.services.guile-swayer;
-in lib.mkIf cfg.enable
-  (let
-    sxhkdCommand = "${cfg.package}/bin/sxhkd ${toString cfg.extraOptions}";
-   in
-    {
-      systemd.user.services.sxhkd = {
-        Unit = {
-          Description = "SXHKD";
-#           BindsTo = [ "graphical-session.target" ];
-          After = [ "sway-session.target" ];
-        };
+  cfg = config.services.stumpwm-like;
+  command = "${config.home.homeDirectory}/dotfiles/stow/stumpwm-like/init.scm";
+in
 
-        Install = {
-          WantedBy = [ "default.target" ];
-        };
+{
+  options.services.stumpwm-like = {
+    enable = mkEnableOption "stumpwm like behaviour";
+  };
+  config =
+    lib.mkIf
+      cfg.enable
+      {
+        systemd.user.services.stumpwm-like = {
+          Unit = {
+            Description = "Make sway behave like stumpwm";
+            After = [ "sway-session.target" ];
+          };
 
-        Service = {
-          ExecStart = sxhkdCommand;
+          Install = {
+            WantedBy = [ "default.target" ];
+          };
+
+          Service = {
+            ExecStart = command;
+          };
         };
       };
-    })
+}

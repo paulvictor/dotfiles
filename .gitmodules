@@ -1,3 +1,6 @@
 [submodule "stow/stumpwm/.stumpwm.d/modules"]
 	path = stow/stumpwm/.stumpwm.d/modules
 	url = https://github.com/stumpwm/stumpwm-contrib.git
+[submodule "stow/stumpwm-like/guile-swayer"]
+	path = stow/stumpwm-like/guile-swayer
+	url = git@github.com:paulvictor/guile-swayer.git

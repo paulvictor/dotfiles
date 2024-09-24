@@ -25,7 +25,7 @@ rec {
 
   # Returns a derivation with the given name that copies the contents
   # of the given directory to $out.
-  copyDir = name : dir : pkgs.runCommand name { inherit dir; } ''
+  copyDir = name: dir: pkgs.runCommand name { inherit dir; } ''
     cp -rT $dir $out
   '';
 
