@@ -53,9 +53,16 @@ in
     enable = true;
     wrapperFeatures.gtk = true;
     systemd.enable = true;
+    extraConfigEarly = ''
+      exec_always "${pkgs.procps}/bin/pkill -f '.*stumpwm-like/init.scm'"
+    '';
+    extraConfig = ''
+      exec_always "sleep 1 && ~/.bin/stumpwm-like/init.scm"
+    '';
     config = {
       modifier = "Mod4"; # Super key
-      keybindings = lib.mkOptionDefault keybindings;
+      keybindings = lib.mkForce {}; #lib.mkOptionDefault keybindings;
+
       output = {
         "HDMI-A-1" = {
           mode = "2560x1440@60Hz";

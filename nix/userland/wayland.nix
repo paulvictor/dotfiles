@@ -124,6 +124,6 @@ in
       };
     };
   };
-  services.stumpwm-like.enable = true;
+  services.stumpwm-like.enable = false;
 }
 

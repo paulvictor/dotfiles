@@ -2,7 +2,7 @@
 !#
 
 (let* ((path (dirname (current-filename)))
-       (modules-path (string-join path "/guile-swayer")))
+       (modules-path (string-join `(,path "guile-swayer") "/")))
   (format #t "adding ~a to load path \n" modules-path)
   (add-to-load-path modules-path))
 
@@ -79,13 +79,9 @@
 (which-key-init)
 
 (define (show-rofi-message msg)
-  (hide-rofi-message)
-  (display (format #f "notify-send -t 1000 -e \"~a\"" msg))
-  (system (format #f "notify-send -t 1000 -e \"~a\"" msg)))
-
-(define (hide-rofi-message)
-  ;; (system "pkill -f '.*rofi -e.*'")
-  (format #t "hiding the rofi message"))
+  (let ((command  (format #f "notify-send -t 6000 -c sway.keymap -t 1000 -e \"~a\"" msg)))
+    (display command)
+    (system command)))
 
 (define (show-which-key submap bindings)
   (format #t "Displaying Submap ~a Bindings:\n" submap)
@@ -104,7 +100,7 @@
 (define (hide-which-key submap)
   (format #t "Hiding Submap Bindings:\n")
   ;; hide your which-key viewer (rofi, eww, etc.)
-  (hide-rofi-message))
+  )
 
 ;; add the display and hide hook functions
 (add-hook! which-key-display-keybindings-hook show-which-key)

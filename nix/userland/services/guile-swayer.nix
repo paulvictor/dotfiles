@@ -25,6 +25,7 @@ in
 
           Service = {
             ExecStart = command;
+            Environment = "PATH=${lib.makeBinPath (with pkgs;[guile slurp grim wl-clipboard libnotify fuzzel alacritty])}";
           };
         };
       };
