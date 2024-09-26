@@ -1,6 +1,6 @@
 #!/usr/bin/env guile
 !#
-
+; Assuming that this file has guile-swayers cloned in the same level
 (let* ((path (dirname (current-filename)))
        (modules-path (string-join `(,path "guile-swayer") "/")))
   (format #t "adding ~a to load path \n" modules-path)

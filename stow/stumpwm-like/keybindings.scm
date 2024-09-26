@@ -27,7 +27,7 @@
 
   ;; define root keybindings
   (general-define-keys
-   '("s-exclam" (sway-move-container-to-workspace 1) #:wk "Move to workspace 1"))
+   '("s-S-10" (sway-move-container-to-workspace 1) #:wk "Move to workspace 1"))
   (general-define-keys
 
    ;; window and group management
@@ -68,6 +68,7 @@
    `("s-S-RET" (exec "alacritty") #:wk "Spawn Terminal")
    `("s-e" (exec "emacsclient -c -n") #:wk "Emacs client")
    `("s-o" (exec "warpd --normal") #:wk "Control the rat with the mind")
+   `("s-p" (exec "passdo") #:wk "Type out the password")
    `("s-DEL" (exec "swaylock-fancy") #:wk "Lock")
    `("s-10" (sway-switch-workspace-id 1) #:wk "Switch ws 1")
    `("s-11" (sway-switch-workspace-id 2) #:wk "Switch ws 2")
