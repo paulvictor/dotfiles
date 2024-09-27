@@ -34,15 +34,6 @@ let
     "Alt+j" = "move workspace to output down";
     "Alt+k" = "move workspace to output up";
     "Alt+l" = "move workspace to output right";
-#     "Shift+slash" = "menu-surfraw";
-    # OCR a screen selection
-#     "hyper + x" = "${pkgs.imagemagick}/bin/convert x: -modulate 100,0 -resize 400% -set density 300 png:- | ${pkgs.tesseract}/bin/tesseract stdin stdout | ${pkgs.xclip}/bin/xclip -selection clipboard";
-    # Pulse Audio controls
-#     "XF86Audio{Raise,Lower}Volume" = "${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ {+5%,-5%}"; #increase sound volume
-#     "XF86AudioMute" =  "${pkgs.pulseaudio}/bin/pactl set-sink-mute  @DEFAULT_SINK@ toggle"; # mute sound
-    # "XF86MicMute" =  "pulseaudio-ctl mute-input"; # mute mic
-    # Sreen brightness controls
-#     "XF86MonBrightness{Up,Down}" = "${light}/bin/light -{A,U} 5";
   };
 
 in
