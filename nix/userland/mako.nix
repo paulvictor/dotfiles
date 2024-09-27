@@ -16,7 +16,6 @@
       [category=sway.keymap]
       background-color=#E6E6FA
       history=0
-      max-history=0
       default-timeout=6000
       height=1000
       padding=10,20,20,10

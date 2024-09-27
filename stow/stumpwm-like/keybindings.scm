@@ -26,8 +26,20 @@
   (general-init)
 
   ;; define root keybindings
-  (general-define-keys
-   '("s-S-10" (sway-move-container-to-workspace 1) #:wk "Move to workspace 1"))
+  (for-each
+   (lambda (i)
+     (let* ((keychord (+ i 9))
+            (with-prefix (format #f "s-~a" keychord))
+            (with-shifted-prefix (format #f "s-S-~a" keychord)))
+
+       (general-define-key with-prefix
+                           `(sway-switch-workspace-id ,i)
+                           #:wk (format #f "Switch to workspace ~a" i))
+       (general-define-key with-shifted-prefix
+                           `(sway-move-container-to-workspace ,i)
+                           #:wk (format #f "Move container to workspace ~a" i))))
+
+   (iota 9 1 1))
   (general-define-keys
 
    ;; window and group management
@@ -64,20 +76,14 @@
    `("s-," (sway-focus-container-sibling SWAY-SIBLING-PREV) #:wk "Cycle Tabs Previous")
 
    `("s-d" (exec "fuzzel") #:wk "Applications")
+   `("s-S-d" (exec "rofiElectronAppsRunner") #:wk "Electron Apps")
+   `("s-RET" (exec "emacsclient -c -n -e \"(pvr/new-eshell-window)\""))
    `("s-w" (sway-kill) #:wk "Kill Window")
    `("s-S-RET" (exec "alacritty") #:wk "Spawn Terminal")
    `("s-e" (exec "emacsclient -c -n") #:wk "Emacs client")
    `("s-o" (exec "warpd --normal") #:wk "Control the rat with the mind")
    `("s-p" (exec "passdo") #:wk "Type out the password")
-   `("s-DEL" (exec "swaylock-fancy") #:wk "Lock")
-   `("s-10" (sway-switch-workspace-id 1) #:wk "Switch ws 1")
-   `("s-11" (sway-switch-workspace-id 2) #:wk "Switch ws 2")
-   `("s-12" (sway-switch-workspace-id 3) #:wk "Switch ws 3")
-   `("s-13" (sway-switch-workspace-id 4) #:wk "Switch ws 4")
-   `("s-14" (sway-switch-workspace-id 5) #:wk "Switch ws 5")
-   `("s-15" (sway-switch-workspace-id 6) #:wk "Switch ws 6")
-   `("s-16" (sway-switch-workspace-id 7) #:wk "Switch ws 7")
-   `("s-17" (sway-switch-workspace-id 8) #:wk "Switch ws 8"))
+   `("s-DEL" (exec "swaylock-fancy") #:wk "Lock"))
 
   ;; define leader keymap
   (general-define-keys

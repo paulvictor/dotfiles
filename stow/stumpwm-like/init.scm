@@ -79,7 +79,7 @@
 (which-key-init)
 
 (define (show-rofi-message msg)
-  (let ((command  (format #f "notify-send -t 6000 -c sway.keymap -t 1000 -e \"~a\"" msg)))
+  (let ((command  (format #f "notify-send -t 6000 -c sway.keymap -e \"~a\"" msg)))
     (display command)
     (system command)))
 

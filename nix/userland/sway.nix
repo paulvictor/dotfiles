@@ -54,10 +54,11 @@ in
     wrapperFeatures.gtk = true;
     systemd.enable = true;
     extraConfigEarly = ''
-      exec_always "${pkgs.procps}/bin/pkill -f '.*stumpwm-like/init.scm'"
+      exec_always "${pkgs.procps}/bin/pkill -f '.*stumpwm-like/init.scm' || true"
     '';
     extraConfig = ''
-      exec_always "sleep 1 && ~/.bin/stumpwm-like/init.scm"
+      exec_always ~/.bin/stumpwm-like/init.scm
+      exec_always ${pkgs.alacritty}/bin/alacritty
     '';
     config = {
       modifier = "Mod4"; # Super key
