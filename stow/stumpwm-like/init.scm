@@ -32,6 +32,8 @@
 ;; subscribe to all events
 (sway-subscribe-all)
 
+(load "workspace-groups.scm")
+
 ;; configure workspace groups to sync groups
 ;; (define OUTPUTS '("eDP-1"))
 ;; (define GROUPS

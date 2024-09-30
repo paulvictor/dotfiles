@@ -47,10 +47,6 @@ in
     extraConfigEarly = ''
       exec_always "${pkgs.procps}/bin/pkill -f '.*stumpwm-like/init.scm' || true"
     '';
-    extraConfig = ''
-      exec_always ~/.bin/stumpwm-like/init.scm
-      exec_always ${pkgs.alacritty}/bin/alacritty
-    '';
     config = {
       modifier = "Mod4"; # Super key
       keybindings = lib.mkForce {}; #lib.mkOptionDefault keybindings;
@@ -79,9 +75,10 @@ in
       menu = "${pkgs.fuzzel}/bin/fuzzel";
       bars = [];
       startup = [
+        { command = "~/.bin/stumpwm-like/init.scm"; always = true; }
         { command = "systemctl --user restart waybar"; always = true; }
         { command = "systemctl --user restart emacs.service"; always = false; }
-
+        { command = "${pkgs.alacritty}/bin/alacritty"; always = true;}
       ];
     };
   };
