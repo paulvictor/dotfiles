@@ -36,10 +36,10 @@ let
   };
   tridactyl = pkgs.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {
     pname = "tridactyl";
-    version = "1.23.0pre6895";
+    version = "1.23.0pre7038";
     addonId = "tridactyl.vim.betas@cmcaine.co.uk";
-    url = "https://tridactyl.cmcaine.co.uk/betas/tridactyl2-1.24.0pre6905.xpi";
-    sha256 = "sha256-GVFJSJkAcWYkn/mrX6fgWC0oLj3o2oh2LLCq+DLpQZY=";
+    url = "https://tridactyl.cmcaine.co.uk/betas/tridactyl2-1.24.1pre7038.xpi";
+    sha256 = "070nrrgnz6v4hjdzgkvi31pnz79r8yn6cw1645f4p9f39ga945bb";
     meta = {};
   };
   tabfs = pkgs.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {

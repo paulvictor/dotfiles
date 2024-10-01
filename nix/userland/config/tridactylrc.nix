@@ -50,7 +50,7 @@ bind gD composite tabduplicate; tabdetach
 bind / fillcmdline find
 bind ? fillcmdline find -?
 bind n findnext 1
-bind N findnext -1
+bind N findnext 1 -?
 bind ,<Space> nohlsearch
 
 bind 0 fillcmdline_notrail tabopen https://pursuit.purescript.org/search?q=

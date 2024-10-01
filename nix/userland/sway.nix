@@ -75,7 +75,7 @@ in
       menu = "${pkgs.fuzzel}/bin/fuzzel";
       bars = [];
       startup = [
-        { command = "~/.bin/stumpwm-like/init.scm"; always = true; }
+        { command = "\"sleep 1 && ~/.bin/stumpwm-like/init.scm\""; always = true; }
         { command = "systemctl --user restart waybar"; always = true; }
         { command = "systemctl --user restart emacs.service"; always = false; }
         { command = "${pkgs.alacritty}/bin/alacritty"; always = true;}
