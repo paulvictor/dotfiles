@@ -27,19 +27,20 @@
 
   ;; define root keybindings
   (for-each
-   (lambda (i)
-     (let* ((keychord (+ i 9))
+   (lambda (ws k)
+     (let* ((keychord (+ k 9))
             (with-prefix (format #f "s-~a" keychord))
             (with-shifted-prefix (format #f "s-S-~a" keychord)))
 
        (general-define-key with-prefix
-                           `(sway-switch-workspace-id ,i)
-                           #:wk (format #f "Switch to workspace ~a" i))
+                           `(sway-switch-workspace ,ws)
+                           #:wk (format #f "Switch to workspace ~a" ws))
        (general-define-key with-shifted-prefix
-                           `(sway-move-container-to-workspace ,i)
-                           #:wk (format #f "Move container to workspace ~a" i))))
+                           `(sway-move-container-to-workspace ,ws)
+                           #:wk (format #f "Move container to workspace ~a" ws))))
 
-   (iota 9 1 1))
+   (map car WS-GROUPS)
+   (iota (length WS-GROUPS) 1))
   (general-define-keys
 
    ;; window and group management
@@ -124,9 +125,7 @@
      ("f" (sway-fullscreen SWAY-FULLSCREEN-TOGGLE) #:wk "Fullscreen")
      ("d" (sway-layout SWAY-LAYOUT-DEFAULT) #:wk "Default Layout")
      ("t" (sway-layout SWAY-LAYOUT-TABBED) #:wk "Tabbed Layout")
-     ("SPC"
-      (sway-layout-toggle
-       (string-join '("stacking" "tabbed" "splitv" "splith") " ")) #:wk "Switch layouts"))))
+     ("s" (sway-layout SWAY-LAYOUT-STACKING) #:wk "Stacking Layout"))))
 
 
 ;;    ;; rofi keymap
