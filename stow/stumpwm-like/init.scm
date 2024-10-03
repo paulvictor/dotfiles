@@ -24,13 +24,8 @@
 ;; a separate scheme file for look and feel configuration
 ;; (load "behavior.scm")
 
-;; init keybindings
-;; a separate scheme file for keybindings (using general)
 (load "workspace-groups.scm")
 (load "keybindings.scm")
-(keybindings-init)
-
-
 
 ;; subscribe to all events
 (sway-subscribe-all)
@@ -46,11 +41,11 @@
 ;; (auto-reload-init)
 
 ;; configure which key to show available keybindings
-(which-key-configure #:delay-idle 0.2)
+(which-key-configure #:delay-idle 1.2)
 (which-key-init)
 
 (define (show-rofi-message msg)
-  (let ((command  (format #f "notify-send -t 6000 -c sway.keymap -e \"~a\"" msg)))
+  (let ((command  (format #f "notify-send -t 5000 -c sway.keymap -e \"~a\"" msg)))
     (display command)
     (system command)))
 

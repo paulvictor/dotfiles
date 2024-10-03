@@ -172,3 +172,5 @@
 ;;    ;; brightness-keys
 ;;    `("XF86MonBrightnessUp" (exec "brightnessctl set +10%") #:wk "Increase Brightness")
 ;;    `("XF86MonBrightnessDown" (exec "brightnessctl set 10%-") #:wk "Decrease Brightness")
+
+(keybindings-init)
