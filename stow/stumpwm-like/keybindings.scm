@@ -59,18 +59,6 @@
    `("s-S-k" (sway-move-container SWAY-DIRECTION-UP) #:wk "Move Container Up")
    `("s-S-l" (sway-move-container SWAY-DIRECTION-RIGHT) #:wk "Move Container Right")
 
-   ;; switch workspace
-   `("s-C-h" (workspace-grid-switch-workspace-left) #:wk "Switch Workspace Left")
-   `("s-C-j" (workspace-grid-switch-workspace-down) #:wk "Switch Workspace Down")
-   `("s-C-k" (workspace-grid-switch-workspace-up) #:wk "Switch Workspace Up")
-   `("s-C-l" (workspace-grid-switch-workspace-right) #:wk "Switch Workspace Right")
-
-   ;; move container to workspace
-   `("s-M-C-h" (workspace-grid-move-container-to-workspace-left) #:wk "Move Container to Workspace Left")
-   `("s-M-C-j" (workspace-grid-move-container-to-workspace-down) #:wk "Move Container to Workspace Down")
-   `("s-M-C-k" (workspace-grid-move-container-to-workspace-up) #:wk "Move Container to Workspace Up")
-   `("s-M-C-l" (workspace-grid-move-container-to-workspace-right) #:wk "Move Container to Workspace Right")
-
    ;; Tab like cycling
    `("s-." (sway-focus-container-sibling SWAY-SIBLING-NEXT) #:wk "Cycle Tabs Next")
    `("s-," (sway-focus-container-sibling SWAY-SIBLING-PREV) #:wk "Cycle Tabs Previous")
@@ -173,3 +161,4 @@
 ;;    ;; brightness-keys
 ;;    `("XF86MonBrightnessUp" (exec "brightnessctl set +10%") #:wk "Increase Brightness")
 ;;    `("XF86MonBrightnessDown" (exec "brightnessctl set 10%-") #:wk "Decrease Brightness")
+

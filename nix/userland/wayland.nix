@@ -60,7 +60,7 @@ in
         command = "${sway}/bin/swaymsg \"output * dpms off\"";
         resumeCommand = "${sway}/bin/swaymsg \"output * dpms on\"";
       }
-      { timeout = 600; command = "systemctl suspend"; }
+      { timeout = 600; command = "${pkgs.systemd}/bin/systemctl suspend"; }
     ];
     events = [
       { event = "before-sleep"; command = "${lockPackage}/bin/swaylock-fancy";}
