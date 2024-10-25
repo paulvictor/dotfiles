@@ -13,6 +13,8 @@
              (modules auto-reload)
              (modules which-key)
              (system repl server)
+             (ice-9 pretty-print)
+             (libs sway-tree-helper)
              (swayipc))
 
 ;; (spawn-server (make-unix-domain-server-socket #:path "/tmp/viktor/swayer.sock"))
@@ -32,7 +34,7 @@
 ;; subscribe to all events
 (sway-subscribe-all)
 
-(load "workspace-groups.scm")
+;; (load "workspace-groups.scm")
 
 ;; configure workspace groups to sync groups
 ;; (define OUTPUTS '("eDP-1"))
@@ -108,6 +110,22 @@
 (add-hook! which-key-display-keybindings-hook show-which-key)
 ;; (add-hook! which-key-hide-keybindings-hook hide-which-key)
 
+(define prev-focused-window (sway-tree-node-focused))
+(define inactive-opacity 0.5)
+(define (make-inactive-windows-transparent window-event)
+  (display "window changed \n")
+  (set! e window-event)
+  (when (equal? "focus" (sway-window-event-change window-event))
+    (let* ((this-window (sway-window-event-container window-event))
+           (this-window-id (sway-tree-id this-window))
+           (prev-window-id (sway-tree-id prev-focused-window)))
+      (when (not (equal? this-window-id prev-window-id)) ;; See https://github.com/swaywm/sway/issues/2859
+        (let* ((command (format #f "[con_id=\"~a\"] opacity ~a" prev-window-id inactive-opacity)))
+          (sway-dispatch-command command)
+          (sway-opacity SWAY-OPACITY-SET 1)))
+      (set! prev-focused-window this-window))))
+
+(add-hook! sway-window-hook make-inactive-windows-transparent)
 ;; start listening to sway events
 (sway-start-event-listener-thread)
 (thread-join! SWAY-LISTENER-THREAD)
