@@ -121,7 +121,7 @@ in
         pdftk
         pursuit
         rofi
-        rxvt_unicode-with-plugins
+        rxvt-unicode
         scrot
         siji
 

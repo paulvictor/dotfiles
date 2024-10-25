@@ -13,7 +13,7 @@ with lib;
     experimental-features = nix-command flakes
     accept-flake-config = true
   '';
-  nix.package = pkgs.nixFlakes;
+  nix.package = pkgs.nixVersions.stable;
   nix.settings.system-features = [ "kvm" "big-parallel" ];
 
   hardware.enableRedistributableFirmware = mkDefault true;

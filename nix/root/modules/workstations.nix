@@ -15,7 +15,7 @@ with pkgs;
     htop
     man-pages
     neovim
-    posix_man_pages
+    man-pages-posix
     psmisc
     wget
   ] ++ lib.optionals isPhysicalDevice [
@@ -26,7 +26,6 @@ with pkgs;
     git
     gnupg
     home-manager
-    kmonad
     libnotify
     nix-prefetch-github
     patchelf
@@ -84,7 +83,7 @@ with pkgs;
   imports =
     lib.optionals isPhysicalDevice
       [
-        args.specialArgs.kmonad.nixosModules.default
+#         args.specialArgs.kmonad.nixosModules.default
         ./keyd.nix
       ];
 
