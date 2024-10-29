@@ -70,6 +70,7 @@ let
             lsp-mode
             lsp-ui
             macrostep
+            macrostep-geiser
             magit
             nerd-icons
             nerd-icons-completion

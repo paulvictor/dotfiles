@@ -112,16 +112,21 @@
 
 (define prev-focused-window (sway-tree-node-focused))
 (define inactive-opacity 0.5)
+
+(define* (container-command command container-id #:key (exec #t))
+  (let ((command-with-container-id (format #f "[con_id=\"~a\"] ~a" container-id command)))
+    (if exec (sway-dispatch-command command-with-container-id)
+        command-with-container-id)))
+
 (define (make-inactive-windows-transparent window-event)
   (display "window changed \n")
-  (set! e window-event)
   (when (equal? "focus" (sway-window-event-change window-event))
     (let* ((this-window (sway-window-event-container window-event))
            (this-window-id (sway-tree-id this-window))
            (prev-window-id (sway-tree-id prev-focused-window)))
       (when (not (equal? this-window-id prev-window-id)) ;; See https://github.com/swaywm/sway/issues/2859
-        (let* ((command (format #f "[con_id=\"~a\"] opacity ~a" prev-window-id inactive-opacity)))
-          (sway-dispatch-command command)
+        (let* ((command (sway-opacity SWAY-OPACITY-SET inactive-opacity #:exec #f)))
+          (container-command command prev-window-id)
           (sway-opacity SWAY-OPACITY-SET 1)))
       (set! prev-focused-window this-window))))
 
