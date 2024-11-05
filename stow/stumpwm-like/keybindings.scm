@@ -71,7 +71,17 @@
    `("s-e" (exec "emacsclient -c -n") #:wk "Emacs client")
    `("s-o" (exec "warpd --normal") #:wk "Control the rat with the mind")
    `("s-p" (exec "passdo") #:wk "Type out the password")
-   `("s-DEL" (exec "swaylock-fancy") #:wk "Lock"))
+   `("s-TAB"
+     (sway-switch-workspace SWAY-WORKSPACE-BACK-AND-FORTH #:auto-back-and-forth #f)
+     #:wk "Switch to previous workspace"))
+
+  (general-define-keys
+     #:prefix "s-DEL" #:wk "Exit"
+     `("l" (exec "loginctl lock-session") #:wk "Lock")
+     `("e" (exec "loginctl terminate-session \"\"") #:wk "Logout")
+     `("s" (exec "systemctl suspend") #:wk "Suspend")
+     `("r" (exec "systemctl reboot") #:wk "Reboot")
+     `("x" (exec "systemctl poweroff") #:wk "Poweroff"))
 
   ;; define leader keymap
   (general-define-keys

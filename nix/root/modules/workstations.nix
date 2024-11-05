@@ -46,7 +46,7 @@ with pkgs;
   services.udev.packages =
     lib.optionals isPhysicalDevice
       [ android-udev-rules yubikey-personalization ];
-  services.pcscd.enable = isPhysicalDevice;
+  # services.pcscd.enable = isPhysicalDevice;
   programs.adb.enable = isPhysicalDevice;
 
   hardware.keyboard.zsa.enable = isPhysicalDevice;
