@@ -106,6 +106,20 @@
   ;; hide your which-key viewer (rofi, eww, etc.)
   )
 
+
+(define (setup-outputs)
+  (let* ((dp-1-params '(("mode" "2560x1440@60Hz")
+                        ("pos" "1450" "523")))
+         (hdmi-a-1-params '(("mode" "2560x1440@60Hz")
+                            ("pos" "0" "0")
+                            ("transform" "270")))
+         (concat-all-nested-strings (lambda (ll)
+                                      (string-join (map string-join ll)))))
+    (sway-output "HDMI-A-1" (concat-all-nested-strings hdmi-a-1-params))
+    (sway-output "DP-1" (concat-all-nested-strings dp-1-params))))
+
+(setup-outputs)
+
 ;; add the display and hide hook functions
 (add-hook! which-key-display-keybindings-hook show-which-key)
 ;; (add-hook! which-key-hide-keybindings-hook hide-which-key)

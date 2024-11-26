@@ -918,7 +918,6 @@ Repeated invocations toggle between the two most recently open buffers."
 (load-file (concat user-emacs-directory "names.el"))
 (load-file (concat user-emacs-directory "eshell.el"))
 
-
 (setq display-buffer-alist
       (append display-buffer-alist
       '(
@@ -1108,3 +1107,4 @@ point reaches the beginning or end of the buffer, stop there."
 ;;   (with-eval-after-load 'exwm-randr
 ;;     (exwm-enable)
 ;;     (exwm-randr-mode 1)))
+(put 'downcase-region 'disabled nil)

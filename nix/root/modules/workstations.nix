@@ -46,7 +46,21 @@ with pkgs;
   services.udev.packages =
     lib.optionals isPhysicalDevice
       [ android-udev-rules yubikey-personalization ];
-  # services.pcscd.enable = isPhysicalDevice;
+#   security.polkit.enable = lib.mkForce false;
+
+  services.pcscd.enable = isPhysicalDevice;
+  users.groups.ykusers = { };
+  security.polkit.extraConfig = ''
+    polkit.addRule(function (action, subject) {
+      if (
+        (action.id == "org.debian.pcsc-lite.access_pcsc" ||
+          action.id == "org.debian.pcsc-lite.access_card") &&
+         subject.isInGroup("ykusers")
+      ) {
+        return polkit.Result.YES;
+      }
+    });
+  '';
   programs.adb.enable = isPhysicalDevice;
 
   hardware.keyboard.zsa.enable = isPhysicalDevice;

@@ -132,7 +132,7 @@ let
     gst-plugins-ugly
   ];
   webkitDeps = with pkgs; [
-    webkitgtk
+    webkitgtk_4_1
     glib gtk3
     glib-networking
     gsettings-desktop-schemas

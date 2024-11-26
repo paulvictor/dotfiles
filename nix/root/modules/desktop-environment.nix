@@ -15,7 +15,7 @@ in {
     ./pipewire.nix
   ];
   services.libinput.enable = true;
-  security.polkit.enable = true;
+#   security.polkit.enable = lib.mkForce false;
   hardware.graphics.enable = true; # when using QEMU KVM
   security.pam.services.swaylock.text = "auth include login";
   programs.ydotool.enable = true;

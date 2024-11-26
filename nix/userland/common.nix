@@ -165,9 +165,10 @@ with pkgs;
       no-symkey-cache = true;
     };
     scdaemonSettings = {
-      #disable-ccid = true;
+      disable-ccid = true;
       pcsc-driver = "${pkgs.pcsclite.lib}/lib/libpcsclite.so.1";
       card-timeout = "1";
+      "reader-port Yubico Yubikey" = true;
     };
   };
   programs.password-store = {

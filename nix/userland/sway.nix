@@ -52,12 +52,13 @@ in
       keybindings = lib.mkForce {}; #lib.mkOptionDefault keybindings;
 
       output = {
+        "DP-1" = {
+          mode = "2560x1440@60Hz";
+          pos = "1440 523";
+        };
         "HDMI-A-1" = {
           mode = "2560x1440@60Hz";
           transform = "270";
-        };
-        "DP-1" = {
-          mode = "2560x1440@60Hz";
         };
       };
       focus = {
