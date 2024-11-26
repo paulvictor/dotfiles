@@ -9,6 +9,20 @@ let
     hash = "sha256-bHrfc9bGKY57+KGDRH5CdRflWH5va4jzGkMzXRrapg4=";
   };
   emacs-webkit = callPackage "${emacs-webkit-src}/default.nix" { inherit pkgs; };
+  ngnk-mode =
+    let
+      version = "c2b6f3d98f566061369bd00a91124da4280c9398";
+      src = fetchFromGitHub {
+        owner = "gitonthescene";
+        repo = "ngnk-mode";
+        rev = version;
+        hash = "sha256-CSjVKWhAdYC4JZyTx0B8dS7I99y+mnCdnmRe2/Pfyx0=";
+      };
+    in
+      pkgs.emacsPackages.trivialBuild {
+        pname = "ngnk-mode";
+        inherit version src;
+      };
   _emacs =
     if specialArgs.withGUI then emacs-unstable.override({withGTK3 = true; withImageMagick = true; }) else emacs-unstable-nox;
   customizedEmacs =
@@ -75,6 +89,7 @@ let
             nerd-icons
             nerd-icons-completion
             nerd-icons-corfu
+            ngnk-mode
             nov
             nerd-icons-dired
             nix-mode

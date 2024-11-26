@@ -291,8 +291,9 @@ Also move to the next line, since that's the most frequent action after"
   :hook (minibuffer-setup . vertico-repeat-save) ; Make sure vertico state is saved for `vertico-repeat'
   :bind
   (;; ("M-." . #'vertico-repeat) ; Perfectly return to the state of the last Vertico minibuffer usage
-;;    ("C-." . #'vertico-repeat-select)
+   ;;    ("C-." . #'vertico-repeat-select)
    :map vertico-map
+   ("M-<RETURN>" . vertico-exit-input)
    ("C-M-n" . #'vertico-next-group)
    ("C-M-p" . #'vertico-previous-group))
   :custom
@@ -874,10 +875,13 @@ Repeated invocations toggle between the two most recently open buffers."
 (use-package org
   :custom
   (org-special-ctrl-a/e t)
+  (org-return-follow-links t)
   (org-M-RET-may-split-line
    '((headline . nil)
      (item . nil)
-     (default . t))))
+     (default . t)))
+  :bind (:map org-mode-map
+              ("C-M-i" . completion-at-point)))
 
 (use-package org-tree-slide
   :bind (:map org-tree-slide-mode-map
@@ -978,6 +982,7 @@ Repeated invocations toggle between the two most recently open buffers."
 
 (defun add-line-above ()
   (interactive)
+  ;; FIXME Doesnt work at the beginning of the buffer
   (previous-line)
   (end-of-line)
   (newline-and-indent))
@@ -1107,4 +1112,21 @@ point reaches the beginning or end of the buffer, stop there."
 ;;   (with-eval-after-load 'exwm-randr
 ;;     (exwm-enable)
 ;;     (exwm-randr-mode 1)))
-(put 'downcase-region 'disabled nil)
+
+
+(use-package ngnk-mode)
+(use-package ngnk-cli)
+;; One thing is that C-. is not bound to anythng and can be used as a prefix
+(use-package org-roam
+  :custom
+  (org-roam-directory "~/stuff/org-roam-notes/")
+  (org-roam-completion-everywhere t)
+  (org-roam-capture-templates
+   '(("d" "default" plain "%?"
+      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)))
+  :bind (("C-c r t" . org-roam-buffer-toggle)
+         ("C-c r f" . org-roam-node-find)
+         ("C-c r i" . org-roam-node-insert))
+  :config
+  (org-roam-setup))
