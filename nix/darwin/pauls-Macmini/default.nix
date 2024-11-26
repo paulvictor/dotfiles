@@ -52,11 +52,11 @@ darwin.lib.darwinSystem {
     setupNixPath
     commonModules
     machineSpecific
-    ../services/sshd.nix
+#     ../services/sshd.nix
      # https://evilmartians.com/chronicles/stick-with-security-yubikey-ssh-gnupg-macos
-    ../services/gpg-agent.nix
-    ../services/ln-ssh-auth-sock.nix
-    ../services/tuns.nix
+#     ../services/gpg-agent.nix
+#     ../services/ln-ssh-auth-sock.nix
+#     ../services/tuns.nix
     ../services/power-mgmt.nix
     ../modules/networking.nix
     inputs.juspay-config.nixosModules.${system}.juspay-cachix
