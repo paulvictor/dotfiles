@@ -29,7 +29,7 @@ with pkgs;
     dunst
 #     findWindowByTitle
     adwaita-icon-theme
-#     nyxt
+    nyxt
     pa_applet
     paprefs
     passdo
