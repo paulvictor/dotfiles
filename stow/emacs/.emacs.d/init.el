@@ -23,7 +23,7 @@
 ;; Use straight.el for use-package expressions
 (straight-use-package 'use-package)
 
-;; (setq straight-use-package-by-default t) ;; like setting :straight t forall use-package forms
+;;  (setq straight-use-package-by-default t) ;; like setting :straight t forall use-package forms
 
 (use-package package
   :config
@@ -182,9 +182,18 @@
 
 (defun pvr/set-font-faces ()
   (set-mouse-color "white")
-  (set-face-attribute 'default nil :family "VictorMono Nerd Font" :height 110 :weight 'bold)
+
+  ;;   (set-face-attribute 'default nil :family "UDEV Gothic 35NFLG" :height 110)
+  ;;   (set-face-attribute 'default nil :family "Monoid Nerd Font" :height 110)
+
+;;   (set-face-attribute 'default nil :family "VictorMono Nerd Font" :height 110 :weight 'bold)
 ;;   (set-face-attribute 'term nil :family "IosevkaTerm Nerd Font Mono" :height 60)
 ;;   (set-face-attribute 'fixed-pitch nil :font "Iosevka Fixed Slab" :height 110 :weight 'bold)
+  (set-face-attribute 'default nil :family "JetBrainsMono Nerd Font" :height 110)
+  (set-face-attribute 'bold nil :weight 'semibold)
+  (set-face-attribute 'italic nil :slant 'oblique)
+  (set-fontset-font t nil "Symbols Nerd Font" nil 'append)
+
   (set-frame-parameter (selected-frame) 'alpha '(90 . 90)))
 
 (if (daemonp)
@@ -252,7 +261,6 @@
   (doom-modeline-persp-name t)
   (doom-modeline-display-default-persp-name nil)
   (doom-modeline-persp-icon t)
-  (doom-modeline-modal-icon t)
   :config
   (doom-modeline-mode 1))
 
@@ -326,8 +334,10 @@ Also move to the next line, since that's the most frequent action after"
 
 (use-package nerd-icons
   :custom
-  (nerd-icons-font-family "Symbols Nerd Font Mono"))
+  (nerd-icons-font-family "Symbols Nerd Font"))
 
+
+;; Commenting to get it running
 (use-package nerd-icons-completion
   :init
   (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup)
@@ -337,16 +347,6 @@ Also move to the next line, since that's the most frequent action after"
 (use-package nerd-icons-dired
   :hook
   (dired-mode . nerd-icons-dired-mode))
-
-(use-package orderless
-  :custom
-  (orderless-matching-styles
-   '(orderless-literal
-     orderless-prefixes
-     orderless-initialism
-     orderless-regexp))
-  (completion-category-overrides '((file (styles basic partial-completion)))) ;; For tramp to work seamlessly
-  (completion-styles '(orderless)))
 
 (use-package project
   :custom

@@ -24,7 +24,9 @@ let
         inherit version src;
       };
   _emacs =
-    if specialArgs.withGUI then emacs-unstable.override({withGTK3 = true; withImageMagick = true; }) else emacs-unstable-nox;
+    if specialArgs.withGUI then emacs-unstable else emacs-unstable-nox;
+  #
+#     if specialArgs.withGUI then emacs-unstable.override({withGTK3 = true; withImageMagick = true; }) else emacs-unstable-nox;
   customizedEmacs =
     (emacsPackagesFor _emacs)
       .emacsWithPackages(epkgs:
@@ -45,7 +47,7 @@ let
             copy-as-format
             dash
             dashboard
-            dired-single
+#             dired-single
             direnv
             doom-modeline
             doom-themes

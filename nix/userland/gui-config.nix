@@ -6,7 +6,6 @@ let
   source-code-pro-nerdfonts = pkgs.callPackage ./packages/source-code-pro-nerdfonts {};
   hack-nerdfonts = pkgs.callPackage ./packages/hack-nerdfonts.nix {};
 #       firacode-nerdfonts = pkgs.callPackage ./packages/fira-code-nerdfonts.nix {};
-  victor-mono-nerdfonts = pkgs.callPackage ./packages/victor-mono-nerdfonts/default.nix {};
   all-the-icons-fonts = pkgs.callPackage ./packages/all-the-icons-fonts.nix {};
   pursuit = pkgs.callPackage ./scripts/pursuit.nix {};
   menu-surfraw = pkgs.callPackage ./scripts/menu-surfraw.nix {};
@@ -96,7 +95,6 @@ in
   {
     home.packages =
       [
-        (nerdfonts.override { fonts = [ "Hack" "VictorMono" "IosevkaTerm" "Iosevka" "SourceCodePro" "DejaVuSansMono" "FiraCode" "NerdFontsSymbolsOnly" ]; })
         all-the-icons-fonts
         autorandr
         brotab
@@ -137,11 +135,22 @@ in
         zathura # Crashing.
         zoom-us
         (vivaldi.override { proprietaryCodecs = true; enableWidevine = true;})
-        (iosevka-bin.override { variant = "Aile"; })
-        (iosevka-bin.override { variant = "Slab"; })
-        (iosevka-bin.override { variant = "Curly"; })
         (ungoogled-chromium.override { enableWideVine = true;})
-      ];
+      ] ++ (with nerd-fonts;
+          [
+#             hack
+            victor-mono
+            jetbrains-mono
+            udev-gothic-nf
+            plemoljp-nf
+#             iosevka-term
+#             iosevka
+            sauce-code-pro
+#             dejavu-sans-mono
+            symbols-only
+#             fira-code
+            monoid
+          ]);
     xresources =
       let
         xresourcesFile = callPackage ./scripts/xresources.nix { template = "rxvt-unicode"; brightness = "dark"; scheme = "tomorrow"; };

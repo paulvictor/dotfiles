@@ -16,8 +16,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     emacsOverlay = {
-      url = "github:nix-community/emacs-overlay/8a94f9d557f3f8b372f03f18b2e1be3820d7da7f";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/emacs-overlay/master";
     };
     neovim.url = "github:nix-community/neovim-nightly-overlay";
     impermanence.url = "github:nix-community/impermanence";

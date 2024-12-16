@@ -12,3 +12,7 @@ stow/stumpwm/.stumpwm.d/stumpwm.log.1
 /nix/root/configuraton.nix
 /stow/emacs/.emacs.d/init.org
 /stow/emacs/.emacs.d/eln-cache/
+/stow/emacs/.emacs.d/elpa/
+/stow/emacs/.emacs.d/history
+/stow/emacs/.emacs.d/transient/
+/stow/emacs/.emacs.d/straight/
