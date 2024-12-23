@@ -189,8 +189,12 @@
 ;;   (set-face-attribute 'default nil :family "VictorMono Nerd Font" :height 110 :weight 'bold)
 ;;   (set-face-attribute 'term nil :family "IosevkaTerm Nerd Font Mono" :height 60)
 ;;   (set-face-attribute 'fixed-pitch nil :font "Iosevka Fixed Slab" :height 110 :weight 'bold)
-  (set-face-attribute 'default nil :family "JetBrainsMono Nerd Font" :height 110)
-  (set-face-attribute 'bold nil :weight 'semibold)
+  (set-face-attribute 'default nil :family "JetBrainsMono Nerd Font" :height 120)
+;;     (set-face-attribute 'default nil :family "DejaVu Serif" :height 110)
+
+  ;;   (set-face-attribute 'default nil :family "JuliaMono" :height 110)
+
+  (set-face-attribute 'bold nil :weight 'bold)
   (set-face-attribute 'italic nil :slant 'oblique)
   (set-fontset-font t nil "Symbols Nerd Font" nil 'append)
 

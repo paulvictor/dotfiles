@@ -16,3 +16,5 @@ stow/stumpwm/.stumpwm.d/stumpwm.log.1
 /stow/emacs/.emacs.d/history
 /stow/emacs/.emacs.d/transient/
 /stow/emacs/.emacs.d/straight/
+/stow/emacs/.emacs.d/auto-save-list/
+/stow/emacs/.emacs.d/eshell/

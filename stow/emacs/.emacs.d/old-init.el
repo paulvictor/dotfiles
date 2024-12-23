@@ -472,7 +472,8 @@ Repeated invocations toggle between the two most recently open buffers."
                   (org-level-6 . 0.8)
                   (org-level-7 . 0.9)
                   (org-level-8 . 0.8)))
-    (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face)))
+    ;; (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face))
+    )
   (setq org-capture-templates
         '(("l" "Useful Links" entry
            (file+olp "Links.org" "Links")

@@ -100,7 +100,7 @@ in
         brotab
         cantarell-fonts
         custom-vieb
-        dejavu_fonts
+        dejavu_fonts.full-ttf
         electronApps
         font-awesome
         google-chrome
@@ -138,17 +138,17 @@ in
         (ungoogled-chromium.override { enableWideVine = true;})
       ] ++ (with nerd-fonts;
           [
-#             hack
+            #hack
             victor-mono
             jetbrains-mono
             udev-gothic-nf
             plemoljp-nf
-#             iosevka-term
-#             iosevka
+            #iosevka-term
+            #iosevka
             sauce-code-pro
 #             dejavu-sans-mono
             symbols-only
-#             fira-code
+            #fira-code
             monoid
           ]);
     xresources =
