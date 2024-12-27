@@ -28,7 +28,7 @@ in
     extraGroups = [ "networkmanager" "audio" "wheel" "tty" "lp" "fuse" "docker" "adbusers" "netdev" "lxd" "disk" "video" "keys" "libvirtd" "qemu-libvirtd" "pipewire" "ydotool" "ykusers" ];
     shell = pkgs.zsh;
     openssh.authorizedKeys.keyFiles =
-        [ ghKey ];
+        [ ];
   };
 
 

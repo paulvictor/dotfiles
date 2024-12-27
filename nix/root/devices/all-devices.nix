@@ -20,7 +20,7 @@
     system = "x86_64-linux";
     customisations = {
       isWorkMachine = true;
-      onZFS = true;
+      onZFS = false;
     };
   }
   {

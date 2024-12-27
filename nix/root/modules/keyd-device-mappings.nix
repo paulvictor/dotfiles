@@ -96,7 +96,7 @@ let
 
 in {
   uriel.builtin = {
-    ids = ["0001:0001:098cf552"];
+    ids = ["0001:0001:a31694d4"];
     settings = {
       inherit base global main numbers symbols;#  toBase;
       inherit "capsWord:S";

@@ -4,72 +4,44 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
+
+
   imports =
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelParams = pkgs.lib.mkDefault [ "acpi_rev_override" ];
-
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "i915" "intel_agp" "rtsx_pci_sdmmc" ];
-  boot.loader.grub.zfsSupport = true;
   boot.initrd.kernelModules = [ ];
-  boot.supportedFilesystems = [ "zfs" ];
-  boot.initrd.supportedFilesystems = [ "zfs" ];
-  # acpi_call only for laptops
   boot.kernelModules = [ "kvm-intel" "acpi_call" ];
-  boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
-
-  # acpi_call only for laptops
-  # boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
 
   fileSystems."/" =
-    { device = "master/local/root";
-      fsType = "zfs";
+    { device = "/dev/disk/by-uuid/aa1a338a-ab76-4831-b2bc-39419646f608";
+      fsType = "ext4";
     };
 
-  fileSystems."/nix" =
-    { device = "master/local/nix";
-      fsType = "zfs";
-    };
-
-  fileSystems."/gnu" =
-    { device = "master/local/gnu";
-      fsType = "zfs";
-    };
-
-  fileSystems."/tmp" =
-    { device = "master/local/tmp";
-      fsType = "zfs";
-    };
+  boot.initrd.luks.devices."root".device = "/dev/disk/by-uuid/d49b1a24-5ecd-46ce-ba27-f6ae73644f8c";
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-label/BOOT";
+    { device = "/dev/disk/by-uuid/12CE-A600";
       fsType = "vfat";
+      options = [ "fmask=0077" "dmask=0077" ];
     };
 
-  fileSystems."/persist" =
-    { device = "master/safe/persist";
-      fsType = "zfs";
-      neededForBoot = true;
-    };
+  swapDevices = [ ];
 
-  fileSystems."/home" =
-    { device = "master/safe/home";
-      fsType = "zfs";
-    };
+  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
+  # (the default) this is the recommended approach. When using systemd-networkd it's
+  # still possible to use this option, but it's recommended to use it in conjunction
+  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
+  networking.useDHCP = lib.mkDefault true;
 
-  fileSystems."/tomb" =
-    { device = "master/safe/tomb";
-      fsType = "zfs";
-      neededForBoot = true;
-    };
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
-  fileSystems."/var/lib/bluetooth" = {
-    device = "/persist/var/lib/bluetooth";
-    options = [ "bind" "noauto" "x-systemd.automount" ];
-    noCheck = true;
-  };
+
+  # acpi_call only for laptops
+  boot.kernelParams = pkgs.lib.mkDefault [ "acpi_rev_override" ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 

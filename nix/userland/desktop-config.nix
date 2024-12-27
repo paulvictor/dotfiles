@@ -47,13 +47,6 @@ with pkgs;
     xsel
   ];
 
-  home.persistence."/persist/home/viktor" = {
-    allowOther = false;
-    directories = [
-      "Downloads"
-    ] ++ (lib.optional (specialArgs.hostName != "sorlag") "crypt");
-  };
-
   xdg.configFile.rofi = {
     recursive = true;
     source = fetchFromGitHub {
