@@ -39,8 +39,5 @@ with lib;
     optionals isPhysicalDevice [
       ./modules/desktop-environment.nix
       ./modules/networking.nix
-    ] ++
-    optionals (customisations.onZFS or false) [
-      ./modules/impermanence-zfs.nix
     ];
 }

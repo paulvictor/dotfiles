@@ -59,6 +59,5 @@ darwin.lib.darwinSystem {
 #     ../services/tuns.nix
     ../services/power-mgmt.nix
     ../modules/networking.nix
-    inputs.juspay-config.nixosModules.${system}.juspay-cachix
   ];
 }

@@ -25,7 +25,6 @@ let
       customisations = args.customisations or {};
       common = {
         imports = [
-          inputs.impermanence.nixosModules.impermanence
           ../common-config.nix
           ../caches.nix
 #           ../tailscale.nix
@@ -49,7 +48,7 @@ let
       ../modules/viktor.nix
       ../modules/workstations.nix
       ../modules/ssh.nix
-    ] ++ (optionals (customisations.isWorkMachine or false) [ inputs.juspay-config.nixosModules.${system}.juspay-cachix ]);
+    ];
 
   mkNixosSystem = {hostName, system, customisations, isPhysicalDevice, extraModules}:
     let

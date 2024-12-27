@@ -1,11 +1,6 @@
 {
   description = "Meta Config";
 
-#   nixConfig = {
-#     substituters = [ "https://nix-community.cachix.org" ];
-#     trusted-public-keys = [ "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" ];
-#   };
-
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
@@ -19,13 +14,11 @@
       url = "github:nix-community/emacs-overlay/master";
     };
     neovim.url = "github:nix-community/neovim-nightly-overlay";
-    impermanence.url = "github:nix-community/impermanence";
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nur.url = "github:nix-community/nur";
-    mozilla.url = "github:mozilla/nixpkgs-mozilla";
     ngnk.url = "github:nathyong/ngnk-nix";
     ngnk.inputs.nixpkgs.follows = "nixpkgs";
     ngnk.inputs.flake-utils.follows = "flake-utils";
@@ -33,26 +26,11 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     # Adblock hosts
-    stevenBlack.url = "github:StevenBlack/hosts/master";
-    stevenBlack.flake = false;
     goodbyeAds.url = "github:jerryn70/GoodbyeAds/master";
     goodbyeAds.flake = false;
 
-    kmonad = {
-      url = "github:kmonad/kmonad/master?dir=nix";
-#       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    juspay-config = {
-      url = "git+ssh://git@bitbucket.org/juspay/pauls-work-config.git";
-    };
-
     nix-cl = {
       url = "github:Uthar/nix-cl/master";
-    };
-
-    comma = {
-      url = "github:nix-community/comma/master";
     };
 
     nix-index-database = {
@@ -84,6 +62,9 @@
       url = "github:paulvictor/guile-swayer";
       flake = false;
     };
+
+    # see https://determinate.systems/posts/extending-nixos-configurations/#using-private-github-inputs-in-flakes
+    # to integrate private flakes
 
     magix = {
       url = "github:dschrempf/magix";
@@ -129,14 +110,12 @@
         electron-apps
         wallpaper-overlay
         surfraw-overlay
-        inputs.nur.overlay
-        inputs.mozilla.overlays.firefox
+        inputs.nur.overlays.default
         ql2nix-overlay
         inputs.ngnk.overlay
         emacsOverlay.overlay
         pcloudcc-overlay
         xsecurelock-overlay
-        inputs.comma.overlays.default
         rofi-theme-overlay
         actual-server-overlay
         warpd-overlay
@@ -149,12 +128,10 @@
         pass-override-overlay
         ffmpeg-overlay
         electron-apps
-        inputs.nur.overlay
-        inputs.mozilla.overlays.firefox
+        inputs.nur.overlays.default
         ql2nix-overlay
         inputs.ngnk.overlay
         emacsOverlay.overlay
-        inputs.comma.overlays.default
       ];
       pkgsFor = system:
         let

@@ -1,25 +1,15 @@
 { config, pkgs, lib, specialArgs, ... }:
 
 let
-
   shareLink = pkgs.callPackage ./scripts/shareLink.nix { inherit pkgs config; };
-
   customizedEmacs = pkgs.callPackage ./packages/emax {};
-
-  mk-jail-profile = import ./config/jail-profile.nix;
-
-  pms = pkgs.callPackage ./packages/pms {};
-
 in
 with pkgs;
 {
   home.packages = [
     awscli2
-    comma
     ddgr
     doctl
-    fzf
-    # jailed-firefox
     ssm-session-manager-plugin
     keybase
     lsof
@@ -30,12 +20,9 @@ with pkgs;
     openssh
     openssl
     pbgopy
-#     pms
     prettyping
-    qemu
     skim
     stow
-    #texlive.combined.scheme-full
     tree
     unzip
     vifm
@@ -50,10 +37,6 @@ with pkgs;
     tealdeer
     bandwhich
     grex
-  ] ++
-  lib.optionals (!python310Packages.pyopenssl.meta.broken) [
-    haskellPackages.niv
-    mpc_cli
   ] ++
   lib.optionals (specialArgs.isLinux) [
     ffmpeg-full
@@ -210,4 +193,7 @@ with pkgs;
     GNUPGHOME = "${config.home.homeDirectory}/.gnupg";
     EDITOR = "emacsclient -c -n";
   };
+
+  programs.nix-index-database.comma.enable = true;
+
 }
