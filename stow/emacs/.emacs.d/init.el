@@ -1002,7 +1002,7 @@ Repeated invocations toggle between the two most recently open buffers."
       (local-set-key (kbd "C-<return>" ) 'add-line-below)
       (local-set-key (kbd "M-<return>") 'add-line-above)))
 
-(global-set-key (kbd "C-x k") #'kill-this-buffer)
+(global-set-key (kbd "C-x k") #'kill-current-buffer)
 (global-set-key (kbd "C-<tab>") #'next-buffer)
 (global-set-key (kbd "C-<iso-lefttab>") #'previous-buffer)
 
@@ -1123,7 +1123,7 @@ point reaches the beginning or end of the buffer, stop there."
 ;; One thing is that C-. is not bound to anythng and can be used as a prefix
 (use-package org-roam
   :custom
-  (org-roam-directory "~/stuff/org-roam-notes/")
+  (org-roam-directory "~/stuff/org-notes/")
   (org-roam-completion-everywhere t)
   (org-roam-capture-templates
    '(("d" "default" plain "%?"
@@ -1134,3 +1134,14 @@ point reaches the beginning or end of the buffer, stop there."
          ("C-c r i" . org-roam-node-insert))
   :config
   (org-roam-setup))
+
+(use-package hydra)
+(global-set-key (kbd "C-M-<tab>")
+                (defhydra hydra-zoom ()
+                  "zoom"
+                  ("+" text-scale-increase "in")
+                  ("=" text-scale-decrease "out")
+                  ;; More things to hydra
+                  ;; Winner undo/redo
+                  ;; Next/prev buffer in project
+                  ("q" nil "quit")))
