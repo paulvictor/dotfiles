@@ -52,7 +52,8 @@ with pkgs;
 
   imports = [
     ./zsh.nix
-  ] ++ lib.optional specialArgs.isLinux ./email.nix;
+    ./himalaya.nix
+  ]; # ++ lib.optional specialArgs.isLinux ./email.nix;
 
   programs.direnv = {
     enable = true;
