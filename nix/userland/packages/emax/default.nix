@@ -98,6 +98,7 @@ let
             nix-modeline
             nix-sandbox
             no-littering
+            org-download
             org-make-toc
             org-roam
             org-superstar

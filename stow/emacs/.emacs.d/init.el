@@ -950,6 +950,7 @@ Repeated invocations toggle between the two most recently open buffers."
          (window-height . 0.3)
          (dedicated . t)))))
 
+
 (defun indent-between-pair (&rest _ignored)
   (newline)
   (indent-according-to-mode)
@@ -1125,15 +1126,42 @@ point reaches the beginning or end of the buffer, stop there."
   :custom
   (org-roam-directory "~/stuff/org-notes/")
   (org-roam-completion-everywhere t)
+  (org-roam-mode-sections '((org-roam-backlinks-section :unique t)
+                            org-roam-reflinks-section))
   (org-roam-capture-templates
    '(("d" "default" plain "%?"
       :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
       :unnarrowed t)))
   :bind (("C-c r t" . org-roam-buffer-toggle)
          ("C-c r f" . org-roam-node-find)
+         ("C-c r c" . org-roam-capture)
          ("C-c r i" . org-roam-node-insert))
   :config
+
   (org-roam-setup))
+
+
+(add-to-list 'display-buffer-alist
+             '("\\*org-roam\\*"
+               (display-buffer-in-side-window)
+               (side . right)
+               (slot . 0)
+               (window-width . 0.33)
+               (window-parameters . ((no-other-window . t)
+                                     (no-delete-other-windows . t)))))
+
+(use-package browse-url
+  :custom
+;;   (browse-url-browser-function #'browse-url-firefox) ;; We cant set this up properly yet because we only have firefox-devedition. If we can create a symlink, would solve
+  (browse-url-firefox-new-window-is-tab t))
+
+
+(use-package org-download
+  :hook
+  ((org-mode dired-mode) . org-download-enable)
+  :custom
+  (org-download-method 'attach)
+  (org-download-screenshot-method "grim + slurp"))
 
 (use-package hydra)
 (global-set-key (kbd "C-M-<tab>")
