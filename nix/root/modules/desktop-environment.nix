@@ -15,7 +15,6 @@ in {
     ./pipewire.nix
   ];
   services.libinput.enable = true;
-#   security.polkit.enable = lib.mkForce false;
   hardware.graphics.enable = true; # when using QEMU KVM
   security.pam.services.swaylock.text = "auth include login";
   programs.ydotool.enable = true;
@@ -96,4 +95,54 @@ in {
 
   programs.dconf.enable = true;
 
+  # TODO screen sharing doesnt work yet
+  # see https://github.com/emersion/xdg-desktop-portal-wlr/wiki/%22It-doesn't-work%22-Troubleshooting-Checklist
+  # https://mozilla.github.io/webrtc-landing/gum_test.html
+  # https://soyuka.me/make-screen-sharing-wayland-sway-work/
+  # https://github.com/emersion/xdg-desktop-portal-wlr/blob/master/contrib/wlroots-portals.conf
+  # https://gitlab.freedesktop.org/pipewire/wireplumber/-/issues/454
+  # https://github.com/emersion/xdg-desktop-portal-wlr/wiki/Screencast-Compatibility
+  # https://discourse.nixos.org/t/xdg-portals-all-broken/48308/9
+  # https://mynixos.com/nixpkgs/option/xdg.portal.config
+  # https://github.com/emersion/xdg-desktop-portal-wlr/wiki/%22It-doesn't-work%22-Troubleshooting-Checklist
+  # https://github.com/emersion/xdg-desktop-portal-wlr/blob/master/contrib/wlroots-portals.conf
+  # https://github.com/NixOS/nixpkgs/blob/nixos-24.11/nixos/modules/config/xdg/portal.nix
+  xdg.portal = {
+    enable = true;
+
+    wlr.enable = true;
+    wlr.settings = {
+      screencast = {
+        output_name = "HDMI-A-1";
+        max_fps = 30;
+        chooser_type = "simple";
+        chooser_cmd = "${pkgs.slurp}/bin/slurp -f %o -or";
+      };
+    };
+    extraPortals = [
+      pkgs.xdg-desktop-portal-wlr
+      pkgs.xdg-desktop-portal-gtk
+    ];
+    configPackages = [pkgs.xdg-desktop-portal-wlr pkgs.xdg-desktop-portal-gtk];
+    config = {
+      common = {
+        default = ["gtk"];
+      };
+      wlroots = {
+        "org.freedesktop.impl.portal.Screenshot" = "wlr";
+        "org.freedesktop.impl.portal.ScreenCast" = "wlr";
+      };
+    };
+
+  };
+  environment.systemPackages = with pkgs; [
+    xdg-desktop-portal-wlr
+    xdg-desktop-portal-gtk
+  ];
+
 }
+# [screencast]
+# output_name=
+# max_fps=30
+# chooser_cmd=slurp -f %o -or
+# chooser_type=simple

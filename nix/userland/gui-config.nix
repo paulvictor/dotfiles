@@ -180,6 +180,7 @@ in
         "usual" = {
           id = 2;
           settings = {
+            "media.peerconnection.enabled" = true;
             "browser.shell.checkDefaultBrowser" = false;
             "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
             "network.http.pipelining" = true;
