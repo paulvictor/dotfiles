@@ -1155,7 +1155,6 @@ point reaches the beginning or end of the buffer, stop there."
 ;;   (browse-url-browser-function #'browse-url-firefox) ;; We cant set this up properly yet because we only have firefox-devedition. If we can create a symlink, would solve
   (browse-url-firefox-new-window-is-tab t))
 
-
 (use-package org-download
   :hook
   ((org-mode dired-mode) . org-download-enable)
@@ -1167,8 +1166,8 @@ point reaches the beginning or end of the buffer, stop there."
 (global-set-key (kbd "C-M-<tab>")
                 (defhydra hydra-zoom ()
                   "zoom"
-                  ("+" text-scale-increase "in")
-                  ("=" text-scale-decrease "out")
+                  ("i" text-scale-increase "in")
+                  ("o" text-scale-decrease "out")
                   ;; More things to hydra
                   ;; Winner undo/redo
                   ;; Next/prev buffer in project
