@@ -36,7 +36,6 @@
 
   imports = [
     ./hardware-configuration.nix
-    # ./syncthing.nix
   ];
 
 }
