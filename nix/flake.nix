@@ -133,51 +133,28 @@
         inputs.ngnk.overlay
         emacsOverlay.overlay
       ];
-      pkgsFor = system:
-        let
-          _nixpkgs = import nixpkgs { inherit system; };
-          inherit (_nixpkgs.stdenv) isLinux;
-          patched-nixpkgs = _nixpkgs.applyPatches {
-            name = "nixpkgs-patched";
-            src = nixpkgs;
-            patches = import ./patches.nix { pkgs = _nixpkgs; };
-          };
-        in
-        import nixpkgs {
-          inherit system;
-          config = {
-            keep-derivations = true;
-            keep-outputs = true;
-            allowUnfree = true;
-            vivaldi = {
-              proprietaryCodecs = true;
-              enableWideVine = true;
-            };
-          };
-          overlays =
-            if isLinux
-            then linuxOverlays
-            else darwinOverlays;
-      };
 #         lib = nixpkgs.lib // import ./ip.nix { inherit pkgs; };
-    in {
-      nixosConfigurations =
-        import ./root/devices/default.nix {
-          inherit self pkgsFor inputs;
-          inherit (nixpkgs) lib;
-        };
-#       deploy.nodes = createNixDeploy self.nixosConfigurations;
-      darwinConfigurations = import ./darwin/default.nix {
-          inherit nixpkgs self pkgsFor;
+    in flake-utils.lib.eachDefaultSystem(system:
+      let
+        pkgs = inputs.nixpkgs.legacyPackages.${system};
+      in {
+        nixosConfigurations =
+          import ./root/devices/default.nix {
+            inherit  pkgs inputs;
+            overlays = linuxOverlays;
+          };
+        #       deploy.nodes = createNixDeploy self.nixosConfigurations;
+        darwinConfigurations = import ./darwin/default.nix {
+          inherit nixpkgs self pkgs;
           inherit (nixpkgs) lib;
           inherit inputs;
           overlays = darwinOverlays;
-      };
-      homeConfigurations =
-        import ./userland/default.nix {
-          inherit pkgsFor;
-          inherit (nixpkgs) lib;
-          inherit (inputs) nixpkgs homeManager impermanence flake-utils nix-index-database firefox-nightly guile-swayer magix;
         };
-    };
+        homeConfigurations =
+          import ./userland/default.nix {
+            inherit pkgs;
+            inherit inputs;
+            overlays = linuxOverlays; # TODO change non mac overlays to check beforehand and fail
+          };
+      });
 }

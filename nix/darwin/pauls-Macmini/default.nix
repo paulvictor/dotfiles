@@ -1,4 +1,4 @@
-args@{ nixpkgs, self, pkgsFor, lib, inputs, overlays, ...}:
+args@{ nixpkgs, self, lib, inputs, overlays, ...}:
 
 let
   system = flake-utils.lib.system.aarch64-darwin;

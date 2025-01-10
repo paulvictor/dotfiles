@@ -1,22 +1,5 @@
-system: nixpkgs:
+system:
 {
-  "viktor@sarge" = {
-    system = system.x86_64-linux;
-    extraSpecialArgs = {
-      hostSpecificImports = [
-        ./devices/sarge.nix
-      ];
-      withGUI = true; # Enable/disable gui programs
-      isDesktop = true; # Desktop environment setup. Roughly if any of the X related things should be enabled
-      isDevEnv = true; # For all dev packages
-      networkInterface = "wlp2s0";
-      isLinux = true;
-      hostName = "sarge";
-    };
-    username = "viktor";
-    homeDirectory = "/home/viktor";
-    stateVersion = "21.05";
-  };
   "viktor@uriel" = {
     system = system.x86_64-linux;
     extraSpecialArgs = {
@@ -58,7 +41,7 @@ system: nixpkgs:
         ({config, pkgs, lib,...}: {
           home.sessionPath = [ "/run/current-system/sw/bin" ];
           home.sessionVariables = {
-            NIX_PATH = "nixpkgs=${nixpkgs.outPath}";
+#             NIX_PATH = "nixpkgs=${nixpkgs.outPath}";
           };
         })
       ];

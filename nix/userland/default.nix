@@ -1,13 +1,16 @@
 args:
 
 let
-  inherit (args) pkgsFor homeManager flake-utils lib nixpkgs nix-index-database firefox-nightly guile-swayer magix;
-  mkHomeConfig = extraArgs: homeManager.lib.homeManagerConfiguration (rec {
-    pkgs = pkgsFor extraArgs.system;
-    extraSpecialArgs = extraArgs.extraSpecialArgs // {inherit guile-swayer magix; inherit (extraArgs) system;};
+  inherit (args) pkgs inputs overlays;
+  inherit (inputs) magix sops-nix guile-swayer;
+  mkHomeConfig = extraArgs: inputs.homeManager.lib.homeManagerConfiguration (rec {
+    inherit pkgs;
+    extraSpecialArgs = extraArgs.extraSpecialArgs // {inherit guile-swayer magix overlays; inherit (extraArgs) system;};
     modules = [
-      nix-index-database.hmModules.nix-index
+      inputs.nix-index-database.hmModules.nix-index
+      ./overlays.nix
       ./home-configuration.nix
+      {nixpkgs.config = {allowUnfree = true;};}
     ] ++ [
       {
         home = {
@@ -16,11 +19,10 @@ let
       }
     ];
   });
-  allDevices = import ./all-devices.nix flake-utils.lib.system nixpkgs;
+  allDevices = import ./all-devices.nix inputs.flake-utils.lib.system;
 in
 builtins.mapAttrs(_: attrs:
   mkHomeConfig {
-    inherit (attrs) system username homeDirectory stateVersion;
-    pkgs = pkgsFor attrs.system;
-    inherit (attrs) extraSpecialArgs;
+    inherit (attrs) system username homeDirectory stateVersion extraSpecialArgs;
+    inherit pkgs;
   }) allDevices

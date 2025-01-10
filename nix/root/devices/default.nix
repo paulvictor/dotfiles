@@ -1,11 +1,11 @@
-{ self, pkgsFor, inputs, ... }:
+{ pkgs, inputs, overlays, ... }:
 
 let
   inherit (inputs) sops-nix nixos-generators flake-utils homeManager nixpkgs kmonad;
 
   inherit (builtins) attrNames isAttrs readDir listToAttrs elem;
 
-  inherit (nixpkgs.lib) filterAttrs hasSuffix mapAttrs' nameValuePair removeSuffix hasPrefix forEach mkIf optionals nixosSystem mkForce;
+  inherit (nixpkgs.lib)   mapAttrs' nameValuePair removeSuffix hasPrefix forEach mkIf optionals nixosSystem mkForce;
 
   setupNixPath = {config, lib, ...}: {
     environment.etc =
@@ -30,10 +30,10 @@ let
 #           ../tailscale.nix
           ../modules/actual-server.nix
         ];
-
-        system.configurationRevision = mkIf (self ? rev) self.rev;
+        nixpkgs.overlays = overlays;
+#         nixpkgs.config = { allowUnfree = true; };
+        system.configurationRevision = mkIf (inputs.self ? rev) inputs.self.rev;
         networking.hostName = hostName;
-        nixpkgs.pkgs = mkForce (pkgsFor system);
         nix.registry.nixpkgs.flake = nixpkgs;
       };
 
@@ -51,9 +51,7 @@ let
     ];
 
   mkNixosSystem = {hostName, system, customisations, isPhysicalDevice, extraModules}:
-    let
-      pkgs = pkgsFor system;
-    in nixosSystem {
+    nixosSystem {
       inherit system pkgs;
       modules = mkModules {inherit hostName system customisations;} ++ extraModules;
       specialArgs =
@@ -70,7 +68,7 @@ listToAttrs
       let
         inherit (deviceConfig) hostName system extraModules format isPhysicalDevice;
         generatedImage = nixos-generators.nixosGenerate {
-          pkgs = pkgsFor system;
+          inherit pkgs;
           format = format;
           modules =
             mkModules {inherit hostName system; customisations = deviceConfig.customisations or {};}
