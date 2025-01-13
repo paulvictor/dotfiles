@@ -10,7 +10,11 @@
 
   networking.stevenblack = {
     enable = true;
-    block = ["fakenews" "gambling" "porn" "social"];
+    block = [
+      "fakenews"
+      "gambling"
+#       "social"
+    ];
   };
 
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];

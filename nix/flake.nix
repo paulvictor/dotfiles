@@ -138,11 +138,13 @@
       let
         pkgs = inputs.nixpkgs.legacyPackages.${system};
       in {
-        nixosConfigurations =
+        packages = {
+          nixosConfigurations =
           import ./root/devices/default.nix {
             inherit  pkgs inputs;
             overlays = linuxOverlays;
           };
+        };
         #       deploy.nodes = createNixDeploy self.nixosConfigurations;
         darwinConfigurations = import ./darwin/default.nix {
           inherit nixpkgs self pkgs;

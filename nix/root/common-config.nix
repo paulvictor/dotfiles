@@ -30,11 +30,6 @@ with lib;
       isPhysicalDevice
         [ "aarch64-linux" "armv7l-linux" "riscv64-linux" ];
 
-  boot.postBootCommands = "
-    [ -d /tomb/${config.networking.hostName}/ssh ] || \
-      mkdir -pv /tomb/${config.networking.hostName}/ssh
-  ";
-
   imports =
     optionals isPhysicalDevice [
       ./modules/desktop-environment.nix
