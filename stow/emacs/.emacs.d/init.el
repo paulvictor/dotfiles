@@ -1168,6 +1168,11 @@ point reaches the beginning or end of the buffer, stop there."
                   "zoom"
                   ("i" text-scale-increase "in")
                   ("o" text-scale-decrease "out")
+                  ("v" shrink-window "shrink height")
+                  ("^" enlarge-window "increase height")
+                  ("<" shrink-window-horizontally "shrink width")
+                  (">" enlarge-window-horizontally "shrink width")
+
                   ;; More things to hydra
                   ;; Winner undo/redo
                   ;; Next/prev buffer in project
