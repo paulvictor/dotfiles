@@ -2,9 +2,6 @@
 { config, pkgs, lib, ... }:
 
 {
-  imports = [
-    ./syncthing.nix
-  ]
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
@@ -27,6 +24,7 @@
 
   imports = [
     ./hardware-configuration.nix
+    ./syncthing.nix
   ];
   hardware.keyboard.qmk.enable = true;
 

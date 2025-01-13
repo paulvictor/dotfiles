@@ -16,6 +16,7 @@ with pkgs;
     man-pages
     neovim
     man-pages-posix
+    manix
     psmisc
     wget
   ] ++ lib.optionals isPhysicalDevice [

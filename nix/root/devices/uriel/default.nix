@@ -25,6 +25,7 @@
   networking.hostName = "uriel";
   # From head -c4 /dev/urandom | od -A none -t x4
   networking.hostId = "237ab499";
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 

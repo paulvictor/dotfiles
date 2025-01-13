@@ -1,9 +1,5 @@
 { config, ... } :
 
-let
-  syncthing-key-file = "/run/syncthing/key.pem";
-  syncthing-cert-file = "/run/syncthing/cert.pem";
-in
 {
   imports = [
     ../../modules/syncthing.nix
@@ -14,14 +10,12 @@ in
   sops.secrets."syncthing/key.pem" = {
     owner = config.users.users.viktor.name;
     group = config.users.users.viktor.group;
-#     mode = "O400";
-    path = syncthing-key-file;
+    restartUnits = [ "syncthing.service" ];
   };
   sops.secrets."syncthing/cert.pem" = {
     owner = config.users.users.viktor.name;
     group = config.users.users.viktor.group;
-#     mode = "O400";
-    path = syncthing-cert-file;
+    restartUnits = [ "syncthing.service" ];
   };
 
   services.syncthing = {
@@ -29,8 +23,8 @@ in
     user = "viktor";
     openDefaultPorts = true;
     configDir = "${config.users.users.viktor.home}/.config/syncthing";
-    key = syncthing-key-file;
-    cert = syncthing-cert-file;
+    key = config.sops.secrets."syncthing/key.pem".path;
+    cert = config.sops.secrets."syncthing/cert.pem".path;
     settings = {
       options = {
         urAccepted = -1;
