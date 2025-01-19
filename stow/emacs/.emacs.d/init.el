@@ -1175,3 +1175,5 @@ point reaches the beginning or end of the buffer, stop there."
                   ("n" winner-redo "Winner redo")
                   ("p" winner-undo "Winner undo")
                   ("q" nil "quit")))
+
+(use-package himalaya)

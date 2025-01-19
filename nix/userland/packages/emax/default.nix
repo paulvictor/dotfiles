@@ -9,6 +9,20 @@ let
     hash = "sha256-bHrfc9bGKY57+KGDRH5CdRflWH5va4jzGkMzXRrapg4=";
   };
   emacs-webkit = callPackage "${emacs-webkit-src}/default.nix" { inherit pkgs; };
+  himalaya-emacs =
+    let
+      version = "934e8f8741e3cfff577d7119eceb2cfdb7cff6f3";
+      src = fetchFromGitHub {
+        owner = "dantecatalfamo";
+        repo = "himalaya-emacs";
+        rev = version;
+        hash = "sha256-JuWh6KdvPw5dJK86Ak87G/eFSKyggZViuTaNflpIlt8=";
+      };
+    in
+      pkgs.emacsPackages.trivialBuild {
+        pname = "ngnk-mode";
+        inherit version src;
+      };
   ngnk-mode =
     let
       version = "c2b6f3d98f566061369bd00a91124da4280c9398";
@@ -75,6 +89,7 @@ let
             guru-mode
             haskell-mode
             helpful
+            himalaya-emacs
             hl-todo
             hydra
             iedit
