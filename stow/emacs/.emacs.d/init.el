@@ -1145,3 +1145,5 @@ point reaches the beginning or end of the buffer, stop there."
                   ;; Winner undo/redo
                   ;; Next/prev buffer in project
                   ("q" nil "quit")))
+
+(use-package himalaya)
