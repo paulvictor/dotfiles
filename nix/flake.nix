@@ -134,17 +134,17 @@
         emacsOverlay.overlay
       ];
 #         lib = nixpkgs.lib // import ./ip.nix { inherit pkgs; };
-    in flake-utils.lib.eachDefaultSystem(system:
+    in flake-utils.lib.eachDefaultSystemPassThrough(system:
       let
         pkgs = inputs.nixpkgs.legacyPackages.${system};
       in {
-        packages = {
-          nixosConfigurations =
+
+        nixosConfigurations =
           import ./root/devices/default.nix {
             inherit  pkgs inputs;
             overlays = linuxOverlays;
           };
-        };
+
         #       deploy.nodes = createNixDeploy self.nixosConfigurations;
         darwinConfigurations = import ./darwin/default.nix {
           inherit nixpkgs self pkgs;
