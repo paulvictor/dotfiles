@@ -1,4 +1,4 @@
-{ pkgs, inputs, overlays, lib, ... }:
+{ inputs, overlays, lib, ... }:
 
 let
 
@@ -27,9 +27,7 @@ let
         system.configurationRevision = lib.mkIf (inputs.self ? rev) inputs.self.rev;
         networking.hostName = hostName;
       };
-
       machine = import "${toString ./.}/${hostName}/default.nix";
-
     in [
       setupNixPath
       common
@@ -40,15 +38,6 @@ let
       ../modules/workstations.nix
       ../modules/ssh.nix
     ];
-
-  mkNixosSystem = {hostName, system, isPhysicalDevice}:
-    nixosSystem {
-      inherit system pkgs;
-      modules = mkModules hostName;
-      specialArgs =
-        { inherit inputs system hostName isPhysicalDevice; } ;
-    };
-
   deviceConfigs = import ./all-devices.nix;
 
 in
@@ -57,12 +46,9 @@ listToAttrs
     deviceConfigs
     (deviceConfig:
       let
-        inherit (deviceConfig) hostName system isPhysicalDevice;
+        inherit (deviceConfig) hostName;
       in
         {
           name = hostName;
-          value = mkNixosSystem {
-            inherit hostName system;
-            isPhysicalDevice = deviceConfig.isPhysicalDevice or true;
-          };
+          value = mkModules hostName;
         }))

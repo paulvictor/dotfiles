@@ -109,18 +109,23 @@
       ];
       supportedFormats =
         lib.remove "all-formats" (lib.attrNames inputs.nixos-generators.nixosModules);
-#         lib = nixpkgs.lib // import ./ip.nix { inherit pkgs; };
+      nixosModules = import ./root/devices/default.nix { inherit inputs lib overlays; };
     in flake-utils.lib.eachDefaultSystemPassThrough(system:
       let
         pkgs = inputs.nixpkgs.legacyPackages.${system};
         nixosConfigurations =
-          import ./root/devices/default.nix {
-            inherit pkgs inputs lib;
-            overlays = overlays;
-          };
+          lib.mapAttrs
+            (_: modules:
+              lib.nixosSystem {
+                inherit system pkgs modules;
+                specialArgs = {
+                  inherit inputs;
+                  isPhysicalDevice = true; # HACK for now
+                };
+              })
+            nixosModules;
       in {
         inherit nixosConfigurations;
-        #       deploy.nodes = createNixDeploy self.nixosConfigurations;
         darwinConfigurations = import ./darwin/default.nix {
           inherit nixpkgs self pkgs;
           inherit (nixpkgs) lib;
