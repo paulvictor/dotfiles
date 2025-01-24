@@ -38,11 +38,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    firefox-nightly = {
-      url = "github:nix-community/flake-firefox-nightly";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     actual-server-repo = {
       url = "github:paulvictor/actual-server";
       inputs = {
@@ -70,43 +65,36 @@
       url = "github:dschrempf/magix";
     };
 
+    flake-utils-plus = {
+      url = "github:gytis-ivaskevicius/flake-utils-plus";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+
   };
 
   outputs = { self, nixpkgs, emacsOverlay, flake-utils, darwin, nix-cl, ... }@inputs :
     let
+      inherit (nixpkgs) lib;
       gllock-overlay = import ./overlays/gllock.nix;
-      tomb-overlay = import ./overlays/tomb.nix;
-      xdotool-overlay = import ./overlays/xdotool.nix;
       brotab-overlay = import ./overlays/brotab.nix;
       ripgrep-overlay = import ./overlays/ripgrep.nix;
       rofi-fuzzy = import ./overlays/rofi-fuzzy.nix;
       pass-override-overlay = import ./overlays/pass-override.nix;
-      ffmpeg-overlay = import ./overlays/ffmpeg.nix;
       wallpaper-overlay = import ./overlays/wallpaper.nix;
-      urxvt-perls-overlay = import ./overlays/urxvt-perls.nix;
-      urxvt-overlay = import ./overlays/urxvt-with-plugins.nix;
       electron-apps = import ./overlays/electronApps;
       surfraw-overlay = import ./overlays/surfraw.nix;
       ql2nix-overlay = import ./overlays/ql2nix.nix;
       pcloudcc-overlay = import ./overlays/pcloud-console-client.nix;
-      pyopenssl-fix-hack = import ./overlays/pyopenssl-broken-fix-hack.nix;
       fish-docker-completion = import ./overlays/fish.nix;
-      xsecurelock-overlay = import ./overlays/xsecurelock.nix;
       rofi-theme-overlay = import ./overlays/rofi-theme-overlay.nix;
-      actual-server-overlay = import ./overlays/actual-server.nix { inherit (inputs) actual-server-repo; };
-      keyd-overlay = import ./overlays/keyd.nix;
       warpd-overlay = import ./overlays/warpd.nix;
       #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
-      linuxOverlays = [
+      overlays = [
         fish-docker-completion
-        tomb-overlay
-        xdotool-overlay
         brotab-overlay
         ripgrep-overlay
         rofi-fuzzy
         pass-override-overlay
-        ffmpeg-overlay
-        urxvt-overlay
         electron-apps
         wallpaper-overlay
         surfraw-overlay
@@ -115,48 +103,35 @@
         inputs.ngnk.overlay
         emacsOverlay.overlay
         pcloudcc-overlay
-        xsecurelock-overlay
         rofi-theme-overlay
-        actual-server-overlay
         warpd-overlay
+        inputs.flake-utils-plus.overlay
       ];
-      darwinOverlays = [
-        pyopenssl-fix-hack
-        xdotool-overlay
-        brotab-overlay
-        ripgrep-overlay
-        pass-override-overlay
-        ffmpeg-overlay
-        electron-apps
-        inputs.nur.overlays.default
-        ql2nix-overlay
-        inputs.ngnk.overlay
-        emacsOverlay.overlay
-      ];
+      supportedFormats =
+        lib.remove "all-formats" (lib.attrNames inputs.nixos-generators.nixosModules);
 #         lib = nixpkgs.lib // import ./ip.nix { inherit pkgs; };
     in flake-utils.lib.eachDefaultSystemPassThrough(system:
       let
         pkgs = inputs.nixpkgs.legacyPackages.${system};
-      in {
-
         nixosConfigurations =
           import ./root/devices/default.nix {
-            inherit  pkgs inputs;
-            overlays = linuxOverlays;
+            inherit pkgs inputs lib;
+            overlays = overlays;
           };
-
+      in {
+        inherit nixosConfigurations;
         #       deploy.nodes = createNixDeploy self.nixosConfigurations;
         darwinConfigurations = import ./darwin/default.nix {
           inherit nixpkgs self pkgs;
           inherit (nixpkgs) lib;
           inherit inputs;
-          overlays = darwinOverlays;
+          overlays = overlays;
         };
         homeConfigurations =
           import ./userland/default.nix {
             inherit pkgs;
             inherit inputs;
-            overlays = linuxOverlays; # TODO change non mac overlays to check beforehand and fail
+            overlays = overlays; # TODO change non mac overlays to check beforehand and fail
           };
       });
 }

@@ -1,6 +1,5 @@
 self: super:
-
-{
+super.lib.optionalAttrs (super.stdenv.isLinux){
   rofi = super.stdenv.mkDerivation {
     name = "rofi-fuzzy";
     buildInputs = [ super.makeWrapper ];

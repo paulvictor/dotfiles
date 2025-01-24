@@ -81,12 +81,6 @@ with pkgs;
   virtualisation.lxd.enable = false;
 
   security.wrappers = {
-#     gllock = {
-#       owner = "root";
-#       group = "root";
-#       setuid = true;
-#       source = "${gllock}/bin/gllock";
-#     };
     cryptsetup = {
       owner = "root";
       group = "root";
@@ -98,7 +92,6 @@ with pkgs;
   imports =
     lib.optionals isPhysicalDevice
       [
-#         args.specialArgs.kmonad.nixosModules.default
         ./keyd.nix
       ];
 

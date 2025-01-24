@@ -7,6 +7,7 @@ let
     hash = "sha256-61+kJvOi4oog0+tGucc1rWemdx2vp15wlluJE+1PzTs=";
   };
 in
-{
-  warpd = (prev.warpd.overrideAttrs({inherit src;})).override({withX = false;});
-}
+prev.lib.optionalAttrs (prev.stdenv.isLinux)
+  {
+    warpd = (prev.warpd.overrideAttrs({inherit src;})).override({withX = false;});
+  }

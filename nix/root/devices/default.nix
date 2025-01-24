@@ -1,29 +1,22 @@
-{ pkgs, inputs, overlays, ... }:
+{ pkgs, inputs, overlays, lib, ... }:
 
 let
-  inherit (inputs) sops-nix nixos-generators flake-utils homeManager nixpkgs kmonad;
 
   inherit (builtins) attrNames isAttrs readDir listToAttrs elem;
 
-  inherit (nixpkgs.lib)   mapAttrs' nameValuePair removeSuffix hasPrefix forEach mkIf optionals nixosSystem mkForce;
+  inherit (lib) nixosSystem forEach;
 
-  setupNixPath = {config, lib, ...}: {
+  setupNixPath = {lib, ...}: {
     environment.etc =
-      mapAttrs'
+      lib.mapAttrs'
         (name: value: { name = "nix/inputs/${name}"; value = { source = value.outPath; }; })
         inputs;
     nix.nixPath = [ "/etc/nix/inputs" ];
   };
 
-  moduleArgs = {
-    inherit (inputs) stevenBlack goodbyeAds kmonad neovim nixpkgs;
-  };
-
-  mkModules = args:
+  mkModules = hostName:
     let
-      inherit (args) hostName system ;
-      customisations = args.customisations or {};
-      common = {
+      common = {lib, ...}: {
         imports = [
           ../common-config.nix
           ../caches.nix
@@ -31,10 +24,8 @@ let
           ../modules/actual-server.nix
         ];
         nixpkgs.overlays = overlays;
-#         nixpkgs.config = { allowUnfree = true; };
-        system.configurationRevision = mkIf (inputs.self ? rev) inputs.self.rev;
+        system.configurationRevision = lib.mkIf (inputs.self ? rev) inputs.self.rev;
         networking.hostName = hostName;
-        nix.registry.nixpkgs.flake = nixpkgs;
       };
 
       machine = import "${toString ./.}/${hostName}/default.nix";
@@ -42,20 +33,20 @@ let
     in [
       setupNixPath
       common
-      sops-nix.nixosModules.sops
-      homeManager.nixosModule
+      inputs.sops-nix.nixosModules.sops
+      inputs.homeManager.nixosModule
       machine
       ../modules/viktor.nix
       ../modules/workstations.nix
       ../modules/ssh.nix
     ];
 
-  mkNixosSystem = {hostName, system, customisations, isPhysicalDevice, extraModules}:
+  mkNixosSystem = {hostName, system, isPhysicalDevice}:
     nixosSystem {
       inherit system pkgs;
-      modules = mkModules {inherit hostName system customisations;} ++ extraModules;
+      modules = mkModules hostName;
       specialArgs =
-        moduleArgs // { inherit system customisations hostName isPhysicalDevice; } ;
+        { inherit inputs system hostName isPhysicalDevice; } ;
     };
 
   deviceConfigs = import ./all-devices.nix;
@@ -66,26 +57,12 @@ listToAttrs
     deviceConfigs
     (deviceConfig:
       let
-        inherit (deviceConfig) hostName system extraModules format isPhysicalDevice;
-        generatedImage = nixos-generators.nixosGenerate {
-          inherit pkgs;
-          format = format;
-          modules =
-            mkModules {inherit hostName system; customisations = deviceConfig.customisations or {};}
-            ++ (optionals (deviceConfig ? extraModules) deviceConfig.extraModules);
-          specialArgs = moduleArgs // { inherit system; isPhysicalDevice = false;};
-        };
+        inherit (deviceConfig) hostName system isPhysicalDevice;
       in
         {
           name = hostName;
-          value =
-            if !(deviceConfig ? format)
-            then
-              mkNixosSystem {
-                inherit hostName system;
-                customisations = deviceConfig.customisations or {};
-                isPhysicalDevice = deviceConfig.isPhysicalDevice or true;
-                extraModules = deviceConfig.extraModules or [];
-              }
-            else generatedImage;
+          value = mkNixosSystem {
+            inherit hostName system;
+            isPhysicalDevice = deviceConfig.isPhysicalDevice or true;
+          };
         }))

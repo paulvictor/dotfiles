@@ -7,7 +7,9 @@ let
     rev = "bfdde8e7912ad50a468c721b29b448c1ec5fa5e3";
     sha256 = "w/AE1o8vIZdD0jAi7++gdlmApGjeyDv6CD4xxrD9Fsw=";
   };
-in {
+in
+prev.lib.optionalAttrs (prev.stdenv.isLinux)
+{
   rofi-themes = final.stdenv.mkDerivation {
     name = "rofi-themes";
     inherit src;

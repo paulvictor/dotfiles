@@ -2,7 +2,6 @@ args@{ config, pkgs, lib, ...}:
 
 let
   inherit (args) isPhysicalDevice;
-  customisations = args.customisations or {};
 in
 with lib;
 {
