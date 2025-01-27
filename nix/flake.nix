@@ -131,6 +131,7 @@
                       {
                         inherit modules format system;
                         specialArgs = {
+                          inherit inputs;
                           isPhysicalDevice = false;
                         };
                       })
@@ -148,6 +149,7 @@
                 lib.nixosSystem {
                   inherit system pkgs modules;
                   specialArgs = {
+                    inherit inputs;
                     isPhysicalDevice = true; # HACK for now
                   };
                 })

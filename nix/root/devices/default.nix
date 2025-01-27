@@ -6,34 +6,25 @@ let
 
   inherit (lib) nixosSystem forEach;
 
-  setupNixPath = {lib, ...}: {
-    environment.etc =
-      lib.mapAttrs'
-        (name: value: { name = "nix/inputs/${name}"; value = { source = value.outPath; }; })
-        inputs;
-    nix.nixPath = [ "/etc/nix/inputs" ];
-  };
-
-  mkModules = hostName:
+  commonModules =
     let
       common = {lib, ...}: {
-        imports = [
-          ../common-config.nix
-          ../caches.nix
-#           ../tailscale.nix
-          ../modules/actual-server.nix
-        ];
         nixpkgs.overlays = overlays;
         system.configurationRevision = lib.mkIf (inputs.self ? rev) inputs.self.rev;
-        networking.hostName = hostName;
       };
-      machine = import "${toString ./.}/${hostName}/default.nix";
     in [
-      setupNixPath
+      ../common-config.nix
+      ../caches.nix
       common
+      inputs.flake-utils-plus.nixosModules.autoGenFromInputs
+      {
+        nix.generateNixPathFromInputs = true;
+        nix.generateRegistryFromInputs = true;
+        nix.linkInputs = true;
+      }
       inputs.sops-nix.nixosModules.sops
       inputs.homeManager.nixosModule
-      machine
+
       ../modules/viktor.nix
       ../modules/workstations.nix
       ../modules/ssh.nix
@@ -50,5 +41,8 @@ listToAttrs
       in
         {
           name = hostName;
-          value = mkModules hostName;
+          value = [
+            {networking.hostName = hostName;}
+            "${toString ./.}/${hostName}/default.nix"
+          ] ++ commonModules;
         }))

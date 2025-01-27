@@ -2,7 +2,7 @@ args@{ config, lib, pkgs, ... } :
 
 let
   inherit (args) isPhysicalDevice;
-  isCloudDevice = !isPhysicalDevice;
+
   inherit (args) system;
 in
 with pkgs;
@@ -19,6 +19,7 @@ with pkgs;
     manix
     psmisc
     wget
+    fup-repl
   ] ++ lib.optionals isPhysicalDevice [
     binutils
     bluez

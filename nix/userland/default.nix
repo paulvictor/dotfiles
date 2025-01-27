@@ -2,7 +2,7 @@ args:
 
 let
   inherit (args) pkgs inputs overlays;
-  inherit (inputs) magix sops-nix guile-swayer;
+  inherit (inputs) magix guile-swayer;
   mkHomeConfig = extraArgs: inputs.homeManager.lib.homeManagerConfiguration (rec {
     inherit pkgs;
     extraSpecialArgs = extraArgs.extraSpecialArgs // {inherit guile-swayer magix overlays; inherit (extraArgs) system;};
