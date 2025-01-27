@@ -43,7 +43,7 @@
 (setq w32-enable-italics t)
 ; This must be done before font settings!
 ; (set-frame-parameter (selected-frame) 'alpha '(85 . 70))
-; (add-to-list 'default-frame-alist '(alpha . (85 . 70)))
+(add-to-list 'default-frame-alist '(alpha . 85))
 (setq-default indent-tabs-mode nil)
 (menu-bar-mode -1)
 (tool-bar-mode -1)

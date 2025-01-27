@@ -13,7 +13,6 @@
     emacsOverlay = {
       url = "github:nix-community/emacs-overlay/master";
     };
-    neovim.url = "github:nix-community/neovim-nightly-overlay";
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -75,6 +74,7 @@
   outputs = { self, nixpkgs, emacsOverlay, flake-utils, darwin, nix-cl, ... }@inputs :
     let
       inherit (nixpkgs) lib;
+      inherit (flake-utils.lib) eachDefaultSystemPassThrough eachDefaultSystem;
       gllock-overlay = import ./overlays/gllock.nix;
       brotab-overlay = import ./overlays/brotab.nix;
       ripgrep-overlay = import ./overlays/ripgrep.nix;
@@ -109,34 +109,62 @@
       ];
       supportedFormats =
         lib.remove "all-formats" (lib.attrNames inputs.nixos-generators.nixosModules);
-      nixosModules = import ./root/devices/default.nix { inherit inputs lib overlays; };
-    in flake-utils.lib.eachDefaultSystemPassThrough(system:
-      let
-        pkgs = inputs.nixpkgs.legacyPackages.${system};
-        nixosConfigurations =
-          lib.mapAttrs
-            (_: modules:
-              lib.nixosSystem {
-                inherit system pkgs modules;
-                specialArgs = {
-                  inherit inputs;
-                  isPhysicalDevice = true; # HACK for now
-                };
-              })
-            nixosModules;
-      in {
-        inherit nixosConfigurations;
-        darwinConfigurations = import ./darwin/default.nix {
-          inherit nixpkgs self pkgs;
-          inherit (nixpkgs) lib;
-          inherit inputs;
-          overlays = overlays;
-        };
-        homeConfigurations =
-          import ./userland/default.nix {
-            inherit pkgs;
+      nixosModules =
+        # attrset of host to configuration
+        import ./root/devices/default.nix { inherit inputs lib overlays; };
+      imageModules =
+        lib.listToAttrs
+          (lib.forEach supportedFormats
+            (format: lib.nameValuePair format
+              (lib.mapAttrs
+                (_: m: m ++ [inputs.nixos-generators.nixosModules.${format}])
+                nixosModules)));
+    in
+      (eachDefaultSystem (system:
+        {
+          images =
+            lib.mapAttrs
+              (format: configModules:
+                lib.mapAttrs
+                  (_: modules:
+                    inputs.nixos-generators.nixosGenerate
+                      {
+                        inherit modules format system;
+                        specialArgs = {
+                          isPhysicalDevice = false;
+                        };
+                      })
+                  configModules
+              )
+              imageModules;
+        }
+      ))
+      // (eachDefaultSystemPassThrough (system:
+        let
+          pkgs = inputs.nixpkgs.legacyPackages.${system};
+          nixosConfigurations =
+            lib.mapAttrs
+              (_: modules:
+                lib.nixosSystem {
+                  inherit system pkgs modules;
+                  specialArgs = {
+                    isPhysicalDevice = true; # HACK for now
+                  };
+                })
+              nixosModules;
+        in {
+          inherit nixosConfigurations imageModules;
+          darwinConfigurations = import ./darwin/default.nix {
+            inherit nixpkgs self pkgs;
+            inherit (nixpkgs) lib;
             inherit inputs;
-            overlays = overlays; # TODO change non mac overlays to check beforehand and fail
+            overlays = overlays;
           };
-      });
+          homeConfigurations =
+            import ./userland/default.nix {
+              inherit pkgs;
+              inherit inputs;
+              overlays = overlays; # TODO change non mac overlays to check beforehand and fail
+            };
+        }));
 }

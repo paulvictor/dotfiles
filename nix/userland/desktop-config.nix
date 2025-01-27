@@ -3,9 +3,6 @@
 with lib;
 let
   rofiElectronAppsRunner = pkgs.callPackage ../overlays/electronApps/rofiRun.nix {};
-  wmexit = pkgs.callPackage ./scripts/wmexit.nix {};
-  findWindowByTitle = pkgs.callPackage ./scripts/findWindowByTitle.nix {};
-  popcorntime = pkgs.callPackage ./packages/popcorntime.nix {};
 in
 with pkgs;
 {
@@ -24,10 +21,8 @@ with pkgs;
   home.packages = [
     acpi # TODO : Install only on laptops
     afuse
-    arandr
     asciinema
     dunst
-#     findWindowByTitle
     adwaita-icon-theme
     nyxt
     pa_applet
@@ -37,14 +32,6 @@ with pkgs;
     pcloud-console-client
     pulseaudio-ctl
     rofiElectronAppsRunner
-    wmctrl
-    wmexit
-    wmfocus
-    xclip
-    xdotool
-    xorg.xdpyinfo
-    xorg.xmodmap
-    xsel
   ];
 
   xdg.configFile.rofi = {
@@ -66,56 +53,9 @@ with pkgs;
       size = "48";
     };
   };
-  xsession = {
-    enable = true;
-    initExtra = ''
-      ${xorg.xmodmap}/bin/xmodmap -verbose ${config.home.homeDirectory}/.Xmodmap
-      ${feh}/bin/feh --bg-scale ${wall1} ${wall2} ${wall3}
-      ${autorandr}/bin/autorandr --change
-    '';
-    windowManager.command = "${import ./scripts/mk-stumpwm.nix { inherit pkgs;}}";
-  };
 
   fonts.fontconfig.enable = true;
 
-  services.picom = {
-    enable = false;
-    menuOpacity = 0.7;
-    backend = "glx";
-    settings = {
-      extraOptions = ''
-        focus-exclude = (x = 0 && y = 0 && override-redirect = true) || (_NET_WM_NAME@:s = "rofi");
-      '';
-      noDockShadow = true;
-      inactive-dim-fixed = true;
-      inactive-dim = 0.4;
-      blur = true;
-      wintypes =  { dock = { shadow = false; clip-shadow-above = true; }; };
-    };
-  };
-
-  services.sxhkd = {
-    enable = true;
-    extraOptions =  [ "-m" " -1" ];
-    keybindings = {
-      "hyper + shift + Return" = "${rxvt-unicode}/bin/urxvt";
-      "hyper + e" = "emacsclient -c -n -d :0";
-      "hyper + d" = "rofi -show drun";
-      "hyper + p" = "${passdo}/bin/passdo";
-      "hyper + s" = "${scrot}/bin/scrot -m";
-      "hyper + shift + s" = "${scrot}/bin/scrot -s";
-      "hyper + shift + slash" = "menu-surfraw";
-      "hyper + shift + d" = "${rofiElectronAppsRunner}/bin/rofiElectronAppsRunner";
-      # OCR a screen selection
-      "hyper + x" = "${imagemagick}/bin/convert x: -modulate 100,0 -resize 400% -set density 300 png:- | ${tesseract}/bin/tesseract stdin stdout | ${xclip}/bin/xclip -selection clipboard";
-      # Pulse Audio controls
-      "XF86Audio{Raise,Lower}Volume" = "${pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ {+5%,-5%}"; #increase sound volume
-      "XF86AudioMute" =  "${pulseaudio}/bin/pactl set-sink-mute  @DEFAULT_SINK@ toggle"; # mute sound
-      # "XF86MicMute" =  "pulseaudio-ctl mute-input"; # mute mic
-      # Sreen brightness controls
-      "XF86MonBrightness{Up,Down}" = "${light}/bin/light -{A,U} 5";
-    };
-  };
   programs.alacritty = {
     enable = true;
     settings = {
@@ -218,13 +158,6 @@ with pkgs;
     ];
   };
 
-  services.screen-locker = {
-    enable = true;
-    inactiveInterval = 5;
-    lockCmd = "${xsecurelock}/bin/xsecurelock";
-    xautolock.enable = false;
-  };
-
   xdg.configFile."zathura/zathurarc".text = ''
     set selection-clipboard clipboard
   '';
@@ -262,10 +195,4 @@ with pkgs;
     NOREVIEW
     RAW_RESERVED
   '';
-
-  programs.autorandr = {
-    hooks.postswitch = {
-      change-background = "${feh}/bin/feh --bg-scale ${wall1} ${wall2} ${wall3}";
-    };
-  };
 }

@@ -12,6 +12,7 @@ let
       (n: v: {name = "${prefix}${n}"; value = v;});
   warpdCommand =
     "${pkgs.warpd}/bin/warpd -c ${config.xdg.configFile."warpd/config".target} ";
+  # obsolete, done with guile swayer
   keybindings = prefixWithHelper "${modifier}+" {
     "Shift+Return" = "exec ${pkgs.alacritty}/bin/alacritty";
     "Tab" = "workspace back_and_forth";
@@ -45,7 +46,7 @@ in
     wrapperFeatures.gtk = true;
     systemd.enable = true;
     extraConfigEarly = ''
-      exec_always "${pkgs.procps}/bin/pkill -f '.*stumpwm-like/init.scm' || true"
+      exec_always --no-startup-id wpaperd
     '';
     config = {
       modifier = "Mod4"; # Super key
@@ -76,7 +77,7 @@ in
       menu = "${pkgs.fuzzel}/bin/fuzzel";
       bars = [];
       startup = [
-        { command = "\"sleep 0.2 && ~/.bin/stumpwm-like/init.scm\""; always = true; } # TODO make this a systemd service and make it a dependency of sway-session.target
+        { command = "\"guile ~/stumpwm-like/init.scm\""; always = true; } # TODO make this a systemd service and make it a dependency of sway-session.target
         { command = "systemctl --user restart waybar"; always = true; }
         { command = "systemctl --user restart emacs.service"; always = false; }
         { command = "${pkgs.alacritty}/bin/alacritty"; always = true;}

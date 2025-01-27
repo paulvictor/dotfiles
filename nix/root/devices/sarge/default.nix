@@ -25,7 +25,7 @@
 
   imports = [
     ./hardware-configuration.nix
-    ./syncthing.nix
+#     ./syncthing.nix # Disabling syncthing for now
   ];
 
   virtualisation.libvirtd = {

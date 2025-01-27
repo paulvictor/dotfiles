@@ -31,6 +31,16 @@ in
     package = lockPackage;
   };
 
+  programs.wpaperd = {
+    enable = true;
+    settings = {
+      default = {
+        path = pkgs.wall1;
+        mode = "stretch";
+      };
+    };
+  };
+
   programs.fuzzel = {
     enable = true;
     settings = {
