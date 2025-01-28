@@ -1,41 +1,39 @@
-system:
 {
   "viktor@uriel" = {
-    system = system.x86_64-linux;
     extraSpecialArgs = {
       hostSpecificImports = [
         ./devices/uriel.nix
       ];
-      withGUI = true; # Enable/disable gui programs
-      isDesktop = true; # Desktop environment setup. Roughly if any of the X related things should be enabled
-      isDevEnv = true; # For all dev packages
-      networkInterface = "wlp59s0";
-      isLinux = true;
-      hostName = "uriel";
     };
-    username = "viktor";
-    homeDirectory = "/home/viktor";
-    stateVersion = "21.05";
+    additionalModules = [
+      {
+        home.username = "viktor";
+        home.homeDirectory = "/home/viktor";
+        home.stateVersion = "21.05";
+      }
+    ];
+    withGUI = true; # Enable/disable gui programs
+    isDesktop = true; # Desktop environment setup. Roughly if any of the X related things should be enabled
+    isDevEnv = true; # For all dev packages
   };
   "viktor@sorlag" = {
-    system = system.x86_64-linux;
     extraSpecialArgs = {
       hostSpecificImports = [
         ./devices/sorlag.nix
       ];
-      withGUI = true; # Enable/disable gui programs
-      isDesktop = true; # Desktop environment setup. Roughly if any of the X related things should be enabled
-      isDevEnv = true; # For all dev packages
-      networkInterface = "wlp5s0";
-      isLinux = true;
-      hostName = "sorlag";
     };
-    username = "viktor";
-    homeDirectory = "/home/viktor";
-    stateVersion = "22.05";
+    additionalModules = [
+      {
+        home.username = "viktor";
+        home.homeDirectory = "/home/viktor";
+        home.stateVersion = "22.05";
+      }
+    ];
+    withGUI = true; # Enable/disable gui programs
+    isDesktop = true; # Desktop environment setup. Roughly if any of the X related things should be enabled
+    isDevEnv = true; # For all dev packages
   };
   "paul@crash" = {
-    system = system.aarch64-darwin;
     extraSpecialArgs = {
       hostSpecificImports = [
         ({config, pkgs, lib,...}: {
@@ -45,15 +43,16 @@ system:
           };
         })
       ];
-      withGUI = false; # Enable/disable gui programs
-      isDesktop = false; # Desktop environment setup. Roughly if any of the X related things should be enabled
-      isDevEnv = true; # For all dev packages
-      networkInterface = "wlp2s0";
-      isLinux = false;
-      hostName = "crash";
     };
-    username = "paul";
-    homeDirectory = "/Users/paul";
-    stateVersion = "22.05";
+    withGUI = false; # Enable/disable gui programs
+    isDesktop = false; # Desktop environment setup. Roughly if any of the X related things should be enabled
+    isDevEnv = true; # For all dev packages
+    additionalModules = [
+      {
+        home.username = "paul";
+        home.homeDirectory = "/Users/paul";
+        home.stateVersion = "22.05";
+      }
+    ];
   };
 }

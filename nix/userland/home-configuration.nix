@@ -1,5 +1,3 @@
-{ config, pkgs, lib, specialArgs, system, ... }:
-
 # # TODO : Try to refactor with https://discourse.nixos.org/t/using-mkif-with-nested-if/5221/2
 # # Also https://discourse.nixos.org/t/infinite-recursion-on-optional-import/8892/3
 {
@@ -14,11 +12,5 @@
       ./modules/services/gocryptfs.nix
       ./modules/services/battery-alert.nix
       ./common.nix
-    ]
-    ++ (lib.optional specialArgs.withGUI ./gui-config.nix)
-    ++ (lib.optionals specialArgs.isDevEnv [
-      ./dev-config.nix
-    ])
-    ++ (lib.optional specialArgs.isDesktop ./desktop-config.nix)
-    ++ specialArgs.hostSpecificImports;
+    ];
 }

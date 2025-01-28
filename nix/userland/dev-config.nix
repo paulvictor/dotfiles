@@ -3,6 +3,7 @@
 with pkgs;
 let
   tmuxWithConfig = pkgs.callPackage ./packages/tmux {};
+  inherit (pkg.stdenv) system isLinux;
 in
   {
     home.file.".ghc/ghci.conf".text = ''
@@ -63,9 +64,9 @@ in
         tmuxWithConfig
         pscid
         leiningen clojure
-        specialArgs.magix.packages.${specialArgs.system}.magix
+        specialArgs.magix.packages.${system}.magix
 #         visidata # for visualizing data
       ] ++
-      (lib.optionals specialArgs.isLinux [ bindfs msgpack-tools k ]);
+      (lib.optionals isLinux [ bindfs msgpack-tools k ]);
   }
 

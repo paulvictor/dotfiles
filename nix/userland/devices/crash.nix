@@ -1,4 +1,4 @@
-{ config, pkgs, lib, specialArgs, ... }:
+{ lib, ... }:
 
 {
   programs.ssh.enable = lib.mkForce false;

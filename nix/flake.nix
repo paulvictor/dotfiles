@@ -162,11 +162,6 @@
             inherit inputs;
             overlays = overlays;
           };
-          homeConfigurations =
-            import ./userland/default.nix {
-              inherit pkgs;
-              inherit inputs;
-              overlays = overlays; # TODO change non mac overlays to check beforehand and fail
-            };
+          homeConfigurations = import ./userland/default.nix { inherit inputs pkgs overlays; };
         }));
 }

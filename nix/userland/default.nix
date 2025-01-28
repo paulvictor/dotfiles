@@ -1,28 +1,27 @@
-args:
+{pkgs, inputs, overlays, ...}:
 
 let
-  inherit (args) pkgs inputs overlays;
-  inherit (inputs) magix guile-swayer;
-  mkHomeConfig = extraArgs: inputs.homeManager.lib.homeManagerConfiguration (rec {
+  inherit (inputs) magix homeManager;
+  allDevices = import ./all-devices.nix;
+  inherit (pkgs) lib;
+in
+builtins.mapAttrs(_: attrs:
+  let
+    inherit (attrs) extraSpecialArgs additionalModules;
+  in homeManager.lib.homeManagerConfiguration ({
     inherit pkgs;
-    extraSpecialArgs = extraArgs.extraSpecialArgs // {inherit guile-swayer magix overlays; inherit (extraArgs) system;};
+    extraSpecialArgs = extraSpecialArgs // {inherit magix;};
     modules = [
       inputs.nix-index-database.hmModules.nix-index
       ./overlays.nix
       ./home-configuration.nix
-      {nixpkgs.config = {allowUnfree = true;};}
-    ] ++ [
       {
-        home = {
-          inherit (extraArgs) username homeDirectory stateVersion;
-        };
+        nixpkgs.config.allowUnfree = true;
+        nixpkgs.overlays = overlays;
       }
-    ];
-  });
-  allDevices = import ./all-devices.nix inputs.flake-utils.lib.system;
-in
-builtins.mapAttrs(_: attrs:
-  mkHomeConfig {
-    inherit (attrs) system username homeDirectory stateVersion extraSpecialArgs;
-    inherit pkgs;
-  }) allDevices
+    ]
+    ++ (lib.optional attrs.withGUI ./gui-config.nix)
+    ++ (lib.optional attrs.isDevEnv  ./dev-config.nix )
+    ++ (lib.optional attrs.isDesktop ./desktop-config.nix)
+    ++ additionalModules;
+  })) allDevices

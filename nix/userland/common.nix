@@ -3,6 +3,7 @@
 let
   shareLink = pkgs.callPackage ./scripts/shareLink.nix { inherit pkgs config; };
   customizedEmacs = pkgs.callPackage ./packages/emax {};
+  inherit (pkgs.stdenv) isLinux;
 in
 with pkgs;
 {
@@ -38,7 +39,7 @@ with pkgs;
     bandwhich
     grex
   ] ++
-  lib.optionals (specialArgs.isLinux) [
+  lib.optionals (isLinux) [
     ffmpeg-full
     pcsctools
     pcsclite
@@ -141,7 +142,7 @@ with pkgs;
   };
 
   programs.gpg = {
-    enable = specialArgs.isLinux;
+    enable = isLinux;
     settings = {
       default-key = "0xA96C9B89755DF7D2";
       default-recipient-self = true;
@@ -165,7 +166,7 @@ with pkgs;
   };
 
   services.emacs = {
-    enable = specialArgs.isLinux;
+    enable = isLinux;
     package = customizedEmacs;
     client = {
       enable = true;
@@ -174,12 +175,12 @@ with pkgs;
   };
 
   programs.emacs = {
-    enable = !specialArgs.isLinux;
+    enable = !isLinux;
     package = customizedEmacs;
   };
 
   programs.eza = {
-    enable = specialArgs.isLinux;
+    enable = isLinux;
   };
 
   programs.broot = {
@@ -190,7 +191,7 @@ with pkgs;
     };
   };
 
-  systemd.user.sessionVariables = lib.optionalAttrs specialArgs.isLinux {
+  systemd.user.sessionVariables = lib.optionalAttrs isLinux {
     GNUPGHOME = "${config.home.homeDirectory}/.gnupg";
     EDITOR = "emacsclient -c -n";
   };
