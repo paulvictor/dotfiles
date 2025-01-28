@@ -13,24 +13,22 @@ let
         system.configurationRevision = lib.mkIf (inputs.self ? rev) inputs.self.rev;
       };
     in [
+      inputs.flake-utils-plus.nixosModules.autoGenFromInputs
+      inputs.sops-nix.nixosModules.sops
+      inputs.homeManager.nixosModule
       ../common-config.nix
       ../caches.nix
       common
-      inputs.flake-utils-plus.nixosModules.autoGenFromInputs
       {
         nix.generateNixPathFromInputs = true;
         nix.generateRegistryFromInputs = true;
         nix.linkInputs = true;
       }
-      inputs.sops-nix.nixosModules.sops
-      inputs.homeManager.nixosModule
-
       ../modules/viktor.nix
       ../modules/workstations.nix
       ../modules/ssh.nix
     ];
   deviceConfigs = import ./all-devices.nix;
-
 in
 listToAttrs
   (forEach
