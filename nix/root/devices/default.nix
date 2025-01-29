@@ -4,7 +4,7 @@ let
 
   inherit (builtins) attrNames isAttrs readDir listToAttrs elem;
 
-  inherit (lib) nixosSystem forEach;
+  inherit (lib) forEach;
 
   commonModules =
     let
@@ -13,9 +13,7 @@ let
         system.configurationRevision = lib.mkIf (inputs.self ? rev) inputs.self.rev;
       };
     in [
-      inputs.flake-utils-plus.nixosModules.autoGenFromInputs
-      inputs.sops-nix.nixosModules.sops
-      inputs.homeManager.nixosModule
+
       ../common-config.nix
       ../caches.nix
       common
@@ -35,12 +33,17 @@ listToAttrs
     deviceConfigs
     (deviceConfig:
       let
-        inherit (deviceConfig) hostName;
+        inherit (deviceConfig) hostName unifiedHomeManager;
       in
         {
           name = hostName;
           value = [
-            {networking.hostName = hostName;}
+            inputs.flake-utils-plus.nixosModules.autoGenFromInputs
+            inputs.sops-nix.nixosModules.sops
+            inputs.homeManager.nixosModule
+            {
+              networking.hostName = hostName;
+            }
             "${toString ./.}/${hostName}/default.nix"
-          ] ++ commonModules;
+          ] ++ commonModules ++ (lib.optionals unifiedHomeManager [../../userland/nixosModule.nix]);
         }))

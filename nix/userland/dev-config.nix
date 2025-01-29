@@ -64,7 +64,7 @@ in
         tmuxWithConfig
         pscid
         leiningen clojure
-        specialArgs.magix.packages.${system}.magix
+        specialArgs.inputs.magix.packages.${system}.magix
 #         visidata # for visualizing data
       ] ++
       (lib.optionals isLinux [ bindfs msgpack-tools k ]);

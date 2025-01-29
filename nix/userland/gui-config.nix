@@ -1,8 +1,8 @@
-{ config, pkgs, lib, specialArgs, ... }:
+{ config, pkgs, lib, ... }:
 
 with pkgs;
 let
-  custom-vieb = import ./packages/vieb.nix { inherit pkgs config; };
+  custom-vieb = import ./packages/vieb.nix { inherit pkgs; inherit (config.home) homeDirectory; };
   source-code-pro-nerdfonts = pkgs.callPackage ./packages/source-code-pro-nerdfonts {};
   hack-nerdfonts = pkgs.callPackage ./packages/hack-nerdfonts.nix {};
 #       firacode-nerdfonts = pkgs.callPackage ./packages/fira-code-nerdfonts.nix {};
@@ -89,8 +89,6 @@ let
         type = "stdio";
         allowed_extensions = ["tabfs@paulvictor.com"];
       };
-
-  customizedemacs = pkgs.callPackage ./packages/emax {};
 in
   {
     home.packages =
@@ -133,7 +131,6 @@ in
         yubikey-manager
         yubikey-personalization
         zathura # Crashing.
-        zoom-us
         (vivaldi.override { proprietaryCodecs = true; enableWidevine = true;})
         (ungoogled-chromium.override { enableWideVine = true;})
       ] ++ (with nerd-fonts;

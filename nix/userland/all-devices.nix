@@ -1,15 +1,11 @@
 {
   "viktor@uriel" = {
-    extraSpecialArgs = {
-      hostSpecificImports = [
-        ./devices/uriel.nix
-      ];
-    };
     additionalModules = [
       {
         home.username = "viktor";
         home.homeDirectory = "/home/viktor";
         home.stateVersion = "21.05";
+        services.batteryAlert.enable = true;
       }
     ];
     withGUI = true; # Enable/disable gui programs
@@ -17,11 +13,6 @@
     isDevEnv = true; # For all dev packages
   };
   "viktor@sorlag" = {
-    extraSpecialArgs = {
-      hostSpecificImports = [
-        ./devices/sorlag.nix
-      ];
-    };
     additionalModules = [
       {
         home.username = "viktor";

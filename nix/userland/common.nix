@@ -47,7 +47,6 @@ with pkgs;
     rclone
     rclone-browser
     shareLink
-    customizedEmacs
     watchexec # because of https://github.com/NixOS/nixpkgs/issues/160876
   ];
 
@@ -175,7 +174,7 @@ with pkgs;
   };
 
   programs.emacs = {
-    enable = !isLinux;
+    enable = true;
     package = customizedEmacs;
   };
 

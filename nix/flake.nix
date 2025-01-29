@@ -80,6 +80,7 @@
       ripgrep-overlay = import ./overlays/ripgrep.nix;
       rofi-fuzzy = import ./overlays/rofi-fuzzy.nix;
       pass-override-overlay = import ./overlays/pass-override.nix;
+      pass-with-extensions = import ./overlays/pass-with-extensions.nix;
       wallpaper-overlay = import ./overlays/wallpaper.nix;
       electron-apps = import ./overlays/electronApps;
       surfraw-overlay = import ./overlays/surfraw.nix;
@@ -88,6 +89,7 @@
       fish-docker-completion = import ./overlays/fish.nix;
       rofi-theme-overlay = import ./overlays/rofi-theme-overlay.nix;
       warpd-overlay = import ./overlays/warpd.nix;
+      passdo = import ./overlays/type-password/passdo.nix;
       #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
       overlays = [
         fish-docker-completion
@@ -95,6 +97,8 @@
         ripgrep-overlay
         rofi-fuzzy
         pass-override-overlay
+        pass-with-extensions
+        passdo
         electron-apps
         wallpaper-overlay
         surfraw-overlay
@@ -142,7 +146,18 @@
       ))
       // (eachDefaultSystemPassThrough (system:
         let
-          pkgs = inputs.nixpkgs.legacyPackages.${system};
+          pkgs =
+            import nixpkgs {
+              inherit system;
+              config.allowUnfreePredicate =
+                pkg: builtins.elem (lib.getName pkg) [
+                  "google-chrome"
+                  "vivaldi"
+                  "widevine-cdm"
+                  "ungoogled-chromium"
+                  "ungoogled-chromium-unwrapped"
+                ];
+            };
           nixosConfigurations =
             lib.mapAttrs
               (_: modules:

@@ -1,4 +1,4 @@
-{ pkgs, config }:
+{ pkgs, homeDirectory }:
 
 let
   viebrc = pkgs.writeText "viebrc"
@@ -15,7 +15,7 @@ set containerstartuppage=main
 set countlimit=100
 set devtoolsposition=split
 set downloadmethod=confirm
-set downloadpath=${config.home.homeDirectory}/plain/Downloads
+set downloadpath=${homeDirectory}/plain/Downloads
 set favicons=session
 set favoritepages=
 " set firefoxmode=always
@@ -202,7 +202,7 @@ pkgs.runCommand "vieb" { buildInputs = [ pkgs.makeWrapper ]; }
       rm $out/bin/vieb
       # Because we create this ourself, by creating a wrapper
       makeWrapper ${pkgs.vieb}/bin/vieb $out/bin/vieb \
-        --add-flags "--datafolder=${config.home.homeDirectory}/plain/vieb" \
+        --add-flags "--datafolder=${homeDirectory}/plain/vieb" \
         --add-flags "--site-isolation=strict" \
         --add-flags "--config-file=${viebrc}"
     ''
