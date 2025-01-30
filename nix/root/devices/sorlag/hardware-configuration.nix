@@ -11,7 +11,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelParams = pkgs.lib.mkDefault [ "acpi_rev_override" ];
 
-  boot.initrd.availableKernelModules = [  "vmd" "usbhid" "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "usbhid" "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   # acpi_call only for laptops
   boot.kernelModules = [ "kvm-intel" "acpi_call" ];

@@ -67,6 +67,6 @@ in
         specialArgs.inputs.magix.packages.${system}.magix
 #         visidata # for visualizing data
       ] ++
-      (lib.optionals isLinux [ bindfs msgpack-tools k ]);
+      (lib.optionals isLinux [ bindfs k ]);
   }
 

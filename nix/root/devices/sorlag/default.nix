@@ -28,7 +28,9 @@
   ];
   hardware.keyboard.qmk.enable = true;
 
-  environment.systemPackages = with pkgs; [ qmk qmk_hid vial ];
+  environment.systemPackages =
+    with pkgs;
+    [ qmk qmk_hid ];
 
 #   hardware.video.hidpi.enable = true;
 

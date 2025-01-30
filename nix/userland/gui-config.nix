@@ -101,7 +101,7 @@ in
         dejavu_fonts.full-ttf
         electronApps
         font-awesome
-        google-chrome
+
         googler
         gromit-mpx
 
@@ -130,24 +130,32 @@ in
         yubico-piv-tool
         yubikey-manager
         yubikey-personalization
+        (ungoogled-chromium.override { enableWideVine = pkgs.stdenv.isx86_64; })
         zathura # Crashing.
-        (vivaldi.override { proprietaryCodecs = true; enableWidevine = true;})
-        (ungoogled-chromium.override { enableWideVine = true;})
-      ] ++ (with nerd-fonts;
-          [
-            #hack
-            victor-mono
-            jetbrains-mono
-            udev-gothic-nf
-            plemoljp-nf
-            #iosevka-term
-            #iosevka
-            sauce-code-pro
-#             dejavu-sans-mono
-            symbols-only
-            #fira-code
-            monoid
-          ]);
+
+      ] ++
+      (with nerd-fonts;
+        [
+          #hack
+          victor-mono
+          jetbrains-mono
+          udev-gothic-nf
+          plemoljp-nf
+          #iosevka-term
+          #iosevka
+          sauce-code-pro
+          #             dejavu-sans-mono
+          symbols-only
+          #fira-code
+          monoid
+        ])
+      ++ (lib.optionals pkgs.stdenv.isx86_64
+        [
+          (vivaldi.override { proprietaryCodecs = true; enableWidevine = true;})
+
+          google-chrome
+        ]
+      );
     xresources =
       let
         xresourcesFile = callPackage ./scripts/xresources.nix { template = "rxvt-unicode"; brightness = "dark"; scheme = "tomorrow"; };
@@ -158,7 +166,10 @@ in
       };
     programs.firefox = {
       enable = true;
-      package = firefox-devedition-bin;
+      package =
+        if (pkgs.stdenv.isAarch64)
+        then firefox-devedition
+        else firefox-devedition-bin;
       #package = firefox-beta-bin ; # wrapFirefox (latest.firefox-beta-bin) { browserName = "firefox"; };
       profiles = {
         "proxied" = {
