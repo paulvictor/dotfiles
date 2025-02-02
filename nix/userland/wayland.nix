@@ -28,7 +28,12 @@ in
 
   programs.swaylock = {
     enable = true;
-    package = lockPackage;
+    settings = {
+      font-size = 24;
+      show-failed-attempts = true;
+      image = "${pkgs.wall1}";
+      scaling = "tile";
+    };
   };
 
   programs.wpaperd = {

@@ -140,6 +140,11 @@ in {
     xdg-desktop-portal-gtk
   ];
 
+  programs.sway = {
+    enable = true;
+    package = null;
+  };
+
 }
 # [screencast]
 # output_name=

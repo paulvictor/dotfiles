@@ -112,7 +112,7 @@
    `(general-define-keys
      #:prefix "DEL" #:wk "Session"
      ("q" (sway-exit) #:wk "Exit Sway")
-     ("l" (exec "swaylock-fancy") #:wk "Lock session")
+     ("l" (exec "swaylock") #:wk "Lock session")
      ("r" (sway-reload) #:wk "Reload Sway"))
 
    `(general-define-keys

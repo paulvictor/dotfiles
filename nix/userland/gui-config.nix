@@ -222,6 +222,8 @@ in
             "ui.prefersReducedMotion" = 1;
             "browser.compactmode.show" = true;
             "xpinstall.signatures.required" = false;
+            "layout.css.prefers-color-scheme.content-override" = 0;
+            "ui.systemUsesDarkTheme" = 1;
           };
           userChrome = import ./config/userChrome.nix { inherit pkgs; };
           extensions = [

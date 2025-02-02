@@ -31,7 +31,7 @@ with pkgs;
     pavucontrol
     pulseaudio-ctl
     rofiElectronAppsRunner
-  ] ++ lib.optionals pkgs.stdenv.isx86_64 [pcloud-console-client];
+  ] ;
 
   xdg.configFile.rofi = {
     recursive = true;

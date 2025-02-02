@@ -17,7 +17,7 @@ let
     "Shift+Return" = "exec ${pkgs.alacritty}/bin/alacritty";
     "Tab" = "workspace back_and_forth";
     "w" = "kill";
-    "BackSpace" = "exec swaylock-fancy";
+    "BackSpace" = "exec swaylock";
     "Shift+space" = "focus mode_toggle";
     "u" = "focus parent";
     "Shift+u" = "focus child";
