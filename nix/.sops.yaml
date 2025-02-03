@@ -10,3 +10,10 @@ creation_rules:
       age:
       - *sorlag
       - *uriel
+  - path_regex: secrets/sorlag/[^/]+\.(yaml|json|env|ini|conf)$
+    key_groups:
+    - pgp:
+      - *paul
+      age:
+      - *sorlag
+

@@ -1,6 +1,6 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, specialArgs, ... }:
 
-lib.mkIf (config.networking.hostName == "uriel") {
+{
   networking.firewall.allowedUDPPorts = [ config.services.tailscale.port ];
   networking.firewall.allowedTCPPorts = [ 5006 ];
   networking.nameservers = [ "100.100.100.100" "8.8.8.8" "1.1.1.1" ];
@@ -8,16 +8,11 @@ lib.mkIf (config.networking.hostName == "uriel") {
   services.tailscale = {
     enable = true;
     port = 12345;
-    authKeyFile = "/var/lib/tailscale/authkey";
+    authKeyFile = "/run/secrets/tailscle.authkey";
     extraUpFlags = [
       "--operator"
       "viktor"
       "--ssh"
-    ];
-  };
-  environment.persistence."/persist" = {
-    directories = [
-      "/var/lib/tailscale"
     ];
   };
 }

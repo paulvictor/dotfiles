@@ -91,9 +91,9 @@ with pkgs;
   };
 
   imports =
-    lib.optionals isPhysicalDevice
       [
         ./keyd.nix
+        ../../root/tailscale.nix
       ];
 
 }

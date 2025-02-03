@@ -16,6 +16,7 @@ let
           PermitRootLogin = lib.mkDefault "yes";
           GatewayPorts = "yes";
           PasswordAuthentication = false;
+          StrictModes = false;
         };
       };
     };

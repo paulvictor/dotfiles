@@ -94,11 +94,4 @@ in
       ];
     };
   };
-  services.himalaya-watch = {
-    enable = true;
-    environment = {
-      GNUPGHOME = gpg-dir;
-    };
-  };
-
 }
