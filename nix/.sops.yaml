@@ -1,0 +1,12 @@
+keys:
+  - &sorlag age1a0c8jmahvfppjqqy4375w4nq8knv0esshjx8kgdnpx6vl2djzfcsr8gdmg
+  - &paul 2A4F0026730E0C45C031B3FA2BF9A72A4A1D161D!
+  - &uriel age1f07tempfywuy6cjteuvcdepxytx0l3yjwfegsrwvjpcz0zzphdpqyy2lep
+creation_rules:
+  - path_regex: secrets/[^/]+\.(yaml|json|env|ini|conf)$
+    key_groups:
+    - pgp:
+      - *paul
+      age:
+      - *sorlag
+      - *uriel

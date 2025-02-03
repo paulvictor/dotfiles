@@ -33,5 +33,6 @@ with lib;
     optionals isPhysicalDevice [
       ./modules/desktop-environment.nix
       ./modules/networking.nix
+      ./deploy-secrets.nix
     ];
 }

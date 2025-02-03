@@ -4,15 +4,16 @@
   imports = [
     ../../modules/syncthing.nix
   ];
-  sops.defaultSopsFile = ./secrets/syncthing.yaml;
-  sops.defaultSopsFormat = "yaml";
-  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   sops.secrets."syncthing/key.pem" = {
+    sopsFile = ./secrets/syncthing.yaml;
+    format = "yaml";
     owner = config.users.users.viktor.name;
     group = config.users.users.viktor.group;
     restartUnits = [ "syncthing.service" ];
   };
   sops.secrets."syncthing/cert.pem" = {
+    sopsFile = ./secrets/syncthing.yaml;
+    format = "yaml";
     owner = config.users.users.viktor.name;
     group = config.users.users.viktor.group;
     restartUnits = [ "syncthing.service" ];
