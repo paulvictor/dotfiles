@@ -8,11 +8,12 @@
   services.tailscale = {
     enable = true;
     port = 12345;
-    authKeyFile = "/run/secrets/tailscle.authkey";
+    authKeyFile = config.sops.secrets."tailscale.authkey".path;
     extraUpFlags = [
-      "--operator"
-      "viktor"
+      "--operator" "viktor"
       "--ssh"
+      "--accept-risk" "all"
+      "--accept-routes"
     ];
   };
 }

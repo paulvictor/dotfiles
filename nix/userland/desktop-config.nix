@@ -10,7 +10,7 @@ with pkgs;
     [ ./wayland.nix
       ./config/warpd.nix ];
   services.gocryptfs = {
-    enable = pkgs.stdenv.isLinux;
+    enable = false;
     cryptDir = "${config.home.homeDirectory}/crypt";
     plainDir = "${config.home.homeDirectory}/plain";
     passCmd = "cat /run/secrets/crypt-mount-key";

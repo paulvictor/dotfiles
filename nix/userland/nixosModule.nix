@@ -4,6 +4,7 @@
   home-manager.useUserPackages = true;
   home-manager.useGlobalPkgs = true;
   home-manager.extraSpecialArgs = {inherit (specialArgs) inputs;};
+  home-manager.backupFileExtension = ".bkp";
   home-manager.users.viktor = {
     imports = [
       specialArgs.inputs.nix-index-database.hmModules.nix-index
