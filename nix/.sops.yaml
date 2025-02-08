@@ -16,4 +16,12 @@ creation_rules:
       - *paul
       age:
       - *sorlag
+  - path_regex: secrets/uriel/[^/]+\.(yaml|json|env|ini|conf)$
+    key_groups:
+    - pgp:
+      - *paul
+      age:
+      - *uriel
+
+
 

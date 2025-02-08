@@ -6,7 +6,7 @@
   networking.nameservers = [ "100.100.100.100" "8.8.8.8" "1.1.1.1" ];
   environment.systemPackages = with pkgs; [ tailscale ];
   services.tailscale = {
-    enable = true;
+    enable = (config.sops.secrets ? "tailscale.authkey");
     port = 12345;
     authKeyFile = config.sops.secrets."tailscale.authkey".path;
     extraUpFlags = [
@@ -14,6 +14,8 @@
       "--ssh"
       "--accept-risk" "all"
       "--accept-routes"
+      "--timeout" "10s"
+      "--advertise-tags" "tag:workstations"
     ];
   };
 }
