@@ -57,6 +57,11 @@
       flake = false;
     };
 
+    nix-on-droid = {
+      url = "github:nix-community/nix-on-droid";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # see https://determinate.systems/posts/extending-nixos-configurations/#using-private-github-inputs-in-flakes
     # to integrate private flakes
 
@@ -71,10 +76,10 @@
 
   };
 
-  outputs = { self, nixpkgs, emacsOverlay, flake-utils, darwin, nix-cl, ... }@inputs :
+  outputs = { self, nixpkgs, ... }@inputs :
     let
       inherit (nixpkgs) lib;
-      inherit (flake-utils.lib) eachDefaultSystemPassThrough eachDefaultSystem;
+      inherit (inputs.flake-utils.lib) eachDefaultSystemPassThrough eachDefaultSystem;
       gllock-overlay = import ./overlays/gllock.nix;
       brotab-overlay = import ./overlays/brotab.nix;
       ripgrep-overlay = import ./overlays/ripgrep.nix;
@@ -105,7 +110,7 @@
         inputs.nur.overlays.default
         ql2nix-overlay
         inputs.ngnk.overlay
-        emacsOverlay.overlay
+        inputs.emacsOverlay.overlay
         pcloudcc-overlay
         rofi-theme-overlay
         warpd-overlay
@@ -124,7 +129,10 @@
                 (_: m: m ++ [inputs.nixos-generators.nixosModules.${format}])
                 nixosModules)));
     in
-      (eachDefaultSystem (system:
+      {
+        inherit nixosModules;
+      }
+      // (eachDefaultSystem (system:
         {
           images =
             lib.mapAttrs
@@ -178,5 +186,9 @@
             overlays = overlays;
           };
           homeConfigurations = import ./userland/default.nix { inherit inputs pkgs overlays; };
-        }));
+        }))
+      // {
+        nixOnDroidConfigurations.default = import ./nix-on-droid.nix;
+      }
+  ;
 }

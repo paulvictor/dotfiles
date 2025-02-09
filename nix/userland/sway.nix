@@ -77,6 +77,7 @@ in
       menu = "${pkgs.fuzzel}/bin/fuzzel";
       bars = [];
       startup = [
+        { command = "wpaperd"; always = true; }
         { command = "\"guile ~/stumpwm-like/init.scm\""; always = true; } # TODO make this a systemd service and make it a dependency of sway-session.target
         { command = "systemctl --user restart waybar"; always = true; }
         { command = "systemctl --user restart emacs.service"; always = false; }
