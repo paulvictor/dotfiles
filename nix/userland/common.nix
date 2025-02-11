@@ -8,27 +8,19 @@ in
 with pkgs;
 {
   home.packages = [
-    awscli2
     ddgr
     doctl
-    ssm-session-manager-plugin
-    keybase
     lsof
     moreutils
-    ncmpcpp
     nix-bundle
     opensc
-    openssh
-    openssl
     pbgopy
     prettyping
     skim
     stow
     tree
     unzip
-    vifm
     yt-dlp
-    z-lua
   ] ++
   [ procs
     bat

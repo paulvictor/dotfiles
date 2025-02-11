@@ -111,7 +111,7 @@ in
         material-icons
         menu-surfraw
         mpv
-        networkmanagerapplet
+
         noto-fonts
 #             nyxt-3
         pdftk

@@ -61,7 +61,7 @@ in
         sbcl
         silver-searcher
         tmate
-        tmuxWithConfig
+
         pscid
         leiningen clojure
         specialArgs.inputs.magix.packages.${system}.magix
