@@ -75,7 +75,8 @@ with pkgs;
 
   # Again, only for laptops
   # This will save you money and possibly your life!
-  services.thermald.enable = lib.mkForce isPhysicalDevice;
+  services.thermald.enable =
+    (isPhysicalDevice && pkgs.stdenv.isx86_64);
 
   programs.firejail.enable = isPhysicalDevice;
 
