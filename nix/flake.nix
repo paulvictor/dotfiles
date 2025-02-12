@@ -154,25 +154,14 @@
       ))
       // (eachDefaultSystemPassThrough (system:
         let
-          pkgs =
-            import nixpkgs {
-              inherit system;
-              config.allowUnfreePredicate =
-                pkg: builtins.elem (lib.getName pkg) [
-                  "google-chrome"
-                  "vivaldi"
-                  "widevine-cdm"
-                  "ungoogled-chromium"
-                  "ungoogled-chromium-unwrapped"
-                ];
-            };
+          pkgs = nixpkgs.legacyPackages.${system};
           nixosConfigurations =
             lib.mapAttrs
               (_: modules:
                 lib.nixosSystem {
-                  inherit system pkgs modules;
+                  inherit modules;
                   specialArgs = {
-                    inherit inputs;
+                    inherit inputs system;
                     isPhysicalDevice = true; # HACK for now
                   };
                 })

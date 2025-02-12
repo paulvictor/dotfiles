@@ -25,12 +25,9 @@ with lib;
   };
 
   boot.binfmt.emulatedSystems =
-    optionals
-      isPhysicalDevice
-      (
-        lib.remove
-          config.nixpkgs.system
-          [ "x86_64-linux" "aarch64-linux" "armv7l-linux" "riscv64-linux" ]);
+    lib.remove
+      pkgs.stdenv.hostPlatform.system
+      [ "x86_64-linux" "aarch64-linux" "armv7l-linux" "riscv64-linux" ];
 
   imports =
     optionals isPhysicalDevice [

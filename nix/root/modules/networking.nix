@@ -19,7 +19,9 @@
 
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
   networking.networkmanager.enable = true;
-  networking.networkmanager.insertNameservers = [ "8.8.8.8" "8.8.4.4" ];
+  services.resolved = {
+    enable = true;
+  };
 
   networking.firewall.enable = lib.mkDefault false;
 

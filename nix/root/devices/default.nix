@@ -7,21 +7,26 @@ let
   inherit (lib) forEach;
 
   commonModules =
-    let
-      common = {lib, ...}: {
-        nixpkgs.overlays = overlays;
-        system.configurationRevision = lib.mkIf (inputs.self ? rev) inputs.self.rev;
-      };
-    in [
-
+    [
       ../common-config.nix
       ../caches.nix
-      common
-      {
+      ({lib, ...}: {
+        system.configurationRevision = lib.mkIf (inputs.self ? rev) inputs.self.rev;
+        nixpkgs.overlays = overlays;
         nix.generateNixPathFromInputs = true;
         nix.generateRegistryFromInputs = true;
         nix.linkInputs = true;
-      }
+        nixpkgs.config.allowUnfreePredicate =
+          pkg: builtins.elem (lib.getName pkg)
+            [
+              "google-chrome"
+              "vivaldi"
+              "widevine-cdm"
+              "ungoogled-chromium"
+              "ungoogled-chromium-unwrapped"
+            ];
+      })
+      ({system, ...}: {nixpkgs.hostPlatform = system;})
       ../modules/viktor.nix
       ../modules/workstations.nix
       ../modules/ssh.nix
@@ -41,9 +46,7 @@ listToAttrs
             inputs.flake-utils-plus.nixosModules.autoGenFromInputs
             inputs.sops-nix.nixosModules.sops
             inputs.homeManager.nixosModule
-            {
-              networking.hostName = hostName;
-            }
+            { networking.hostName = hostName; }
             "${toString ./.}/${hostName}/default.nix"
           ] ++ commonModules ++ (lib.optionals unifiedHomeManager [../../userland/nixosModule.nix]);
         }))
