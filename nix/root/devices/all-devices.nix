@@ -11,4 +11,8 @@
     hostName = "uriel";
     unifiedHomeManager = true;
   }
+  {
+    hostName = "orbb";
+    unifiedHomeManager = true;
+  }
 ]
