@@ -35,6 +35,8 @@
   # high-resolution display
   # hardware.video.hidpi.enable = lib.mkDefault true;
 
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+
   boot.extraModprobeConfig = ''
     # From https://unix.stackexchange.com/questions/572962/system-setting-to-stop-wifi-from-dropping-connection and https://bugzilla.kernel.org/show_bug.cgi?id=203709
     options mac80211 probe_wait_ms=2000 beacon_loss_count=30 max_nullfunc_tries=20 max_probe_tries=50

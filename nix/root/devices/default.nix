@@ -24,9 +24,9 @@ let
               "widevine-cdm"
               "ungoogled-chromium"
               "ungoogled-chromium-unwrapped"
+              "prl-tools"
             ];
       })
-      ({system, ...}: {nixpkgs.hostPlatform = system;})
       ../modules/viktor.nix
       ../modules/workstations.nix
       ../modules/ssh.nix

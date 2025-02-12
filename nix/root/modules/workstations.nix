@@ -42,12 +42,14 @@ with pkgs;
   programs.zsh.enable = true;
 
   virtualisation.docker= {
-    enable = isPhysicalDevice;
+    enable = false;
     logDriver = "journald";
   };
   services.udev.packages =
     lib.optionals isPhysicalDevice
-      [ android-udev-rules yubikey-personalization ];
+      [
+#         android-udev-rules
+        yubikey-personalization ];
 #   security.polkit.enable = lib.mkForce false;
 
   services.pcscd.enable = isPhysicalDevice;
@@ -63,15 +65,15 @@ with pkgs;
       }
     });
   '';
-  programs.adb.enable = isPhysicalDevice;
+  programs.adb.enable = false;
 
-  hardware.keyboard.zsa.enable = isPhysicalDevice;
+  hardware.keyboard.zsa.enable = false;
 
   # For SSD's
-  services.fstrim.enable = lib.mkForce isPhysicalDevice;
+  services.fstrim.enable = isPhysicalDevice && pkgs.stdenv.isx86_64;
 
   # For laptops
-  services.tlp.enable = lib.mkForce isPhysicalDevice;
+  services.tlp.enable = isPhysicalDevice && pkgs.stdenv.isx86_64;
 
   # Again, only for laptops
   # This will save you money and possibly your life!
