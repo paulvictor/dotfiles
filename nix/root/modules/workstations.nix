@@ -45,6 +45,7 @@ with pkgs;
     enable = lib.mkDefault false;
     logDriver = "journald";
   };
+  users.groups.docker =  {};
   services.udev.packages =
     lib.optionals isPhysicalDevice
       [
