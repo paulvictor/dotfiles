@@ -42,7 +42,7 @@ with pkgs;
   programs.zsh.enable = true;
 
   virtualisation.docker= {
-    enable = false;
+    enable = lib.mkDefault false;
     logDriver = "journald";
   };
   services.udev.packages =
