@@ -2,7 +2,8 @@
 
 {program, name}:
 
-let script = pkgs.writeShellScript name program;
+let
+  script = pkgs.writeShellScript name program;
 in
 [
   "/bin/zsh"

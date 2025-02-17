@@ -7,7 +7,7 @@
       ProgramArguments = [
         "${pkgs.gnupg}/bin/gpgconf"
         "--launch"
-	"gpg-agent"
+	      "gpg-agent"
       ];
       RunAtLoad = true;
     };

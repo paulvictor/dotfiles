@@ -4,7 +4,7 @@ let
   system = flake-utils.lib.system.aarch64-darwin;
   inherit (inputs) darwin  flake-utils;
   commonModules = {pkgs,...}: {
-    services.nix-daemon.enable = true;
+    system.stateVersion = 4;
     nix.package = pkgs.nixStable;
     nix.extraOptions = ''
       experimental-features = nix-command flakes
@@ -15,31 +15,23 @@ let
     environment.systemPackages = with pkgs;[
       inputs.homeManager.packages."${system}".default
     ];
-    nixpkgs = {
-      inherit overlays system;
-    };
+    nixpkgs = {inherit overlays system;};
 
-    environment.shells = [ pkgs.bashInteractive_5 pkgs.zsh ];
+    environment.shells = [ pkgs.bashInteractive pkgs.zsh ];
     environment.systemPath = [ "/run/current-system/sw/bin" ];
 
-    programs.bash = {
-      enable = true;
-    };
-    documentation.enable = false;
-    documentation.man.enable = false;
-    documentation.doc.enable = false;
-    documentation.info.enable = false;
-  };
-  machineSpecific = _: {
-    networking.hostName = "crash";
-    networking.computerName = "Crash";
+    programs.bash.enable = true;
+    documentation.enable = true;
+    documentation.man.enable = true;
+    documentation.doc.enable = true;
+    documentation.info.enable = true;
+    networking = {dns = [ "8.8.8.8" "8.8.4.4" ];};
   };
 
-  setupNixPath = {lib, ...}: {
-    nix.nixPath =
-      lib.mapAttrs'
-        (name: value: { inherit name; value = value.outPath; })
-        inputs;
+  machineSpecific = {
+    networking.hostName = "crash";
+    networking.computerName = "Crash";
+    networking.knownNetworkServices = ["Wi-Fi" "Ethernet Adaptor" "Thunderbolt Ethernet"];
   };
 
 in
@@ -48,11 +40,15 @@ darwin.lib.darwinSystem {
   inputs = {
     inherit nixpkgs darwin;
   };
+  specialArgs = {
+    userName = "paul.victor";
+  };
   modules = [
-    setupNixPath
     commonModules
     machineSpecific
-#     ../services/sshd.nix
+    ../services/sshd.nix
+    ../services/admin.nix
+
      # https://evilmartians.com/chronicles/stick-with-security-yubikey-ssh-gnupg-macos
 #     ../services/gpg-agent.nix
 #     ../services/ln-ssh-auth-sock.nix

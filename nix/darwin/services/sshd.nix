@@ -2,14 +2,18 @@
 
 let
   programWrapper = import ./common.nix { inherit pkgs; };
-  command = ''${pkgs.openssh}/bin/sshd -D -f /Users/paul/.custom-ssh/sshd_config'';
+  command =
+    ''${pkgs.openssh}/bin/sshd -D -f ${(toString ./.) + "/sshd_config"}'';
 in
 {
+  imports = [
+    ./gensshkeys.nix
+  ];
   launchd.daemons = {
     nix-sshd.serviceConfig = {
-      Label = "daemon.nix.foo";
-      UserName = "paul";
-      ProgramArguments = programWrapper { program = command; name = "foo";};
+      Label = "daemon.nix.remote";
+      UserName = "paul.victor";
+      ProgramArguments = programWrapper { program = command; name = "remote";};
       RunAtLoad = true;
       KeepAlive = true;
     };

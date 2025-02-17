@@ -1,5 +1,3 @@
-args@{config, pkgs, lib, ...}:
-
 {
   networking =
     {
