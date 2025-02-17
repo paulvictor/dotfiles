@@ -14,7 +14,6 @@ with pkgs;
     git
     htop
     man-pages
-    neovim
     man-pages-posix
     manix
     psmisc
@@ -36,6 +35,12 @@ with pkgs;
     wally-cli
     wirelesstools
   ];
+
+  programs.neovim = {
+    enable = true;
+    vimAlias = true;
+    viAlias = true;
+  };
 
   services.upower.enable = isPhysicalDevice;
   #services.nixosManual.showManual = true;

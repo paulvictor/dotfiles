@@ -123,7 +123,8 @@ in
   '';
   shellAliases = {
     # grep = "GREP_COLORS=\"1;33;40\" LANG=C egrep --color=always";
-    gen_new_cert = "'openssl req -new -x509 -key ~/.ssh/id_rsa -out cacert.pem -days 1095'";
+    gen_new_cert = "openssl req -new -x509 -key ~/.ssh/id_rsa -out cacert.pem -days 1095";
+    ee = "emacsclient -c -n $1";
 #     nextp = "mpc next";
 #     prevp = "mpc prev";
 #     tnew = "new-tmux-from-dir-name";
