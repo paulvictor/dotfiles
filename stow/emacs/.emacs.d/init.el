@@ -1177,3 +1177,8 @@ point reaches the beginning or end of the buffer, stop there."
                   ("q" nil "quit")))
 
 (use-package himalaya)
+
+(use-package man
+  :custom
+  (Man-width-max nil)
+  (Man-switches "-a"))

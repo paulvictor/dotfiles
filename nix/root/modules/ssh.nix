@@ -10,4 +10,5 @@
       StrictModes = false;
     };
   };
+  programs.mosh.enable = true;
 }
