@@ -13,7 +13,6 @@ builtins.mapAttrs(_: attrs:
     extraSpecialArgs = extraSpecialArgs // {inherit magix;};
     modules = [
       inputs.nix-index-database.hmModules.nix-index
-      ./overlays.nix
       ./home-configuration.nix
       {
         nixpkgs.config.allowUnfree = true;

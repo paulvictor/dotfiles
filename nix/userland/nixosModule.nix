@@ -8,7 +8,6 @@
   home-manager.users.viktor = {
     imports = [
       specialArgs.inputs.nix-index-database.hmModules.nix-index
-      ./overlays.nix
       ./home-configuration.nix
       {
         home.username = "viktor";

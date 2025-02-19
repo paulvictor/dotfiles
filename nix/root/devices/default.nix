@@ -45,7 +45,7 @@ listToAttrs
           value = [
             inputs.flake-utils-plus.nixosModules.autoGenFromInputs
             inputs.sops-nix.nixosModules.sops
-            inputs.homeManager.nixosModule
+            inputs.homeManager.nixosModules.default
             { networking.hostName = hostName; }
             "${toString ./.}/${hostName}/default.nix"
           ] ++ commonModules ++ (lib.optionals unifiedHomeManager [../../userland/nixosModule.nix]);

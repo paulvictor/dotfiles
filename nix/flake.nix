@@ -95,8 +95,10 @@
       rofi-theme-overlay = import ./overlays/rofi-theme-overlay.nix;
       warpd-overlay = import ./overlays/warpd.nix;
       passdo = import ./overlays/type-password/passdo.nix;
+      schemesh-overlay = import ./overlays/schemesh.nix;
       #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
       overlays = [
+        schemesh-overlay
         fish-docker-completion
         brotab-overlay
         ripgrep-overlay

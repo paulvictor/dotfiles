@@ -44,6 +44,7 @@ darwin.lib.darwinSystem {
     userName = "paul.victor";
   };
   modules = [
+    inputs.homeManager.darwinModules.default;
     commonModules
     machineSpecific
     ../services/sshd.nix

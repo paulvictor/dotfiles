@@ -226,7 +226,7 @@ in
             "ui.systemUsesDarkTheme" = 1;
           };
           userChrome = import ./config/userChrome.nix { inherit pkgs; };
-          extensions = [
+          extensions.packages = [
             nur.repos.rycee.firefox-addons.i-dont-care-about-cookies
 #             nur.repos.rycee.firefox-addons.bypass-paywalls-clean
             brotab-extension

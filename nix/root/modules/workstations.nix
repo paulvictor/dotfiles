@@ -34,6 +34,7 @@ with pkgs;
     virt-manager
     wally-cli
     wirelesstools
+    schemesh
   ];
 
   programs.neovim = {

@@ -88,7 +88,7 @@ in
   programs.himalaya = {
     enable = true;
     package = pkgs.himalaya.override {
-      buildFeatures = [
+      withFeatures = [
         "notmuch"
         "pgp-gpg"
       ];

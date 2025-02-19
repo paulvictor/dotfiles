@@ -1,8 +1,5 @@
-args@{ config, pkgs, lib, ...}:
+{ config, pkgs, lib, isPhysicalDevice, ...}:
 
-let
-  inherit (args) isPhysicalDevice;
-in
 with lib;
 {
   nix.settings.auto-optimise-store = true;
@@ -12,7 +9,7 @@ with lib;
     experimental-features = nix-command flakes
     accept-flake-config = true
   '';
-  nix.package = pkgs.nixVersions.stable;
+  nix.package = pkgs.nixVersions.latest;
   nix.settings.system-features = [ "kvm" "big-parallel" ];
 
   hardware.enableRedistributableFirmware = mkDefault true;
