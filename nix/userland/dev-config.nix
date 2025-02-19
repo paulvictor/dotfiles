@@ -2,7 +2,6 @@
 
 with pkgs;
 let
-  tmuxWithConfig = pkgs.callPackage ./packages/tmux {};
   inherit (pkg.stdenv) system isLinux;
 in
   {
@@ -43,25 +42,18 @@ in
       [
         axel
         cachix
-        enscript
         entr
         gnumake
-        google-cloud-sdk
         guile_3_0
         guile_3_0.dev
         guile_3_0.info
         jq
-        k9s
-        kubectl
-        kubectx
-        kubetail
         nodejs
         pv
         ruby
         sbcl
-        silver-searcher
         tmate
-
+        chez
         pscid
         leiningen clojure
         specialArgs.inputs.magix.packages.${system}.magix
