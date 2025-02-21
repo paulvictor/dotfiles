@@ -70,6 +70,14 @@ in
 
 
   initExtra = ''
+    [[ $TERM == "dumb" ]] \
+      && unsetopt zle \
+      && unsetopt prompt_cr \
+      && unsetopt prompt_subst \
+      && unfunction precmd \
+      && unfunction preexec \
+      && PS1='$ ' \
+      && return
     export LESS="-QR"
     setopt interactivecomments
     setopt autocd
