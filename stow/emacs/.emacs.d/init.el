@@ -976,6 +976,7 @@ Repeated invocations toggle between the two most recently open buffers."
 (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
 (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 (add-hook 'geiser-repl-mode-hook 'turn-on-smartparens-strict-mode)
+(add-hook 'ielm-mode-hook 'turn-on-smartparens-strict-mode)
 
 ;; Move cursor to end of current line
 ;; Insert new line below current line
@@ -1182,3 +1183,10 @@ point reaches the beginning or end of the buffer, stop there."
   :custom
   (Man-width-max nil)
   (Man-switches "-a"))
+
+(use-package tramp
+  :custom
+  (tramp-default-method "ssh")
+  (tramp-default-user "viktor")
+  (tramp-encoding-shell "/etc/profiles/per-user/viktor/bin/zsh")
+  (tramp-use-connection-share nil))
