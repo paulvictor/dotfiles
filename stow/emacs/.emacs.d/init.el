@@ -918,7 +918,11 @@ Repeated invocations toggle between the two most recently open buffers."
   :config
   ;; (setq geiser-default-implementation 'gambit)
   (setq geiser-default-implementation 'guile)
-  (setq geiser-active-implementations '(guile)))
+  (setq geiser-active-implementations '(guile chez))
+  (setq geiser-implementations-alist
+        '(((regexp "\\.scm$") guile)
+         ((regexp "\\.def\\'") chez) ((regexp "\\.ss\\'") chez)
+         ((regexp "\\.rkt$") racket))))
 
 (load-file (concat user-emacs-directory "ghcid.el"))
 (load-file (concat user-emacs-directory "utils.el"))
@@ -1186,7 +1190,5 @@ point reaches the beginning or end of the buffer, stop there."
 
 (use-package tramp
   :custom
-  (tramp-default-method "ssh")
-  (tramp-default-user "viktor")
-  (tramp-encoding-shell "/etc/profiles/per-user/viktor/bin/zsh")
+  (tramp-default-method "sshx")
   (tramp-use-connection-share nil))
