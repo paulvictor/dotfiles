@@ -136,7 +136,6 @@ let
             s
             smartparens
             slack
-            slime
             sly
             swiper
             transient

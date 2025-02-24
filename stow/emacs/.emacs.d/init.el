@@ -638,23 +638,24 @@ Repeated invocations toggle between the two most recently open buffers."
   (let ((browse-url-browser-function 'w3m-browse-url))
     (apply orig-fun args)))
 
-(use-package slime
-  :hook (lisp-mode . slime-mode)
-  :init
-  (setq inferior-lisp-program "sbcl") ; TODO : Move to dir specific config
-;;      (add-to-list 'slime-contribs 'slime-fancy)
-  :config
-  (advice-add 'hyperspec-lookup :around #'hyperspec-lookup--hyperspec-lookup-w3m)
-  (add-hook 'slime-load-hook
-            (lambda ()
-              (define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)))
-  (require 'slime-autoloads))
+;; (use-package slime
+;;   :hook (lisp-mode . slime-mode)
+;;   :init
+;;   (setq inferior-lisp-program "sbcl") ; TODO : Move to dir specific config
+;; ;;      (add-to-list 'slime-contribs 'slime-fancy)
+;;   :config
+;;   (advice-add 'hyperspec-lookup :around #'hyperspec-lookup--hyperspec-lookup-w3m)
+;;   (add-hook 'slime-load-hook
+;;             (lambda ()
+;;               (define-key slime-prefix-map (kbd "M-h") 'slime-documentation-lookup)))
+;;   (require 'slime-autoloads))
 
-;; (use-package sly
+(use-package sly
 ;;   :hook
 ;;   (lisp-mode . sly-mode)
-;;   :custom
-;;   (inferior-lisp-program "sbcl"))
+  :custom
+  (inferior-lisp-program "sbcl"))
+
 (use-package ielm
   :bind
   (:map inferior-emacs-lisp-mode-map
@@ -672,6 +673,10 @@ Repeated invocations toggle between the two most recently open buffers."
     (advice-add 'ielm-send-input :after #'(lambda (&rest args)
                                             (with-file-modes #o600
                                               (comint-write-input-ring))))))
+
+(use-package emacs-slime-nav
+  :hook
+  ((emacs-lisp-mode ielm-mode) . elisp-slime-nav-mode))
 
 (use-package whole-line-or-region
   :config
