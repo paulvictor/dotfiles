@@ -101,9 +101,10 @@ with pkgs;
   };
 
   imports =
-      [
-        ./keyd.nix
-        ../../root/tailscale.nix
-      ];
+    [
+      ./fonts.nix
+      ./keyd.nix
+      ../../root/tailscale.nix
+    ];
 
 }

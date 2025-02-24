@@ -56,6 +56,7 @@ in
         chez
         pscid
         leiningen clojure
+        cbqn
         specialArgs.inputs.magix.packages.${system}.magix
 #         visidata # for visualizing data
       ] ++

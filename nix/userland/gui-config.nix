@@ -3,9 +3,6 @@
 with pkgs;
 let
   custom-vieb = import ./packages/vieb.nix { inherit pkgs; inherit (config.home) homeDirectory; };
-  source-code-pro-nerdfonts = pkgs.callPackage ./packages/source-code-pro-nerdfonts {};
-  hack-nerdfonts = pkgs.callPackage ./packages/hack-nerdfonts.nix {};
-#       firacode-nerdfonts = pkgs.callPackage ./packages/fira-code-nerdfonts.nix {};
   all-the-icons-fonts = pkgs.callPackage ./packages/all-the-icons-fonts.nix {};
   pursuit = pkgs.callPackage ./scripts/pursuit.nix {};
   menu-surfraw = pkgs.callPackage ./scripts/menu-surfraw.nix {};
@@ -93,26 +90,19 @@ in
   {
     home.packages =
       [
-        all-the-icons-fonts
+
         autorandr
         brotab
-        cantarell-fonts
         custom-vieb
-        dejavu_fonts.full-ttf
         electronApps
-        font-awesome
-
         googler
         gromit-mpx
-
         hicolor-icon-theme
         league-of-moveable-type
         localsend
         material-icons
         menu-surfraw
         mpv
-
-        noto-fonts
 #             nyxt-3
         pdftk
         pursuit
@@ -120,35 +110,15 @@ in
         rxvt-unicode
         scrot
         siji
-
         surf
         surfraw
-        ubuntu_font_family
-        unifont
-
         vlc
         yubico-piv-tool
         yubikey-manager
         yubikey-personalization
         (ungoogled-chromium.override { enableWideVine = pkgs.stdenv.isx86_64; })
         zathura # Crashing.
-
-      ] ++
-      (with nerd-fonts;
-        [
-          #hack
-          victor-mono
-          jetbrains-mono
-          udev-gothic-nf
-          plemoljp-nf
-          #iosevka-term
-          #iosevka
-          sauce-code-pro
-          #             dejavu-sans-mono
-          symbols-only
-          #fira-code
-          monoid
-        ])
+      ]
       ++ (lib.optionals pkgs.stdenv.isx86_64
         [
           (vivaldi.override { proprietaryCodecs = true; enableWidevine = true;})

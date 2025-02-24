@@ -54,6 +54,7 @@ let
             anzu
             avy
             avy-zap
+            bqn-mode
             browse-at-remote
             cape
             clojure-mode

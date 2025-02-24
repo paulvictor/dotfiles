@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     "owner" = "domtronn";
     "repo" =  "all-the-icons.el";
-    "rev" = "c0d288a41faea2ecb7e8dd947486764a2ee17ec9";
-    "sha256" = "1r1905irz9rh05qzmzk1cbdnk4667ax8wm71r1prv8dnx8nq05kp";
+    rev = "39ef44f810c34e8900978788467cc675870bcd19";
+    hash = "sha256-SlqJ8erFtiydEdgZFGJ23DQ9fZH4FF09iO6t3gf5pwE=";
     "fetchSubmodules" = true;
   };
   buildCommand = ''
