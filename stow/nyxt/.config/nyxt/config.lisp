@@ -1,16 +1,9 @@
 (in-package #:nyxt-user)
 
-;; (define-configuration (buffer web-buffer)
-;;   ((default-modes (append '(nyxt::emacs-mode) %slot-default%))))
-;; (define-configuration (buffer web-buffer)
-;;   ((default-modes (append '(nyxt::vi-normal-mode) %slot-default%))))
+(load "~/nyxt-env/.qlot/setup.lisp")
+(load "~/nyxt-env/.qlot/quicklisp/setup.lisp")
 
-(start-swank)
-
-(load "~/quicklisp/setup.lisp")
-
-(ql:quickload :slynk)
-(ql:quickload '("str" "cl-ppcre" "alexandria" "njson"))
+(ql:quickload '("slynk" "str" "cl-ppcre" "alexandria" "njson"))
 
 (define-command-global start-slynk (&optional (slynk-port slynk::default-server-port))
   "Start a Slynk server that can be connected to, for instance, in Emacs via SLY."
@@ -23,13 +16,15 @@
 
 (setf (uiop:getenv "GTK_THEME") "Adwaita:dark")
 
-;; (define-configuration browser
-;;     ((session-restore-prompt :always-restore)
-;;      (autofills '((make-autofill :name "First Name" :fill "Paul Victor")
-;;                   (make-autofill :name "Last Name" :fill "Raj")
-;;                   (make-autofill :name "Name" :fill "Paul Victor Raj")
-;;                   (make-autofill :name "Email" :fill "paulvictor@gmail.com")))
-;;      (external-editor-program (or (uiop/os:getenv "EDITOR") "emacsclient -c"))))
+(define-configuration browser
+  ((default-new-buffer-url (quri:uri "nyxt:nyxt/mode/repl:repl"))
+   (remote-execution-p t)
+   (session-restore-prompt :always-restore)
+   (autofills '((make-autofill :name "First Name" :fill "Paul Victor")
+                (make-autofill :name "Last Name" :fill "Raj")
+                (make-autofill :name "Name" :fill "Paul Victor Raj")
+                (make-autofill :name "Email" :fill "paulvictor@gmail.com")))
+   (external-editor-program (or (uiop/os:getenv "EDITOR") "emacsclient -c -n"))))
 
 (define-configuration browser
     ((external-editor-program (uiop:getenvp "EDITOR"))))
@@ -67,6 +62,19 @@
 (define-configuration context-buffer
     "Configure search engines manually"
   ((search-engines *search-engines-with-google-completions*)))
+
+;; (define-configuration context-buffer
+;;   (global-history-p t))
+
+(define-configuration web-buffer
+  ((default-modes (append '(nyxt/mode/reduce-tracking:reduce-tracking-mode
+                            nyxt/mode/blocker:blocker-mode
+                            nyxt/mode/force-https:force-https-mode)
+                          %slot-value%))))
+(define-configuration status-buffer ((glyph-mode-presentation-p t)))
+(define-configuration :force-https-mode ((glyph "HTTPS")))
+(define-configuration :blocker-mode ((glyph "block")))
+(define-configuration :reduce-tracking-mode ((glyph "no-track")))
 
 ;; From https://discourse.atlas.engineer/t/change-keybinding/593
 (defmacro alter-keyscheme (prefix keyscheme scheme-name &body bindings)
@@ -113,12 +121,12 @@
     (let ((map (make-keymap "override-map")))
       (define-key map "M-x" 'execute-command)))))
 
-;; (define-configuration input-buffer
-;;   ((override-map
-;;     (let ((map (make-keymap "override-map")))
-;;       (define-key map "M-x" 'execute-command)))))
-;; ;; (define-configuration nyxt/hint-mode:hint-mode
-;; ;;   ((auto-follow-hints-p t)))
+(define-configuration input-buffer
+  ((override-map
+    (let ((map (make-keymap "override-map")))
+      (define-key map "M-x" 'execute-command)))))
+;; (define-configuration nyxt/hint-mode:hint-mode
+;;   ((auto-follow-hints-p t)))
 
 ;; (define-configuration nyxt/web-mode:web-mode
 ;;   ((nyxt/web-mode:hints-alphabet "asdfghjkl")

@@ -986,6 +986,7 @@ Repeated invocations toggle between the two most recently open buffers."
 (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 (add-hook 'geiser-repl-mode-hook 'turn-on-smartparens-strict-mode)
 (add-hook 'ielm-mode-hook 'turn-on-smartparens-strict-mode)
+(add-hook 'sly-mrepl-hook 'turn-on-smartparens-strict-mode)
 
 ;; Move cursor to end of current line
 ;; Insert new line below current line

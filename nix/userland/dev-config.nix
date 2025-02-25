@@ -1,4 +1,4 @@
-{ config, pkgs, lib, specialArgs, ... }:
+ { config, pkgs, lib, specialArgs, ... }:
 
 with pkgs;
 let
@@ -50,8 +50,7 @@ in
         jq
         nodejs
         pv
-        ruby
-        sbcl
+        sbcl sbclPackages.qlot-cli
         tmate
         chez
         pscid
