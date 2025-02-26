@@ -113,7 +113,7 @@
   (add-hook 'eshell-mode-hook
             (lambda ()
               (setq-local corfu-auto nil)
-              (advice-add #'corfu-insert :after #'corfu-send-shell)
+;;               (advice-add #'corfu-insert :after #'corfu-send-shell)
               (corfu-mode)))
   ;; (add-hook 'eshell-mode-hook
   ;;             (lambda ()

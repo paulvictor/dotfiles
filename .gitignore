@@ -19,3 +19,4 @@ stow/stumpwm/.stumpwm.d/stumpwm.log.1
 /stow/emacs/.emacs.d/auto-save-list/
 /stow/emacs/.emacs.d/eshell/
 *.qcow2
+/stow/nyxt/nyxt-env/.qlot/
