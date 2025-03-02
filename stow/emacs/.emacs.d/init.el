@@ -1135,7 +1135,7 @@ point reaches the beginning or end of the buffer, stop there."
 ;; One thing is that C-. is not bound to anythng and can be used as a prefix
 (use-package org-roam
   :custom
-  (org-roam-directory "~/stuff/org-notes/")
+  (org-roam-directory "~/org-roam-notes/")
   (org-roam-completion-everywhere t)
   (org-roam-mode-sections '((org-roam-backlinks-section :unique t)
                             org-roam-reflinks-section))
