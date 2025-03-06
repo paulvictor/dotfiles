@@ -102,8 +102,7 @@
                      nyxt/keyscheme:emacs
                      "C-_" 'reopen-last-buffer
                      "C-space" 'nyxt/mode/visual:toggle-mark
-                     "C-x k" 'delete-current-buffer
-                     "C-x C-k" 'delete-buffer
+;;                      "C-x k" 'delete-current-buffer ; Fails on loading github pages
                      "C-:" 'nyxt/mode/visual:visual-mode))))
 
 (define-configuration visual-mode

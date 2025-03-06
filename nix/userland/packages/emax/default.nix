@@ -1,4 +1,4 @@
-{pkgs ? import <nixpkgs> {}, specialArgs ? {withGUI = true;}}:
+{pkgs ? import <nixpkgs> {}}:
 
 with pkgs;
 let
@@ -37,12 +37,8 @@ let
         pname = "ngnk-mode";
         inherit version src;
       };
-  _emacs =
-    if specialArgs.withGUI then emacs-unstable else emacs-unstable-nox;
-  #
-#     if specialArgs.withGUI then emacs-unstable.override({withGTK3 = true; withImageMagick = true; }) else emacs-unstable-nox;
   customizedEmacs =
-    (emacsPackagesFor _emacs)
+    (emacsPackagesFor emacs-unstable) # We are getting rid of the nox package. If needed, run emacs -nw
       .emacsWithPackages(epkgs:
         [ (with epkgs.melpaPackages;
           [
@@ -154,7 +150,7 @@ let
         )
         ]
         ++
-        [ (with epkgs; [ nano-theme ]) ]
+        [ (with epkgs; [ nano-theme eat ]) ]
         ++
         [ (with epkgs.elpaPackages; [ undo-tree org vertico corfu plz kind-icon pulsar erc ]) ]);
   gstBuildInputs = with gst_all_1; [

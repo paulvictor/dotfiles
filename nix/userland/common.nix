@@ -189,4 +189,12 @@ with pkgs;
 
   programs.nix-index-database.comma.enable = true;
 
+  home.activation = {
+    createSchemeshDirs = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      run mkdir -p $VERBOSE_ARG $HOME/.cache/schemesh
+      run [ -f $HOME/.cache/schemesh/history.txt ] || touch $HOME/.cache/schemesh/history.txt
+      run mkdir -p $VERBOSE_ARG $HOME/.config/schemesh
+    '';
+  };
+
 }

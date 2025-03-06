@@ -78,11 +78,11 @@ with pkgs;
       cursor.blink_interval = 500;
       cursor.blink_timeout = 10;
       cursor.vi_mode_style.shape = "Beam";
+      terminal.shell = "${lib.getExe pkgs.schemesh}";
       keyboard.bindings = [
         { key = "V"; mods = "Control|Shift"; action = "Paste"; }
         { key = "C"; mods = "Control|Shift"; action = "Copy"; }
         { key = "Space"; mods = "Control"; action = "ToggleViMode"; }
-        { key = "Space"; mods = "Shift"; action = "ToggleViMode"; }
         { key = "I"; mode = "Vi"; action = "ToggleViMode"; }
         { key = "Escape"; mode = "Vi"; action = "ClearSelection"; }
         { key = "H"; mode = "Vi"; action = "Left"; }
