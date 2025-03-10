@@ -1198,3 +1198,8 @@ point reaches the beginning or end of the buffer, stop there."
   :custom
   (tramp-default-method "sshx")
   (tramp-use-connection-share nil))
+
+(use-package bqn-mode
+  :bind
+  (:map bqn-mode-map
+        ("C-M-x" . bqn-comint-eval-dwim)))
