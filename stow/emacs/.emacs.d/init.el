@@ -1202,4 +1202,9 @@ point reaches the beginning or end of the buffer, stop there."
 (use-package bqn-mode
   :bind
   (:map bqn-mode-map
-        ("C-M-x" . bqn-comint-eval-dwim)))
+        ("C-M-x" . bqn-comint-eval-dwim))
+  :config
+  (progn
+    (require 'smartparens)
+    (sp-with-modes '(bqn-mode)
+      (sp-local-pair "⟨" "⟩"))))
