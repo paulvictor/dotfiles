@@ -45,7 +45,9 @@
             ("sudo" "vi" "visudo")
             ("sudo" "su")
             ("cabal" "repl")
-            ("guix" "search"))))
+            ("guix" "search")))
+  :config
+  (eat-eshell-mode))
 
 (defun corfu-send-shell (&rest _)
   "Send completion candidate when inside comint/eshell."

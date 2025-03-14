@@ -1208,3 +1208,11 @@ point reaches the beginning or end of the buffer, stop there."
     (require 'smartparens)
     (sp-with-modes '(bqn-mode)
       (sp-local-pair "⟨" "⟩"))))
+
+(use-package eat
+  :custom
+  (eat-kill-buffer-on-exit t)
+  (eat-term-scrollback-size (* 16 1024 1024))
+  (eat-enable-yank-to-terminal t)
+  (eat-line-input-ring-size 100000)
+  (eat-line-input-history-isearch 'dwim))

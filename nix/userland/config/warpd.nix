@@ -22,8 +22,8 @@ in
       hint2: ;
       grid: space
       screen: Tab
-      hint_size: 100
-      hint_chars: naerisot
+      hint_size: 20
+      hint_chars: naerisotgm
       hint2_chars: uyqneihjk
       screen_chars: arst
 

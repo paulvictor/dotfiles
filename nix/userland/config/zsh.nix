@@ -78,6 +78,7 @@ in
       && unfunction preexec \
       && PS1='$ ' \
       && return
+    [ -n "$EAT_SHELL_INTEGRATION_DIR" ] && source "$EAT_SHELL_INTEGRATION_DIR/zsh"
     export LESS="-QR"
     setopt interactivecomments
     setopt autocd
