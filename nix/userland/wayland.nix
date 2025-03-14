@@ -1,15 +1,7 @@
 { lib, config, pkgs, ...}:
 
 let
-  lockPackage =
-    with pkgs;
-    swaylock-fancy.overrideAttrs(prev: {
-    postInstall = ''
-      wrapProgram $out/bin/swaylock-fancy \
-        --prefix PATH : ${lib.makeBinPath [ coreutils grim gawk jq swaylock imagemagick getopt fontconfig wmctrl sway ]}
-    '';
-  });
-
+  lockCommand = "${pkgs.swaylock}/bin/swaylock -F -f -c 000000";
 in
 {
 
@@ -69,7 +61,7 @@ in
   services.swayidle = with pkgs;{
     enable = true;
     timeouts = [
-      { timeout = 300; command = "${lockPackage}/bin/swaylock-fancy"; }
+      { timeout = 300; command = lockCommand; }
       {
         timeout = 500;
         command = "${sway}/bin/swaymsg \"output * dpms off\"";
@@ -78,8 +70,8 @@ in
 #       { timeout = 600; command = "${pkgs.systemd}/bin/systemctl suspend"; }
     ];
     events = [
-      { event = "before-sleep"; command = "${lockPackage}/bin/swaylock-fancy";}
-      { event = "lock"; command = "${lockPackage}/bin/swaylock-fancy";}
+      { event = "before-sleep"; command = lockCommand; }
+#       { event = "lock"; command = lockCommand; }
     ];
   };
 
