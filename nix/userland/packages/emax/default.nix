@@ -152,7 +152,7 @@ let
         ++
         [ (with epkgs; [ nano-theme eat ]) ]
         ++
-        [ (with epkgs.elpaPackages; [ undo-tree org vertico corfu plz kind-icon pulsar erc ]) ]);
+        [ (with epkgs.elpaPackages; [ undo-tree org vertico corfu plz kind-icon pulsar erc ement ]) ]);
   gstBuildInputs = with gst_all_1; [
     gstreamer gst-libav
     gst-plugins-base

@@ -1216,3 +1216,5 @@ point reaches the beginning or end of the buffer, stop there."
   (eat-enable-yank-to-terminal t)
   (eat-line-input-ring-size 100000)
   (eat-line-input-history-isearch 'dwim))
+
+(use-package ement)
