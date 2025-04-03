@@ -1217,4 +1217,6 @@ point reaches the beginning or end of the buffer, stop there."
   (eat-line-input-ring-size 100000)
   (eat-line-input-history-isearch 'dwim))
 
-(use-package ement)
+(use-package ement
+  :custom
+  (ement-save-sessions t))
