@@ -86,13 +86,13 @@
   ;; define leader keymap
   (general-define-keys
    #:prefix "s-Space" #:wk "Leader"
-   ;; focus map
+
    `(general-define-keys
-     #:prefix "f" #:wk "Focus"
-     ("h" (sway-focus-container SWAY-DIRECTION-LEFT) #:wk "Focus Container Left")
-     ("j" (sway-focus-container SWAY-DIRECTION-DOWN) #:wk "Focus Container Down")
-     ("k" (sway-focus-container SWAY-DIRECTION-UP) #:wk "Focus Container Up")
-     ("l" (sway-focus-container SWAY-DIRECTION-RIGHT) #:wk "Focus Container Right"))
+     #:prefix "-" #:wk "Split"
+     ("h" (sway-split-container SWAY-SPLIT-HORIZONTAL) #:wk "Split container horizontal")
+     ("v" (sway-split-container SWAY-SPLIT-VERTICAL) #:wk "Split container vertical")
+     ("t" (sway-split-container SWAY-SPLIT-TOGGLE) #:wk "Split container toggle")
+     ("n" (sway-split-container SWAY-TOGGLE-NONE) #:wk "Split container none"))
 
    `(general-define-keys
      #:prefix "s" #:wk "Screenshot"
@@ -126,20 +126,6 @@
       (sway-layout-toggle
        (string-join '("stacking" "tabbed" "splitv" "splith") " ")) #:wk "Switch layouts"))))
 
-
-;;    ;; rofi keymap
-;;    `(general-define-keys
-;;      #:prefix "r" #:wk "Rofi"
-;;      ("p" (exec "sleep 0.05 && ~/.config/rofi/bin/password-manager") #:wk "Password Manager")
-;;      ("m" (exec "sleep 0.05 && rofi-mount") #:wk "Mount Drives")
-;;      ("u" (exec "sleep 0.05 && rofi-unmount") #:wk "Unmount Drives")
-;;      ("w" (exec "sleep 0.05 && .config/rofi/bin/wifi") #:wk "Wifi")
-;;      ("b" (exec "sleep 0.05 && ~/.config/rofi/bin/bluetooth") #:wk "Bluetooth")
-;;      ("f" (exec "sleep 0.05 && ~/.config/rofi/bin/finder") #:wk "Finder")
-;;      ("k" (exec "sleep 0.05 && ~/.config/rofi/bin/keyboard-layout") #:wk "Keyboard Layouts")
-;;      ("P" (exec "sleep 0.05 && ~/.config/rofi/bin/powermenu") #:wk "Power")
-;;      ("s" (exec "sleep 0.05 && ~/.config/rofi/bin/sound-input") #:wk "Sound Input")
-;;      ("S" (exec "sleep 0.05 && ~/.config/rofi/bin/sound-output") #:wk "Sound Output"))
 
    ;; screenshot keymap
    ;; flameshot is not performing well under wayland & multiple monitors
