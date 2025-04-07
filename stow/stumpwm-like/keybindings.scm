@@ -73,7 +73,10 @@
    `("s-p" (exec "passdo") #:wk "Type out the password")
    `("s-TAB"
      (sway-switch-workspace SWAY-WORKSPACE-BACK-AND-FORTH #:auto-back-and-forth #f)
-     #:wk "Switch to previous workspace"))
+     #:wk "Switch to previous workspace")
+   `("s-b" (sway-split-container SWAY-SPLIT-HORIZONTAL) #:wk "Split container horizontal")
+   `("s-v" (sway-split-container SWAY-SPLIT-VERTICAL) #:wk "Split container vertical")
+   `("s-t" (sway-split-container SWAY-SPLIT-TOGGLE) #:wk "Split container toggle"))
 
   (general-define-keys
    #:prefix "s-DEL" #:wk "Exit"
