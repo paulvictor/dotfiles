@@ -95,7 +95,7 @@ in
         brotab
         custom-vieb
         electronApps
-        googler
+
         gromit-mpx
         hicolor-icon-theme
         league-of-moveable-type
