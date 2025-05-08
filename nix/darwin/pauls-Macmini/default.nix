@@ -4,7 +4,7 @@ let
   system = flake-utils.lib.system.aarch64-darwin;
   inherit (inputs) darwin  flake-utils;
   commonModules = {pkgs,...}: {
-    system.stateVersion = 4;
+    system.stateVersion = 6;
     nix.package = pkgs.nixStable;
     nix.extraOptions = ''
       experimental-features = nix-command flakes
@@ -44,7 +44,7 @@ darwin.lib.darwinSystem {
     userName = "paul.victor";
   };
   modules = [
-    inputs.homeManager.darwinModules.default;
+    inputs.homeManager.darwinModules.default
     commonModules
     machineSpecific
     ../services/sshd.nix
