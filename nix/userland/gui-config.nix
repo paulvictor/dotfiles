@@ -126,14 +126,14 @@ in
           google-chrome
         ]
       );
-    xresources =
-      let
-        xresourcesFile = callPackage ./scripts/xresources.nix { template = "rxvt-unicode"; brightness = "dark"; scheme = "tomorrow"; };
-      in {
-        extraConfig =
-          ''#define FONTSIZE 13'' + "\n" + builtins.readFile "${xresourcesFile}/config";
-        properties = import ./config/Xresources/default.nix { inherit (pkgs) xclip; };
-      };
+    # xresources =
+#       let
+#         xresourcesFile = callPackage ./scripts/xresources.nix { template = "rxvt-unicode"; brightness = "dark"; scheme = "tomorrow"; };
+#       in {
+#         extraConfig =
+#           ''#define FONTSIZE 13'' + "\n" + builtins.readFile "${xresourcesFile}/config";
+#         properties = import ./config/Xresources/default.nix { inherit (pkgs) xclip; };
+#       };
     programs.firefox = {
       enable = true;
       package =

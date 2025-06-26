@@ -25,6 +25,8 @@ let
               "ungoogled-chromium"
               "ungoogled-chromium-unwrapped"
               "prl-tools"
+              "firefox-devedition-bin"
+              "firefox-developer-edition-bin-unwrapped"
             ];
       })
       ../modules/viktor.nix

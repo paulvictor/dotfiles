@@ -105,6 +105,7 @@ with pkgs;
       ./fonts.nix
       ./keyd.nix
       ../../root/tailscale.nix
+      ./ollama.nix
     ];
 
 }
