@@ -1,5 +1,9 @@
 [
   {
+    hostName = "bones";
+    unifiedHomeManager = true;
+  }
+  {
     hostName = "sorlag";
     unifiedHomeManager = true;
   }
