@@ -22,6 +22,13 @@
   ct $chord-timeout
   ht $hold-timeout)
 
+(defchordsv2
+ (u i)   esc    $ct all-released (qwerty)
+ (c m)   S-scln $ct all-released (qwerty)
+ (v n)   scln   $ct all-released (qwerty)
+ (j k)   (caps-word-toggle 2000) $ct all-released () ;; Even in the base layer
+ )
+
 (defalias
   whky   (layer-switch whky)
   qwerty (layer-switch qwerty)
@@ -56,14 +63,14 @@
   spcth   (tap-hold-release $tt $ht spc (layer-while-held num))
   tabth   (tap-hold-release $tt $ht tab (layer-while-held sym))
   retth   (tap-hold-release $tt $ht ret (multi lctl lalt))
-  dotcomm (fork Period comm (lsft))
-  bspcdel (fork bspc del (lsft))
+  dotcomm (fork (unshift .) comm (lsft rsft))
+  bspcdel (fork (unshift bspc) del (lsft rsft))
 )
 
 (deflayer whky
   @qwerty
   -         w         f     p        b     z            u       y     q         apos
-  @metaa    @altr     s     @sftt    g     m            @sftn   e     @alti     @ctrlo       @ctrlo
+  @metaa    @altr     s     @sftt    g     m            @sftn   e     @alti     @ctrlo       XX
   @ctrlx    x         c     d        v     @dotcomm     h       j     k         l
 
   XX                @spcth  @tabth        @retth  @bspcdel
@@ -72,7 +79,7 @@
 (deflayer num
   @qwerty
   -        /          \           @pipe      XX     `         4     5     6     @plus
-  @lt      @lparen    @rparen     @gt        XX     @ques     1     2     3     0       0
+  @lt      @lparen    @rparen     @gt        XX     @ques     1     2     3     0       XX
   @lcrly   lbrc       rbrc        @rcrly     XX     .         7     8     9     =
 
   XX                  XX           XX                @retth    @bspcdel
@@ -81,15 +88,10 @@
 (deflayer sym
   @qwerty
   XX       XX       XX       XX       XX     @grv      @dllr     @perc    @caret    apos
-  XX       XX       XX       XX       XX     @ques     @excl     @at      @hash     @astr       @astr
+  XX       XX       XX       XX       XX     @ques     @excl     @at      @hash     @astr   XX
   XX       XX       XX       XX       XX     .         left      down     up        rght
 
   XX                         XX       XX               @retth    @bspcdel
 )
 
-(defchordsv2
- (n e)      esc    $ct all-released (qwerty)
- (spc bspc) S-scln $ct all-released (qwerty)
- (tab ret)  scln   $ct all-released (qwerty)
- (h j)      (caps-word-toggle 2000) $ct all-released () ;; Even in the base layer
- )
+
