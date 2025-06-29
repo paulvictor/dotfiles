@@ -1,5 +1,6 @@
 { pkgs, homeDirectory }:
 
+# https://github.com/tejing1/vieb-nix/blob/master/package.nix
 let
   viebrc = pkgs.writeText "viebrc"
     ''

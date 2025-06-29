@@ -93,7 +93,7 @@ in
 
         autorandr
         brotab
-        custom-vieb
+#         custom-vieb
         electronApps
 
         gromit-mpx
@@ -103,9 +103,7 @@ in
         material-icons
         menu-surfraw
         mpv
-#             nyxt-3
         pdftk
-        pursuit
         rofi
         rxvt-unicode
         scrot
@@ -136,11 +134,7 @@ in
 #       };
     programs.firefox = {
       enable = true;
-      package =
-        if (pkgs.stdenv.isAarch64)
-        then firefox-devedition
-        else firefox-devedition-bin;
-      #package = firefox-beta-bin ; # wrapFirefox (latest.firefox-beta-bin) { browserName = "firefox"; };
+      package = firefox-devedition;
       profiles = {
         "proxied" = {
           id = 1;

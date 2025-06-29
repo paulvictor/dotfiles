@@ -69,7 +69,7 @@ in
   ];
 
 
-  initExtra = ''
+  initContent = ''
     [[ $TERM == "dumb" ]] \
       && unsetopt zle \
       && unsetopt prompt_cr \

@@ -2,16 +2,10 @@
  esc
  1    2    3    4    5    6    7    8    9    0
  q    w    e    r    t    y    u    i    o    p    del
- a    s    d    f    g    h    j    k    l    ret
+ a    s    d    f    g    h    j    k    l    kprt
  sft            c    v         n    m
+ ;; TODO we need to also map Ctrl to Ctrl/CtrlX in the qwerty layer
 )
-
-(defcfg
-  process-unmapped-keys   yes
-  concurrent-tap-hold     yes
-  allow-hardware-repeat   no
-  linux-dev /dev/input/by-path/platform-i8042-serio-0-event-kbd
-  )
 
 (deflayer qwerty
   @whky

@@ -1,6 +1,7 @@
 {
   description = "Meta Config";
 
+  # https://elis.nu/blog/2022/10/outsourcing-nixos-compile-time-to-microsoft/
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
