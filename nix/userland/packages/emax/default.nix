@@ -53,6 +53,7 @@ let
             bqn-mode
             browse-at-remote
             cape
+            casual
             clojure-mode
             cider
             copy-as-format
@@ -152,7 +153,7 @@ let
         ++
         [ (with epkgs; [ nano-theme eat ]) ]
         ++
-        [ (with epkgs.elpaPackages; [ undo-tree org vertico corfu plz kind-icon pulsar erc ement ]) ]);
+        [ (with epkgs.elpaPackages; [ undo-tree org vertico corfu plz kind-icon pulsar erc ement vundo ]) ]);
   gstBuildInputs = with gst_all_1; [
     gstreamer gst-libav
     gst-plugins-base
