@@ -26,7 +26,7 @@ jobs:
       # and push to cachix.
       - name: Build for sorlag
         working-directory: ./nix
-        run: nixos-rebuild --accept-flake-config build --flake .#sorlag
+        run: nix -L --accept-flake-config build .\#nixosConfigurations.sorlag.config.system.build.toplevel
       - name: Push deps to cachix
         working-directory: ./nix
         run: realpath result | cachix push paulvictor
