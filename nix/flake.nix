@@ -1,6 +1,12 @@
 {
   description = "Meta Config";
 
+  nixConfig = {
+    substituters = "https://paulvictor.cachix.org https://nix-community.cachix.org https://cache.nixos.org ";
+    trusted-substituters =  "https://paulvictor.cachix.org https://cache.nixos.org";
+    trusted-public-keys = "paulvictor.cachix.org-1:tuOSw1NsHLZJUXZC9L0QdegOFqpLvcXdQyGKTU+Cic4= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=";
+  };
+
   # https://elis.nu/blog/2022/10/outsourcing-nixos-compile-time-to-microsoft/
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";

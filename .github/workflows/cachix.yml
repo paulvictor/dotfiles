@@ -1,0 +1,32 @@
+name: BuildAndCache
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Clone repo
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      # Install nix
+      - uses: cachix/install-nix-action@v31
+      - name: Cachix setup
+        uses: cachix/cachix-action@v15
+        with:
+          name: paulvictor
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+          skipPush: true
+
+      # Build a configuration.nix file that doesn't use flakes
+      # and push to cachix.
+      - name: Build for sorlag
+        working-directory: ./nix
+        run: nixos-rebuild --accept-flake-config build --flake .#sorlag
+      - name: Push deps to cachix
+        working-directory: ./nix
+        run: realpath result | cachix push paulvictor
