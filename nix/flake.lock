@@ -509,21 +509,6 @@
     },
     "nixlib": {
       "locked": {
-        "lastModified": 1751764648,
-        "narHash": "sha256-YcOV5pjz6CGo3rogh6Cn+idk1D54stnHKPssKZHdSKA=",
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "rev": "ad3b5848957727196961b696418a3cea370b77a8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "type": "github"
-      }
-    },
-    "nixlib_2": {
-      "locked": {
         "lastModified": 1736643958,
         "narHash": "sha256-tmpqTSWVRJVhpvfSN9KXBvKEXplrwKnSZNAoNPf/S/s=",
         "owner": "nix-community",
@@ -539,7 +524,7 @@
     },
     "nixos-generators": {
       "inputs": {
-        "nixlib": "nixlib_2",
+        "nixlib": "nixlib",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -790,7 +775,6 @@
         "nix-cl": "nix-cl",
         "nix-index-database": "nix-index-database",
         "nix-on-droid": "nix-on-droid",
-        "nixlib": "nixlib",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs_5",
         "nur": "nur",

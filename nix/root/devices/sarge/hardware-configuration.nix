@@ -75,8 +75,6 @@
     [ { device = "/dev/disk/by-uuid/72b544b2-e2c8-46b3-bf6a-f3b35c1f109d"; }
     ];
 
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
   boot.loader.grub.enable = lib.mkDefault true;
