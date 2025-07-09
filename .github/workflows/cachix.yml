@@ -20,13 +20,7 @@ jobs:
         with:
           name: paulvictor
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
-          skipPush: true
-
-      # Build a configuration.nix file that doesn't use flakes
-      # and push to cachix.
-      - name: Build for sorlag
+          pushFilter: "(-source$ | nixpkgs\.tar\.gz$)"
+      - name: BuildSystemConfigurations
         working-directory: ./nix
-        run: nix -L --accept-flake-config build .\#nixosConfigurations.sorlag.config.system.build.toplevel
-      - name: Push deps to cachix
-        working-directory: ./nix
-        run: realpath result | cachix push paulvictor
+        run: nix build github:srid/devour-flake -L --no-link --print-out-paths --override-input flake  .
