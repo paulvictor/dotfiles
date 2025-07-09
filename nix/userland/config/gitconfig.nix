@@ -34,7 +34,7 @@
     extraConfig = {
       core = {
         whitespace = "trailing-space,space-before-tab";
-        editor = "emacsClient -c -n";
+        editor = "emacsclient -c -n";
       };
       apply = {
         whitespace = "fix";
