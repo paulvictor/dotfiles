@@ -81,11 +81,13 @@
       inputs.flake-utils.follows = "flake-utils";
     };
 
+    nixlib.url = "github:nix-community/nixpkgs.lib";
+
   };
 
   outputs = { self, nixpkgs, ... }@inputs :
     let
-      inherit (nixpkgs) lib;
+      inherit (inputs.nixlib) lib;
       inherit (inputs.flake-utils.lib) eachDefaultSystemPassThrough eachDefaultSystem;
       gllock-overlay = import ./overlays/gllock.nix;
       brotab-overlay = import ./overlays/brotab.nix;
