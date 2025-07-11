@@ -778,7 +778,8 @@
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs_5",
         "nur": "nur",
-        "sops-nix": "sops-nix"
+        "sops-nix": "sops-nix",
+        "vieb-nix": "vieb-nix"
       }
     },
     "scss-reset": {
@@ -865,6 +866,26 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "vieb-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1752065133,
+        "narHash": "sha256-uWw+ri5Yyqr2ruI9+I57DbGUGhS0B6UPvGtV5FZsDS8=",
+        "owner": "tejing1",
+        "repo": "vieb-nix",
+        "rev": "6b87d5ea7503c22bc1524deb564c72af5d405315",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tejing1",
+        "repo": "vieb-nix",
         "type": "github"
       }
     }

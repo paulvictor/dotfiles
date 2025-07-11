@@ -31,7 +31,8 @@ with pkgs;
     pavucontrol
     pulseaudio-ctl
     rofiElectronAppsRunner
-  ] ;
+    vieb
+  ];
 
   xdg.configFile.rofi = {
     recursive = true;

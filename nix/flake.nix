@@ -81,6 +81,9 @@
       inputs.flake-utils.follows = "flake-utils";
     };
 
+    vieb-nix.url = "github:tejing1/vieb-nix";
+    vieb-nix.inputs.nixpkgs.follows = "nixpkgs";
+
   };
 
   outputs = { self, nixpkgs, ... }@inputs :
@@ -98,15 +101,17 @@
       surfraw-overlay = import ./overlays/surfraw.nix;
       ql2nix-overlay = import ./overlays/ql2nix.nix;
       pcloudcc-overlay = import ./overlays/pcloud-console-client.nix;
-      fish-docker-completion = import ./overlays/fish.nix;
+#       fish-docker-completion = import ./overlays/fish.nix; # We dont need this for now since we dont need the docker completions as much
       rofi-theme-overlay = import ./overlays/rofi-theme-overlay.nix;
       warpd-overlay = import ./overlays/warpd.nix;
       passdo = import ./overlays/type-password/passdo.nix;
       schemesh-overlay = import ./overlays/schemesh.nix;
+      vieb-overlay = final: prev: import (inputs.vieb-nix) {pkgs = final;};
       #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
       overlays = [
         schemesh-overlay
-        fish-docker-completion
+        vieb-overlay
+
         brotab-overlay
         ripgrep-overlay
         rofi-fuzzy
