@@ -238,8 +238,6 @@
 ;; Auto-revert to disk on file change
 (global-auto-revert-mode 1)
 
-(defalias 'list-buffers 'ibuffer)
-
 (use-package doom-themes
   :custom
   (doom-themes-enable-bold t)    ; if nil, bold is universally disbabled
@@ -492,6 +490,10 @@ Also move to the next line, since that's the most frequent action after"
   :bind
   (:map isearch-mode-map
         ([remap isearch-delete-char] . isearch-del-char))
+  :config
+  (progn
+    (require 'casual-isearch)
+    (keymap-set isearch-mode-map "C-M-g" #'casual-isearch-tmenu))
 ;;   :config
 ;;   ;; Prevents issue where you have to press backspace twice when
 ;;   ;; trying to remove the first character that fails a search
@@ -573,7 +575,11 @@ Also move to the next line, since that's the most frequent action after"
    (dired-isearch-filenames 'dwim)
    (dired-kill-when-opening-new-dired-buffer t)
    (dired-create-destination-dirs t)
-   (dired-dwim-target t)))
+   (dired-dwim-target t))
+  :config
+  (progn
+    (require 'casual-dired)
+    (keymap-set dired-mode-map "C-M-g" #'casual-dired-tmenu)))
 
 (use-package dired-single
   :after (dired dired-jump)
@@ -592,6 +598,12 @@ Repeated invocations toggle between the two most recently open buffers."
 (use-package ibuffer
   :hook
   (ibuffer-mode . hl-line-mode)
+  :config
+  (progn
+    (require 'casual-ibuffer)
+    (keymap-set ibuffer-mode-map "F" #'casual-ibuffer-filter-tmenu)
+    (keymap-set ibuffer-mode-map "s" #'casual-ibuffer-sortby-tmenu)
+    (keymap-set ibuffer-mode-map "C-M-g" #'casual-ibuffer-tmenu))
   :custom
   (ibuffer-movement-cycle nil)
   (ibuffer-default-shrink-to-minimum-size nil)
@@ -726,7 +738,7 @@ Repeated invocations toggle between the two most recently open buffers."
       (copy-region-as-kill start end)))
   (select-window
    (cdr
-    (ring-ref avy-ring 0)))
+    (activate-markring-ref avy-ring 0)))
   t)
 
 (defun avy-action-yank-whole-line (pt)
@@ -745,11 +757,8 @@ Repeated invocations toggle between the two most recently open buffers."
 (use-package avy
   :bind
   (("M-g c" . avy-goto-char-2)
-   ("M-g M-c" . avy-goto-char-2)
    ("M-g l" . avy-goto-line)
-   ("M-g M-l" . avy-goto-line)
    ("M-g w" . avy-goto-word-1)
-   ("M-g M-w" . avy-goto-word-1)
    ("M-l" . avy-goto-char-timer))
   :custom
   (avy-keys home-row-keys)
@@ -759,6 +768,9 @@ Repeated invocations toggle between the two most recently open buffers."
      (avy-goto-line . pre)
      (avy-goto-char-timer . at-full)))
   :config
+  (progn
+    (require 'casual-avy)
+    (keymap-global-set "C-M-g" #'casual-avy-tmenu))
   (setf (alist-get ?k avy-dispatch-alist) 'avy-action-kill-stay
         (alist-get ?K avy-dispatch-alist) 'avy-action-kill-whole-line
         (alist-get ?  avy-dispatch-alist) 'avy-action-mark-to-char
@@ -766,10 +778,8 @@ Repeated invocations toggle between the two most recently open buffers."
         (alist-get ?w avy-dispatch-alist) 'avy-action-copy
         (alist-get ?W avy-dispatch-alist) 'avy-action-copy-whole-line
         (alist-get ?Y avy-dispatch-alist) 'avy-action-yank-whole-line
-
         (alist-get ?t avy-dispatch-alist) 'avy-action-teleport
         (alist-get ?T avy-dispatch-alist) 'avy-action-teleport-whole-line
-
         (alist-get ?  avy-dispatch-alist) 'avy-action-mark-to-char))
 
 (use-package avy-zap
@@ -1087,6 +1097,10 @@ point reaches the beginning or end of the buffer, stop there."
   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
 
 (use-package info
+  :config
+  (progn
+    (require 'casual-info)
+    (keymap-set Info-mode-map "C-M-g" #'casual-info-tmenu))
   :custom
   (Info-isearch-search nil))
 
@@ -1220,3 +1234,11 @@ point reaches the beginning or end of the buffer, stop there."
 (use-package ement
   :custom
   (ement-save-sessions t))
+
+(use-package casual-calc
+  :bind (:map calc-mode-map
+              ("C-M-g" . casual-calc-tmenu)))
+
+(use-package casual-image
+  :bind (:map image-mode-map
+              ("C-M-g" . casual-image-tmenu)))

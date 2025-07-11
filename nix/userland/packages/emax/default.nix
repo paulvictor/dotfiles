@@ -53,7 +53,7 @@ let
             bqn-mode
             browse-at-remote
             cape
-            casual
+            casual-suite
             clojure-mode
             cider
             copy-as-format

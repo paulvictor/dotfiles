@@ -247,3 +247,7 @@ directory to make multiple eshell windows easier."
   (eshell-smart-space-goes-to-end t)
   :config
   (eshell-smart-initialize))
+
+(use-package casual-eshell
+  :bind (:map eshell-mode-map
+              ("C-M-g" . casual-eshell-tmenu)))
