@@ -88,7 +88,7 @@
 (deflayer sym
   @qwerty
   XX       XX       XX       XX       XX     @grv      @dllr     @perc    @caret    apos
-  XX       XX       XX       XX       XX     @ques     @excl     @at      @hash     @astr   XX
+  XX       XX       XX       XX       XX     @amp     @excl     @at      @hash     @astr   XX
   XX       XX       XX       XX       XX     .         left      down     up        rght
 
   XX                         XX       XX               @retth    @bspcdel
