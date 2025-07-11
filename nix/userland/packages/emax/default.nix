@@ -38,7 +38,7 @@ let
         inherit version src;
       };
   customizedEmacs =
-    (emacsPackagesFor emacs-unstable) # We are getting rid of the nox package. If needed, run emacs -nw
+    (emacsPackagesFor emacs-git-pgtk) # We are getting rid of the nox package. If needed, run emacs -nw
       .emacsWithPackages(epkgs:
         [ (with epkgs.melpaPackages;
           [
