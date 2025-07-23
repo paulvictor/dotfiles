@@ -12,18 +12,18 @@ let
         };
       };
     in "${app}/bin/juspay-password-cmd"; # lib.getExe' app "juspay-password-cmd";
-  # package =
-#     (pkgs.himalaya.override {
-#       withFeatures = [
-#         "notmuch"
-#         "pgp-gpg"
-#       ];
-#     }).overrideAttrs(prev: {
-#       nativeBuildInputs = prev.nativeBuildInputs ++ [pkgs.makeWrapper];
-#       postFixup = (prev.postFixup or "") + ''
-#         wrapProgram $out/bin/himalaya --set RUST_LOG off
-#       '';
-#     });
+  package =
+    (pkgs.himalaya.override {
+      withFeatures = [
+        "notmuch"
+        "pgp-gpg"
+      ];
+    }).overrideAttrs(prev: {
+      nativeBuildInputs = prev.nativeBuildInputs ++ [pkgs.makeWrapper];
+      postFixup = (prev.postFixup or "") + ''
+        wrapProgram $out/bin/himalaya --set RUST_LOG off
+      '';
+    });
 
 in
 {
@@ -100,6 +100,6 @@ in
   };
   programs.himalaya = {
     enable = true;
-    inherit package;
+    package = pkgs.himalaya;
   };
 }
