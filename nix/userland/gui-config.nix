@@ -90,31 +90,16 @@ in
   {
     home.packages =
       [
-
         autorandr
         brotab
-#         custom-vieb
         electronApps
-
-        gromit-mpx
         hicolor-icon-theme
         league-of-moveable-type
         localsend
         material-icons
-        menu-surfraw
         mpv
         pdftk
-        rofi
-        rxvt-unicode
-        scrot
         siji
-        surf
-        surfraw
-        vlc
-        yubico-piv-tool
-        yubikey-manager
-        yubikey-personalization
-        (ungoogled-chromium.override { enableWideVine = pkgs.stdenv.isx86_64; })
         zathura # Crashing.
       ]
       ++ (lib.optionals pkgs.stdenv.isx86_64
@@ -122,6 +107,21 @@ in
           (vivaldi.override { proprietaryCodecs = true; enableWidevine = true;})
 
           google-chrome
+        ]
+      )
+      ++ (lib.optionals pkgs.stdenv.isLinux
+        [
+          electronApps
+          yubico-piv-tool
+          yubikey-manager
+          yubikey-personalization
+          menu-surfraw
+          scrot
+          surf
+          surfraw
+          vlc
+          (ungoogled-chromium.override { enableWideVine = pkgs.stdenv.isx86_64; })
+
         ]
       );
     # xresources =
@@ -217,32 +217,5 @@ in
       rev = "092a88c2233c10a1b28cad647b2bf3fd667aaa84";
       sha256 = "19mqavlz713ilr0x8a6j7205irns069nx0a85f4h7xs0pc2kknhz";
       fetchSubmodules = true;
-    };
-    xdg.configFile = {
-      "surfraw/conf" = {
-        source = import ./config/surfraw { inherit pkgs; };
-      };
-      "surfraw/elvi/hoogle" = {
-        text =
-          let hoogle = import ./scripts/elvis.nix {
-                inherit pkgs;
-                name = "hoogle";
-                searchUrl = "https://www.haskell.org/hoogle/?hoogle=";
-                baseUrl = "https://www.haskell.org/hoogle/";
-              };
-          in lib.readFile "${hoogle}/bin/hoogle";
-        executable = true;
-      };
-      "surfraw/elvi/pursuit" = {
-        text =
-          let pursuit = import ./scripts/elvis.nix {
-                inherit pkgs;
-                name = "pursuit";
-                searchUrl = "https://pursuit.purescript.org/search?q=";
-                baseUrl = "https://pursuit.purescript.org/";
-              };
-          in lib.readFile "${pursuit}/bin/pursuit";
-        executable = true;
-      };
     };
   }

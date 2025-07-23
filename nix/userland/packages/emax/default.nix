@@ -191,10 +191,10 @@ let
       w3m
       fish
       delta
-    ] ++ webkitDeps ++ treeSitters;
+    ] ++ treeSitters;
     postBuild = ''
       wrapProgram $out/bin/emacs \
-        --prefix PATH : ${lib.makeBinPath [ ripgrep fd w3m fish delta guile_3_0 ]} \
+        --prefix PATH : ${lib.makeBinPath [ ripgrep fd w3m fish delta guile_3_0 coreutils ]} \
         --set GIO_EXTRA_MODULES "${pkgs.glib-networking}/lib/gio/modules:${pkgs.dconf.lib}/lib/gio/modules" \
         --set GST_PLUGIN_SYSTEM_PATH_1_0 "${pkgs.lib.concatMapStringsSep ":" (p: "${p}/lib/gstreamer-1.0") gstBuildInputs}" \
         --add-flags --maximized
