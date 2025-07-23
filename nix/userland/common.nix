@@ -4,6 +4,8 @@ let
   shareLink = pkgs.callPackage ./scripts/shareLink.nix { inherit pkgs config; };
   customizedEmacs = pkgs.callPackage ./packages/emax {};
   inherit (pkgs.stdenv) isLinux;
+  gpg-agent-enabled = config.services.gpg-agent.enable;
+  privKey = if gpg-agent-enabled then "~/.ssh/id_rsa.pub" else "~/.ssh/id_rsa";
 in
 with pkgs;
 {
@@ -74,55 +76,40 @@ with pkgs;
     serverAliveInterval = 30;
     serverAliveCountMax = 5;
     extraConfig = ''
-      IdentityFile ~/.ssh/id_rsa.pub
+      IdentityFile ${privKey}
     '';
     matchBlocks = {
       "github" = {
         host = "github";
         hostname = "github.com";
         user = "git";
-        identityFile = "~/.ssh/id_rsa.pub";
+        identityFile = privKey;
       };
       "bitbucket" = {
         host = "bitbucket";
         hostname = "bitbucket.org";
+        identityFile = privKey;
         user = "git";
-        identityFile = "~/.ssh/id_rsa.pub";
       };
       "setup-tunnel-1" = {
         host = "setup-tunnel-1";
         hostname = "paulvictor.xyz";
         user = "viktor";
-        identityFile = "~/.ssh/id_rsa.pub";
+        identityFile = privKey;
         extraOptions = {
           "SessionType" = "none";
           "LocalForward" = "8888 127.0.0.1:8080";
           "RequestTTY" = "no";
         };
       };
-      "into-crash" = {
-        host = "into-crash";
-        hostname = "paulvictor.xyz";
-        user = "paul";
-        port = 8888;
-        identityFile = "~/.ssh/id_rsa.pub";
-      };
-      "into-crash-directly" = {
-        host = "into-crash-directly";
-        hostname = "localhost";
-        user = "paul";
-        port = 8080;
-        forwardAgent = true;
-        identityFile = "~/.ssh/id_rsa.pub";
-        proxyJump = "viktor@paulvictor.xyz";
-      };
+
       "setup-socks-proxy" = {
         host = "setup-socks-proxy";
         hostname = "localhost";
         user = "paul";
         port = 8888;
         forwardAgent = true;
-        identityFile = "~/.ssh/id_rsa.pub";
+        identityFile = privKey;
         extraOptions = {
           "SessionType" = "none";
           "DynamicForward" = "127.0.0.1:6565";

@@ -20,24 +20,3 @@
 #    ++ (lib.optional (specialArgs.isDesktop or true) ./desktop-config.nix);
   };
 }
-# builtins.mapAttrs(_: attrs:
-#   let
-#     inherit (attrs) extraSpecialArgs additionalModules;
-#   in ({
-
-#     extraSpecialArgs = extraSpecialArgs // {inherit magix;};
-#     modules = [
-#       inputs.nix-index-database.hmModules.nix-index
-#       ./overlays.nix
-#       ./home-configuration.nix
-#       {
-#         nixpkgs.config.allowUnfree = true;
-#         nixpkgs.overlays = overlays;
-#       }
-#     ]
-#     ++ (lib.optional attrs.withGUI ./gui-config.nix)
-#     ++ (lib.optional attrs.isDevEnv  ./dev-config.nix )
-#     ++ (lib.optional attrs.isDesktop ./desktop-config.nix)
-#     ++ additionalModules;
-#   })) allDevices
-
