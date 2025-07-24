@@ -120,6 +120,7 @@ in
           surf
           surfraw
           vlc
+          rofi # for passdo
           (ungoogled-chromium.override { enableWideVine = pkgs.stdenv.isx86_64; })
 
         ]
