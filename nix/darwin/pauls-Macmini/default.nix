@@ -36,19 +36,23 @@ let
 
 in
 darwin.lib.darwinSystem {
-  inherit system;
-  inputs = {
-    inherit nixpkgs darwin;
-  };
+  inherit system inputs;
   specialArgs = {
+    inherit inputs;
     userName = "paul.victor";
   };
   modules = [
     inputs.homeManager.darwinModules.default
+    ../../userland/nix-darwin.nix
     commonModules
     machineSpecific
-    ../services/sshd.nix
     ../services/admin.nix
+    ({
+      users.users."paul.victor" = {
+        name = "paul.victor";
+        home = "/Users/paul.victor";
+      };
+    })
 
      # https://evilmartians.com/chronicles/stick-with-security-yubikey-ssh-gnupg-macos
 #     ../services/gpg-agent.nix
