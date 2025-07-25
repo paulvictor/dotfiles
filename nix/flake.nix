@@ -122,6 +122,7 @@
         wallpaper-overlay
         surfraw-overlay
         inputs.nur.overlays.default
+        inputs.darwin.overlays.default
         ql2nix-overlay
         inputs.ngnk.overlay
         inputs.emacsOverlay.overlay
@@ -183,10 +184,8 @@
         in {
           inherit nixosConfigurations imageModules;
           darwinConfigurations = import ./darwin/default.nix {
-            inherit nixpkgs self pkgs;
             inherit (nixpkgs) lib;
-            inherit inputs;
-            overlays = overlays;
+            inherit inputs overlays;
           };
           homeConfigurations = import ./userland/default.nix { inherit inputs pkgs overlays; };
         }))

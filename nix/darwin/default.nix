@@ -1,6 +1,21 @@
-args:
+args@{inputs, lib, overlays, ...}:
 
-{
-  paul-Macmini = import ./pauls-Macmini args;
-  macstudio = import ./macstudio args;
-}
+let
+  system = inputs.flake-utils.lib.system.aarch64-darwin;
+  devices = builtins.attrNames ( builtins.readDir ./devices);
+  mkDarwinSystem = device: inputs.darwin.lib.darwinSystem {
+    specialArgs = {inherit inputs;};
+    modules = [
+      {nixpkgs = {inherit overlays;};}
+      inputs.homeManager.darwinModules.home-manager
+      "${toString ./.}/devices/${device}/default.nix"
+      ../userland/nix-darwin.nix
+      ./modules/common.nix
+      ./modules/tailscale.nix
+    ];
+  };
+
+
+in
+builtins.listToAttrs
+  (lib.forEach devices (device: lib.nameValuePair device (mkDarwinSystem device)))
