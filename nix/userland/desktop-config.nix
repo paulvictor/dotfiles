@@ -150,7 +150,7 @@ with pkgs;
     defaultCacheTtlSsh = 3600;
     maxCacheTtl = 6 * 3600;
     maxCacheTtlSsh = 6 * 3600;
-    pinentryPackage = pinentry-qt;
+    pinentry.package = pinentry-qt;
     enableScDaemon = true;
     sshKeys = [
       "# id_rsa"

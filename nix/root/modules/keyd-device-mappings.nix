@@ -55,17 +55,17 @@ let
     "4" = "|";                                "0" = "6";
     "5" = "noop";                             "-" = "+";
 
-    q = "<";        u = "?";
-    w = "(";        i = "1";
-    e = ")";        o = "2";
-    r = ">";        p = "3";
-    t = "noop";    "leftbrace" = "0";
+    q = "<";                 u = "?";
+    w = "leftbrace";         i = "1";
+    e = "rightbrace";        o = "2";
+    r = ">";                 p = "3";
+    t = "noop";              "leftbrace" = "0";
 
     a = "{";             j = ".";
-    s = "leftbrace";     k = "7";
-    d = "rightbrace";    l = "8";
-    f = "}";        ";" = "9";
-    g = "noop";     "'" = "=";
+    s = "(";             k = "7";
+    d = ")";             l = "8";
+    f = "}";             ";" = "9";
+    g = "noop";          "'" = "=";
   } // commonBindings;
   symbols = {
     "7" = "~";

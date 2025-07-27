@@ -79,8 +79,8 @@
 (deflayer num
   @qwerty
   -        /          \           @pipe      XX     `         4     5     6     @plus
-  @lt      @lparen    @rparen     @gt        XX     @ques     1     2     3     0       XX
-  @lcrly   lbrc       rbrc        @rcrly     XX     .         7     8     9     =
+  @lt      lbrc       rbrc        @gt        XX     @ques     1     2     3     0       XX
+  @lcrly   @lparen    @rparen     @rcrly     XX     .         7     8     9     =
 
   XX                  XX           XX                @retth    @bspcdel
 )
