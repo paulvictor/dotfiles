@@ -4,6 +4,10 @@
   services.syncthing = {
     settings = {
       devices = {
+        sarge = {
+          id = "FHS2LGI-LTCSU2F-NKKI3TB-RVOG3FM-IVDPPHI-DD74X6W-MKIQ3GG-KBNWTQO";
+          autoAcceptFolders = true;
+        };
         uriel = {
           id = "6XM6BA2-3ROYNBY-J4LVX5D-3NWQ7CR-NUE237C-C7XKZNZ-BFTI2KJ-E2SWGQC";
           autoAcceptFolders = true;

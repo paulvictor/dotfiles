@@ -4,6 +4,10 @@
     unifiedHomeManager = true;
   }
   {
+    hostName = "sarge";
+    unifiedHomeManager = true;
+  }
+  {
     hostName = "sorlag";
     unifiedHomeManager = true;
   }

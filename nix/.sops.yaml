@@ -4,7 +4,14 @@ keys:
   - &uriel age1f07tempfywuy6cjteuvcdepxytx0l3yjwfegsrwvjpcz0zzphdpqyy2lep
   - &orbb age1ha8ruk96jkucr4dh3t6fs75yy06zq3apvwsmlca680vmsjay553qqtllkx
   - &bones age180rdqcp233km4e2x7kqgqsp52jyk2jqfhlwlc43da7hs0kenw98qtknmwa
+  - &sarge age1jd2yj2fyhfkppn5jaegqwrul0d4jt50ytg4nm0h85kacs3nphsgsju7vj6
 creation_rules:
+  - path_regex: root/devices/sarge/secrets/[^/]+\.(yaml|json|env|ini|conf)$
+    key_groups:
+    - pgp:
+      - *paul
+      age:
+      - *sarge
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini|conf)$
     key_groups:
     - pgp:
@@ -36,6 +43,9 @@ creation_rules:
       - *paul
       age:
       - *bones
-
-
-
+  - path_regex: secrets/sarge/[^/]+\.(yaml|json|env|ini|conf)$
+    key_groups:
+    - pgp:
+      - *paul
+      age:
+      - *sarge
