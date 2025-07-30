@@ -49,7 +49,7 @@
     (read-line port)))
 
 (define (type-out str)
-  (system* "ydotool" "type" "--key-delay" "40" str))
+  (system* "ydotool" "type" "--key-delay" "40" str "-e" "0"))
 
 (define type-password
   (let ((selected-password (show-menu-and-get-selection)))
