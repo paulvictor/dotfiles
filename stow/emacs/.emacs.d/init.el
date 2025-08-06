@@ -66,6 +66,7 @@
 
 (use-package emacs
   :custom
+  (set-mark-command-repeat-pop t)
   (tab-width 2)
   ;; Enable recursive minibuffers
   (enable-recursive-minibuffer t)
@@ -895,12 +896,32 @@ Repeated invocations toggle between the two most recently open buffers."
   :custom
   (org-special-ctrl-a/e t)
   (org-return-follow-links t)
+  (org-confirm-babel-evaluate nil)
+  (org-babel-load-languages
+   '((emacs-lisp . t)
+     (R . t)
+;;      (bqn . t) ; Enable once we have ob-bqn included
+     (scheme . t)
+     (haskell . t)
+     (eshell . t)
+     (js . t)
+     (shell . t)))
   (org-M-RET-may-split-line
    '((headline . nil)
      (item . nil)
      (default . t)))
+  :config
+  (require 'org-tempo)
+  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("hs" . "src haskell"))
+  (add-to-list 'org-structure-template-alist '("js" . "src js"))
+  (add-to-list 'org-structure-template-alist '("py" . "src python"))
   :bind (:map org-mode-map
               ("C-M-i" . completion-at-point)))
+
+(use-package org-bullets
+  :hook (org-mode . org-bullets-mode))
 
 (use-package org-tree-slide
   :bind (:map org-tree-slide-mode-map

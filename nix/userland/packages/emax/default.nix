@@ -111,6 +111,8 @@ let
             nix-modeline
             nix-sandbox
             no-littering
+            org-bullets
+            org-beautify-theme
             org-download
             org-make-toc
             org-roam
