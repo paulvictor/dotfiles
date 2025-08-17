@@ -67,6 +67,7 @@
 (use-package emacs
   :custom
   (set-mark-command-repeat-pop t)
+  (undo-limit (100*1024))
   (tab-width 2)
   ;; Enable recursive minibuffers
   (enable-recursive-minibuffer t)
