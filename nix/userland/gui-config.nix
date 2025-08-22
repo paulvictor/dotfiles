@@ -117,7 +117,7 @@ in
           yubikey-personalization
           menu-surfraw
           scrot
-          surf
+#           surf
           surfraw
           vlc
           rofi # for passdo
