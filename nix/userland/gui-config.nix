@@ -104,14 +104,13 @@ in
       ]
       ++ (lib.optionals pkgs.stdenv.isx86_64
         [
-#           (vivaldi.override { proprietaryCodecs = true; enableWidevine = true;})
-
+          vivaldi
           google-chrome
         ]
       )
       ++ (lib.optionals pkgs.stdenv.isLinux
         [
-          electronApps
+
           yubico-piv-tool
           yubikey-manager
           yubikey-personalization
@@ -121,7 +120,7 @@ in
           surfraw
           vlc
           rofi # for passdo
-#           (ungoogled-chromium.override { enableWideVine = pkgs.stdenv.isx86_64; })
+          ungoogled-chromium
 
         ]
       );
