@@ -104,7 +104,7 @@ in
       ]
       ++ (lib.optionals pkgs.stdenv.isx86_64
         [
-          (vivaldi.override { proprietaryCodecs = true; enableWidevine = true;})
+#           (vivaldi.override { proprietaryCodecs = true; enableWidevine = true;})
 
           google-chrome
         ]
@@ -121,7 +121,7 @@ in
           surfraw
           vlc
           rofi # for passdo
-          (ungoogled-chromium.override { enableWideVine = pkgs.stdenv.isx86_64; })
+#           (ungoogled-chromium.override { enableWideVine = pkgs.stdenv.isx86_64; })
 
         ]
       );
