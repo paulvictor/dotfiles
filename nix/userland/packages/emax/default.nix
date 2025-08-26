@@ -60,13 +60,11 @@ let
             copy-as-format
             dash
             dashboard
-#             dired-single
             direnv
             doom-modeline
             doom-themes
             edit-server
             elisp-slime-nav
-#             emacs-webkit
             embark orderless consult marginalia
             engine-mode
             erc-colorize erc-yank
@@ -88,6 +86,7 @@ let
             guru-mode
             haskell-mode
             helpful
+            hide-mode-line
             himalaya-emacs
             hl-todo
             hydra

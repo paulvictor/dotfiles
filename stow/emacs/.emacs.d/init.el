@@ -262,9 +262,9 @@
   (doom-modeline-major-mode-color-icon t)
   (doom-modeline-buffer-state-icon t)
   (doom-modeline-buffer-modification-icon t)
-  (doom-modeline-persp-name t)
-  (doom-modeline-display-default-persp-name nil)
-  (doom-modeline-persp-icon t)
+  ;; (doom-modeline-persp-name t)
+;;   (doom-modeline-display-default-persp-name nil)
+;;   (doom-modeline-persp-icon t)
   :config
   (doom-modeline-mode 1))
 
@@ -628,17 +628,17 @@ Repeated invocations toggle between the two most recently open buffers."
   (ibuffer-saved-filter-groups nil)
   (ibuffer-old-time 24))
 
-(defun pvr/create-or-switch-perspective (dir)
-  (persp-switch (f-filename dir)))
+;; (defun pvr/create-or-switch-perspective (dir)
+;;   (persp-switch (f-filename dir)))
 
-(use-package perspective
-  :after project
-  :custom
-  (persp-mode-prefix-key (kbd "C-c M-p"))
-  (persp-initial-frame-name "Main")
-  :config
-  (advice-add 'project-switch-project :before #'pvr/create-or-switch-perspective)
-  (persp-mode 1))
+;; (use-package perspective
+;;   :after project
+;;   :custom
+;;   (persp-mode-prefix-key (kbd "C-c M-p"))
+;;   (persp-initial-frame-name "Main")
+;;   :config
+;;   (advice-add 'project-switch-project :before #'pvr/create-or-switch-perspective)
+;;   (persp-mode 1))
 
 (use-package magit
   :config
@@ -1211,3 +1211,65 @@ point reaches the beginning or end of the buffer, stop there."
 (use-package casual-image
   :bind (:map image-mode-map
               ("C-M-g" . casual-image-tmenu)))
+
+(use-package bufler
+  :custom
+  (bufler-columns '("Name" "Mode" "VC" "Path"))
+  (bufler-groups
+   (bufler-defgroups
+     (group
+      ;; Subgroup collecting all named workspaces.
+      (auto-workspace))
+     (group
+      ;; Subgroup collecting all `help-mode' and `info-mode' buffers.
+      (group-or "*Help/Info*"
+                (mode-match "*Help*" (rx bos "help-"))
+                (mode-match "*Info*" (rx bos "info-"))))
+     (group
+      ;; Subgroup collecting all special buffers (i.e. ones that are not
+      ;; file-backed), except `magit-status-mode' buffers (which are allowed to fall
+      ;; through to other groups, so they end up grouped with their project buffers).
+      (group-and "*Special*"
+                 (lambda (buffer)
+                   (unless (or (funcall (mode-match "Magit" (rx bos "magit-status"))
+                                        buffer)
+                               (funcall (mode-match "Dired" (rx bos "dired"))
+                                        buffer)
+                               (funcall (auto-file) buffer))
+                     "*Special*")))
+      (group
+       ;; Subgroup collecting these "special special" buffers
+       ;; separately for convenience.
+       (name-match "**Special**"
+                   (rx bos "*" (or "Messages" "Warnings" "scratch" "Backtrace") "*")))
+      (group
+       ;; Subgroup collecting all other Magit buffers, grouped by directory.
+       (mode-match "*Magit* (non-status)" (rx bos (or "magit" "forge") "-"))
+       (auto-directory))
+      ;; Remaining special buffers are grouped automatically by mode.
+      (auto-mode))
+     (group
+      ;; Subgroup collecting buffers in `org-directory' (or "~/org" if
+      ;; `org-directory' is not yet defined).
+      (dir (if (bound-and-true-p org-directory)
+               org-directory
+             "~/org"))
+      (group
+       ;; Subgroup collecting indirect Org buffers, grouping them by file.
+       ;; This is very useful when used with `org-tree-to-indirect-buffer'.
+       (auto-indirect)
+       (auto-file))
+      ;; Group remaining buffers by whether they're file backed, then by mode.
+      (group-not "*special*" (auto-file))
+      (auto-mode))
+     (group
+      ;; Subgroup collecting buffers in a version-control project,
+      ;; grouping them by directory.
+      (auto-project))
+     ;; Group remaining buffers by directory, then major mode.
+     (auto-directory)
+     (auto-mode)))
+  (bufler-vc-state t)
+  :config
+  (bufler-mode))
+(use-package bufler-workspace)
