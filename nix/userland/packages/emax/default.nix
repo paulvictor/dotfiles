@@ -52,6 +52,7 @@ let
             avy-zap
             bqn-mode
             browse-at-remote
+            bufler burly
             cape
             casual-suite
             clojure-mode
@@ -155,20 +156,8 @@ let
         ++
         [ (with epkgs; [ nano-theme eat ]) ]
         ++
-        [ (with epkgs.elpaPackages; [ beframe undo-tree org vertico corfu plz kind-icon pulsar erc ement vundo ]) ]);
-  gstBuildInputs = with gst_all_1; [
-    gstreamer gst-libav
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
-  ];
-  webkitDeps = with pkgs; [
-    webkitgtk_4_1
-    glib gtk3
-    glib-networking
-    gsettings-desktop-schemas
-  ] ++ gstBuildInputs;
+        [ (with epkgs.elpaPackages; [ activities beframe undo-tree org vertico corfu plz kind-icon pulsar erc ement vundo ]) ]);
+
   treeSitters = with pkgs.tree-sitter-grammars; [
     tree-sitter-nix
     tree-sitter-json
@@ -198,7 +187,6 @@ let
       wrapProgram $out/bin/emacs \
         --prefix PATH : ${lib.makeBinPath [ ripgrep fd w3m fish delta guile_3_0 coreutils git ]} \
         --set GIO_EXTRA_MODULES "${pkgs.glib-networking}/lib/gio/modules:${pkgs.dconf.lib}/lib/gio/modules" \
-        --set GST_PLUGIN_SYSTEM_PATH_1_0 "${pkgs.lib.concatMapStringsSep ":" (p: "${p}/lib/gstreamer-1.0") gstBuildInputs}" \
         --add-flags --maximized
     '';
   };

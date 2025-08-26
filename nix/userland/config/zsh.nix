@@ -1,4 +1,4 @@
-{ pkgs, config }:
+{ pkgs, config, ... }:
 
 with pkgs;
 let
@@ -20,18 +20,6 @@ let
         "$SPACESHIP_NIX_SHELL_SUFFIX"
     }
   '';
-  manPager =
-    runCommand "lezz" {buildInputs = [ makeWrapper ];} ''
-      mkdir -pv $out/bin
-      makeWrapper ${less}/bin/less $out/bin/lezz \
-        --set LESS_TERMCAP_mb $(printf '\e[01;31m') \
-        --set LESS_TERMCAP_md $(printf '\e[01;35m') \
-        --set LESS_TERMCAP_me $(printf '\e[0m')  \
-        --set LESS_TERMCAP_se $(printf '\e[0m')  \
-        --set LESS_TERMCAP_so $(printf '\e[01;33m')  \
-        --set LESS_TERMCAP_ue $(printf '\e[0m')  \
-        --set LESS_TERMCAP_us $(printf '\e[04;36m')
-    '';
   pl-zsh-nix-shell = {
     name = "zsh-nix-shell";
     file = "nix-shell.plugin.zsh";
@@ -49,27 +37,29 @@ let
   };
 in
 {
-  enable = true;
-  autosuggestion.enable = true;
-  dotDir = ".zsh";
-  syntaxHighlighting.enable = true;
-  history = {
-    path = "${config.home.homeDirectory}/plain/zsh/zsh_history";
-    expireDuplicatesFirst = true;
-    extended = false;
-    ignoreDups = true;
-    save = 100000;
-    share = true;
-    size = 100000;
-  };
-  plugins = [
-    pl-zsh-nix-shell
-    pl-zsh-completions
-    pl-nix-zsh-completions
-  ];
+  programs.zsh =
+    {
+      enable = true;
+      autosuggestion.enable = true;
+      dotDir = "${config.home.homeDirectory}/.zsh";
+      syntaxHighlighting.enable = true;
+      history = {
+        path = "${config.home.homeDirectory}/plain/zsh/zsh_history";
+        expireDuplicatesFirst = true;
+        extended = false;
+        ignoreDups = true;
+        save = 100000;
+        share = true;
+        size = 100000;
+      };
+      plugins = [
+        pl-zsh-nix-shell
+        pl-zsh-completions
+        pl-nix-zsh-completions
+      ];
 
 
-  initContent = ''
+      initContent = ''
     [[ $TERM == "dumb" ]] \
       && unsetopt zle \
       && unsetopt prompt_cr \
@@ -120,7 +110,6 @@ in
       (for (( i=1; i<=$LINES; i++ )); do echo; done; clear)
 
     export EDITOR="emacsclient -c"
-    #eval "$(${lua}/bin/lua ${z-lua}/bin/z --init zsh enhanced once fzf)"
     _ZL_ECHO=1
     _ZL_MATCH_MODE=1
 
@@ -128,28 +117,25 @@ in
 
     function gen-passwd () { ${pkgs.gnupg}/bin/gpg --gen-random --armor 0 $1:-24 }
     source ${pkgs.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh
-    macsman() {
-      emacsclient -c -n --eval "(let ((Man-notify-method 'bully)) (man \"$1\"))"
-    }
   '';
-  shellAliases = {
-    # grep = "GREP_COLORS=\"1;33;40\" LANG=C egrep --color=always";
-    gen_new_cert = "${pkgs.openssl}/bin/openssl req -new -x509 -key ~/.ssh/id_rsa -out cacert.pem -days 1095";
-    ee = "emacsclient -c -n $1";
-    man = "macsman";
-#     nextp = "mpc next";
-#     prevp = "mpc prev";
-#     tnew = "new-tmux-from-dir-name";
-    cat = "bat";
-    ping = "prettyping";
-    ssh = "TERM=xterm-color ssh";
-    screen-grab = "ffmpeg -f x11grab -video_size 1920x1080 -framerate 30 -i :1 -vcodec libx264 -preset ultrafast -qp 0 -pix_fmt yuv444p video.mkv";
-  };
-  oh-my-zsh = {
-    enable = true;
-    plugins = [ "git" ];
-    theme = "spaceship";
-    custom = "$HOME/.config/zsh";
-  };
+      shellAliases = {
+        # grep = "GREP_COLORS=\"1;33;40\" LANG=C egrep --color=always";
+        gen_new_cert = "${pkgs.openssl}/bin/openssl req -new -x509 -key ~/.ssh/id_rsa -out cacert.pem -days 1095";
+        ee = "emacsclient -c -n $1";
+        man = "macsman";
+        #     nextp = "mpc next";
+        #     prevp = "mpc prev";
+        #     tnew = "new-tmux-from-dir-name";
+        cat = "bat";
+        ping = "prettyping";
+        ssh = "TERM=xterm-color ssh";
+        screen-grab = "ffmpeg -f x11grab -video_size 1920x1080 -framerate 30 -i :1 -vcodec libx264 -preset ultrafast -qp 0 -pix_fmt yuv444p video.mkv";
+      };
+      oh-my-zsh = {
+        enable = true;
+        plugins = [ "git" ];
+        theme = "spaceship";
+        custom = "$HOME/.config/zsh";
+      };
 
-}
+    };}

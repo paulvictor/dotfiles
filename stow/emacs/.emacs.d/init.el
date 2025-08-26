@@ -67,7 +67,7 @@
 (use-package emacs
   :custom
   (set-mark-command-repeat-pop t)
-  (undo-limit (100*1024))
+  (undo-limit (* 100 1024))
   (tab-width 2)
   ;; Enable recursive minibuffers
   (enable-recursive-minibuffer t)
@@ -352,11 +352,15 @@ Also move to the next line, since that's the most frequent action after"
   :hook
   (dired-mode . nerd-icons-dired-mode))
 
+(defun pvr/rename-frame-on-project (&rest args)
+  (set-frame-name (format "emacs - *%s*" (project-name (project-current)))))
+
 (use-package project
   :custom
   (project-switch-use-entire-map t)
   (project-key-prompt-style 'brackets)
   :config
+  (advice-add 'project-switch-project :after #'pvr/rename-frame-on-project)
   (general-define-key
    :keymaps 'project-prefix-map
    "b" 'consult-project-buffer
@@ -801,26 +805,6 @@ Repeated invocations toggle between the two most recently open buffers."
 
 (use-package hydra)
 
-(defun eshell-persp ()
-  "Crete a new persp for eshell"
-  (interactive)
-  (persp-switch "eshell")
-  (with-perspective "eshell"
-    (let
-        ((buffer (eshell)))
-      (persp-switch-to-buffer buffer)
-      (persp-set-buffer "*eshell*"))))
-
-(defun vterm-persp ()
-  "Crete a new persp for vterm"
-  (interactive)
-  (persp-switch "vterm")
-  (with-perspective "vterm"
-    (let
-        ((buffer (vterm)))
-      (persp-switch-to-buffer buffer)
-      (persp-set-buffer "*vterm*"))))
-
 (use-package purescript-mode
   :mode "\\.purs\\'")
 
@@ -1128,43 +1112,6 @@ point reaches the beginning or end of the buffer, stop there."
 
 ;; (use-package ts-fold
 ;;   :straight (ts-fold :type git :host github :repo "emacs-tree-sitter/ts-fold"))
-
-;; (straight-use-package
-;;  '(webkit :type git :host github :repo "akirakyle/emacs-webkit"
-;;           :branch "main"
-;;           :files (:defaults "*.js" "*.css" "*.so")
-;;           :pre-build ("make")))
-
-
-;; (use-package exwm
-;;   :init
-;;   (require 'exwm-config)
-;;   (setq exwm-workspace-number 5)
-;;   (add-hook 'exwm-update-class-hook #'(lambda ()
-;;                                         (exwm-workspace-rename-buffer exwm-class-name)))
-;;   (setq exwm-input-global-keys
-;;         `(([?\s-w] . exwm-workspace-switch)
-;;           ([?\s-r] . exwm-reset)
-;;           ([?\s-h] . windmove-left)
-;;           ([?\s-j] . windmove-down)
-;;           ([?\s-k] . windmove-up)
-;;           ([?\s-l] . windmove-right)
-;;           ((kbd "s-<return>") . (lambda () (eshell)))
-;;           ,@(mapcar (lambda (i)
-;;                       `(,(kbd (format "s-%d" i)) .
-;;                         (lambda ()
-;;                           (interactive)
-;;                           (exwm-workspace-switch-create ,i))))
-;;                     (number-sequence 0 9))
-;;           ([\?s-&] . (lambda (command)
-;;                        (interactive (list (read-shell-command "$ ")))
-;;                        (start-process-shell-command command nil command)))))
-;;   :config
-;;   (require 'exwm-randr)
-;;   (with-eval-after-load 'exwm-randr
-;;     (exwm-enable)
-;;     (exwm-randr-mode 1)))
-
 
 (use-package ngnk-mode)
 (use-package ngnk-cli)
