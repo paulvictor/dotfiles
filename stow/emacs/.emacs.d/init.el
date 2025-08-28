@@ -355,12 +355,22 @@ Also move to the next line, since that's the most frequent action after"
 (defun pvr/rename-frame-on-project (&rest args)
   (set-frame-name (format "emacs - *%s*" (project-name (project-current)))))
 
+(defun pvr/create-or-resume-activity (prj-dir)
+  (if-let ((activity (activities-named prj-dir)))
+      (activities-resume activity)
+    (activities-new prj-dir)))
+
 (use-package project
   :custom
   (project-switch-use-entire-map t)
   (project-key-prompt-style 'brackets)
   :config
   (advice-add 'project-switch-project :after #'pvr/rename-frame-on-project)
+  (setopt project-prompter (lambda ()
+                             (let ((prj-dir (project-prompt-project-dir)))
+                               (pvr/create-or-resume-activity prj-dir)
+                               prj-dir)))
+;;   (advice-add 'project-prompt-project-dir :after #'pvr/create-or-resume-activity)
   (general-define-key
    :keymaps 'project-prefix-map
    "b" 'consult-project-buffer
@@ -1213,13 +1223,31 @@ point reaches the beginning or end of the buffer, stop there."
               ("C-M-g" . casual-image-tmenu)))
 
 (use-package bufler
+  :bind
+  ("C-x C-b" . bufler-list)
   :custom
   (bufler-columns '("Name" "Mode" "VC" "Path"))
   (bufler-groups
    (bufler-defgroups
+     ;; Subgroup collecting all named workspaces.
+     (group (auto-workspace))
+     ;; Subgroup collecting buffers in a version-control project,
+     ;; grouping them by directory.
+     (group (auto-project))
      (group
-      ;; Subgroup collecting all named workspaces.
-      (auto-workspace))
+      (group-or "*Org Notes*"
+                 (dir (or (and
+                           (bound-and-true-p org-roam-directory)
+                           (f-dir? org-roam-directory)
+                           org-roam-directory)
+                          "~/org-roam-notes/")))
+      (group
+       ;; Subgroup collecting indirect Org buffers, grouping them by file.
+       ;; This is very useful when used with `org-tree-to-indirect-buffer'.
+       (auto-indirect)
+       (auto-file))
+      (group-not "*special*" (auto-file))
+      (auto-mode))
      (group
       ;; Subgroup collecting all `help-mode' and `info-mode' buffers.
       (group-or "*Help/Info*"
@@ -1248,28 +1276,16 @@ point reaches the beginning or end of the buffer, stop there."
        (auto-directory))
       ;; Remaining special buffers are grouped automatically by mode.
       (auto-mode))
-     (group
-      ;; Subgroup collecting buffers in `org-directory' (or "~/org" if
-      ;; `org-directory' is not yet defined).
-      (dir (if (bound-and-true-p org-directory)
-               org-directory
-             "~/org"))
-      (group
-       ;; Subgroup collecting indirect Org buffers, grouping them by file.
-       ;; This is very useful when used with `org-tree-to-indirect-buffer'.
-       (auto-indirect)
-       (auto-file))
-      ;; Group remaining buffers by whether they're file backed, then by mode.
-      (group-not "*special*" (auto-file))
-      (auto-mode))
-     (group
-      ;; Subgroup collecting buffers in a version-control project,
-      ;; grouping them by directory.
-      (auto-project))
      ;; Group remaining buffers by directory, then major mode.
      (auto-directory)
      (auto-mode)))
   (bufler-vc-state t)
-  :config
+  :init
   (bufler-mode))
-(use-package bufler-workspace)
+
+(use-package activities
+  :custom
+  (activities-name-prefix "*emacs session α: ")
+  (activities-always-persist nil)
+  :init
+  (activities-mode))

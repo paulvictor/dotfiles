@@ -137,5 +137,5 @@ in
         theme = "spaceship";
         custom = "$HOME/.config/zsh";
       };
-
-    };}
+    };
+}
