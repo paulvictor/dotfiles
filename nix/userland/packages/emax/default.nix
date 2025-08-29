@@ -155,7 +155,7 @@ let
         ++
         [ (with epkgs; [ nano-theme eat ]) ]
         ++
-        [ (with epkgs.elpaPackages; [ activities beframe undo-tree org vertico corfu plz kind-icon pulsar erc ement vundo ]) ]);
+        [ (with epkgs.elpaPackages; [ activities beframe undo-tree org vertico corfu plz kind-icon pulsar erc ement vundo tmr ]) ]);
 
   treeSitters = with pkgs.tree-sitter-grammars; [
     tree-sitter-nix

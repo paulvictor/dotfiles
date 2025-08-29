@@ -955,17 +955,12 @@ Repeated invocations toggle between the two most recently open buffers."
          ((regexp "\\.def\\'") chez) ((regexp "\\.ss\\'") chez)
          ((regexp "\\.rkt$") racket))))
 
-(load-file (concat user-emacs-directory "ghcid.el"))
-(load-file (concat user-emacs-directory "utils.el"))
-(load-file (concat user-emacs-directory "completions.el"))
-(load-file (concat user-emacs-directory "names.el"))
-(load-file (concat user-emacs-directory "eshell.el"))
+(dolist (f '("ghcid.el" "utils.el" "completions.el" "names.el" "eshell.el" "popup.el")) ;; The order here is somewhat important as functions defined in certain modules are used in others down the list
+  (load-file (concat user-emacs-directory f)))
 
 (setq display-buffer-alist
       (append display-buffer-alist
-      '(
-
-        ;; The added space is for didactic purposes
+      '(;; The added space is for didactic purposes
 
         ;; Each entry in this list has this anatomy:
 
@@ -1287,5 +1282,20 @@ point reaches the beginning or end of the buffer, stop there."
   :custom
   (activities-name-prefix "*emacs session α: ")
   (activities-always-persist nil)
+  :config
+  (defvar activities-prefix-keymap
+    (let ((map (make-sparse-keymap)))
+      (suppress-keymap map)
+      (define-key map "n" 'activities-new)
+      (define-key map "l" 'activities-list)
+      (define-key map "d" 'activities-define)
+      (define-key map "k" 'activities-kill)
+      (define-key map (kbd "RET") 'activities-switch)
+      (define-key map "b" 'activities-switch-buffer)
+      (define-key map "a" 'activities-resume)
+      (define-key map "s" 'activities-suspend)
+      (define-key map "g" 'activities-revert)
+      map))
+  (keymap-global-set "C-c a" activities-prefix-keymap)
   :init
   (activities-mode))

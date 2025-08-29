@@ -65,7 +65,7 @@
 
    `("s-d" (exec "fuzzel") #:wk "Applications")
    `("s-S-d" (exec "rofiElectronAppsRunner") #:wk "Electron Apps")
-   `("s-RET" (exec "emacsclient -c -n -e \"(pvr/new-eshell-window)\""))
+   `("s-RET" (exec "emacsclient -n -e \"(pvr-window-popup-pvr-eshell)\""))
    `("s-w" (sway-kill) #:wk "Kill Window")
    `("s-S-RET" (exec "alacritty") #:wk "Spawn Terminal")
    `("s-e" (exec "emacsclient -c -n") #:wk "Emacs client")
@@ -117,6 +117,12 @@
      ("q" (sway-exit) #:wk "Exit Sway")
      ("l" (exec "swaylock") #:wk "Lock session")
      ("r" (sway-reload) #:wk "Reload Sway"))
+
+   `(general-define-keys
+     #:prefix "e" #:wk "Emacs" ;; Actions without creating a new frame
+     ("c" (exec "emacsclient -n -e \"(pvr-window-popup-org-capture)\""))
+     ;; TODO can we set timer
+     ("RET" (exec "emacsclient -n -e \"(pvr-window-popup-pvr-eshell)\"")))
 
    `(general-define-keys
      #:prefix "w" #:wk "Window"

@@ -30,10 +30,7 @@
 (defun pvr/eshell-quit-or-delete-char (arg)
   (interactive "p")
   (if (and (eolp) (looking-back eshell-prompt-regexp))
-      (progn
-        (eshell-life-is-too-much)       ; Why not? (eshell/exit)
-        (ignore-errors
-          (delete-window)))
+      (eshell-life-is-too-much)
     (delete-forward-char arg)))
 
 (use-package em-term
@@ -228,12 +225,6 @@ directory to make multiple eshell windows easier."
     (eshell-send-input)))
 
 (bind-key "C-!" 'eshell-here)
-
-(defun pvr/new-eshell ()
-  (interactive)
-  (let ((name (pvr/random-name)))
-    (eshell "new")
-    (rename-buffer (concat "*eshell " name " *"))))
 
 ;;;; Smarter EShell
 ;;;;
