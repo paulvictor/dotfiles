@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - try-activities.el
 
 jobs:
   build:
