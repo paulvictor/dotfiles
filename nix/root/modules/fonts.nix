@@ -10,7 +10,6 @@
     noto-fonts
     ubuntu_font_family
     unifont
-    bqn386
   ] ++ (with pkgs.nerd-fonts;
     [
       #hack
@@ -18,7 +17,7 @@
       jetbrains-mono
       udev-gothic-nf
       plemoljp-nf
-      #iosevka-term
+      iosevka-term
       #iosevka
       sauce-code-pro
       #             dejavu-sans-mono

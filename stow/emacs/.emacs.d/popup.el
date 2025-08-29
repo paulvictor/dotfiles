@@ -15,7 +15,9 @@ Make the new frame have the `pvr-window-popup-frame' parameter."
      ,(format "Run `%s' in a popup frame with `pvr-window-popup-frame' parameter.
 Also see `pvr-window-delete-popup-frame'." command)
      (interactive)
-     (let ((frame (make-frame '((pvr-window-popup-frame . t)))))
+     (let ((frame (make-frame '((pvr-window-popup-frame . t)
+                                (window-system . x)
+                                (display . ":0")))))
        (select-frame frame)
        (switch-to-buffer " pvr-window-hidden-buffer-for-popup-frame")
        (condition-case nil

@@ -120,7 +120,7 @@
 
    `(general-define-keys
      #:prefix "e" #:wk "Emacs" ;; Actions without creating a new frame
-     ("c" (exec "emacsclient -n -e \"(pvr-window-popup-org-capture)\""))
+     ("c" (exec "emacsclient -n -e \"(pvr-window-popup-org-roam-capture)\""))
      ;; TODO can we set timer
      ("RET" (exec "emacsclient -n -e \"(pvr-window-popup-pvr-eshell)\"")))
 

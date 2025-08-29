@@ -48,7 +48,7 @@ in
         guile_3_0.dev
         guile_3_0.info
         jq
-        nodejs
+        nodejs_22
         pv
         sbcl sbclPackages.qlot-cli
         tmate

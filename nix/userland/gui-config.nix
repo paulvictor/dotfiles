@@ -3,17 +3,8 @@
 with pkgs;
 let
   custom-vieb = import ./packages/vieb.nix { inherit pkgs; inherit (config.home) homeDirectory; };
-  all-the-icons-fonts = pkgs.callPackage ./packages/all-the-icons-fonts.nix {};
-  pursuit = pkgs.callPackage ./scripts/pursuit.nix {};
+
   menu-surfraw = pkgs.callPackage ./scripts/menu-surfraw.nix {};
-  darkreader-extension = pkgs.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {
-    pname = "dark-reader";
-    version = "4.9.33";
-    addonId = "addon@darkreader.org";
-    url = "https://addons.mozilla.org/firefox/downloads/file/3783471/dark_reader-4.9.33-an+fx.xpi";
-    sha256 = "0n9i5vdmjbzhvyvx0mircajrbs484xc4492sg3xkv5fvrw9yrrs9";
-    meta = {};
-  };
   brotab-extension = pkgs.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {
     pname = "brotab";
     version = "1.3.0";
@@ -32,10 +23,10 @@ let
   };
   tridactyl = pkgs.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {
     pname = "tridactyl";
-    version = "1.23.0pre7038";
+    version = "1.24.4pre7194";
     addonId = "tridactyl.vim.betas@cmcaine.co.uk";
-    url = "https://tridactyl.cmcaine.co.uk/betas/tridactyl2-1.24.1pre7038.xpi";
-    sha256 = "070nrrgnz6v4hjdzgkvi31pnz79r8yn6cw1645f4p9f39ga945bb";
+    url = "https://tridactyl.cmcaine.co.uk/betas/tridactyl2-1.24.3pre7189.xpi";
+    sha256 = "sha256-FMOvkEe5ruFLz8jUllitDrdPJMszgRvKez8i61CMB/w=";
     meta = {};
   };
   tabfs = pkgs.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {
@@ -87,7 +78,9 @@ let
         allowed_extensions = ["tabfs@paulvictor.com"];
       };
 in
-  {
+{
+  imports = [];
+  config = {
     home.packages =
       [
         autorandr
@@ -116,7 +109,7 @@ in
           yubikey-personalization
           menu-surfraw
           scrot
-#           surf
+          #           surf
           surfraw
           vlc
           rofi # for passdo
@@ -124,14 +117,6 @@ in
 
         ]
       );
-    # xresources =
-#       let
-#         xresourcesFile = callPackage ./scripts/xresources.nix { template = "rxvt-unicode"; brightness = "dark"; scheme = "tomorrow"; };
-#       in {
-#         extraConfig =
-#           ''#define FONTSIZE 13'' + "\n" + builtins.readFile "${xresourcesFile}/config";
-#         properties = import ./config/Xresources/default.nix { inherit (pkgs) xclip; };
-#       };
     programs.firefox = {
       enable = true;
       package = firefox-devedition;
@@ -192,7 +177,7 @@ in
           userChrome = import ./config/userChrome.nix { inherit pkgs; };
           extensions.packages = [
             nur.repos.rycee.firefox-addons.i-dont-care-about-cookies
-#             nur.repos.rycee.firefox-addons.bypass-paywalls-clean
+            #             nur.repos.rycee.firefox-addons.bypass-paywalls-clean
             brotab-extension
             edit-with-emacs-extension
             tabfs
@@ -218,4 +203,5 @@ in
       sha256 = "19mqavlz713ilr0x8a6j7205irns069nx0a85f4h7xs0pc2kknhz";
       fetchSubmodules = true;
     };
-  }
+  };
+}
