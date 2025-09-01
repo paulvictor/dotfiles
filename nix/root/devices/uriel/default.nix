@@ -29,12 +29,6 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  services.logind.extraConfig = ''
-    IdleAction=lock
-    IdleActionSec=300
-    HoldoffTimeoutSec=5
-  '';
-
   imports = [
     ./hardware-configuration.nix
     ./syncthing.nix

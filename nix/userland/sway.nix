@@ -51,23 +51,6 @@ in
     config = {
       modifier = "Mod4"; # Super key
       keybindings = lib.mkForce {}; #lib.mkOptionDefault keybindings;
-
-      output = {
-        "DP-1" = {
-          mode = "2560x1440@60Hz";
-          pos = "1440 523";
-        };
-        "DSI-1" = { # TODO, can we do only on bones.
-          mode = "1920x1200@60Hz";
-          pos = "0 0";
-          transform = "90";
-          scale = "1.60";
-        };
-        "HDMI-A-1" = {
-          mode = "2560x1440@60Hz";
-          transform = "270";
-        };
-      };
       focus = {
         newWindow = "smart";
         followMouse = "no";

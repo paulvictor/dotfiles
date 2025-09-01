@@ -1,4 +1,4 @@
- { config, pkgs, lib, specialArgs, ... }:
+{ config, pkgs, lib, specialArgs, ... }:
 
 with pkgs;
 let

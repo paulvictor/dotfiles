@@ -16,12 +16,6 @@
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  services.logind.extraConfig = ''
-    IdleAction=lock
-    IdleActionSec=300
-    HoldoffTimeoutSec=5
-  '';
-
   imports = [
     ./hardware-configuration.nix
     ./syncthing.nix

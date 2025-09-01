@@ -148,7 +148,26 @@
         inherit nixosModules;
       }
       // (eachDefaultSystem (system:
-        {
+        let
+          pkgs = import nixpkgs {
+            inherit system overlays;
+            config.allowUnfreePredicate =
+              pkg: builtins.elem (lib.getName pkg)
+                [
+                  "google-chrome"
+                  "vivaldi"
+                  "widevine-cdm"
+                  "ungoogled-chromium"
+                  "ungoogled-chromium-unwrapped"
+                  "prl-tools"
+                  "firefox-devedition-bin"
+                  "firefox-developer-edition-bin-unwrapped"
+                ];
+          };
+        in {
+          legacyPackages = {
+            homeConfigurations = import ./userland/default.nix { inherit inputs pkgs; };
+          };
           images =
             lib.mapAttrs
               (format: configModules:
@@ -169,7 +188,6 @@
       ))
       // (eachDefaultSystemPassThrough (system:
         let
-          pkgs = nixpkgs.legacyPackages.${system};
           nixosConfigurations =
             lib.mapAttrs
               (_: modules:
@@ -187,10 +205,9 @@
             inherit (nixpkgs) lib;
             inherit inputs overlays;
           };
-          homeConfigurations = import ./userland/default.nix { inherit inputs pkgs overlays; };
+
         }))
       // {
         nixOnDroidConfigurations.default = import ./nix-on-droid.nix;
-      }
-  ;
+      };
 }

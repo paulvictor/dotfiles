@@ -1,15 +1,9 @@
 { config, lib, pkgs, ...}:
-
 with lib;
-
 let
-
   batteryWarn = pkgs.callPackage ../../scripts/batteryWarn.nix {};
-
   cfg = config.services.batteryAlert;
-
 in {
-
   options = {
     services.batteryAlert = {
       enable = mkEnableOption "Enable battery low warning";
@@ -33,5 +27,4 @@ in {
       };
     };
   };
-
 }

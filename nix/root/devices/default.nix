@@ -1,11 +1,8 @@
 { inputs, overlays, lib, ... }:
 
 let
-
   inherit (builtins) attrNames isAttrs readDir listToAttrs elem;
-
   inherit (lib) forEach;
-
   commonModules =
     [
       ../common-config.nix
@@ -17,17 +14,7 @@ let
         nix.generateRegistryFromInputs = true;
         nix.linkInputs = true;
         nixpkgs.config.allowUnfreePredicate =
-          pkg: builtins.elem (lib.getName pkg)
-            [
-              "google-chrome"
-              "vivaldi"
-              "widevine-cdm"
-              "ungoogled-chromium"
-              "ungoogled-chromium-unwrapped"
-              "prl-tools"
-              "firefox-devedition-bin"
-              "firefox-developer-edition-bin-unwrapped"
-            ];
+          pkg: builtins.elem (lib.getName pkg) ["prl-tools"];
       })
       ../modules/viktor.nix
       ../modules/workstations.nix
@@ -50,5 +37,9 @@ listToAttrs
             inputs.homeManager.nixosModules.default
             { networking.hostName = hostName; }
             "${toString ./.}/${hostName}/default.nix"
-          ] ++ commonModules ++ (lib.optionals unifiedHomeManager [../../userland/nixosModule.nix]);
+          ]
+          ++ commonModules
+          ++ (lib.optionals false [
+            ../../userland/nixosModule.nix
+          ]);
         }))

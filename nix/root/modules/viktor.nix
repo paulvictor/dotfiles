@@ -20,7 +20,7 @@ in
   };
 
   security.sudo.enable = true;
-  security.sudo.wheelNeedsPassword = true;
+  security.sudo.wheelNeedsPassword = false;
   security.sudo.extraConfig = ''
     viktor ALL=(ALL) NOPASSWD: ALL
   '';

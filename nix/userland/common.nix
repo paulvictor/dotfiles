@@ -174,6 +174,7 @@ with pkgs;
     EDITOR = "emacsclient -c -n";
   };
 
+
   programs.nix-index-database.comma.enable = true;
 
   home.activation = {

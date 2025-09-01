@@ -1,48 +1,60 @@
 {
-  "viktor@uriel" = {
+  "viktor@sarge" = {
     additionalModules = [
-      {
-        home.username = "viktor";
-        home.homeDirectory = "/home/viktor";
-        home.stateVersion = "21.05";
-        services.batteryAlert.enable = true;
-      }
+      ({lib,...}:{
+        home.stateVersion = "25.05";
+        services.batteryAlert.enable = false;
+        wayland.windowManager.sway.config.output = lib.mkForce {
+          "HDMI-A-1" = {
+            mode = "2560x1440@60Hz";
+          };
+        };
+      })
     ];
-    withGUI = true; # Enable/disable gui programs
-    isDesktop = true; # Desktop environment setup. Roughly if any of the X related things should be enabled
-    isDevEnv = true; # For all dev packages
   };
   "viktor@sorlag" = {
     additionalModules = [
-      {
-        home.username = "viktor";
-        home.homeDirectory = "/home/viktor";
-        home.stateVersion = "22.05";
-      }
-    ];
-    withGUI = true; # Enable/disable gui programs
-    isDesktop = true; # Desktop environment setup. Roughly if any of the X related things should be enabled
-    isDevEnv = true; # For all dev packages
-  };
-  "paul@crash" = {
-    extraSpecialArgs = {
-      hostSpecificImports = [
-        ({config, pkgs, lib,...}: {
-          home.sessionPath = [ "/run/current-system/sw/bin" ];
-          home.sessionVariables = {
-#             NIX_PATH = "nixpkgs=${nixpkgs.outPath}";
+      ({lib,...}:{
+        home.stateVersion = "25.05";
+        services.batteryAlert.enable = false;
+        wayland.windowManager.sway.config.output = lib.mkForce {
+          "DP-1" = {
+            mode = "2560x1440@60Hz";
+            pos = "1440 523";
           };
-        })
-      ];
-    };
-    withGUI = false; # Enable/disable gui programs
+          "HDMI-A-1" = {
+            mode = "2560x1440@60Hz";
+            transform = "270";
+          };
+        }
+          ;
+      })
+    ];
+  };
+  "viktor@bones" = {
+    additionalModules = [
+      ({lib,...}:{
+        home.stateVersion = "25.05";
+        services.batteryAlert.enable = true;
+        wayland.windowManager.sway.config.output = lib.mkForce {
+          "DSI-1" = { # TODO, can we do only on bones.
+            mode = "1920x1200@60Hz";
+            pos = "0 0";
+            transform = "90";
+            scale = "1.60";
+          };
+        };
+      })
+    ];
+  };
+  "paul.victor@crash" = {
     isDesktop = false; # Desktop environment setup. Roughly if any of the X related things should be enabled
-    isDevEnv = true; # For all dev packages
     additionalModules = [
       {
-        home.username = "paul";
-        home.homeDirectory = "/Users/paul";
-        home.stateVersion = "22.05";
+        home.username = "paul.victor";
+        home.homeDirectory = "/Users/paul.victor";
+        home.stateVersion = "25.05";
+        home.sessionPath = [ "/run/current-system/sw/bin" ];
       }
     ];
   };

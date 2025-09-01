@@ -61,9 +61,9 @@
     (if (string-match "\\`\\+\\([0-9]+\\)\\'" (car args))
         (let* ((line (string-to-number (match-string 1 (pop args))))
                (file (pop args)))
-          (eshell-view-file file)
+          (view-file file)
           (forward-line line))
-      (eshell-view-file (pop args)))))
+      (view-file (pop args)))))
 
 (defun eshell/quit-and-close (&rest _)
   "Quit the current eshell buffer and close the window it's in."
