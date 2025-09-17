@@ -120,7 +120,7 @@ let
             nix-modeline
             nix-sandbox
             no-littering
-            ob-bqn
+#             ob-bqn
             org-bullets
             org-beautify-theme
             org-download
