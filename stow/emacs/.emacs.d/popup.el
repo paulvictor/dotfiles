@@ -1,6 +1,5 @@
-;; Using code from https://protesilaos.com/codelog/2024-09-19-emacs-command-popup-frame-emacsclient/
-
 ;;;; Run commands in a popup frame
+;; Using code from https://protesilaos.com/codelog/2024-09-19-emacs-command-popup-frame-emacsclient/
 
 (defun pvr-window-delete-popup-frame (&rest _)
   "Kill selected selected frame if it has parameter `pvr-window-popup-frame'.
@@ -19,11 +18,12 @@ Also see `pvr-window-delete-popup-frame'." command)
                                 (window-system . x)
                                 (display . ":0")))))
        (select-frame frame)
-       (switch-to-buffer " pvr-window-hidden-buffer-for-popup-frame")
-       (condition-case nil
-           (call-interactively ',command)
-         ((quit error user-error)
-          (delete-frame frame))))))
+       (with-current-buffer (switch-to-buffer " pvr-window-hidden-buffer-for-popup-frame")
+         (setq-local default-directory "~/") ; Sets the default directory to the home directory since it makes eshell open in a different directory otherwise
+         (condition-case nil
+             (call-interactively ',command)
+           ((quit error user-error)
+            (delete-frame frame)))))))
 
 ;; Dont know why it works even if this is commented out
 ;; (declare-function org-capture "org-capture" (&optional goto keys))

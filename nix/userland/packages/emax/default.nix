@@ -2,6 +2,15 @@
 
 with pkgs;
 let
+  ob-bqn =
+    let
+      src = "${pkgs.emacsPackages.bqn-mode.src}/extras";
+      version = pkgs.emacsPackages.bqn-mode.version;
+    in pkgs.emacsPackages.trivialBuild {
+      pname = "ob-bqn";
+      inherit src version;
+      packageRequires = [ pkgs.emacsPackages.bqn-mode ];
+    };
   emacs-webkit-src = fetchFromGitHub {
     owner = "akirakyle";
     repo = "emacs-webkit";
@@ -111,6 +120,7 @@ let
             nix-modeline
             nix-sandbox
             no-littering
+            ob-bqn
             org-bullets
             org-beautify-theme
             org-download

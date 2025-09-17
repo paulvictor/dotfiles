@@ -389,7 +389,7 @@ Also move to the next line, since that's the most frequent action after"
          ([remap Info-search] . consult-info)
          ;; C-x bindings in `ctl-x-map'
          ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
-         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+         ;; ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer ; Overridden by bufler-switch-buffer
          ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
          ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
          ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
@@ -1207,6 +1207,8 @@ point reaches the beginning or end of the buffer, stop there."
 
 (use-package ement
   :custom
+  (ement-room-compose-method 'compose-buffer)
+  (ement-room-send-message-filter 'ement-room-send-org-filter)
   (ement-save-sessions t))
 
 (use-package casual-calc
@@ -1220,6 +1222,7 @@ point reaches the beginning or end of the buffer, stop there."
 (use-package bufler
   :bind
   ("C-x C-b" . bufler-list)
+  ("C-x b" . bufler-switch-buffer)
   :custom
   (bufler-columns '("Name" "Mode" "VC" "Path"))
   (bufler-groups
