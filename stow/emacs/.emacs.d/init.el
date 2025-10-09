@@ -895,7 +895,7 @@ Repeated invocations toggle between the two most recently open buffers."
   (org-babel-load-languages
    '((emacs-lisp . t)
      (R . t)
-;;      (bqn . t) ; Enable once we have ob-bqn included
+     (bqn . t) ; Enable once we have ob-bqn included
      (scheme . t)
      (haskell . t)
      (eshell . t)
@@ -911,6 +911,7 @@ Repeated invocations toggle between the two most recently open buffers."
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("hs" . "src haskell"))
   (add-to-list 'org-structure-template-alist '("js" . "src js"))
+  (add-to-list 'org-structure-template-alist '("bq" . "src bqn"))
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
   :bind (:map org-mode-map
               ("C-M-i" . completion-at-point)))
