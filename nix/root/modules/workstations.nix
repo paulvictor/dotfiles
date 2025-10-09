@@ -89,8 +89,6 @@ with pkgs;
 
   programs.firejail.enable = isPhysicalDevice;
 
-  virtualisation.lxd.enable = false;
-
   security.wrappers = {
     cryptsetup = {
       owner = "root";
