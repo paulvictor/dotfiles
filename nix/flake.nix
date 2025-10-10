@@ -84,6 +84,9 @@
     vieb-nix.url = "github:tejing1/vieb-nix";
     vieb-nix.inputs.nixpkgs.follows = "nixpkgs";
 
+    microvm.url = "github:microvm-nix/microvm.nix";
+    microvm.inputs.nixpkgs.follows = "nixpkgs";
+
   };
 
   outputs = { self, nixpkgs, ... }@inputs :

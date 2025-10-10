@@ -34,6 +34,7 @@ listToAttrs
           value = [
             inputs.flake-utils-plus.nixosModules.autoGenFromInputs
             inputs.sops-nix.nixosModules.sops
+            inputs.microvm.nixosModules.host
             inputs.homeManager.nixosModules.default
             { networking.hostName = hostName; }
             "${toString ./.}/${hostName}/default.nix"
