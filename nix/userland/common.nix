@@ -67,18 +67,22 @@ with pkgs;
 
   programs.ssh = {
     enable = true;
-    compression = true;
-    controlMaster = "auto";
-    controlPath = "/tmp/ssh_mux_%h_%p_%r";
-    controlPersist = "24h";
-    forwardAgent = true;
-    hashKnownHosts = true;
-    serverAliveInterval = 30;
-    serverAliveCountMax = 5;
+    enableDefaultConfig = false;
     extraConfig = ''
       IdentityFile ${privKey}
     '';
     matchBlocks = {
+      "*" = {
+        compression = true;
+        controlMaster = "auto";
+        controlPath = "/tmp/ssh_mux_%h_%p_%r";
+        controlPersist = "24h";
+        forwardAgent = true;
+        hashKnownHosts = true;
+        serverAliveInterval = 30;
+        serverAliveCountMax = 5;
+
+      };
       "github" = {
         host = "github";
         hostname = "github.com";

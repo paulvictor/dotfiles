@@ -59,6 +59,5 @@ in
         specialArgs.inputs.magix.packages.${system}.magix
 #         visidata # for visualizing data
       ] ++
-      (lib.optionals isLinux [ bindfs k ]);
+      (lib.optionals isLinux [ bindfs ]);
   }
-
