@@ -113,7 +113,7 @@ let
             nerd-icons
             nerd-icons-completion
             nerd-icons-corfu
-            ngnk-mode
+#             ngnk-mode
             nov
             nerd-icons-dired
             nix-mode

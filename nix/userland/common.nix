@@ -38,9 +38,6 @@ with pkgs;
     pcsctools
     pcsclite
     qrcp
-    rclone
-    rclone-browser
-    shareLink
     watchexec # because of https://github.com/NixOS/nixpkgs/issues/160876
   ];
 

@@ -79,7 +79,7 @@ with pkgs;
       cursor.blink_interval = 500;
       cursor.blink_timeout = 10;
       cursor.vi_mode_style.shape = "Beam";
-      terminal.shell = "${lib.getExe pkgs.schemesh}";
+      terminal.shell = "${lib.getExe pkgs.zsh}";
       keyboard.bindings = [
         { key = "V"; mods = "Control|Shift"; action = "Paste"; }
         { key = "C"; mods = "Control|Shift"; action = "Copy"; }
