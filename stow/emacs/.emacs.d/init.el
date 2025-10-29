@@ -356,6 +356,7 @@ Also move to the next line, since that's the most frequent action after"
   (set-frame-name (format "emacs - *%s*" (project-name (project-current)))))
 
 (defun pvr/create-or-resume-activity (prj-dir)
+  (require 'activities)
   (if-let ((activity (activities-named prj-dir)))
       (activities-resume activity)
     (activities-new prj-dir)))
@@ -890,7 +891,7 @@ Repeated invocations toggle between the two most recently open buffers."
 (use-package org
   :custom
   (org-special-ctrl-a/e t)
-  (org-return-follow-links t)
+  (org-return-follows-links t)
   (org-confirm-babel-evaluate nil)
   (org-babel-load-languages
    '((emacs-lisp . t)
@@ -1119,8 +1120,6 @@ point reaches the beginning or end of the buffer, stop there."
 ;; (use-package ts-fold
 ;;   :straight (ts-fold :type git :host github :repo "emacs-tree-sitter/ts-fold"))
 
-(use-package ngnk-mode)
-(use-package ngnk-cli)
 ;; One thing is that C-. is not bound to anythng and can be used as a prefix
 (use-package org-roam
   :custom
@@ -1303,3 +1302,34 @@ point reaches the beginning or end of the buffer, stop there."
   (keymap-global-set "C-c a" activities-prefix-keymap)
   :init
   (activities-mode))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(safe-local-variable-values
+   '((eval setq-local org-roam-directory
+           (f-join
+            (f-full
+             (locate-dominating-file default-directory
+                                     ".dir-locals.el"))
+            "org-notes")
+           org-roam-db-location
+           (expand-file-name "org-roam.db" org-roam-directory))
+     (eval setq-local org-roam-directory
+           (f-join
+            (f-full
+             (locate-dominating-file default-directory
+                                     ".dir-locals.el"))
+            "org-notes"))
+     (eval setq-local org-roam-db-location
+           (expand-file-name "org-roam.db" org-roam-directory))
+     (eval setq-local org-roam-directory
+           (expand-file-name
+            (locate-dominating-file default-directory ".dir-locals.el"))))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
