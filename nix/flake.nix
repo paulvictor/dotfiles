@@ -87,6 +87,10 @@
     microvm.url = "github:microvm-nix/microvm.nix";
     microvm.inputs.nixpkgs.follows = "nixpkgs";
 
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware";
+    };
+
   };
 
   outputs = { self, nixpkgs, ... }@inputs :
