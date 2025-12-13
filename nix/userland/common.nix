@@ -35,7 +35,7 @@ with pkgs;
   ] ++
   lib.optionals (isLinux) [
     ffmpeg-full
-    pcsctools
+    pcsc-tools
     pcsclite
     qrcp
     watchexec # because of https://github.com/NixOS/nixpkgs/issues/160876

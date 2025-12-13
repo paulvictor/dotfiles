@@ -103,6 +103,7 @@ let
             json-mode
             key-chord
             keyfreq
+            kirigami
             linum-relative
             lsp-haskell
             lsp-mode

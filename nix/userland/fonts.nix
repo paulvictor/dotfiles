@@ -8,7 +8,7 @@
     dejavu_fonts.full-ttf
     font-awesome
     noto-fonts
-    ubuntu_font_family
+    ubuntu-classic
     unifont
   ] ++ (with pkgs.nerd-fonts;
     [

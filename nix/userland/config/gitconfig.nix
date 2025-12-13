@@ -8,7 +8,7 @@
   };
   programs.git = {
     enable = true;
-    package = pkgs.gitAndTools.gitFull;
+    package = pkgs.gitFull;
     settings = {
       user.email = "paulvictor@gmail.com";
       user.name = "Paul Victor Raj";
