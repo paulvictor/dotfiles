@@ -1333,3 +1333,6 @@ point reaches the beginning or end of the buffer, stop there."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(use-package kirigami
+  :bind (("C-c TAB" . kirigami-toggle-fold)))
