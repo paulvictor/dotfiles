@@ -120,7 +120,7 @@
         vieb-overlay
 
         brotab-overlay
-        ripgrep-overlay
+        # ripgrep-overlay # Removing for now since it takes a lot of space
         rofi-fuzzy
         pass-override-overlay
         pass-with-extensions
