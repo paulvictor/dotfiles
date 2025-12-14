@@ -1,31 +1,9 @@
 {config, lib, ...}:
 
 {
-  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-  sops.secrets."extra-nix-conf" = {
-    sopsFile = ../secrets/nix-conf-extra.conf;
-    format = "binary";
-    mode = "0440";
-    group = config.users.groups.keys.name;
-  };
-
-  nix.extraOptions = ''
-    !include ${config.sops.secrets.extra-nix-conf.path}
-  '';
-  nix.settings.extra-sandbox-paths = [
-    "/run/secrets"
+  imports = [
+    ./deploy-secrets/nix-conf.nix
+    ./deploy-secrets/tailscale.nix
+    ./deploy-secrets/juspay-wg.nix
   ];
-
-
-} //
-(
-  lib.mkIf (lib.pathExists ../secrets/${config.networking.hostName}/tailscale.conf) {
-    sops.secrets."tailscale.authkey" = {
-      sopsFile = ../secrets/${config.networking.hostName}/tailscale.conf;
-      format = "binary";
-      mode = "0440";
-      group = config.users.groups.keys.name;
-    };
-  }
-)
-
+}

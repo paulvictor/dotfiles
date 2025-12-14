@@ -31,5 +31,6 @@ with lib;
       ./modules/desktop-environment.nix
       ./modules/networking.nix
       ./deploy-secrets.nix
+      ./modules/juspay-wg.nix
     ];
 }
