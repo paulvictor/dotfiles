@@ -1,6 +1,5 @@
 {config, ...}:
 {
-  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   sops.secrets."extra-nix-conf" = {
     sopsFile = ../../secrets/nix-conf-extra.conf;
     format = "binary";
