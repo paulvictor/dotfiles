@@ -72,7 +72,6 @@ with pkgs;
       }
     });
   '';
-  programs.adb.enable = false;
 
   hardware.keyboard.zsa.enable = false;
 

@@ -53,7 +53,6 @@ in
         sbcl sbclPackages.qlot-cli
         tmate
         chez
-        pscid
         leiningen clojure
         cbqn
         specialArgs.inputs.magix.packages.${system}.magix

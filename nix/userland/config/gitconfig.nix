@@ -74,16 +74,10 @@
           renames = true;
         };
       };
-
-
     };
     diff-so-fancy.enable = true;
-
-
-
     signing.key = "3264D1648F8FB1A4A3F74C9318497AC961BB2FB6";
     lfs.enable = true;
-
     includes = [
       {
         condition = "gitdir:Juspay/";

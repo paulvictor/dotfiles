@@ -3,7 +3,6 @@
 {
 
   networking.useDHCP = false;
-  networking.wireless.enable = false;  # Enables wireless support via wpa_supplicant.
   networking.enableIPv6 = false;
 
   boot.kernelParams = [ "ipv6.disable=1" ];
