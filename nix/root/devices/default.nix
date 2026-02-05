@@ -14,7 +14,7 @@ let
         nix.generateRegistryFromInputs = true;
         nix.linkInputs = true;
         nixpkgs.config.allowUnfreePredicate =
-          pkg: builtins.elem (lib.getName pkg) ["prl-tools"];
+          pkg: builtins.elem (lib.getName pkg) ["prl-tools" "open-webui"];
       })
       ../modules/viktor.nix
       ../modules/workstations.nix

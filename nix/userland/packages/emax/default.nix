@@ -52,6 +52,7 @@ let
         [ (with epkgs.melpaPackages;
           [
             ace-window
+            aidermacs
             all-the-icons
             all-the-icons-completion
             all-the-icons-dired
@@ -91,6 +92,7 @@ let
             geiser-guile
             general
             git-gutter
+            gptel
             guix
             guru-mode
             haskell-mode
@@ -114,7 +116,6 @@ let
             nerd-icons
             nerd-icons-completion
             nerd-icons-corfu
-#             ngnk-mode
             nov
             nerd-icons-dired
             nix-mode

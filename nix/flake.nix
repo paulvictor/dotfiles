@@ -169,6 +169,7 @@
                   "prl-tools"
                   "firefox-devedition-bin"
                   "firefox-developer-edition-bin-unwrapped"
+                  "open-webui"
                 ];
           };
         in {

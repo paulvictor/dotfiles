@@ -20,6 +20,7 @@ with lib;
     enable = false;
     gc.enable = true;
   };
+  networking.enableIPv6 = false;
 
   boot.binfmt.emulatedSystems =
     lib.remove
@@ -31,6 +32,6 @@ with lib;
       ./modules/desktop-environment.nix
       ./modules/networking.nix
       ./deploy-secrets.nix
-      ./modules/juspay-wg.nix
+#       ./modules/juspay-wg.nix
     ];
 }

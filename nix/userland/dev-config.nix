@@ -59,4 +59,7 @@ in
 #         visidata # for visualizing data
       ] ++
       (lib.optionals isLinux [ bindfs ]);
+    programs.aider-chat = {
+      enable = true;
+    };
   }

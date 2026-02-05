@@ -52,13 +52,7 @@ with pkgs;
     logDriver = "journald";
   };
   users.groups.docker =  {};
-  services.udev.packages =
-    lib.optionals isPhysicalDevice
-      [
-#         android-udev-rules
-        yubikey-personalization ];
-#   security.polkit.enable = lib.mkForce false;
-
+  services.udev.packages = lib.optionals isPhysicalDevice [yubikey-personalization];
   services.pcscd.enable = isPhysicalDevice;
   users.groups.ykusers = { };
   security.polkit.extraConfig = ''
@@ -72,8 +66,6 @@ with pkgs;
       }
     });
   '';
-
-  hardware.keyboard.zsa.enable = false;
 
   # For SSD's
   services.fstrim.enable = isPhysicalDevice && pkgs.stdenv.isx86_64;

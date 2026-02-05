@@ -46,7 +46,6 @@ in
     wrapperFeatures.gtk = true;
     systemd.enable = true;
     extraConfigEarly = ''
-      exec_always --no-startup-id wpaperd
     '';
     config = {
       modifier = "Mod4"; # Super key
