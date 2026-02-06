@@ -7,9 +7,11 @@
 {
   imports =
     [ # Include the results of the hardware scan.
+      ../../modules/split-gp-tunnel.nix
       ./hardware-configuration.nix
       ./syncthing.nix
     ];
+
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
