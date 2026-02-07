@@ -20,7 +20,7 @@
       iosevka-term
       #iosevka
       sauce-code-pro
-      #             dejavu-sans-mono
+      dejavu-sans-mono
       symbols-only
       #fira-code
       monoid

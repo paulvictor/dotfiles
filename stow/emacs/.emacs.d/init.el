@@ -366,6 +366,7 @@ Also move to the next line, since that's the most frequent action after"
   (project-switch-use-entire-map t)
   (project-key-prompt-style 'brackets)
   :config
+  (require 'activities)
   (advice-add 'project-switch-project :after #'pvr/rename-frame-on-project)
   (setopt project-prompter (lambda ()
                              (let ((prj-dir (project-prompt-project-dir)))

@@ -12,6 +12,14 @@
       })
     ];
   };
+  "viktor@uriel" = {
+    additionalModules = [
+      ({
+        home.stateVersion = "24.11";
+        services.batteryAlert.enable = true;
+      })
+    ];
+  };
   "viktor@sorlag" = {
     additionalModules = [
       ({lib,...}:{
