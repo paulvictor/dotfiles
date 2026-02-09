@@ -3,8 +3,8 @@
 {
   services.kanata = {
     enable = true;
-    keyboards.bones = {
-      config = builtins.readFile ./main.lisp;
+    keyboards.builtin = {
+      config = builtins.readFile ./${config.networking.hostName}.lisp;
       extraArgs = [ "--debug" ];
       extraDefCfg = "
         process-unmapped-keys   yes
