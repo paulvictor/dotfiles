@@ -1,14 +1,22 @@
 {config, lib, inputs, ...}:
 
 {
+  microvm.autostart = ["gp-tunnel-host"];
   microvm.vms = {
     gp-tunnel-host = {
       config = {
-        imports = [ # Include the microvm module
+        imports = [
           inputs.microvm.nixosModules.microvm
         ];
         systemd.network.enable = true;
-
+        networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
+        services.resolved = {
+          enable = true;
+          settings = {
+            Resolve.LLMNR = "true";
+            Resolve.FallbackDNS = [];
+          };
+        };
         users.users.root.password = "toor";
         services.openssh = {
           enable = true;

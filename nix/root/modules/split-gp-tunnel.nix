@@ -3,14 +3,19 @@
 let
   bridge = "gp-br";
   ipPrefix = "172.16.55";
-  guestMac = "02:00:00:00:00:01";
-  guestIpLease = "172.16.55.10";
+  gpTunnelMac = "02:00:00:00:00:01";
+  dhcpServerStaticLeases = [
+    {
+      MACAddress = gpTunnelMac;
+      Address = "${ipPrefix}.12";
+    }
+  ];
 in {
   imports = [ ./gp-tunnel-host.nix ];
   networking.networkmanager = {
     unmanaged = [
-    "interface-name:${bridge}"
-  ];
+      "interface-name:${bridge}"
+    ];
     enable = lib.mkForce false;
   };
   networking.useNetworkd = true;
@@ -18,6 +23,7 @@ in {
   environment.systemPackages = with pkgs;[
     impala iwmenu # for interacting with iwd
   ];
+
   networking.wireless.iwd = {
     enable = true;
     settings = {
@@ -39,7 +45,7 @@ in {
     enable = true;
     internalInterfaces = [ bridge ];
     externalInterface =
-      if config.wireless.enable or config. networking.wireless.iwd.enable
+      if config.wireless.enable or config.networking.wireless.iwd.enable
       then "w+"
       else "e+";
   };
@@ -64,15 +70,15 @@ in {
         dhcpServerConfig = {
           PersistLeases = true;
           DNS = "${ipPrefix}.1";
- EmitDNS = true;
+          EmitDNS = true;
           EmitRouter = true;
           Router = "${ipPrefix}.1";
         };
-        dhcpServerStaticLeases = [
-          { MACAddress = guestMac;
-            Address = guestIpLease;
-          }
-        ];
+        inherit dhcpServerStaticLeases;
+      };
+      microvm-eth0 = {
+        matchConfig.Name = "vm-*";
+        networkConfig.Bridge = bridge;
       };
     };
   };
@@ -80,7 +86,7 @@ in {
     microvm.interfaces = [{
       type = "tap";
       id = "vm-gp-tunnel";
-      mac = guestMac;
+      mac = gpTunnelMac;
     }];
   };
   virtualisation.libvirtd.enable = true;
