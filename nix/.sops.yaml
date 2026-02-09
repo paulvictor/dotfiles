@@ -1,5 +1,4 @@
 keys:
-  - &sorlag age1a0c8jmahvfppjqqy4375w4nq8knv0esshjx8kgdnpx6vl2djzfcsr8gdmg
   - &paul 2A4F0026730E0C45C031B3FA2BF9A72A4A1D161D!
   - &uriel age1f07tempfywuy6cjteuvcdepxytx0l3yjwfegsrwvjpcz0zzphdpqyy2lep
   - &orbb age1ha8ruk96jkucr4dh3t6fs75yy06zq3apvwsmlca680vmsjay553qqtllkx
@@ -20,12 +19,6 @@ creation_rules:
       - *uriel
       - *bones
       - *sarge
-  - path_regex: secrets/sorlag/[^/]+\.(yaml|json|env|ini|conf)$
-    key_groups:
-    - pgp:
-      - *paul
-      age:
-      - *sorlag
   - path_regex: secrets/uriel/[^/]+\.(yaml|json|env|ini|conf)$
     key_groups:
     - pgp:
