@@ -23,19 +23,8 @@
   "viktor@sorlag" = {
     additionalModules = [
       ({lib,...}:{
-        home.stateVersion = "25.05";
-        services.batteryAlert.enable = false;
-        wayland.windowManager.sway.config.output = lib.mkForce {
-          "DP-1" = {
-            mode = "2560x1440@60Hz";
-            pos = "1440 523";
-          };
-          "HDMI-A-1" = {
-            mode = "2560x1440@60Hz";
-            transform = "270";
-          };
-        }
-          ;
+        home.stateVersion = "25.11";
+        services.batteryAlert.enable = true;
       })
     ];
   };
