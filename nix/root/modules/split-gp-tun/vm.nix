@@ -1,4 +1,4 @@
-{config, lib, inputs, ...}:
+{config, lib, pkgs, inputs, ...}:
 
 let
   shared = import ./shared.nix;
@@ -19,6 +19,31 @@ in
     enable = true;
     settings.PermitRootLogin = "yes";
   };
+  system.stateVersion = config.system.nixos.release;
+  boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+  programs.htop.enable = true;
+  programs.neovim = {
+    enable = true;
+    vimAlias = true;
+    viAlias = true;
+  };
+
+  programs.tmux = {
+    enable = true;
+    secureSocket = false;
+  };
+
+  nix.extraOptions = ''
+        keep-outputs = true
+        keep-derivations = true
+        experimental-features = nix-command flakes
+        accept-flake-config = true
+      '';
+  nix.package = pkgs.nixVersions.latest;
+
+  environment.systemPackages = with pkgs;[ jq bind ];
+  networking.firewall.enable = false;
+
   networking.hostName = "patriot";
   microvm.shares = [
     {
