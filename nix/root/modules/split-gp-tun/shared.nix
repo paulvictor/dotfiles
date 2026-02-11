@@ -14,67 +14,72 @@ let
   vmMac = "02:00:00:00:00:01"; # How do i make this unique?
   vmLease = "${ipPrefix}.18";
   wgAddress = {
-    host = [ "172.16.100.1/32"];
-    vm = [ "172.16.100.2/32"];
+    host =  "172.16.100.1/32";
+    vm =  "172.16.100.2/32";
   };
+  hostWGConfig =
+    ''
+      [Interface]
+      Address = ${wgAddress.host}
+      PrivateKey = ${hostKeys.priv}
+      ListenPort = ${wgPort}
+      [Peer]
+      PublicKey = ${vmKeys.pub}
+      Endpoint = ${vmLease}:${wgPort}
+      AllowedIPs = ${wgAddress.vm}
+    '';
 in {
   inherit ipPrefix bridgeIp vmMac vmLease;
-  host.wg = {config, lib, ...}:
+  host.wg = {config, lib, pkgs, ...}:
     {
+      services.wireproxy = {
+        enable = true;
+        configFile = pkgs.writeText "wireproxy-conf" ''
+          [Interface]
+          Address = ${wgAddress.host}
+          PrivateKey = ${hostKeys.priv}
+          ListenPort = ${toString wgPort}
+          [Peer]
+          PublicKey = ${vmKeys.pub}
+          Endpoint = ${vmLease}:${toString wgPort}
+          AllowedIPs = ${wgAddress.vm}
+          # Socks5 creates a socks5 proxy on your LAN, and all traffic would be routed via wireguard.
+          [Socks5]
+          BindAddress = 127.0.0.1:3128
+          # http creates a http proxy on your LAN, and all traffic would be routed via wireguard.
+          [http]
+          BindAddress = 127.0.0.1:25345
+        '';
+      };
       # nix.settings.extra-sandbox-paths = [
       #         "/run/shared/wg"
       #       ];
       networking.wg-quick.interfaces.to-vm = {
         autostart = false;
         privateKey = hostKeys.priv;
-        address = wgAddress.host;
+        address = [wgAddress.host];
         listenPort = wgPort;
         peers = [{
           publicKey = vmKeys.pub;
           endpoint = "${vmLease}:${toString wgPort}";
-          allowedIPs = wgAddress.vm;
+          allowedIPs = [wgAddress.vm];
         }];
       };
     };
   vm.wg = {config, lib, pkgs, ...}:
     {
-      system.stateVersion = config.system.nixos.release;
-      boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
-      programs.htop.enable = true;
-      programs.neovim = {
-        enable = true;
-        vimAlias = true;
-        viAlias = true;
-      };
-
-      programs.tmux = {
-        enable = true;
-        secureSocket = false;
-      };
-
-      nix.extraOptions = ''
-        keep-outputs = true
-        keep-derivations = true
-        experimental-features = nix-command flakes
-        accept-flake-config = true
-      '';
-      nix.package = pkgs.nixVersions.latest;
-
-      environment.systemPackages = with pkgs;[ jq bind ];
-      networking.firewall.enable = false;
-
       #      nix.settings.extra-sandbox-paths = [
       #         "/run/shared/wg"
       #       ];
       networking.wg-quick.interfaces.to-host = {
-        autostart = false;
+        autostart = true;
         privateKey = vmKeys.priv;
-        address = wgAddress.vm;
+        address = [wgAddress.vm];
         listenPort = wgPort;
         peers = [{
           publicKey = hostKeys.pub;
           endpoint = "${bridgeIp}:${toString wgPort}";
-          allowedIPs = wgAddress.host;
+          allowedIPs = [wgAddress.host];
         }];
       };
     };
