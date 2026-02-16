@@ -12,7 +12,7 @@ let
   ipPrefix = "172.16.55";
   bridgeIp = "${ipPrefix}.1";
   vmMac = "02:00:00:00:00:01"; # How do i make this unique?
-  vmLease = "${ipPrefix}.14";
+  vmLease = "${ipPrefix}.16";
   wgAddress = {
     host = "172.16.100.1";
     vm = "172.16.100.2";
@@ -28,8 +28,9 @@ let
       Endpoint = ${vmLease}:${wgPort}
       AllowedIPs = ${wgAddress.vm}/32
     '';
+  tunDevice = "gptun";
 in {
-  inherit ipPrefix bridgeIp vmMac vmLease wgAddress;
+  inherit ipPrefix bridgeIp vmMac vmLease wgAddress tunDevice;
   host.wg = {config, lib, pkgs, ...}:
     {
       services.wireproxy = {
@@ -51,9 +52,14 @@ in {
           BindAddress = 127.0.0.1:25345
         '';
       };
-      # nix.settings.extra-sandbox-paths = [
-      #         "/run/shared/wg"
-      #       ];
+      sops.secrets."shared/wordpass" = {
+        sopsFile = ../../../secrets/passwd.conf;
+        format = "binary";
+        mode = "0777";
+        owner = "microvm";
+        group = "kvm";
+      };
+      users.users.microvm.extraGroups = ["keys"];
       networking.wg-quick.interfaces.to-vm = {
         autostart = false;
         privateKey = hostKeys.priv;
@@ -67,10 +73,20 @@ in {
       };
     };
   vm.wg = {config, lib, pkgs, ...}:
-    {
+    let
+      sharedDir = "/shared";
+    in {
       #      nix.settings.extra-sandbox-paths = [
       #         "/run/shared/wg"
       #       ];
+      microvm.shares = [
+        {
+          tag = "wordpass";
+          source = "/run/secrets/shared";
+          mountPoint = sharedDir;
+        } ];
+      networking.openconnect.interfaces.${tunDevice}.passwordFile = "${sharedDir}/wordpass";
+
       networking.wg-quick.interfaces.to-host = {
         autostart = true;
         privateKey = vmKeys.priv;
