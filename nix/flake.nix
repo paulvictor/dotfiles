@@ -173,6 +173,11 @@
                 ];
           };
         in {
+          devShells.default =
+            with pkgs;
+            mkShell {
+              buildInputs = [ sops ];
+            };
           legacyPackages = {
             homeConfigurations = import ./userland/default.nix { inherit inputs pkgs; };
           };

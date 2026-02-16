@@ -5,7 +5,7 @@ const path = require('path');
 var args = process.argv.slice(2);
 var appUrl = args[0];
 var appName = args[1];
-var userAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
+var userAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36";
 app.on('ready', () => {
   var mainWindow = new BrowserWindow(
   {
