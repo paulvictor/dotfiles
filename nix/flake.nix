@@ -176,7 +176,11 @@
           devShells.default =
             with pkgs;
             mkShell {
-              buildInputs = [ sops ];
+              buildInputs = [
+                sops
+                ssh-to-age
+                # cat /etc/ssh/ssh_host_ed25519_key.pub| ssh-to-age -i - | clipcopy
+              ];
             };
           legacyPackages = {
             homeConfigurations = import ./userland/default.nix { inherit inputs pkgs; };

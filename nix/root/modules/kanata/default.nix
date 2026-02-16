@@ -5,7 +5,7 @@
     enable = true;
     keyboards.builtin = {
       config = builtins.readFile ./${config.networking.hostName}.lisp;
-      extraArgs = [ "--debug" ];
+      extraArgs = [ ];
       extraDefCfg = "
         process-unmapped-keys   yes
         concurrent-tap-hold     yes
