@@ -2,7 +2,7 @@
 
 let
   shared = import ./shared.nix;
-  tunDevice = "gptun";
+  inherit (shared) tunDevice;
   csdWrapper =
     with pkgs;
     runCommandLocal "hipreport-with-hostid" {
@@ -56,14 +56,21 @@ in
   networking.firewall.enable = false;
   networking.hostName = "patriot";
   networking.openconnect.interfaces.${tunDevice} = {
-    user= "paul.victor@identity.juspay.net";
+    user =
+      builtins.concatStringsSep
+        "."
+        [
+          "paul"
+          "victor@identity"
+          "juspay"
+          "net"
+        ];
     protocol = "gp";
     gateway = "pv-ext.connect.juspay.net";
     extraOptions = {
       csd-wrapper = "${csdWrapper}/hipreport.sh";
       disable-ipv6 = true;
     };
-    passwordFile = pkgs.writeText "password" "podaaanga";
   };
   services.dante = {
     enable = true;

@@ -69,7 +69,7 @@ in {
         addresses = [ {Address = "${bridgeIp}/24";} ];
         dhcpServerConfig = {
           PersistLeases = true;
-          DefaultLeaseTimeSec=60;
+          DefaultLeaseTimeSec=30;
           DNS = bridgeIp;
           EmitDNS = true;
           EmitRouter = true;
