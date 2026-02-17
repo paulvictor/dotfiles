@@ -32,47 +32,45 @@
         unstage = ''reset HEAD --'';
         up = ''"!git pull origin \"$(git rev-parse --abbrev-ref HEAD)\""'';
       };
-      extraConfig = {
-        core = {
-          whitespace = "trailing-space,space-before-tab";
-          editor = "emacsclient -c -n";
-        };
-        apply = {
-          whitespace = "fix";
-        };
-        fetch = {
-          prune = true;
-          pruneTags = true;
-          all = true;
-        };
-        rebase = {
-          autoSquash = true;
-          autoStash = true;
-          updateRefs = true;
-        };
-        push = {
-          default = "simple";
-          autoSetupRemote = true;
-          followTags = true;
-        };
-        merge.conflictstyle = "zdiff3";
-        color.ui = true;
-        column.ui = "auto";
-        pull.rebase = true;
-        format.pretty = "format:%C(yellow)%h %Cblue%>(12)%ad %Cgreen%<(7)%aN%Cred%d %Creset%s";
-        help.autocorrect = "prompt";
-        init.defaultBranch = "main";
-        branch.sort = "-committerdate";
-        tag.sort = "version.refname";
-        commit.verbose = true;
-        rerere.enable = true;
-        rerere.autoupdate = true;
-        diff = {
-          algorithm = "histogram";
-          colorMoved = "plain";
-          mnemonicPrefix = true;
-          renames = true;
-        };
+      core = {
+        whitespace = "trailing-space,space-before-tab";
+        editor = "emacsclient -c -n";
+      };
+      apply = {
+        whitespace = "fix";
+      };
+      fetch = {
+        prune = true;
+        pruneTags = true;
+        all = true;
+      };
+      rebase = {
+        autoSquash = true;
+        autoStash = true;
+        updateRefs = true;
+      };
+      push = {
+        default = "simple";
+        autoSetupRemote = true;
+        followTags = true;
+      };
+      merge.conflictstyle = "zdiff3";
+      color.ui = true;
+      column.ui = "auto";
+      pull.rebase = true;
+      format.pretty = "format:%C(yellow)%h %Cblue%>(12)%ad %Cgreen%<(7)%aN%Cred%d %Creset%s";
+      help.autocorrect = "prompt";
+      init.defaultBranch = "main";
+      branch.sort = "-committerdate";
+      tag.sort = "version.refname";
+      commit.verbose = true;
+      rerere.enable = true;
+      rerere.autoupdate = true;
+      diff = {
+        algorithm = "histogram";
+        colorMoved = "plain";
+        mnemonicPrefix = true;
+        renames = true;
       };
     };
     diff-so-fancy.enable = true;
