@@ -78,7 +78,12 @@ with pkgs;
         hashKnownHosts = true;
         serverAliveInterval = 30;
         serverAliveCountMax = 5;
-
+      };
+      "172.16.*" = {
+        userKnownHostsFile = "/dev/null";
+        extraOptions = {
+          StrictHostKeyChecking = "no";
+        };
       };
       "github" = {
         host = "github";
@@ -92,31 +97,7 @@ with pkgs;
         identityFile = privKey;
         user = "git";
       };
-      "setup-tunnel-1" = {
-        host = "setup-tunnel-1";
-        hostname = "paulvictor.xyz";
-        user = "viktor";
-        identityFile = privKey;
-        extraOptions = {
-          "SessionType" = "none";
-          "LocalForward" = "8888 127.0.0.1:8080";
-          "RequestTTY" = "no";
-        };
-      };
 
-      "setup-socks-proxy" = {
-        host = "setup-socks-proxy";
-        hostname = "localhost";
-        user = "paul";
-        port = 8888;
-        forwardAgent = true;
-        identityFile = privKey;
-        extraOptions = {
-          "SessionType" = "none";
-          "DynamicForward" = "127.0.0.1:6565";
-          "RequestTTY" = "no";
-        };
-      };
     };
   };
 

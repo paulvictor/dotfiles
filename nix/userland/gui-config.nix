@@ -77,6 +77,53 @@ let
         type = "stdio";
         allowed_extensions = ["tabfs@paulvictor.com"];
       };
+  commonFFProfile = {
+    settings = {
+      "media.peerconnection.enabled" = true;
+      "browser.shell.checkDefaultBrowser" = false;
+      "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+      "network.http.pipelining" = true;
+      "network.http.pipelining.maxrequests" = 16;
+      "network.http.max-connections" = 1024;
+      "network.http.max-connections-per-server" = 32;
+      "nglayout.initialpaint.delay" = 0;
+      "browser.startup.page" = 3; # restore previous session
+      "privacy.resistFingerprinting.block_mozAddonManager" = true;
+      "extensions.webextensions.restrictedDomains" = "";
+      "browser.sessionStore.warnOnQuit" = false;
+      "browser.warnOnQuit" = false;
+      "signon.rememberSignons" = false;
+      "layers.acceleration.force-enabled" = true;
+      "gfx.webrender.all" = true;
+      "svg.context-properties.content.enabled" = true;
+      "full-screen-api.approval-required" = false;
+      "full-screen-api.warning.delay" = 0;
+      "full-screen-api.warning.timeout" = 0;
+      "browser.tabs.loadBookmarksInTabs" = true;
+      "browser.tabs.loadBookmarksInBackground" = true;
+      "browser.tabs.tabMinWidth" = 50;
+      "browser.urlbar.dnsResolveSingleWordsAfterSearch" = 0;
+      "browser.link.open_newwindow.restriction" = 0;
+      "privacy.popups.showBrowserMessage" = false;
+      "extensions.pocket.enabled" = false;
+      "extensions.screenshots.disabled" = true;
+      "extensions.autoDisableScopes" = 0;
+      "ui.prefersReducedMotion" = 1;
+      "browser.compactmode.show" = true;
+      "xpinstall.signatures.required" = false;
+      "layout.css.prefers-color-scheme.content-override" = 0;
+      "ui.systemUsesDarkTheme" = 1;
+    };
+    userChrome = import ./config/userChrome.nix { inherit pkgs; };
+    extensions.packages = [
+      nur.repos.rycee.firefox-addons.i-dont-care-about-cookies
+      #             nur.repos.rycee.firefox-addons.bypass-paywalls-clean
+      brotab-extension
+      edit-with-emacs-extension
+      tabfs
+      tridactyl
+    ];
+  };
 in
 {
   imports = [];
@@ -103,87 +150,36 @@ in
       )
       ++ (lib.optionals pkgs.stdenv.isLinux
         [
-
+          menu-surfraw
+          rofi
+          scrot
+          surfraw
+          ungoogled-chromium
+          vlc
           yubico-piv-tool
           yubikey-manager
           yubikey-personalization
-          menu-surfraw
-          scrot
-          #           surf
-          surfraw
-          vlc
-          rofi # for passdo
-          ungoogled-chromium
-
         ]
       );
     programs.firefox = {
       enable = true;
       package = firefox-devedition;
       profiles = {
-        "proxied" = {
-          id = 1;
-          settings = {
-            "toolkit.legacyUserProfileCustomizations.stylesheets" = false;
-            "network.proxy.socks" = "localhost";
-            "network.proxy.socks_port" = 6767;
-            "network.proxy.socks_remote_dns" = true;
-          };
-        };
-        "dev-edition-default" = {
-          id = 0;
-          path = "usual";
-        };
-        "usual" = {
-          id = 2;
-          settings = {
-            "media.peerconnection.enabled" = true;
-            "browser.shell.checkDefaultBrowser" = false;
-            "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-            "network.http.pipelining" = true;
-            "network.http.pipelining.maxrequests" = 16;
-            "network.http.max-connections" = 1024;
-            "network.http.max-connections-per-server" = 32;
-            "nglayout.initialpaint.delay" = 0;
-            "browser.startup.page" = 3; # restore previous session
-            "privacy.resistFingerprinting.block_mozAddonManager" = true;
-            "extensions.webextensions.restrictedDomains" = "";
-            "browser.sessionStore.warnOnQuit" = false;
-            "browser.warnOnQuit" = false;
-            "signon.rememberSignons" = false;
-            "layers.acceleration.force-enabled" = true;
-            "gfx.webrender.all" = true;
-            "svg.context-properties.content.enabled" = true;
-            "full-screen-api.approval-required" = false;
-            "full-screen-api.warning.delay" = 0;
-            "full-screen-api.warning.timeout" = 0;
-            #"full-screen-api.transition-duration.enter" = 0 0;
-            #"full-screen-api.transition-duration.leave" = 0 0;
-            "browser.tabs.loadBookmarksInTabs" = true;
-            "browser.tabs.loadBookmarksInBackground" = true;
-            "browser.tabs.tabMinWidth" = 50;
-            "browser.urlbar.dnsResolveSingleWordsAfterSearch" = 0;
-            "browser.link.open_newwindow.restriction" = 0;
-            "privacy.popups.showBrowserMessage" = false;
-            "extensions.pocket.enabled" = false;
-            "extensions.screenshots.disabled" = true;
-            "extensions.autoDisableScopes" = 0;
-            "ui.prefersReducedMotion" = 1;
-            "browser.compactmode.show" = true;
-            "xpinstall.signatures.required" = false;
-            "layout.css.prefers-color-scheme.content-override" = 0;
-            "ui.systemUsesDarkTheme" = 1;
-          };
-          userChrome = import ./config/userChrome.nix { inherit pkgs; };
-          extensions.packages = [
-            nur.repos.rycee.firefox-addons.i-dont-care-about-cookies
-            #             nur.repos.rycee.firefox-addons.bypass-paywalls-clean
-            brotab-extension
-            edit-with-emacs-extension
-            tabfs
-            tridactyl
-          ];
-        };
+        "proxied" =
+          lib.recursiveUpdate
+            commonFFProfile {
+              id = 1;
+              settings = {
+                "toolkit.legacyUserProfileCustomizations.stylesheets" = false;
+                "network.proxy.socks" = "gp-tunnel-host";
+                "network.proxy.socks_port" = 1080;
+                "network.proxy.socks_remote_dns" = true;
+              };
+            };
+        "dev-edition-default" =
+          lib.recursiveUpdate commonFFProfile {id = 0;};
+        "usual" =
+          lib.recursiveUpdate commonFFProfile {id = 2;};
       };
     };
     home.file.".mozilla/native-messaging-hosts/brotab_mediator.json".source =
