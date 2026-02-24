@@ -6,6 +6,7 @@
     enableBashIntegration = true;
     enableZshIntegration = true;
   };
+  programs.diff-so-fancy.enable = true;
   programs.git = {
     enable = true;
     package = pkgs.gitFull;
@@ -73,7 +74,6 @@
         renames = true;
       };
     };
-    diff-so-fancy.enable = true;
     signing.key = "3264D1648F8FB1A4A3F74C9318497AC961BB2FB6";
     lfs.enable = true;
     includes = [
