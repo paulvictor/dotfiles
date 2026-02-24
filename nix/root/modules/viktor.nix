@@ -25,7 +25,7 @@ in
     viktor ALL=(ALL) NOPASSWD: ALL
   '';
 
-  nix.settings.trusted-users = [ "@wheel" "viktor" "root" ];
+  nix.settings.trusted-users = [ "@wheel" "viktor" ];
 
   environment.etc."fuse.conf" = {
     text = ''

@@ -11,7 +11,11 @@ let
     }
   ];
 in {
-  imports = [ shared.host.wg ../wireproxy.nix ];
+  imports =
+    [
+      shared.host.wg
+      ../wireproxy.nix
+    ];
   networking.networkmanager = {
     unmanaged = ["interface-name:${bridge}"];
     enable = lib.mkForce false;
