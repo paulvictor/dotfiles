@@ -61,14 +61,3 @@ in
   };
 
 }
-
-
-# top: N
-#       bottom: I
-#       middle: E
-
-  # up: i
-#       down: e
-#       left: n
-  #       right: o
-  # oneshot_buttons: S-backspace M O
