@@ -7,13 +7,11 @@
   services.tailscale = {
     enable = true;
     port = 12345;
-    extraUpFlags = [
+    extraSetFlags = [
       "--operator" "viktor"
       "--ssh"
       "--accept-risk" "all"
       "--accept-routes"
-      "--timeout" "10s"
-      "--advertise-tags" "tag:workstations"
     ];
   };
 }

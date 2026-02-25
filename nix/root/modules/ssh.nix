@@ -4,10 +4,14 @@
   services.openssh = {
     enable = true;
     settings = {
-      PermitRootLogin = lib.mkDefault "yes";
+      PermitRootLogin =  "prohibit-password";
       GatewayPorts = "yes";
       PasswordAuthentication = false;
+      PubkeyAuthentication = true;
+      KbdInteractiveAuthentication = false;
       StrictModes = false;
+      UsePAM = false;
+      AllowUsers = [ "viktor" ];
     };
   };
   programs.mosh.enable = true;
