@@ -8,7 +8,6 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../modules/kanata/default.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
