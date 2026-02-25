@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../../modules/local-ai-coding-nvidia.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -15,7 +16,8 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # Latest kernel has issues with nvidia. Falling back to stable version
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.

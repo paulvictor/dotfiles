@@ -6,7 +6,7 @@ let
     export XDG_CURRENT_DESKTOP=sway
 
     export MOZ_ENABLE_WAYLAND=1
-    exec ${pkgs.sway}/bin/sway "$@"
+    exec ${pkgs.sway}/bin/sway ${lib.optionalString config.hardware.nvidia.enabled "--unsupported-gpu"} "$@"
   '';
 
 in {
@@ -15,7 +15,7 @@ in {
     ./pipewire.nix
   ];
   services.libinput.enable = true;
-  hardware.graphics.enable = true; # when using QEMU KVM
+  hardware.graphics.enable = true;
   security.pam.services.swaylock.text = "auth include login";
   programs.ydotool.enable = true;
 
