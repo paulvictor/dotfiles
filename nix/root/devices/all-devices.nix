@@ -1,5 +1,9 @@
 [
   {
+    hostName = "anarki";
+    unifiedHomeManager = true;
+  }
+  {
     hostName = "bones";
     unifiedHomeManager = true;
   }

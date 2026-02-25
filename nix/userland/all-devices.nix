@@ -12,6 +12,14 @@
       })
     ];
   };
+  "viktor@anarki" = {
+    additionalModules = [
+      ({
+        home.stateVersion = "25.11";
+        services.batteryAlert.enable = false;
+      })
+    ];
+  };
   "viktor@uriel" = {
     additionalModules = [
       ({
