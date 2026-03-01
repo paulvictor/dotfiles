@@ -79,6 +79,13 @@ with pkgs;
         serverAliveInterval = 30;
         serverAliveCountMax = 5;
       };
+      "gp-host" = {
+        hostname = "gp-tunnel-host";
+        userKnownHostsFile = "/dev/null";
+        extraOptions = {
+          StrictHostKeyChecking = "no";
+        };
+      };
       "172.16.*" = {
         userKnownHostsFile = "/dev/null";
         extraOptions = {
