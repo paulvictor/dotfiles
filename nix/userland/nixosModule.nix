@@ -7,7 +7,7 @@
   home-manager.backupFileExtension = ".bkp";
   home-manager.users.viktor = {
     imports = [
-      specialArgs.inputs.nix-index-database.hmModules.nix-index
+      specialArgs.inputs.nix-index-database.homeModules.nix-index
       ./home-configuration.nix
       {
         home.username = "viktor";

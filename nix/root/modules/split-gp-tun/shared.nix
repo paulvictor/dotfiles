@@ -61,7 +61,7 @@ in {
       };
       users.users.microvm.extraGroups = ["keys"];
       networking.wg-quick.interfaces.to-vm = {
-        autostart = false;
+        autostart = true;
         privateKey = hostKeys.priv;
         address = ["${wgAddress.host}/32"];
         listenPort = wgPort;

@@ -72,6 +72,10 @@ in
       disable-ipv6 = true;
     };
   };
+  systemd.services."openconnect-${tunDevice}".serviceConfig = {
+    RestartSec = 5;
+    Restart = "always";
+  };
   services.dante = {
     enable = true;
     config = ''
@@ -96,16 +100,23 @@ in
       }
     '';
   };
-  systemd.services.dante.bindsTo =
-    [
-      "sys-devices-virtual-net-${tunDevice}.device"
-      "wg-quick-to-host.service"
-    ];
-  systemd.services.dante.requires =
-    [
-      "sys-devices-virtual-net-${tunDevice}.device"
-      "wg-quick-to-host.service"
-    ];
+  systemd.services.dante = {
+    bindsTo =
+      [
+        "sys-devices-virtual-net-${tunDevice}.device"
+        "wg-quick-to-host.service"
+      ];
+    requires =
+      [
+        "sys-devices-virtual-net-${tunDevice}.device"
+        "wg-quick-to-host.service"
+      ];
+    serviceConfig = {
+      RestartSec = 5;
+      Restart = lib.mkForce "always";
+    };
+  };
+
   microvm.shares = [
     {
       tag = "ro-store";

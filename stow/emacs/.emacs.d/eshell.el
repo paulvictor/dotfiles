@@ -79,7 +79,7 @@
   :custom
   (eshell-history-file-name (no-littering-expand-var-file-name "eshell/history"))
   (eshell-history-size 10000)
-  (eshell-hist-ignoredups t)
+  (eshell-hist-ignoredups 'erase)
   (eshell-input-filter
         (lambda (str)
           (not (or

@@ -7,7 +7,7 @@ builtins.mapAttrs(_: attrs:
     inherit pkgs;
     extraSpecialArgs = {inherit inputs;};
     modules = [
-      inputs.nix-index-database.hmModules.nix-index
+      inputs.nix-index-database.homeModules.nix-index
       ./home-configuration.nix
       {
         home.username = lib.mkDefault "viktor";
