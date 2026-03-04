@@ -21,11 +21,11 @@
     :host "grid.ai.juspay.net"
     :key (password-store-get "work/Juspay/grid.ai/sarge")
     :stream t
-    :endpoint "/"
-    :models '(minimaxai/minimax-m2
-              glm-latest
-              claude-opus-4-5
-              kimi-latest))
+    :endpoint "/v1/chat/completions"
+    :models '("minimaxai/minimax-m2"
+              "glm-latest"
+              "claude-opus-4-5"
+              "kimi-latest"))
   (gptel-make-gemini "Gemini"
     :key (password-store-get "work/Juspay/gemini/anarki")
     :stream t)
