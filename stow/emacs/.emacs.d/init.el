@@ -1220,6 +1220,12 @@ point reaches the beginning or end of the buffer, stop there."
 (use-package kirigami
   :bind (("C-c TAB" . kirigami-toggle-fold)))
 
+(use-package browse-url
+  :custom
+  (browse-url-browser-function 'browse-url-firefox)
+  (browse-url-firefox-program
+   (browse-url--find-executable '("firefox-devedition") "firefox")))
+
 (use-package browse-at-remote
   :config
   (add-to-list 'browse-at-remote-remote-type-regexps
