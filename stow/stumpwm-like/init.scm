@@ -15,13 +15,15 @@
              (system repl server)
              (ice-9 pretty-print)
              (libs sway-tree-helper)
+             (srfi srfi-1)
              (swayipc))
 
 ;; (spawn-server (make-unix-domain-server-socket #:path "/tmp/viktor/swayer.sock"))
-(spawn-server (make-tcp-server-socket #:host "0.0.0.0" #:port 12300))
+(spawn-server (make-tcp-server-socket #:host "localhost" #:port 12300))
 
 (sway-connect-sockets!)
 
+(load "switch-windows.scm")
 ;; load look and feel
 ;; a separate scheme file for look and feel configuration
 ;; (load "behavior.scm")
