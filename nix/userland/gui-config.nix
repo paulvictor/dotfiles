@@ -165,21 +165,70 @@ in
       enable = true;
       package = firefox-devedition;
       profiles = {
-        "proxied" =
-          lib.recursiveUpdate
-            commonFFProfile {
-              id = 1;
-              settings = {
-                "toolkit.legacyUserProfileCustomizations.stylesheets" = false;
-                "network.proxy.socks" = "gp-tunnel-host";
-                "network.proxy.socks_port" = 1080;
-                "network.proxy.socks_remote_dns" = true;
-              };
-            };
-        "dev-edition-default" =
-          lib.recursiveUpdate commonFFProfile {id = 0;};
-        "usual" =
-          lib.recursiveUpdate commonFFProfile {id = 2;};
+        "proxied" = {
+          id = 1;
+          settings = {
+            "toolkit.legacyUserProfileCustomizations.stylesheets" = false;
+            # "network.proxy.socks" = "localhost";-                "network.proxy.socks" = "gp-tunnel-host";
+            # "network.proxy.socks_port" = 1080;
+            # "network.proxy.socks_port" = 6767;
+            "network.proxy.socks_remote_dns" = true;
+          };
+        };
+        "dev-edition-default" = {
+          id = 0;
+          path = "usual";
+        };
+        "usual" = {
+          id = 2;
+          settings = {
+            "browser.compactmode.show" = true;
+            "browser.link.open_newwindow.restriction" = 0;
+            "browser.sessionStore.warnOnQuit" = false;
+            "browser.shell.checkDefaultBrowser" = false;
+            "browser.startup.page" = 3; # restore previous session
+            "browser.tabs.loadBookmarksInBackground" = true;
+            "browser.tabs.loadBookmarksInTabs" = true;
+            "browser.tabs.tabMinWidth" = 50;
+            "browser.urlbar.dnsResolveSingleWordsAfterSearch" = 0;
+            "browser.warnOnQuit" = false;
+            "extensions.autoDisableScopes" = 0;
+            "extensions.pocket.enabled" = false;
+            "extensions.screenshots.disabled" = true;
+            "extensions.webextensions.restrictedDomains" = "";
+            "full-screen-api.approval-required" = false;
+            #"full-screen-api.transition-duration.enter" = 0 0;
+            #"full-screen-api.transition-duration.leave" = 0 0;
+            "full-screen-api.warning.delay" = 0;
+            "full-screen-api.warning.timeout" = 0;
+            "gfx.webrender.all" = true;
+            "layers.acceleration.force-enabled" = true;
+            "layout.css.prefers-color-scheme.content-override" = 0;
+            "media.peerconnection.enabled" = true;
+            "network.http.max-connections" = 1024;
+            "network.http.max-connections-per-server" = 32;
+            "network.http.pipelining.maxrequests" = 16;
+            "network.http.pipelining" = true;
+            "nglayout.initialpaint.delay" = 0;
+            "privacy.popups.showBrowserMessage" = false;
+            "privacy.resistFingerprinting.block_mozAddonManager" = true;
+            "signon.rememberSignons" = false;
+            "svg.context-properties.content.enabled" = true;
+            "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+            "ui.prefersReducedMotion" = 1;
+            "ui.systemUsesDarkTheme" = 1;
+            "xpinstall.signatures.required" = false;
+          };
+          userChrome = import ./config/userChrome.nix { inherit pkgs; };
+          extensions.packages = [
+            nur.repos.rycee.firefox-addons.i-dont-care-about-cookies
+            #             nur.repos.rycee.firefox-addons.bypass-paywalls-clean
+            brotab-extension
+            edit-with-emacs-extension
+            tabfs
+            tridactyl
+          ];
+        };
       };
     };
     home.file.".mozilla/native-messaging-hosts/brotab_mediator.json".source =
