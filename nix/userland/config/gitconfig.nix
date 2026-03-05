@@ -80,6 +80,9 @@
       {
         condition = "gitdir:Juspay/";
         contents = {
+          browseAtRemote = {
+            type = "stash";
+          };
           user = {
             email = "paul.victor@juspay.in";
           };

@@ -1219,3 +1219,10 @@ point reaches the beginning or end of the buffer, stop there."
 
 (use-package kirigami
   :bind (("C-c TAB" . kirigami-toggle-fold)))
+
+(use-package browse-at-remote
+  :config
+  (add-to-list 'browse-at-remote-remote-type-regexps
+             `(:host ,(rx bol "ssh.bitbucket.juspay.net" eol)
+               :type "stash"
+               :actual-host "bitbucket.juspay.net")))
