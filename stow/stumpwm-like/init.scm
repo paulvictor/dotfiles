@@ -19,8 +19,7 @@
              (swayipc))
 
 ;; (spawn-server (make-unix-domain-server-socket #:path "/tmp/viktor/swayer.sock"))
-(spawn-server (make-tcp-server-socket #:host "localhost" #:port 12300))
-
+(spawn-server (make-tcp-server-socket #:host "127.0.0.1" #:port 12300))
 (sway-connect-sockets!)
 
 (load "switch-windows.scm")
