@@ -1,8 +1,9 @@
 (use-modules (ice-9 pretty-print)
-             (libs sway-tree-helper)
+             (swayipc)
              (srfi srfi-1)
-             (ice-9 rdelim)
-             (swayipc))
+             (ice-9 popen)
+             (ice-9 string-fun)
+             (ice-9 rdelim))
 
 (define* (window-list pred #:optional (tree (sway-get-tree)))
   "Fold over the tree of windows and collect nodes which satisfy the predicate"
@@ -25,11 +26,12 @@
 (define (get-choice)
   (let* ((choice-cmd "fuzzel --dmenu")
          (choices (focusable-windows-and-ids))
-         (focusable-windows (map car choices))
-         (window-choice-str (string-join focusable-windows "\n" 'suffix))
+         (window-names (map car choices))
+         (window-choice-str (string-join window-names "\n" 'suffix))
          (selected (let ((port
                            (open-input-output-pipe choice-cmd)))
                      (display window-choice-str port)
+                     (force-output port)
                      (read-line port))))
     (pretty-print window-choice-str)
     selected))
