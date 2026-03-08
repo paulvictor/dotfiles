@@ -44,6 +44,7 @@
 
    ;; window and group management
    `("s-f" (sway-fullscreen SWAY-FULLSCREEN-TOGGLE) #:wk "Toggle Fullscreen")
+   `("s-g" (goto-open-windows) #:wk "Jump to open window")
 
    ;; move focus
    `("s-h" (sway-focus-container SWAY-DIRECTION-LEFT) #:wk "Focus Container Left")

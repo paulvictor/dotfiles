@@ -23,9 +23,8 @@
                  (string= (sway-tree-type n) "con")
                  (not (eq? 'null (sway-tree-name n))))))))
 
-(define (get-choice)
-  (let* ((choice-cmd "fuzzel --dmenu")
-         (choices (focusable-windows-and-ids))
+(define* (goto-open-windows #:optional (choice-cmd "fuzzel --dmenu"))
+  (let* ((choices (focusable-windows-and-ids))
          (window-names (map car choices))
          (window-choice-str (string-join window-names "\n" 'suffix))
          (selected (let ((port
@@ -33,5 +32,10 @@
                      (display window-choice-str port)
                      (force-output port)
                      (read-line port))))
-    (pretty-print window-choice-str)
-    selected))
+    (let ((w
+           (find (lambda (name-id)
+                   (string= selected (car name-id)))
+                 choices)))
+      (when w
+        (sway-focus-container-criteria
+         (sway-criteria #:con-id (cdr w)))))))
