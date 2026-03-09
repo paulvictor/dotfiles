@@ -8,9 +8,8 @@
   (gptel-default-mode 'org-mode)
   (gptel-prompt-prefix-alist nil)
   (gptel-org-branching-context t)
-  ;;   (gptel-model 'qwen3-coder-next)
   :config
-  (setf (gptel-get-backend "ChatGPT") nil)
+;;   (setf (gptel-get-backend "ChatGPT") nil)
   (setq gptel--known-backends nil
         gptel-expert-commands t
         gptel-backend (gptel-make-openai "xyne"
