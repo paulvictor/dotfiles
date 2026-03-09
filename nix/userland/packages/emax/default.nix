@@ -29,26 +29,11 @@ let
       };
     in
       pkgs.emacsPackages.trivialBuild {
-        pname = "ngnk-mode";
-        inherit version src;
-      };
-  ngnk-mode =
-    let
-      version = "c2b6f3d98f566061369bd00a91124da4280c9398";
-      src = fetchFromGitHub {
-        owner = "gitonthescene";
-        repo = "ngnk-mode";
-        rev = version;
-        hash = "sha256-CSjVKWhAdYC4JZyTx0B8dS7I99y+mnCdnmRe2/Pfyx0=";
-      };
-    in
-      pkgs.emacsPackages.trivialBuild {
-        pname = "ngnk-mode";
+        pname = "himalaya-emacs";
         inherit version src;
       };
   customizedEmacs =
-    (emacsPackagesFor emacs-unstable) # We are getting rid of the nox package. If needed, run emacs -nw
-      .emacsWithPackages(epkgs:
+    (emacsPackagesFor emacs-unstable).emacsWithPackages(epkgs:
         [ (with epkgs.melpaPackages;
           [
             ace-window

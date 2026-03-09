@@ -44,7 +44,7 @@ with pkgs;
   imports = [
     ./zsh.nix
     ./himalaya.nix
-  ]; # ++ lib.optional specialArgs.isLinux ./email.nix;
+  ];
 
   programs.direnv = {
     enable = true;
