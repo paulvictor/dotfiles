@@ -33,7 +33,7 @@ let
         inherit version src;
       };
   customizedEmacs =
-    (emacsPackagesFor emacs-unstable-pgtk).emacsWithPackages(epkgs:
+    (emacsPackagesFor emacs-unstable).emacsWithPackages(epkgs:
         [ (with epkgs.melpaPackages;
           [
             ace-window

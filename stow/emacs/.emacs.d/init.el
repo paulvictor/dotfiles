@@ -52,12 +52,8 @@
 
 (defvar pvr/emacs-persist-dir
   (f-join pvr/persist-dir "emacs.d"))
-
 (use-package s)
 (use-package dash)
-
-(defun pgtk-p ()
-  (not (not (member "PGTK" (s-split-words system-configuration-features)))))
 
 ;;Do not save duplicates in kill ring
 (setq kill-do-not-save-duplicates t)
@@ -67,9 +63,6 @@
                     (setq-local tab-width 2))
                   ))
       '(c-mode-hook haskell-mode-hook nix-mode-hook))
-
-(when (pgtk-p)
-  (set-frame-parameter nil 'alpha-background 80))
 
 (use-package emacs
   :custom
@@ -191,29 +184,35 @@
 
 (defun pvr/set-font-faces ()
   (set-mouse-color "white")
+
+  ;;   (set-face-attribute 'default nil :family "UDEV Gothic 35NFLG" :height 110)
+  ;;   (set-face-attribute 'default nil :family "Monoid Nerd Font" :height 110)
+
+;;   (set-face-attribute 'default nil :family "VictorMono Nerd Font" :height 110 :weight 'bold)
+;;   (set-face-attribute 'term nil :family "IosevkaTerm Nerd Font Mono" :height 60)
+;;   (set-face-attribute 'fixed-pitch nil :font "Iosevka Fixed Slab" :height 110 :weight 'bold)
   (set-face-attribute 'default nil :family "JetBrainsMono Nerd Font" :height 120)
+;;     (set-face-attribute 'default nil :family "DejaVu Serif" :height 110)
+
+  ;;   (set-face-attribute 'default nil :family "JuliaMono" :height 110)
+
   (set-face-attribute 'bold nil :weight 'bold)
   (set-face-attribute 'italic nil :slant 'oblique)
   (set-fontset-font t nil "Symbols Nerd Font" nil 'append)
-  (set-frame-parameter (selected-frame) 'alpha '(90 . 90)))
 
-(defun setup-look-and-feel (frame)
-  (pvr/set-font-faces)
-  (load-theme 'modus-vivendi-tinted t)
-  (when (pgtk-p)
-    ;; Should I use modify-all-frames-parameters ?
-    (set-frame-parameter frame 'alpha-background 80) ;; Read https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and-Color-Parameters.html#index-opacity_002c-frame-1
-    ;; (add-to-list 'default-frame-alist '(alpha . 85)))
-  (setq initial-buffer-choice #'pvr/show-welcome-buffer)))
+  (set-frame-parameter (selected-frame) 'alpha '(90 . 90)))
 
 (if (daemonp)
     (add-hook 'after-make-frame-functions
               (lambda (frame)
                 (setq doom-modeline-icon t)
                 (with-selected-frame frame
+                  (pvr/set-font-faces)
                   (set-env-vars)
-                  (setup-look-and-feel frame))))
-  (setup-look-and-feel nil))
+                  (setq initial-buffer-choice #'pvr/show-welcome-buffer))))
+  (progn
+    (pvr/set-font-faces)
+    (setq initial-buffer-choice #'pvr/show-welcome-buffer)))
 
 (add-hook
   'prog-mode-hook
@@ -244,7 +243,10 @@
 (use-package doom-themes
   :custom
   (doom-themes-enable-bold t)    ; if nil, bold is universally disbabled
-  (doom-themes-enable-italic t))
+  (doom-themes-enable-italic t)
+  :config
+  (doom-themes-org-config)
+  (load-theme 'doom-tomorrow-night t))
 
 (use-package doom-modeline
   :custom
