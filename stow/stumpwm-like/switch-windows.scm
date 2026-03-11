@@ -1,5 +1,5 @@
 (use-modules (ice-9 pretty-print)
-             (swayipc)
+             (guile-swayer swayipc)
              (srfi srfi-1)
              (ice-9 popen)
              (ice-9 string-fun)
