@@ -37,10 +37,6 @@
     goodbyeAds.url = "github:jerryn70/GoodbyeAds/master";
     goodbyeAds.flake = false;
 
-    nix-cl = {
-      url = "github:Uthar/nix-cl/master";
-    };
-
     nix-index-database = {
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -93,6 +89,11 @@
       url = "github:NixOS/nixos-hardware";
     };
 
+    schemesh = {
+      url = "github:cosmos72/schemesh";
+      flake = false;
+    };
+
   };
 
   outputs = { self, nixpkgs, ... }@inputs :
@@ -118,7 +119,7 @@
       vieb-overlay = final: prev: import (inputs.vieb-nix) {pkgs = final;};
       #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
       overlays = [
-        schemesh-overlay
+        (schemesh-overlay inputs.schemesh)
         vieb-overlay
 
         brotab-overlay
@@ -184,9 +185,7 @@
                 # cat /etc/ssh/ssh_host_ed25519_key.pub| ssh-to-age -i - | clipcopy
               ];
             };
-          legacyPackages = {
-            homeConfigurations = import ./userland/default.nix { inherit inputs pkgs; };
-          };
+          legacyPackages.homeConfigurations = import ./userland/default.nix { inherit inputs pkgs; };
           images =
             lib.mapAttrs
               (format: configModules:
