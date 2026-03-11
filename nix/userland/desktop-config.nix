@@ -32,6 +32,7 @@ with pkgs;
     pulseaudio-ctl
     rofiElectronAppsRunner
     vieb
+    schemesh
   ];
 
   xdg.configFile.rofi = {
@@ -71,7 +72,7 @@ with pkgs;
       font.italic.style = "SemiBold Italic";
       font.bold_italic.family = "VictorMono Nerd Font Mono";
       font.bold_italic.style = "Bold Italic";
-      font.size = 12.0;
+      font.size = lib.mkDefault 12.0;
       bell.animation = "EaseOutSine";
       selection.save_to_clipboard = true;
       cursor.style.shape = "Block";

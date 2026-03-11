@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, specialArgs, ... }:
 
 with pkgs;
 let
@@ -203,7 +203,8 @@ in
             "full-screen-api.warning.timeout" = 0;
             "gfx.webrender.all" = true;
             "layers.acceleration.force-enabled" = true;
-            "layout.css.devPixelsPerPx" = "1.15";
+            "layout.css.devPixelsPerPx" =
+              if specialArgs.hostname == "anarki" then "1.30" else "1.15";
             "layout.css.prefers-color-scheme.content-override" = 0;
             "media.peerconnection.enabled" = true;
             "network.http.max-connections" = 1024;

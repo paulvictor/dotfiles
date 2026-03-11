@@ -3,7 +3,6 @@
     additionalModules = [
       ({lib,...}:{
         home.stateVersion = "25.05";
-        services.batteryAlert.enable = false;
         wayland.windowManager.sway.config.output = lib.mkForce {
           "HDMI-A-1" = {
             mode = "2560x1440@60Hz";
@@ -16,7 +15,7 @@
     additionalModules = [
       ({
         home.stateVersion = "25.11";
-        services.batteryAlert.enable = false;
+        programs.alacritty.settings.font.size = 16.0;
       })
     ];
   };

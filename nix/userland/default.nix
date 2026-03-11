@@ -2,10 +2,16 @@
 let
   inherit (pkgs) lib;
 in
-builtins.mapAttrs(_: attrs:
-  inputs.homeManager.lib.homeManagerConfiguration ({
+builtins.mapAttrs(n: attrs:
+  let
+    hostname = lib.pipe n
+      [(lib.splitString "@")
+       lib.tail
+       lib.head
+      ];
+  in inputs.homeManager.lib.homeManagerConfiguration ({
     inherit pkgs;
-    extraSpecialArgs = {inherit inputs;};
+    extraSpecialArgs = {inherit inputs hostname;};
     modules = [
       inputs.nix-index-database.homeModules.nix-index
       ./home-configuration.nix

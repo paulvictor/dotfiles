@@ -38,11 +38,13 @@
 (add-hook 'before-save-hook
   (lambda ()
     (whitespace-cleanup)))
+
 (defun set-env-vars ()
   (setenv "SSH_AUTH_SOCK"
           (substring
            (shell-command-to-string "gpgconf --list-dirs agent-ssh-socket") 0 -1))
-  (setenv "EDITOR" "emacsclient -c"))
+  (setenv "EDITOR" "emacsclient -c")
+  (setenv "HOST" (s-trim (shell-command-to-string "hostname"))))
 
 (defvar pvr/persist-dir
   (let ((d (or (getenv "PERSIST_DIR") "~/plain")))
@@ -188,11 +190,14 @@
   ;;   (set-face-attribute 'default nil :family "UDEV Gothic 35NFLG" :height 110)
   ;;   (set-face-attribute 'default nil :family "Monoid Nerd Font" :height 110)
 
-;;   (set-face-attribute 'default nil :family "VictorMono Nerd Font" :height 110 :weight 'bold)
-;;   (set-face-attribute 'term nil :family "IosevkaTerm Nerd Font Mono" :height 60)
-;;   (set-face-attribute 'fixed-pitch nil :font "Iosevka Fixed Slab" :height 110 :weight 'bold)
-  (set-face-attribute 'default nil :family "JetBrainsMono Nerd Font" :height 120)
-;;     (set-face-attribute 'default nil :family "DejaVu Serif" :height 110)
+  ;;   (set-face-attribute 'default nil :family "VictorMono Nerd Font" :height 110 :weight 'bold)
+  ;;   (set-face-attribute 'term nil :family "IosevkaTerm Nerd Font Mono" :height 60)
+  ;;   (set-face-attribute 'fixed-pitch nil :font "Iosevka Fixed Slab" :height 110 :weight 'bold)
+  (set-face-attribute 'default nil
+                      :family "JetBrainsMono Nerd Font"
+                      :height (if (equal "anarki" (s-trim (shell-command-to-string "hostname")))
+                                  160 120))
+  ;;     (set-face-attribute 'default nil :family "DejaVu Serif" :height 110)
 
   ;;   (set-face-attribute 'default nil :family "JuliaMono" :height 110)
 
