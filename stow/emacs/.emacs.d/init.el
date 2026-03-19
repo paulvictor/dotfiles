@@ -1,4 +1,5 @@
 ;;; init.el -*- lexical-binding: t; -*-
+;;; -*- lexical-binding: t; -*-
 
 (require 'package)
 (require 'man)
@@ -19,6 +20,7 @@
 ;;       (goto-char (point-max))
 ;;       (eval-print-last-sexp)))
 ;;   (load bootstrap-file nil 'nomessage))
+
 
 ;; Use straight.el for use-package expressions
 ;; (straight-use-package 'use-package)
@@ -1237,3 +1239,57 @@ point reaches the beginning or end of the buffer, stop there."
              `(:host ,(rx bol "ssh.bitbucket.juspay.net" eol)
                :type "stash"
                :actual-host "bitbucket.juspay.net")))
+
+(defun cache-and-get-key (passwd-store-key)
+  (let (cached-secret)
+    (lambda ()
+      (or cached-secret
+          (progn
+            (setq cached-secret (password-store-get passwd-store-key))
+            cached-secret)))))
+
+(use-package slack
+  :custom
+  (slack-prefer-current-team t)
+  :bind (("C-c s K" . slack-stop)
+         ("C-c s c" . slack-select-rooms)
+         ("C-c s u" . slack-select-unread-rooms)
+         ("C-c s U" . slack-user-select)
+         ("C-c s s" . slack-search-from-messages)
+         ("C-c s J" . slack-jump-to-browser)
+         ("C-c s j" . slack-jump-to-app)
+         ("C-c s e" . slack-insert-emoji)
+         ("C-c s E" . slack-message-edit)
+         ("C-c s r" . slack-message-add-reaction)
+         ("C-c s t" . slack-thread-show-or-create)
+         ("C-c s g" . slack-message-redisplay)
+         ("C-c s G" . slack-conversations-list-update-quick)
+         ("C-c s q" . slack-quote-and-reply)
+         ("C-c s Q" . slack-quote-and-reply-with-link)
+         (:map slack-mode-map
+               (("@" . slack-message-embed-mention)
+                ("#" . slack-message-embed-channel)))
+         (:map slack-thread-message-buffer-mode-map
+               (("C-c '" . slack-message-write-another-buffer)
+                ("@" . slack-message-embed-mention)
+                ("#" . slack-message-embed-channel)))
+         (:map slack-message-buffer-mode-map
+               (("C-c '" . slack-message-write-another-buffer)))
+         (:map slack-message-compose-buffer-mode-map
+               (("C-c '" . slack-message-send-from-buffer))))
+  :init
+  (defvar work-slack-secrets nil "Secret for work slack")
+  :config
+  (setq work-slack-secrets (cache-and-get-key "work/Juspay/slack/token"))
+  (let*
+      ((creds (json-parse-string (funcall work-slack-secrets) :object-type 'alist))
+       (token (alist-get 'token creds))
+       (cookie (alist-get 'cookie creds)))
+    (slack-register-team
+     :name "Juspay"
+     :token token
+     :cookie cookie
+     :modeline-enabled t
+     :full-and-display-names t
+     :default t
+     :subscribed-channels nil)))
