@@ -36,7 +36,7 @@
         "${config.users.users.viktor.home}/Photos/victor-pixel8-photos" = {
           id = "bmce4-0zr5d";
           label = "Photos On Victors Pixel 8";
-          devices = [ "uriel" "victors-phone" "sorlag" "sarge" ];
+          devices = [ "uriel" "victors-phone" "sarge" ];
           type = "receiveonly";
           copyOwnershipFromParent = true;
         };
@@ -51,7 +51,6 @@
           devices = [
             "uriel"
             "victors-phone"
-            "sorlag"
             "sarge"
           ];
         };

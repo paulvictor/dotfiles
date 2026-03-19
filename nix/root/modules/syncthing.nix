@@ -1,5 +1,3 @@
-{ config, lib, pkgs, ... } :
-
 {
   services.syncthing = {
     settings = {
@@ -14,10 +12,6 @@
         };
         victors-phone = {
           id = "UBULWV6-3KYFWTK-PMIYLWK-ZXY6IRE-CDTRXLV-3YFCURL-QAZMSPQ-G46OSAH";
-          autoAcceptFolders = true;
-        };
-        sorlag = {
-          id = "GDNPOFY-DFQENWZ-ETUZTLL-ST6JG2W-VCJ4FIZ-WRYRJNY-XPC5CUW-JVQ6ZQE";
           autoAcceptFolders = true;
         };
       };
