@@ -181,8 +181,9 @@
             mkShell {
               buildInputs = [
                 sops
-                ssh-to-age
-                # cat /etc/ssh/ssh_host_ed25519_key.pub| ssh-to-age -i - | clipcopy
+                ssh-to-age # cat /etc/ssh/ssh_host_ed25519_key.pub| ssh-to-age -i - | clipcopy
+                nix-diff
+                nvd
               ];
             };
           legacyPackages.homeConfigurations = import ./userland/default.nix { inherit inputs pkgs; };

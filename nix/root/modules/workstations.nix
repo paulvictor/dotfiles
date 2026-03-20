@@ -92,8 +92,9 @@ with pkgs;
     [
       ./fonts.nix
       ./keyd.nix
-      ../../root/tailscale.nix
+      ../tailscale.nix
       ./ollama.nix
+      ./syncthing
     ];
 
 }

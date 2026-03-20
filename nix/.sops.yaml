@@ -25,6 +25,12 @@ creation_rules:
       - *paul
       age:
       - *anarki
+  - path_regex: root/devices/uriel/secrets/[^/]+\.(yaml|json|env|ini|conf)$
+    key_groups:
+    - pgp:
+      - *paul
+      age:
+      - *uriel
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini|conf)$
     key_groups:
     - pgp:
