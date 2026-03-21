@@ -10,6 +10,8 @@ in
   home.packages = with pkgs; [
     wl-clipboard
     shotman
+    wdisplays
+    wl-mirror
   ];
 
   imports = [
