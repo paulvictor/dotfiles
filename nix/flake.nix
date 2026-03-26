@@ -13,23 +13,14 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    flake-parts.url = "github:hercules-ci/flake-parts";
     homeManager.url = "github:nix-community/home-manager/master";
     homeManager.inputs.nixpkgs.follows = "nixpkgs";
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    emacsOverlay = {
-      url = "github:nix-community/emacs-overlay/master";
-    };
-    nixos-generators = {
-      url = "github:nix-community/nixos-generators";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    sops-nix.url = "github:Mic92/sops-nix";
+
+    emacsOverlay.url = "github:nix-community/emacs-overlay/master";
+
     nur.url = "github:nix-community/nur";
-    ngnk.url = "github:nathyong/ngnk-nix";
-    ngnk.inputs.nixpkgs.follows = "nixpkgs";
-    ngnk.inputs.flake-utils.follows = "flake-utils";
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -49,18 +40,6 @@
         flake-utils.follows = "flake-utils";
       };
     };
-    deploy-rs = {
-      url = "github:serokell/deploy-rs";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        utils.follows = "flake-utils";
-      };
-    };
-
-    guile-swayer = {
-      url = "github:paulvictor/guile-swayer";
-      flake = false;
-    };
 
     nix-on-droid = {
       url = "github:nix-community/nix-on-droid";
@@ -70,9 +49,7 @@
     # see https://determinate.systems/posts/extending-nixos-configurations/#using-private-github-inputs-in-flakes
     # to integrate private flakes
 
-    magix = {
-      url = "github:dschrempf/magix";
-    };
+    magix.url = "github:dschrempf/magix";
 
     flake-utils-plus = {
       url = "github:gytis-ivaskevicius/flake-utils-plus";
@@ -85,9 +62,7 @@
     microvm.url = "github:microvm-nix/microvm.nix";
     microvm.inputs.nixpkgs.follows = "nixpkgs";
 
-    nixos-hardware = {
-      url = "github:NixOS/nixos-hardware";
-    };
+    nixos-hardware.url = "github:NixOS/nixos-hardware";
 
     schemesh = {
       url = "github:cosmos72/schemesh";
@@ -96,137 +71,13 @@
 
   };
 
-  outputs = { self, nixpkgs, ... }@inputs :
-    let
-      inherit (nixpkgs) lib;
-      inherit (inputs.flake-utils.lib) eachDefaultSystemPassThrough eachDefaultSystem;
-      gllock-overlay = import ./overlays/gllock.nix;
-      brotab-overlay = import ./overlays/brotab.nix;
-      ripgrep-overlay = import ./overlays/ripgrep.nix;
-      rofi-fuzzy = import ./overlays/rofi-fuzzy.nix;
-      pass-override-overlay = import ./overlays/pass-override.nix;
-      pass-with-extensions = import ./overlays/pass-with-extensions.nix;
-      wallpaper-overlay = import ./overlays/wallpaper.nix;
-      electron-apps = import ./overlays/electronApps;
-      surfraw-overlay = import ./overlays/surfraw.nix;
-      ql2nix-overlay = import ./overlays/ql2nix.nix;
-      pcloudcc-overlay = import ./overlays/pcloud-console-client.nix;
-#       fish-docker-completion = import ./overlays/fish.nix; # We dont need this for now since we dont need the docker completions as much
-      rofi-theme-overlay = import ./overlays/rofi-theme-overlay.nix;
-      warpd-overlay = import ./overlays/warpd.nix;
-      passdo = import ./overlays/type-password/passdo.nix;
-      schemesh-overlay = import ./overlays/schemesh.nix;
-      vieb-overlay = final: prev: import (inputs.vieb-nix) {pkgs = final;};
-      #   dyalog-nixos-overlay = import (fetchTarball https://github.com/markus1189/dyalog-nixos/tarball/3e09260ec111541be3e0c7a6c4e700fc042a3a8a) { inherit pkgs; } ;
-      overlays = [
-        (schemesh-overlay inputs.schemesh)
-        vieb-overlay
-
-        brotab-overlay
-        # ripgrep-overlay # Removing for now since it takes a lot of space
-        rofi-fuzzy
-        pass-override-overlay
-        pass-with-extensions
-        passdo
-        electron-apps
-        wallpaper-overlay
-        surfraw-overlay
-        inputs.nur.overlays.default
-        inputs.darwin.overlays.default
-        ql2nix-overlay
-        inputs.ngnk.overlay
-        inputs.emacsOverlay.overlay
-        pcloudcc-overlay
-        rofi-theme-overlay
-        warpd-overlay
-        inputs.flake-utils-plus.overlay
-      ];
-      supportedFormats =
-        lib.remove "all-formats" (lib.attrNames inputs.nixos-generators.nixosModules);
-      nixosModules =
-        # attrset of host to configuration
-        import ./root/devices/default.nix { inherit inputs lib overlays; };
-      imageModules =
-        lib.listToAttrs
-          (lib.forEach supportedFormats
-            (format: lib.nameValuePair format
-              (lib.mapAttrs
-                (_: m: m ++ [inputs.nixos-generators.nixosModules.${format}])
-                nixosModules)));
-    in
-      {
-        inherit nixosModules;
-      }
-      // (eachDefaultSystem (system:
-        let
-          pkgs = import nixpkgs {
-            inherit system overlays;
-            config.allowUnfreePredicate =
-              pkg: builtins.elem (lib.getName pkg)
-                [
-                  "google-chrome"
-                  "vivaldi"
-                  "widevine-cdm"
-                  "ungoogled-chromium"
-                  "ungoogled-chromium-unwrapped"
-                  "prl-tools"
-                  "firefox-devedition-bin"
-                  "firefox-developer-edition-bin-unwrapped"
-                  "open-webui"
-                ];
-          };
-        in {
-          devShells.default =
-            with pkgs;
-            mkShell {
-              buildInputs = [
-                sops
-                ssh-to-age # cat /etc/ssh/ssh_host_ed25519_key.pub| ssh-to-age -i - | clipcopy
-                nix-diff
-                nvd
-              ];
-            };
-          legacyPackages.homeConfigurations = import ./userland/default.nix { inherit inputs pkgs; };
-          images =
-            lib.mapAttrs
-              (format: configModules:
-                lib.mapAttrs
-                  (_: modules:
-                    inputs.nixos-generators.nixosGenerate
-                      {
-                        inherit modules format system;
-                        specialArgs = {
-                          inherit inputs;
-                          isPhysicalDevice = false;
-                        };
-                      })
-                  configModules
-              )
-              imageModules;
-        }
-      ))
-      // (eachDefaultSystemPassThrough (system:
-        let
-          nixosConfigurations =
-            lib.mapAttrs
-              (_: modules:
-                lib.nixosSystem {
-                  inherit modules;
-                  specialArgs = {
-                    inherit inputs system;
-                    isPhysicalDevice = true; # HACK for now
-                  };
-                })
-              nixosModules;
-        in {
-          inherit nixosConfigurations imageModules;
-          darwinConfigurations = import ./darwin/default.nix {
-            inherit (nixpkgs) lib;
-            inherit inputs overlays;
-          };
-
-        }))
-      // {
-        nixOnDroidConfigurations.default = import ./nix-on-droid.nix;
-      };
+  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+    systems = inputs.nixpkgs.lib.systems.flakeExposed;
+    imports =
+      [inputs.homeManager.flakeModules.home-manager] ++
+      (with builtins;
+        map
+          (fn: ./flake-parts/${fn})
+          (attrNames (readDir ./flake-parts)));
+  };
 }

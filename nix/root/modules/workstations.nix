@@ -18,7 +18,6 @@ with pkgs;
     manix
     psmisc
     wget
-    fup-repl
   ] ++ lib.optionals isPhysicalDevice [
     binutils
     bluez

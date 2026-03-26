@@ -1,15 +1,14 @@
-{ inputs, overlays, lib, ... }:
+{ inputs, lib, ... }:
 
 let
   inherit (builtins) attrNames isAttrs readDir listToAttrs elem;
-  inherit (lib) forEach;
+  forEach = l: f: map f l;
   commonModules =
     [
       ../common-config.nix
       ../caches.nix
       ({lib, ...}: {
         system.configurationRevision = lib.mkIf (inputs.self ? rev) inputs.self.rev;
-        nixpkgs.overlays = overlays;
         nix.generateNixPathFromInputs = true;
         nix.generateRegistryFromInputs = true;
         nix.linkInputs = true;
