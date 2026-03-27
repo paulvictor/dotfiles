@@ -11,6 +11,20 @@
       ../../modules/local-ai-coding-nvidia.nix
     ];
 
+  powerManagement.enable = true;
+
+
+  # Doing these since I dont want the system to sleep. This messes up the kvm
+  # Mask systemd sleep/suspend targets
+  systemd.targets.sleep.enable = false;
+  systemd.targets.suspend.enable = false;
+  systemd.targets.hibernate.enable = false;
+  systemd.targets.hybrid-sleep.enable = false;
+  # This prevents the system from automatically suspending after inactivity
+  systemd.services.systemd-suspend.enable = false;
+  systemd.services.systemd-hibernate.enable = false;
+  systemd.services.systemd-hybrid-sleep.enable = false;
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
