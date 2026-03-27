@@ -39,7 +39,10 @@ let
 
 in
 {
-  imports = [ ./services/sxhkd.nix ];
+  imports = [
+    ./services/sxhkd.nix
+    ./kanshi.nix
+  ];
   home.packages = with pkgs;[ slurp grim wl-clipboard flameshot wlay ];
   wayland.windowManager.sway = {
     enable = true;

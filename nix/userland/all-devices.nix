@@ -32,6 +32,7 @@
       ({lib,...}:{
         home.stateVersion = "25.11";
         services.batteryAlert.enable = true;
+        services.kanshi.enable = true;
       })
     ];
   };

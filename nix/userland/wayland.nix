@@ -89,6 +89,7 @@ in
     style = builtins.readFile ./config/waybar-style.css;
     settings = {
       mainBar = {
+        output = [ "*" ];
         layer = "top";
         position = "top";
         height = 30;
