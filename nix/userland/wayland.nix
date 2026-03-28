@@ -1,4 +1,4 @@
-{ lib, config, pkgs, ...}:
+{ lib, config, pkgs, specialArgs, ...}:
 
 let
   lockCommand = "${pkgs.swaylock}/bin/swaylock -F -f -c 000000";
@@ -61,20 +61,19 @@ in
   };
 
   services.swayidle = with pkgs;{
-    enable = true;
+    enable = lib.mkDefault true;
     timeouts = [
       { timeout = 300; command = lockCommand; }
-      {
-        timeout = 500;
-        command = "${sway}/bin/swaymsg \"output * dpms off\"";
-        resumeCommand = "${sway}/bin/swaymsg \"output * dpms on\"";
-      }
-#       { timeout = 600; command = "${pkgs.systemd}/bin/systemctl suspend"; }
-    ];
-    events = [
-      { event = "before-sleep"; command = lockCommand; }
-#       { event = "lock"; command = lockCommand; }
-    ];
+    ] ++ (
+      lib.optionals (specialArgs.hostname != "anarki") [ # On this machine dont switch off the monitor
+        {
+          timeout = 500;
+          command = "${sway}/bin/swaymsg \"output * dpms off\"";
+          resumeCommand = "${sway}/bin/swaymsg \"output * dpms on\"";
+        }
+      ]
+    );
+    events = { "before-sleep" = lockCommand; };
   };
 
   programs.swayr = {
