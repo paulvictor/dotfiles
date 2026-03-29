@@ -5,18 +5,18 @@
 ** fix search engine optimization
 *** google -> DDG
 * Nix
-** warpd
-** tailscale
-** darwin and start a vm to run tailscaled
 ** nix on droid
 * Guile
 * General productivity
 * Guix
-* example
 
 * sway
 ** waybar get useful information
-** get waybar and swaybg to start at startup
 ** fix terminal / use emacs client
 ** fix typepass to use fuzzel
-** use guile-swayer
+
+* Expose our current emacs setup as a package with fonts and keybindings
+
+* In emacs write a way to save words to kill ring without killing
+
+* Fix nix-eshell-with-packages to get a eshell.

@@ -1,5 +1,4 @@
 (defsrc
- esc
  1    2    3    4    5     7    8    9    0      -
  q    w    e    r    t     u    i    o    p      lbrc
  caps a    s    d    f  g  j    k    l    scln   apos          ret
@@ -8,10 +7,9 @@
 )
 
 (deflayer qwerty
-  esc
   1    2    3    4    5     7    8    9    0      -
   q    w    e    r    t     u    i    o    p      lbrc
-  caps a    s    d    f  g  j    k    l    scln   apos         @ctrlret
+  lmet a    s    d    f  g  j    k    l    scln   apos         @ctrlret
   @sftesc        c    v          m    ,    @whky)
 
 (defvar
@@ -61,30 +59,50 @@
   astr    S-8
   sftesc  (tap-hold-release $tt $ht esc lsft)
   spcth   (tap-hold-release $tt $ht spc (layer-while-held num))
+  mse-or-s (tap-hold-release $tt $ht s (layer-while-held mouse))
   tabth   (tap-hold-release $tt $ht tab (layer-while-held sym))
   retth   (tap-hold-release $tt $ht ret (multi lctl lalt))
   dotcomm (fork  . (unshift comm) (lsft rsft))
   bspcdel (fork bspc (unshift del) (lsft rsft)))
 
 (deflayer whky
-  @qwerty
-  -         w         f     p        b     z            u          y     q         apos
-  @metaa    @altr     s     @sftt    g     m            @sftn      e     @alti     @ctrlo
-  XX        @ctrlx    x     c        d     v            @dotcomm   h     j         k        l    XX
-  XX                @spcth  @tabth        @retth  @bspcdel  @qwerty)
+  -         w         f           p        b     z            u          y     q         apos
+  @metaa    @altr     @mse-or-s   @sftt    g     m            @sftn      e     @alti     @ctrlo
+  XX        @ctrlx    x           c        d     v            @dotcomm   h     j         k        l    XX
+  XX                  @spcth      @tabth        @retth  @bspcdel  @qwerty)
 
 (deflayer num
-  XX
   -        /          \           @pipe      XX     `         4     5     6     @plus
   @lt      lbrc       rbrc        @gt        XX     @ques     1     2     3     0
   XX       @lcrly   @lparen    @rparen     @rcrly     XX      .     7     8     9       =        XX
   XX                  XX           XX                @retth    @bspcdel   XX)
 
 (deflayer sym
-  @qwerty
   XX       XX       XX       XX       XX     @grv      @dllr     @perc    @caret    apos
   XX       XX       XX       XX       XX     @amp      @excl     @at      @hash     @astr
-  XX       XX       XX       XX       XX       XX     .         left      down      up        rght       XX
+  XX       XX       XX       XX       XX       XX      .         left     down      up        rght       XX
   XX                         XX       XX               @retth    @bspcdel  XX)
 
 
+(defalias
+  ms-scrll (layer-while-held mouse-scroll)
+  ms↑ (movemouse-up 4 4)
+  ms← (movemouse-left 4 4)
+  ms↓ (movemouse-down 4 4)
+  ms→ (movemouse-right 4 4)
+  mw↑ (mwheel-up 50 120)
+  mw← (mwheel-down 50 120)
+  mw↓ (mwheel-left 50 120)
+  mw→ (mwheel-right 50 120))
+
+(deflayer mouse
+          XX       XX       XX       XX         XX     XX       XX       XX       XX       XX
+          XX       XX       XX       XX         XX     XX       @ms←     @ms↓     @ms↑     @ms→
+          XX       XX       XX       XX         XX     XX       XX       XX       XX       XX       XX XX
+          XX                         @ms-scrll @ms-scrll        mlft     mrgt     XX)
+
+(deflayer mouse-scroll
+          XX       XX       XX       XX         XX     XX       XX       XX       XX       XX
+          XX       XX       XX       XX         XX     XX       @mw←     @mw↓     @mw↑     @mw→
+          XX       XX       XX       XX         XX     XX       XX       XX       XX       XX       XX XX
+          XX                         XX         XX              mltp     mrtp     XX)
