@@ -26,7 +26,12 @@
 
   services.ollama = {
     enable = true;
+    host = "0.0.0.0";
+    openFirewall = true;
     package = pkgs.ollama-cuda;
+    environmentVariables = {
+      OLLAMA_ORIGINS = "*";
+    };
     loadModels = [ "qwen3-coder-next:latest" "deepseek-coder-v2:latest" ];
   };
   systemd.services.ollama.serviceConfig = {

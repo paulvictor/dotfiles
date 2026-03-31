@@ -418,7 +418,8 @@ Also move to the next line, since that's the most frequent action after"
   (isearch-repeat-on-direction-change t)
   (isearch-lazy-count t)
   (isearch-wrap-pause 'no-ding)
-  (search-ring-max 100)
+  (search-ring-max 200)
+  (regexp-search-ring-max 200)
   (lazy-count-prefix-format "(%s/%s) ")
   (lazy-count-suffix-format nil))
 
