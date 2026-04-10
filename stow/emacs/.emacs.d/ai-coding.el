@@ -41,8 +41,8 @@
                                   "glm-latest"
                                   "claude-opus-4-5"
                                   "kimi-latest")))
-  (gptel-make-ollama "local/anarki"
-    :host "localhost:11434"
+  (gptel-make-ollama "private/anarki"
+    :host "anarki:11434"
     :stream t
     :models '(qwen3-coder-next))
   (gptel-make-gemini "Gemini"
