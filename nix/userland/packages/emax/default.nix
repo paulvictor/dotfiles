@@ -37,6 +37,7 @@ let
         [ (with epkgs.melpaPackages;
           [
             ace-window
+            agent-shell
             aidermacs
             all-the-icons
             all-the-icons-completion
