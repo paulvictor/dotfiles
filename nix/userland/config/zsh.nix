@@ -136,7 +136,7 @@ in
       };
       oh-my-zsh = {
         enable = true;
-        plugins = [ "git" ];
+        plugins = [];
         theme = "spaceship";
         custom = "$HOME/.config/zsh";
       };

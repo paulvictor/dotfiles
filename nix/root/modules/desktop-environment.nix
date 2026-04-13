@@ -77,8 +77,6 @@ in {
   };
   services.dbus.packages = [ pkgs.bluez ];
 
-  programs.light.enable = true;
-
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;

@@ -34,7 +34,7 @@ with pkgs;
     grex
   ] ++
   lib.optionals (isLinux) [
-    ffmpeg-full
+    ffmpeg
     pcsc-tools
     pcsclite
     qrcp
