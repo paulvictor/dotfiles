@@ -179,6 +179,8 @@ let
       w3m
       fish
       delta
+      claude-code-acp
+      qwen-code
     ] ++ treeSitters;
     postBuild = ''
       wrapProgram $out/bin/emacs \

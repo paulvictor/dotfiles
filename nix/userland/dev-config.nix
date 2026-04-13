@@ -11,6 +11,7 @@ in
     '';
     imports = [
       ./config/gitconfig.nix
+      ./ai-tools.nix
     ];
     programs.fzf = {
       enable = true;
