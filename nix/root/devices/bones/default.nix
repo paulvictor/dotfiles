@@ -11,6 +11,7 @@
       ../../modules/kanata/default.nix
       inputs.nixos-hardware.nixosModules.chuwi-minibook-x
     ];
+  services.kanata.keyboards.builtin.devices = ["/dev/input/by-path/platform-i8042-serio-0-event-kbd"];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;

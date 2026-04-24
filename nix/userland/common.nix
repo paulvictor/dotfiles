@@ -158,6 +158,13 @@ with pkgs;
     };
   };
 
+  home.sessionVariables = {
+    NIXOS_OZONE_WL = "1";           # For Chromium/Electron apps
+    MOZ_ENABLE_WAYLAND = "1";       # For Firefox
+    SDL_VIDEODRIVER = "wayland";    # For Games/SDL apps
+    _JAVA_AWT_WM_NONREPARENTING = "1"; # For Java apps
+  };
+
   systemd.user.sessionVariables = lib.optionalAttrs isLinux {
     GNUPGHOME = "${config.home.homeDirectory}/.gnupg";
     EDITOR = "emacsclient -c -n";

@@ -14,7 +14,6 @@
         movemouse-inherit-accel-state yes
         movemouse-smooth-diagonals yes
       ";
-      devices = ["/dev/input/by-path/platform-i8042-serio-0-event-kbd"];
     };
   };
 }

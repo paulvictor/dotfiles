@@ -113,7 +113,7 @@ in
 		      format = " 💾 {used:0.1f}G";
 	      };
         battery =  {
-          bat =  "BAT0";
+          bat =  lib.mkDefault "BAT0";
           states = {
             good =  95;
             warning =  30;

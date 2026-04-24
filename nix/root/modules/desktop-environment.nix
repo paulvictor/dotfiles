@@ -4,8 +4,10 @@ let
     export XDG_SESSION_TYPE=wayland
     export XDG_SESSION_DESKTOP=sway
     export XDG_CURRENT_DESKTOP=sway
-
+    export NIXOS_OZONE_WL = "1";           # For Chromium/Electron apps
     export MOZ_ENABLE_WAYLAND=1
+    export SDL_VIDEODRIVER = "wayland";    # For Games/SDL apps
+    export _JAVA_AWT_WM_NONREPARENTING = "1"; # For Java apps
     exec ${pkgs.sway}/bin/sway ${lib.optionalString config.hardware.nvidia.enabled "--unsupported-gpu"} "$@"
   '';
 

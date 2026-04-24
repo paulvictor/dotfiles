@@ -4,6 +4,10 @@
     unifiedHomeManager = true;
   }
   {
+    hostName = "slash";
+    unifiedHomeManager = true;
+  }
+  {
     hostName = "bones";
     unifiedHomeManager = true;
   }

@@ -22,6 +22,7 @@ with pkgs;
     acpi # TODO : Install only on laptops
     afuse
     asciinema
+    brightnessctl
     dunst
     adwaita-icon-theme
     nyxt

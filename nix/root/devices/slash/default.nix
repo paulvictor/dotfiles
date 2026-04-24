@@ -2,23 +2,53 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/kanata/default.nix
-      ../../modules/split-gp-tun/default.nix
+      inputs.nixos-hardware.nixosModules.microsoft-surface-pro-9
     ];
-  services.kanata.keyboards.builtin.devices = ["/dev/input/by-path/platform-i8042-serio-0-event-kbd"];
+
+  services.kanata.keyboards.builtin.devices = ["/dev/input/by-path/platform-MSHW0343:00-event-kbd"];
+
+  # networking.hostName = "nixos"; # Define your hostname.
+
+  # Configure network connections interactively with nmcli or nmtui.
+  networking.networkmanager.enable = true;
+  powerManagement.enable = true;
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot = {
+    enable = true;
+    xbootldrMountPoint = "/boot";
+    configurationLimit = 15;
+  };
+  boot.loader.efi = {
+    canTouchEfiVariables = true;
+    efiSysMountPoint = "/efi";
+  };
+  services.iptsd.enable = true;
+
+  services.xserver.videoDrivers = [ "modesetting" ];
+  hardware.graphics = {
+     enable = true;
+     extraPackages = with pkgs; [
+       intel-media-driver
+       intel-vaapi-driver
+       libvdpau-va-gl
+     ];
+  };
+  services.thermald.enable = true;
+  services.tlp.enable = true;
+
+  hardware.microsoft-surface.kernelVersion = "stable";
 
   # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # Latest kernel has issues with nvidia. Falling back to stable version
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
