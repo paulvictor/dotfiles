@@ -116,7 +116,8 @@ let
             org-roam
             org-superstar
             org-tree-slide
-            origami
+            outline-indent
+            origami # TODO not used
             page-break-lines
             paredit
             password-store
@@ -137,6 +138,8 @@ let
             sly
             swiper
             transient
+            # tree-sitter-langs
+#             tree-sitter
             visual-fill-column
             vterm
             w3m
@@ -151,7 +154,15 @@ let
         )
         ]
         ++
-        [ (with epkgs; [ nano-theme eat ]) ]
+        [ (with epkgs;
+          [
+            nano-theme
+            eat
+            eaf-browser
+            eaf-pdf-viewer
+            emacs-application-framework
+            treesit-grammars.with-all-grammars
+          ]) ]
         ++
         [ (with epkgs.elpaPackages; [ activities beframe undo-tree org vertico corfu plz kind-icon pulsar erc ement vundo tmr ]) ]);
 
@@ -179,7 +190,7 @@ let
       w3m
       fish
       delta
-      claude-code-acp
+      claude-agent-acp
       qwen-code
     ] ++ treeSitters;
     postBuild = ''

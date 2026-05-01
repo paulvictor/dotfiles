@@ -136,24 +136,28 @@
            ("md" "eshell/mkdir -p $*")
            ("e" "find-file $1")
            ("ee" "find-file-other-window $1")
+           ("E" "find-file-other-frame $1")
+           ("v" "view-file $1")
+           ("vv" "view-file-other-window $1")
+           ("V" "view-file-other-frame $1")
+           ("f"  "find-file $1")
+           ("ff" "find-file-other-window $1")
+
            ("clipcopy" "xclip -in -selection clipboard")
            ("clippaste" "xclip -out -selection clipboard")
 
-           ("gd" "magit-diff-unstaged")
-           ("gds" "magit-diff-staged")
            ("d" "dired-other-window $1")
            (".." "cd ..")
 
            ("quit" "quit-and-close")
            ("q"  "quit-and-close")
-           ("f"  "find-file $1")
-           ("ff" "find-file-other-window $1")
            ("d"  "dired $1")
            ("gg" "magit-status")
            ("proj" "project-switch-project")
            ("rg" "rg --color=always $*")
 
            ("clear" "clear-scrollback")))
+
 (use-package em-alias
   :ensure nil
   :defer t

@@ -137,7 +137,7 @@ in
       oh-my-zsh = {
         enable = true;
         plugins = [];
-        theme = "spaceship";
+#         theme = "spaceship";
         custom = "$HOME/.config/zsh";
       };
     };

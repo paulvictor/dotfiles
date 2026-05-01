@@ -246,6 +246,13 @@
 
 ;; Auto-revert to disk on file change
 (global-auto-revert-mode 1)
+(defun cache-and-get-key (passwd-store-key)
+  (let (cached-secret)
+    (lambda ()
+      (or cached-secret
+          (progn
+            (setq cached-secret (password-store-get passwd-store-key))
+            cached-secret)))))
 
 (use-package doom-themes
   :custom
@@ -851,29 +858,6 @@ Repeated invocations toggle between the two most recently open buffers."
 (dolist (f '("ghcid.el" "utils.el" "completions.el" "names.el" "eshell.el" "popup.el" "ai-coding.el")) ;; The order here is somewhat important as functions defined in certain modules are used in others down the list
   (load-file (concat user-emacs-directory f)))
 
-(setq display-buffer-alist
-      (append display-buffer-alist
-      '(;; The added space is for didactic purposes
-
-        ;; Each entry in this list has this anatomy:
-
-        ;; ( BUFFER-MATCHING-RULE
-        ;;   LIST-OF-DISPLAY-BUFFER-FUNCTIONS
-        ;;   OPTIONAL-PARAMETERS)
-
-        ;; Match a buffer whose name is "*Occur*".  We have to escape
-        ;; the asterisks to match them literally and not as a special
-        ;; regular expression character.
-        ("\\*\\(Help\\|Occur\\|cider-apropos\\|cider-doc\\)\\*"
-         ;; If a buffer with the matching major-mode exists in some
-         ;; window, then use that one.  Otherwise, display the buffer
-         ;; below the current window.
-         (display-buffer-reuse-mode-window display-buffer-below-selected)
-         ;; Then we have the parameters...
-         (window-height . 0.3)
-         (dedicated . t)))))
-
-
 (defun indent-between-pair (&rest _ignored)
   (newline)
   (indent-according-to-mode)
@@ -1030,15 +1014,43 @@ point reaches the beginning or end of the buffer, stop there."
 
   (org-roam-setup))
 
+(use-package help
+  :custom
+  (help-window-select 'other)
+  (help-window-keep-selected t))
+(dolist (rule '((;; Each entry in this list has this anatomy:
 
-(add-to-list 'display-buffer-alist
-             '("\\*org-roam\\*"
-               (display-buffer-in-side-window)
-               (side . right)
-               (slot . 0)
-               (window-width . 0.33)
-               (window-parameters . ((no-other-window . t)
-                                     (no-delete-other-windows . t)))))
+                 ;; ( BUFFER-MATCHING-RULE
+                 ;;   LIST-OF-DISPLAY-BUFFER-FUNCTIONS
+                 ;;   OPTIONAL-PARAMETERS)
+
+                 ;; Match a buffer whose name is "*Occur*".  We have to escape
+                 ;; the asterisks to match them literally and not as a special
+                 ;; regular expression character.
+                 ("\\*\\(Help\\|Occur\\)\\*"
+                  ;; If a buffer with the matching major-mode exists in some
+                  ;; window, then use that one.  Otherwise, display the buffer
+                  ;; below the current window.
+                  (display-buffer-reuse-mode-window display-buffer-below-selected)
+                  ;; Then we have the parameters...
+                  (window-height . 0.3)
+                  (dedicated . t)))
+                ("\\*org-roam\\*"
+                 (display-buffer-in-side-window)
+                 (side . right)
+                 (slot . 0)
+                 (window-width . 0.33)
+                 (window-parameters . ((no-other-window . t)
+                                       (no-delete-other-windows . t))))
+                ("Claude .*"
+                 (display-buffer-in-side-window)
+                 (side . right)
+                 (slot . 1)
+                 (window-width . 0.33)
+                 (window-parameters . ((no-delete-other-windows . t))))
+                ("\\*agent-shell-diff\\*"
+                 (display-buffer-same-window))))
+  (add-to-list 'display-buffer-alist rule))
 
 (use-package browse-url
   :custom
@@ -1061,7 +1073,7 @@ point reaches the beginning or end of the buffer, stop there."
                   ("v" shrink-window "shrink height")
                   ("^" enlarge-window "increase height")
                   ("<" shrink-window-horizontally "shrink width")
-                  (">" enlarge-window-horizontally "shrink width")
+                  (">" enlarge-window-horizontally "enlarge width")
                   ("n" winner-redo "Winner redo")
                   ("p" winner-undo "Winner undo")
                   ("q" nil "quit")))
@@ -1225,6 +1237,11 @@ point reaches the beginning or end of the buffer, stop there."
  ;; If there is more than one, they won't work right.
  )
 
+(use-package outline-indent
+  :commands outline-indent-minor-mode
+  :custom
+  (outline-indent-ellipsis " ▼"))
+
 (use-package kirigami
   :bind (("C-c TAB" . kirigami-toggle-fold)))
 
@@ -1240,14 +1257,6 @@ point reaches the beginning or end of the buffer, stop there."
              `(:host ,(rx bol "ssh.bitbucket.juspay.net" eol)
                :type "stash"
                :actual-host "bitbucket.juspay.net")))
-
-(defun cache-and-get-key (passwd-store-key)
-  (let (cached-secret)
-    (lambda ()
-      (or cached-secret
-          (progn
-            (setq cached-secret (password-store-get passwd-store-key))
-            cached-secret)))))
 
 (use-package slack
   :custom

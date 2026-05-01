@@ -3,7 +3,7 @@
 {
   home.packages = with pkgs; [
     gemini-cli
-    claude-code-acp
+    claude-agent-acp
     qwen-code
   ];
 }

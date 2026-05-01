@@ -84,7 +84,7 @@ in
   programs.waybar = {
     enable = true;
     systemd.enable = true;
-    systemd.target = ["sway-session.target"];
+    systemd.targets = ["sway-session.target"];
     style = builtins.readFile ./config/waybar-style.css;
     settings = {
       mainBar = {
@@ -135,4 +135,3 @@ in
   };
   services.stumpwm-like.enable = false;
 }
-

@@ -21,3 +21,6 @@ stow/stumpwm/.stumpwm.d/stumpwm.log.1
 *.qcow2
 /stow/nyxt/nyxt-env/.qlot/
 .aider*
+/.agent-shell/
+/stow/emacs/.emacs.d/agent/
+/stow/emacs/.emacs.d/eaf/
