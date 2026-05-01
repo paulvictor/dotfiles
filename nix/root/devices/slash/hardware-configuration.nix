@@ -13,6 +13,13 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
+  boot.kernelParams = [ "mem_sleep_default=s2idle" ];
+
+  # Force the USB-HID wakeup rule for the keyboard
+  services.udev.extraRules = ''
+    # Microsoft Surface Pro 9 Signature Keyboard Wakeup
+    ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="09c0", ATTR{power/wakeup}="enabled"
+  '';
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot = {

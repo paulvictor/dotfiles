@@ -49,14 +49,13 @@ in
         guile_3_0.dev
         guile_3_0.info
         jq
-        nodejs_22
         pv
         sbcl sbclPackages.qlot-cli
-        tmate
         chez
-        leiningen clojure
         cbqn
         specialArgs.inputs.magix.packages.${system}.magix
+        claude-code
+        gemini-cli
 #         visidata # for visualizing data
       ] ++
       (lib.optionals isLinux [ bindfs ]);

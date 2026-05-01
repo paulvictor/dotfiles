@@ -23,10 +23,11 @@ in
   programs.swaylock = {
     enable = true;
     settings = {
+      image = pkgs.wall1;
+      color = "1a1a1a";
       font-size = 24;
       show-failed-attempts = true;
-      image = "${pkgs.wall1}";
-      scaling = "tile";
+      scaling = "fill";
     };
   };
 

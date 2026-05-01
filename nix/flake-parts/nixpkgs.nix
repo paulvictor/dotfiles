@@ -7,6 +7,7 @@
         allowUnfreePredicate =
           pkg: builtins.elem (lib.getName pkg)
             [
+              "claude-code"
               "google-chrome"
               "vivaldi"
               "widevine-cdm"
