@@ -2,7 +2,7 @@
  1    2    3    4    5     7    8    9    0      -
  q    w    e    r    t     u    i    o    p      lbrc
  caps a    s    d    f  g  j    k    l    scln   apos          ret
- sft            c    v          m    ,    f23
+ sft            c    v          m    ,    ralt
  ;; TODO we need to also map Ctrl to Ctrl/CtrlX in the qwerty layer
 )
 

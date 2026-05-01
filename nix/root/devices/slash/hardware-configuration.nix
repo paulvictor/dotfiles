@@ -8,36 +8,35 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.plymouth.enable = true;
   boot.initrd.systemd.enable = true;
-  boot.initrd.availableKernelModules = 
-    [ 
-      "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" 
-
-#      "intel_lpss_pci" "pinctrl_tigerlake" "surface_aggregator_registry" "surface_hid"  "surface_aggregator"
-"intel_lpss_pci" "pinctrl_tigerlake" "8250_dw" "surface_aggregator" "surface_aggregator_hub" "surface_hid" "surface_hid_core" "i915"
-#      "8250_dw" "surface_hid_core"
-#      "i2c_hid_acpi" "hid_generic" "usbhid"
-#      "intel_lpss" "serio_raw" "atkbd"
-#      "i2c_designware_platform" "i2c_designware_core" "hid_multitouch" "hid_generic"
-#      "intel_ish_ipc" "intel_ishtp_hid" "i915"
-    ];
-  boot.initrd.kernelModules = [];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "usbhid" "sd_mod" ];
+  boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
-#  boot.consoleLogLevel = 7;
-#  boot.kernelParams = [ "debug" ];
-  boot.kernelParams = [ "i915.fastboot=1" ];
+
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot = {
+    enable = true;
+    xbootldrMountPoint = "/boot";
+    configurationLimit = 15;
+  };
+  boot.loader.efi = {
+    canTouchEfiVariables = true;
+    efiSysMountPoint = "/efi";
+  };
 
   fileSystems."/" =
-    { device = "/dev/mapper/root";
+    { device = "/dev/mapper/cryptroot";
       fsType = "ext4";
     };
 
-  boot.initrd.luks.devices."root".device = "/dev/disk/by-uuid/24d9d121-a269-437f-925f-ba3c00c1cd67";
+  boot.initrd.luks.devices."cryptroot" = {
+    device = "/dev/disk/by-uuid/2c6781ed-649f-48b7-9a8e-b8245a01221c";
+    crypttabExtraOpts = [ "fido2-device=auto" ];
+  };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/0649-243E";
+    { device = "/dev/disk/by-uuid/12CE-A600";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
@@ -53,4 +52,3 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
-

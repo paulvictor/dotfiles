@@ -20,16 +20,6 @@
   networking.networkmanager.enable = true;
   powerManagement.enable = true;
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot = {
-    enable = true;
-    xbootldrMountPoint = "/boot";
-    configurationLimit = 15;
-  };
-  boot.loader.efi = {
-    canTouchEfiVariables = true;
-    efiSysMountPoint = "/efi";
-  };
   services.iptsd.enable = true;
 
   services.xserver.videoDrivers = [ "modesetting" ];

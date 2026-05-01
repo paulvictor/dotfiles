@@ -214,7 +214,7 @@ in
             "gfx.webrender.all" = true;
             "layers.acceleration.force-enabled" = true;
             "layout.css.devPixelsPerPx" =
-              if specialArgs.hostname == "anarki" then "1.30" else "1.15";
+              if (builtins.elem specialArgs.hostname ["anarki" "slash"]) then "1.30" else "1.15";
             "layout.css.prefers-color-scheme.content-override" = 0;
             "media.peerconnection.enabled" = true;
             "network.http.max-connections" = 1024;

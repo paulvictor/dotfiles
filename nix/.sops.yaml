@@ -6,7 +6,7 @@ keys:
   - &sarge age1jd2yj2fyhfkppn5jaegqwrul0d4jt50ytg4nm0h85kacs3nphsgsju7vj6
   - &sorlag age196hseqvu47nvytpv879u78jr0e5xecr2pea4n8z50r4dfqvpw3gscdqp56
   - &anarki age17z7amum8h67v2xpgdaga2p5zpqukzj32sh7mlnnn5wwfdgur4qcswujtlj
-  - &slash age1c030glmu83j74c9h0c2ymptryuqtskvgy4y5qde7yeth6d9udu8qhxghlu
+  - &slash age18nhms4ha3xkhdx6hzzkja34qzfdx0zvefhylpnxkesk6xe5qzpzq4s7tfs
 creation_rules:
   - path_regex: root/devices/sarge/secrets/[^/]+\.(yaml|json|env|ini|conf)$
     key_groups:
