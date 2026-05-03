@@ -9,6 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/kanata/default.nix
+      ../../modules/split-gp-tun/default.nix
       inputs.nixos-hardware.nixosModules.microsoft-surface-pro-9
     ];
 

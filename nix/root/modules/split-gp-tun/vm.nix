@@ -1,4 +1,4 @@
-{config, lib, pkgs, inputs, ...}:
+{config, lib, pkgs, inputs, hostAuthorizedKeysFiles, ...}:
 
 let
   shared = import ./shared.nix;
@@ -14,7 +14,7 @@ let
       '';
 in
 {
-  imports = [ shared.vm.wg ];
+  imports = [ shared.vm.secrets ];
   systemd.network.enable = true;
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
   services.resolved = {
@@ -24,7 +24,10 @@ in
       Resolve.FallbackDNS = [];
     };
   };
-  users.users.root.password = "toor";
+  users.users.root = {
+    password = "toor";
+    openssh.authorizedKeys.keyFiles = hostAuthorizedKeysFiles;
+  };
   services.openssh = {
     enable = true;
     settings.PermitRootLogin = "yes";
@@ -79,7 +82,6 @@ in
   services.dante = {
     enable = true;
     config = ''
-      internal: ${shared.wgAddress.vm} port = 1080
       internal: ${shared.vmLease} port = 1080
       external: ${tunDevice}
       clientmethod: none
@@ -101,16 +103,18 @@ in
     '';
   };
   systemd.services.dante = {
-    bindsTo =
-      [
-        "sys-devices-virtual-net-${tunDevice}.device"
-        "wg-quick-to-host.service"
-      ];
-    requires =
-      [
-        "sys-devices-virtual-net-${tunDevice}.device"
-        "wg-quick-to-host.service"
-      ];
+    bindsTo = [
+      "sys-devices-virtual-net-${tunDevice}.device"
+      "openconnect-${tunDevice}.service"
+    ];
+    requires = [
+      "sys-devices-virtual-net-${tunDevice}.device"
+      "openconnect-${tunDevice}.service"
+    ];
+    after = [
+      "sys-devices-virtual-net-${tunDevice}.device"
+      "openconnect-${tunDevice}.service"
+    ];
     serviceConfig = {
       RestartSec = 5;
       Restart = lib.mkForce "always";

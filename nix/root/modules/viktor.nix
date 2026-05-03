@@ -1,6 +1,10 @@
 { config, lib, pkgs, ... } :
 let
   mySuperStupidPasswdHashed = "$6$SCMbhhof$227ZIsJWgaZmuZX3gwWUTv4E5VrPaVKmZ/97cbU6yclJdn7To3F0ngRAcvmYX5mPOunW8bU6v16vqvxkqjivK.";
+  githubKeys = pkgs.fetchurl {
+    url = "https://github.com/paulvictor.keys";
+    hash = "sha256-Lr0PrPR+ePnXfp7ClNUSwSUd0g0vNFkuAEcry+DRtCc=";
+  };
 in
 
 {
@@ -17,6 +21,7 @@ in
     uid = 1000;
     extraGroups = [ "networkmanager" "audio" "wheel" "tty" "lp" "fuse" "docker" "adbusers" "netdev" "lxd" "disk" "video" "keys" "libvirtd" "qemu-libvirtd" "pipewire" "ydotool" "ykusers" "kvm" ];
     shell = pkgs.zsh;
+    openssh.authorizedKeys.keyFiles = [ githubKeys ];
   };
 
   security.sudo.enable = true;
