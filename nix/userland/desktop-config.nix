@@ -25,7 +25,7 @@ with pkgs;
     brightnessctl
     dunst
     adwaita-icon-theme
-    nyxt
+    nyxt4
     pa_applet
     paprefs
     passdo

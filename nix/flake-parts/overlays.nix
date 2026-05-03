@@ -12,12 +12,14 @@ let
   warpd-overlay = import ../overlays/warpd.nix;
   passdo = import ../overlays/type-password/passdo.nix;
   schemesh-overlay = import ../overlays/schemesh.nix;
+  nyxt-overlay = import ../overlays/nyxt.nix;
 
   composed =
     lib.composeManyExtensions
       [
         (final: _: (inputs.vieb-nix.packagesFunc final))
         (schemesh-overlay inputs.schemesh)
+        nyxt-overlay
         brotab-overlay
         rofi-fuzzy
         pass-override-overlay

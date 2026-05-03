@@ -1,9 +1,13 @@
 (in-package #:nyxt-user)
 
-(load "~/nyxt-env/.qlot/setup.lisp")
-(load "~/nyxt-env/.qlot/quicklisp/setup.lisp")
+(let* ((qlot-dir #P"/home/viktor/nyxt-env/.qlot/")
+       (setup (merge-pathnames "setup.lisp" qlot-dir)))
+  (uiop:with-current-directory (qlot-dir)
+    (load setup)))
 
-(ql:quickload '("slynk" "str" "cl-ppcre" "alexandria" "njson"))
+(reset-asdf-registries)
+
+(ql:quickload '("slynk" "str" "cl-ppcre" "alexandria" "njson") :silent t)
 
 (define-command-global start-slynk (&optional (slynk-port slynk::default-server-port))
   "Start a Slynk server that can be connected to, for instance, in Emacs via SLY."
@@ -25,6 +29,9 @@
                 (make-autofill :name "Name" :fill "Paul Victor Raj")
                 (make-autofill :name "Email" :fill "paulvictor@gmail.com")))
    (external-editor-program (or (uiop/os:getenv "EDITOR") "emacsclient -c -n"))))
+
+(define-configuration browser
+                      ((default-new-buffer-url (quri:uri "https://start.duckduckgo.com"))))
 
 (define-configuration browser
     ((external-editor-program (uiop:getenvp "EDITOR"))))
