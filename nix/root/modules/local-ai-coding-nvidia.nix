@@ -32,7 +32,11 @@
     environmentVariables = {
       OLLAMA_ORIGINS = "*";
     };
-    loadModels = [ "qwen3-coder-next:latest" "deepseek-coder-v2:latest" ];
+    loadModels = [
+      "qwen3-coder-next:latest"
+      "qwen3.6:latest"
+      "gemma4:31b"
+    ];
   };
   systemd.services.ollama.serviceConfig = {
     MemoryMax = "108G";
