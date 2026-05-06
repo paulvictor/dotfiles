@@ -103,10 +103,6 @@ in
     '';
   };
   systemd.services.dante = {
-    bindsTo = [
-      "sys-devices-virtual-net-${tunDevice}.device"
-      "openconnect-${tunDevice}.service"
-    ];
     requires = [
       "sys-devices-virtual-net-${tunDevice}.device"
       "openconnect-${tunDevice}.service"

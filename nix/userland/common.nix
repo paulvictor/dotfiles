@@ -104,6 +104,11 @@ with pkgs;
         identityFile = privKey;
         user = "git";
       };
+      "*.bitbucket.juspay.net" = {
+        user = "git";
+        identityFile = privKey;
+        proxyCommand = "${pkgs.netcat-openbsd}/bin/nc -x gp-tunnel-host:1080 %h %p";
+      };
 
     };
   };
