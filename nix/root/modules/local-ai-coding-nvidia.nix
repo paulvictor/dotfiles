@@ -41,7 +41,7 @@
   systemd.services.ollama.serviceConfig = {
     MemoryMax = "108G";
   };
-  services.open-webui.enable = true;
+  services.open-webui.enable = false;
   nixpkgs.config.cudaSupport = true;
   nix.settings.substituters = [
     "https://cache.nixos-cuda.org"

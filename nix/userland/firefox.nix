@@ -145,6 +145,7 @@ in
 
   programs.firefox = {
     enable = true;
+    configPath = "${config.home.homeDirectory}/.mozilla/firefox";
     package = firefox-devedition;
     profiles = {
       "proxied" = {
