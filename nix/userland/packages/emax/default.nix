@@ -11,6 +11,17 @@ let
       inherit src version;
       packageRequires = [ pkgs.emacsPackages.bqn-mode ];
     };
+  agent-shell-bookmark = pkgs.emacsPackages.trivialBuild {
+    pname = "agent-shell-bookmark";
+    version = "0-unstable-2025-05-13";
+    src = fetchFromGitHub {
+      owner = "dcluna";
+      repo = "agent-shell-bookmark";
+      rev = "c1eab34bff4f35bf929885ed5045c6100afcf496";
+      hash = "sha256-o9/QULEZ1rWAl0KBqIHf0yqHtBJCrqB4+Z1umJ7EFGM=";
+    };
+    packageRequires = [ pkgs.emacsPackages.melpaPackages.agent-shell ];
+  };
   emacs-webkit-src = fetchFromGitHub {
     owner = "akirakyle";
     repo = "emacs-webkit";
@@ -18,26 +29,13 @@ let
     hash = "sha256-bHrfc9bGKY57+KGDRH5CdRflWH5va4jzGkMzXRrapg4=";
   };
   emacs-webkit = callPackage "${emacs-webkit-src}/default.nix" { inherit pkgs; };
-  himalaya-emacs =
-    let
-      version = "934e8f8741e3cfff577d7119eceb2cfdb7cff6f3";
-      src = fetchFromGitHub {
-        owner = "dantecatalfamo";
-        repo = "himalaya-emacs";
-        rev = version;
-        hash = "sha256-JuWh6KdvPw5dJK86Ak87G/eFSKyggZViuTaNflpIlt8=";
-      };
-    in
-      pkgs.emacsPackages.trivialBuild {
-        pname = "himalaya-emacs";
-        inherit version src;
-      };
   customizedEmacs =
     (emacsPackagesFor emacs-unstable).emacsWithPackages(epkgs:
         [ (with epkgs.melpaPackages;
           [
             ace-window
             agent-shell
+            agent-shell-bookmark
             aidermacs
             all-the-icons
             all-the-icons-completion
@@ -84,7 +82,7 @@ let
             haskell-mode
             helpful
             hide-mode-line
-            himalaya-emacs
+            himalaya
             hl-todo
             hydra
             iedit
@@ -148,6 +146,7 @@ let
             whole-line-or-region
             yaml-mode
             zerodark-theme
+            zig-mode
             zoom-window
           ]
           ++ [ flim apel ] # Needed only from w3m atm

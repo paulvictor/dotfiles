@@ -20,3 +20,12 @@
 * In emacs write a way to save words to kill ring without killing
 
 * Fix nix-eshell-with-packages to get a eshell.
+* Have a way for profiles
+** Some ideas are laptop, desktop, cloud, vpn machines.
+* Have name viktor/paulvictor@gmail.com configured
+** Look at https://github.com/srid/nixos-config/blob/master/modules/flake-parts/config.nix for a way to do this.
+** Better than hardcoding a bunch of stuff.
+* Get my emacs as a package
+* Bring the electron apps also into fuzzel. No reason for a seperate shortcut.
+** Try erwic from vieb. Looks better than vanilla electron
+* Need a solution for Whatsapp

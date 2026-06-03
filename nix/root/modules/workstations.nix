@@ -2,13 +2,14 @@ args@{ config, lib, pkgs, ... } :
 
 let
   inherit (args) isPhysicalDevice;
-
-  inherit (args) system;
 in
 with pkgs;
 {
-  # Set your time zone.
-  time.timeZone = "Asia/Kolkata";
+
+  # keep timezone updated to local time using geoclue
+  time.timeZone = null;
+  services.localtimed.enable = true;
+  services.geoclue2.enable = true;
 
   environment.systemPackages = [
     git
@@ -49,6 +50,7 @@ with pkgs;
     enable = lib.mkDefault false;
     logDriver = "journald";
   };
+
   users.groups.docker =  {};
   services.udev.packages = lib.optionals isPhysicalDevice [yubikey-personalization];
   services.pcscd.enable = isPhysicalDevice;

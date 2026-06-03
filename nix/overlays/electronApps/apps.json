@@ -1,7 +1,0 @@
-[
-    { "appName" : "Gitter", "url" : "https://gitter.im" },
-    { "appName" : "JuspaySlack", "url" : "https://juspay.slack.com/sign_in_with_password" },
-    { "appName" : "BrainFm", "url" : "https://my.brain.fm/" },
-    { "appName" : "YoutubeMusic", "url": "https://music.youtube.com" },
-    { "appName" : "XyneSpaces", "url": "https://spaces.xyne.juspay.net" }
-]

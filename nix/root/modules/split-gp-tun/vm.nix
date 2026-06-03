@@ -78,6 +78,7 @@ in
   systemd.services."openconnect-${tunDevice}".serviceConfig = {
     RestartSec = 5;
     Restart = "always";
+    TimeoutStopSec= "10s";
   };
   services.dante = {
     enable = true;

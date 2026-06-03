@@ -18,6 +18,7 @@
         wayland.windowManager.sway.config.output."eDP-1".scale = "1.8";
         programs.waybar.settings.mainBar.battery.bat = "BAT1";
         services.batteryAlert.enable = true;
+        services.kanshi.enable = true;
       })
     ];
   };

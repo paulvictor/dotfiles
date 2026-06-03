@@ -15,13 +15,12 @@
 
   services.kanata.keyboards.builtin.devices = ["/dev/input/by-path/platform-MSHW0343:00-event-kbd"];
 
-  # networking.hostName = "nixos"; # Define your hostname.
-
-  # Configure network connections interactively with nmcli or nmtui.
-  networking.networkmanager.enable = true;
   powerManagement.enable = true;
-
   services.iptsd.enable = true;
+
+  # Keep these to prevent the SP9 from entering a "coma"
+  systemd.targets.hibernate.enable = false;
+  systemd.targets.hybrid-sleep.enable = false;
 
   services.xserver.videoDrivers = [ "modesetting" ];
   hardware.graphics = {
@@ -30,16 +29,13 @@
        intel-media-driver
        intel-vaapi-driver
        libvdpau-va-gl
+       intel-compute-runtime # Optional: adds OpenCL support for the Iris Xe GPU
      ];
   };
-  services.thermald.enable = true;
-  services.tlp.enable = true;
+
+  services.tlp.enable = lib.mkForce false;
 
   hardware.microsoft-surface.kernelVersion = "stable";
-
-  # Use latest kernel.
-  # Latest kernel has issues with nvidia. Falling back to stable version
-  # boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.

@@ -28,6 +28,11 @@ in
       font-size = 24;
       show-failed-attempts = true;
       scaling = "fill";
+      # Optional: High-DPI optimizations for the Surface screen
+      indicator-radius = 100;
+      indicator-thickness = 7;
+      ring-color = "3d59a1";
+      key-hl-color = "82a1f1";
     };
   };
 
@@ -74,7 +79,10 @@ in
         }
       ]
     );
-    events = { "before-sleep" = lockCommand; };
+    events = {
+      "before-sleep" = "${lockCommand} && ${sway}/bin/swaymsg \"output * dpms off\"";
+      "after-resume" = "${sway}/bin/swaymsg \"output * dpms on\"";
+    };
   };
 
   programs.swayr = {

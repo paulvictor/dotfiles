@@ -10,10 +10,21 @@
 
   boot.initrd.systemd.enable = true;
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "usbhid" "sd_mod" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.initrd.kernelModules = ["intel_lpss_pci"];
+  boot.kernelModules = [ "kvm-intel" # "pinctrl_alderlake" # This could also be the reason for the high gpe storm
+                       ];
   boot.extraModulePackages = [ ];
-  boot.kernelParams = [ "mem_sleep_default=s2idle" ];
+  boot.kernelParams = [
+#     "mem_sleep_default=s2idle"
+    # One of this may cause GPE storm, but gemini thinks otherwise
+    # "reboot=pci"               # Helps the Surface shut down/reboot cleanly
+    #     "pcie_aspm=off"
+#     "acpi_mask_gpe=0x32,0x33,0x34,0x35,0x36,0x37,0x38,0x39,0x3A,0x3B,0x3C,0x3D,0x3E,0x3F,0x40,0x41,0x42,0x43,0x44,0x45,0x46,0x47,0x48,0x49,0x4A,0x4B,0x4C,0x4D"
+#     "surface_aggregator.0.lid_status=1"
+  ];
+
+  systemd.targets.hibernate.enable = false;
+  systemd.targets.hybrid-sleep.enable = false;
 
   # Force the USB-HID wakeup rule for the keyboard
   services.udev.extraRules = ''
