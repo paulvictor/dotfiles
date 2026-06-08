@@ -1,11 +1,13 @@
 const electron = require('electron');
 const { session, app, BrowserWindow, Menu, MenuItem, shell } = electron;
 const path = require('path');
-var args = process.argv.slice(2);
-console.log(args);
-var appUrl = args[0];
-var appName = args[1];
+var appUrl = process.env.ELECTRON_APP_URL;
+var appName = process.env.ELECTRON_APP_NAME;
+var proxy = process.env.ELECTRON_APP_PROXY;
 var userAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36";
+if (proxy) {
+  app.commandLine.appendSwitch('proxy-server', proxy);
+}
 app.on('ready', () => {
   var mainWindow = new BrowserWindow(
   {

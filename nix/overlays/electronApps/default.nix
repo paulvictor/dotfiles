@@ -1,23 +1,26 @@
 self: super:
   let
     appDefs = import ./apps.nix;
-    electronCmd = {url, name, proxy ? null, ...}:
-      let
-        proxyFlag =
-          super.lib.optionalString
-            (proxy != null)
-            "--proxy-server=${proxy} ";
-      in "${self.electron}/bin/electron ${proxyFlag} ${./index.js} ${url} ${name}";
     allApps = map
-      ({name, ...} @ app:
-        super.writeShellScriptBin name ''${electronCmd app}'')
+      ({url, name, proxy ? null}:
+        super.stdenv.mkDerivation {
+          inherit name;
+          nativeBuildInputs = [ super.makeWrapper ];
+          buildCommand = ''
+            makeWrapper ${self.electron}/bin/electron $out/bin/${name} \
+              --set ELECTRON_APP_URL "${url}" \
+              --set ELECTRON_APP_NAME "${name}" \
+              ${super.lib.optionalString (proxy != null) ''--set ELECTRON_APP_PROXY "${proxy}"''} \
+              --add-flags "${./index.js}"
+          '';
+        })
       appDefs;
     allDesktopEntries = map
-      ({url, name, ...} @ app:
+      ({name, ...}:
         super.makeDesktopItem {
-          name = name;
+          inherit name;
           desktopName = name;
-          exec = electronCmd app;
+          exec = name;
           type = "Application";
           categories = [ "Network" ];
         })

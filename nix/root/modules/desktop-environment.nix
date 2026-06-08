@@ -24,13 +24,7 @@ in {
   services.greetd = {
     enable = true;
     settings = {
-      default_session.command = ''
-        ${pkgs.tuigreet}/bin/tuigreet \
-          --time \
-          --user-menu \
-          --remember \
-          --cmd ${swayWithEnv}
-      '';
+      default_session.command = ''${pkgs.tuigreet}/bin/tuigreet --time --user-menu --remember --cmd ${swayWithEnv}'';
     };
   };
   environment.etc."greetd/environments".text = ''
