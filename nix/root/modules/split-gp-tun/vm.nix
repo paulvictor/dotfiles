@@ -24,14 +24,17 @@ in
       Resolve.FallbackDNS = [];
     };
   };
+  networking.hostId = "007f0200";
   users.users.root = {
-    password = "toor";
+    password = "";
     openssh.authorizedKeys.keyFiles = hostAuthorizedKeysFiles;
   };
   services.openssh = {
     enable = true;
     settings.PermitRootLogin = "yes";
+    settings.PermitEmptyPasswords = "yes";
   };
+  security.pam.services.sshd.allowNullPassword = true;
   system.stateVersion = config.system.nixos.release;
   boot.kernelPackages = pkgs.linuxPackages_latest;
   programs.htop.enable = true;
@@ -73,6 +76,7 @@ in
     extraOptions = {
       csd-wrapper = "${csdWrapper}/hipreport.sh";
       disable-ipv6 = true;
+      local-hostname = "slash"; # Only works on this hostname
     };
   };
   systemd.services."openconnect-${tunDevice}".serviceConfig = {

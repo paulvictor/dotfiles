@@ -8,6 +8,7 @@ let
   pass-with-extensions = import ../overlays/pass-with-extensions.nix;
   wallpaper-overlay = import ../overlays/wallpaper.nix;
   electron-apps = import ../overlays/electronApps;
+  gp-vpn = import ../overlays/gp-vpn.nix;
   rofi-theme-overlay = import ../overlays/rofi-theme-overlay.nix;
   warpd-overlay = import ../overlays/warpd.nix;
   passdo = import ../overlays/type-password/passdo.nix;
@@ -26,6 +27,7 @@ let
         pass-with-extensions
         passdo
         electron-apps
+        gp-vpn
         wallpaper-overlay
         inputs.nur.overlays.default
         inputs.emacsOverlay.overlay

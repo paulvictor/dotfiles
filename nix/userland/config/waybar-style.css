@@ -58,7 +58,7 @@ window#waybar {
 	background: #af005f;
 	color: #1b1d1e;
 }
-#clock, #battery, #cpu, #memory, #network, #pulseaudio, #custom-spotify, #tray, #mode {
+#clock, #battery, #cpu, #memory, #network, #pulseaudio, #custom-spotify, #custom-gp-vpn, #tray, #mode {
 	padding: 0 3px;
 	margin: 0 2px;
 }
@@ -119,4 +119,16 @@ window#waybar {
 }
 
 #tray {
+}
+
+#custom-gp-vpn.connected {
+    color: #a1b56c;
+}
+
+#custom-gp-vpn.connecting {
+    color: #f7ca88;
+}
+
+#custom-gp-vpn.disconnected {
+    color: #ab4642;
 }

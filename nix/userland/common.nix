@@ -82,8 +82,11 @@ with pkgs;
       "gp-host" = {
         hostname = "gp-tunnel-host";
         userKnownHostsFile = "/dev/null";
+        user = "root";
         extraOptions = {
           StrictHostKeyChecking = "no";
+          PubkeyAuthentication = "no";
+          PasswordAuthentication = "yes";
         };
       };
       "172.16.*" = {

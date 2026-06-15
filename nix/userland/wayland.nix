@@ -103,7 +103,15 @@ in
         height = 30;
         modules-left = [ "sway/workspaces" "sway/mode" ];
         modules-center = [ "sway/window" ];
-        modules-right = [ "cpu" "memory" "network" "clock" "battery" ];
+        modules-right = [ "custom/gp-vpn" "cpu" "memory" "network" "clock" "battery" ];
+        "custom/gp-vpn" = {
+          exec = "${pkgs.gpVpn}/bin/gp-vpn status";
+          on-click = "${pkgs.gpVpn}/bin/gp-vpn reconnect";
+          on-click-right = "${pkgs.gpVpn}/bin/gp-vpn disconnect";
+          interval = 30;
+          return-type = "json";
+          format = "󰦝 {}";
+        };
         clock = {
           interval = 5;
           tooltip = false;
