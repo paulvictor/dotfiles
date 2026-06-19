@@ -9,6 +9,8 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/local-ai-coding-nvidia.nix
+      ../../modules/split-gp-tun/default.nix
+
     ];
 
   powerManagement.enable = true;

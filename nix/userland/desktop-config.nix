@@ -20,7 +20,6 @@ with pkgs;
 
   home.packages = [
     acpi # TODO : Install only on laptops
-    afuse
     asciinema
     brightnessctl
     dunst
