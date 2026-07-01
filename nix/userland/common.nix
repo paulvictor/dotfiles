@@ -65,54 +65,41 @@ with pkgs;
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    extraConfig = ''
-      IdentityFile ${privKey}
-    '';
-    matchBlocks = {
-      "*" = {
-        compression = true;
-        controlMaster = "auto";
-        controlPath = "/tmp/ssh_mux_%h_%p_%r";
-        controlPersist = "24h";
-        forwardAgent = true;
-        hashKnownHosts = true;
-        serverAliveInterval = 30;
-        serverAliveCountMax = 5;
-      };
+    settings = {
       "gp-host" = {
-        hostname = "gp-tunnel-host";
-        userKnownHostsFile = "/dev/null";
-        user = "root";
-        extraOptions = {
-          StrictHostKeyChecking = "no";
-          PubkeyAuthentication = "no";
-          PasswordAuthentication = "yes";
-        };
-      };
-      "172.16.*" = {
-        userKnownHostsFile = "/dev/null";
-        extraOptions = {
-          StrictHostKeyChecking = "no";
-        };
+        HostName = "gp-tunnel-host";
+        UserKnownHostsFile = "/dev/null";
+        User = "root";
+        StrictHostKeyChecking = "no";
+        PubkeyAuthentication = "no";
+        PasswordAuthentication = "yes";
       };
       "github" = {
-        host = "github";
-        hostname = "github.com";
-        user = "git";
-        identityFile = privKey;
+        HostName = "github.com";
+        User = "git";
+        IdentityFile = privKey;
       };
       "bitbucket" = {
-        host = "bitbucket";
-        hostname = "bitbucket.org";
-        identityFile = privKey;
-        user = "git";
+        HostName = "bitbucket.org";
+        User = "git";
+        IdentityFile = privKey;
       };
       "*.bitbucket.juspay.net" = {
-        user = "git";
-        identityFile = privKey;
-        proxyCommand = "${pkgs.netcat-openbsd}/bin/nc -x gp-tunnel-host:1080 %h %p";
+        User = "git";
+        IdentityFile = privKey;
+        ProxyCommand = "${pkgs.netcat-openbsd}/bin/nc -x gp-tunnel-host:1080 %h %p";
       };
-
+      "*" = lib.hm.dag.entryAfter [ "gp-host" "github" "bitbucket" "*.bitbucket.juspay.net" ] {
+        Compression = true;
+        ControlMaster = "auto";
+        ControlPath = "/tmp/ssh_mux_%h_%p_%r";
+        ControlPersist = "24h";
+        ForwardAgent = true;
+        HashKnownHosts = true;
+        IdentityFile = privKey;
+        ServerAliveInterval = 30;
+        ServerAliveCountMax = 5;
+      };
     };
   };
 

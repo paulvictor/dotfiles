@@ -11,6 +11,17 @@ let
       inherit src version;
       packageRequires = [ pkgs.emacsPackages.bqn-mode ];
     };
+  wasabi = pkgs.emacsPackages.trivialBuild {
+    pname = "wasabi";
+    version = "2026-07-01-unstable";
+    src = pkgs.fetchFromGitHub {
+      owner = "xenodium";
+      repo = "wasabi";
+      rev = "12bd301502df2e63de2049f99d9234b2039263b3";
+      hash = "sha256-+RV445JnTZhOSUpEgdN4JfS9T3h9S2+9R+4phZ3ixD4=";
+    };
+    packageRequires = [ pkgs.emacsPackages.melpaPackages.acp ];
+  };
   agent-shell-bookmark = pkgs.emacsPackages.trivialBuild {
     pname = "agent-shell-bookmark";
     version = "0-unstable-2025-05-13";
@@ -107,6 +118,7 @@ let
             nix-sandbox
             no-littering
             ob-bqn
+
             org-bullets
             org-beautify-theme
             org-download
@@ -141,6 +153,7 @@ let
             visual-fill-column
             vterm
             w3m
+            wasabi
             wgrep
             which-key
             whole-line-or-region
@@ -194,7 +207,7 @@ let
     ] ++ treeSitters;
     postBuild = ''
       wrapProgram $out/bin/emacs \
-        --prefix PATH : ${lib.makeBinPath [ ripgrep fd w3m fish delta guile_3_0 coreutils git ]} \
+        --prefix PATH : ${lib.makeBinPath [ ripgrep fd w3m fish delta guile_3_0 coreutils git wuzapi ]} \
         --set GIO_EXTRA_MODULES "${pkgs.glib-networking}/lib/gio/modules:${pkgs.dconf.lib}/lib/gio/modules" \
         --add-flags --maximized
     '';

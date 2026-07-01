@@ -9,6 +9,7 @@ let
   wallpaper-overlay = import ../overlays/wallpaper.nix;
   electron-apps = import ../overlays/electronApps;
   gp-vpn = import ../overlays/gp-vpn.nix;
+  wuzapi = import ../overlays/wuzapi.nix;
   rofi-theme-overlay = import ../overlays/rofi-theme-overlay.nix;
   warpd-overlay = import ../overlays/warpd.nix;
   passdo = import ../overlays/type-password/passdo.nix;
@@ -28,6 +29,7 @@ let
         passdo
         electron-apps
         gp-vpn
+        wuzapi
         wallpaper-overlay
         inputs.nur.overlays.default
         inputs.emacsOverlay.overlay
