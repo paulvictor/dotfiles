@@ -2,7 +2,8 @@
 
 let
   # Determine the port name based on the hostname
-  extPort = if specialArgs.hostname == "slash" then "DP-3" else "DP-1";
+  extPort = "BNQ BenQ RD320UA D8S00010019";
+  extMode = "3840x2160@60.000Hz";
 
   # Helper for the stacked Y-position calculation
   # (4K logical height @ 1.3 scale is ~1660)
@@ -21,7 +22,7 @@ in
         profile.name = "mirror";
         profile.outputs = [
           { criteria = "eDP-1"; status = "enable"; position = "0,0"; }
-          { criteria = extPort; status = "enable"; mode = "preferred"; position = "4000,0"; }
+          { criteria = extPort; status = "enable"; mode = extMode; position = "4000,0"; }
         ];
         profile.exec = "${pkgs.wl-mirror}/bin/wl-mirror -F ${extPort} eDP-1";
       }
@@ -31,7 +32,7 @@ in
         profile.name = "office_stacked";
         profile.outputs = [
           {criteria = "eDP-1"; status = "enable"; position = "320,${toString laptopY}";}
-          {criteria = extPort; status = "enable"; mode = "preferred"; position = "0,0"; scale = extScale;}
+          {criteria = extPort; status = "enable"; mode = extMode; position = "0,0"; scale = extScale;}
         ];
       }
 
@@ -40,7 +41,7 @@ in
         profile.name = "office_ext_only";
         profile.outputs = [
           { criteria = "eDP-1"; status = "disable"; }
-          {criteria = extPort; status = "enable"; mode = "preferred"; scale = extScale;}
+          {criteria = extPort; status = "enable"; mode = extMode; scale = extScale;}
         ];
       }
 

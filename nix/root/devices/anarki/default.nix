@@ -10,7 +10,7 @@
       ./hardware-configuration.nix
       ../../modules/local-ai-coding-nvidia.nix
       ../../modules/split-gp-tun/default.nix
-
+      ../../modules/remote-builds/builder.nix
     ];
 
   powerManagement.enable = true;

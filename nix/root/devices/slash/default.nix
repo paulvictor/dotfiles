@@ -10,8 +10,13 @@
       ./hardware-configuration.nix
       ../../modules/kanata/default.nix
       ../../modules/split-gp-tun/default.nix
+      ../../modules/remote-builds/buildee.nix
       inputs.nixos-hardware.nixosModules.microsoft-surface-pro-9
     ];
+
+  nix.extraOptions = ''
+    !include /etc/nix/build-capacity.conf
+  '';
 
   services.kanata.keyboards.builtin.devices = ["/dev/input/by-path/platform-MSHW0343:00-event-kbd"];
 
