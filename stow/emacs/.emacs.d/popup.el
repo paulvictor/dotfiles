@@ -1,3 +1,5 @@
+;;; ...  -*- lexical-binding: t -*-
+
 ;;;; Run commands in a popup frame
 ;; Using code from https://protesilaos.com/codelog/2024-09-19-emacs-command-popup-frame-emacsclient/
 

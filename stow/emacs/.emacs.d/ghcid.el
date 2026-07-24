@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 ;;; ghcid.el --- Really basic ghcid+stack support in emacs with compilation-mode -*- lexical-binding: t -*-
 ;;; From https://github.com/ndmitchell/ghcid/blob/master/plugins/emacs/ghcid.el
 

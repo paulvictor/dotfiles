@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 ; Generate names like docker
 ; Taken from https://github.com/moby/moby/blob/master/pkg/namesgenerator/names-generator.go
 (defun pvr/random-name ()

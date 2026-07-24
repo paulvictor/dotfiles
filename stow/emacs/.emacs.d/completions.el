@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 (setq completion-auto-wrap t
       ;;       completion-auto-help 'always
       completion-show-help nil

@@ -1,4 +1,4 @@
-
+;;; -*- lexical-binding: t; -*-
 (use-package lsp-mode
   :hook ((haskell-mode . lsp-deferred))
   :commands (lsp lsp-deferred)

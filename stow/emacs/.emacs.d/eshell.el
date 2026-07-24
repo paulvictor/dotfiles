@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 (defun eshell-narrow-to-prompt ()
   "Narrow buffer to prompt at point."
   (interactive)

@@ -433,13 +433,15 @@ Also move to the next line, since that's the most frequent action after"
 (use-package wgrep) ;; TODO fix the configs
 (use-package pdf-tools
   :config
-    (pdf-tools-install t t nil nil)
-    (setq-default pdf-view-display-size 'fit-width)
-    (add-hook 'pdf-view-mode-hook
-      (lambda ()
-        (blink-cursor-mode -1)))
+  (pdf-tools-install t t nil nil)
+  (add-hook 'pdf-view-mode-hook
+            (lambda ()
+              (blink-cursor-mode -1)))
+  (add-hook 'pdf-view-mode-hook #'pdf-view-roll-minor-mode)
   :custom
-    (pdf-annot-activate-created-annotations t "automatically annotate highlights"))
+  (pdf-view-continuous t)
+  (pdf-annot-activate-created-annotations t "automatically annotate highlights")
+  (pdf-view-display-size 'fit-width))
 
 (use-package replace
   :custom
@@ -713,6 +715,9 @@ Repeated invocations toggle between the two most recently open buffers."
   (aw-ignore-current nil))
 
 (use-package hydra)
+
+(use-package lean4-mode
+  :mode "\\.lean\\'")
 
 (use-package purescript-mode
   :mode "\\.purs\\'")
@@ -1205,37 +1210,6 @@ point reaches the beginning or end of the buffer, stop there."
   (keymap-global-set "C-c a" activities-prefix-keymap)
   :init
   (activities-mode))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(safe-local-variable-values
-   '((eval setq-local org-roam-directory
-           (f-join
-            (f-full
-             (locate-dominating-file default-directory
-                                     ".dir-locals.el"))
-            "org-notes")
-           org-roam-db-location
-           (expand-file-name "org-roam.db" org-roam-directory))
-     (eval setq-local org-roam-directory
-           (f-join
-            (f-full
-             (locate-dominating-file default-directory
-                                     ".dir-locals.el"))
-            "org-notes"))
-     (eval setq-local org-roam-db-location
-           (expand-file-name "org-roam.db" org-roam-directory))
-     (eval setq-local org-roam-directory
-           (expand-file-name
-            (locate-dominating-file default-directory ".dir-locals.el"))))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 (use-package outline-indent
   :commands outline-indent-minor-mode

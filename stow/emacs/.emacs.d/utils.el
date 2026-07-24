@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 ;; Lifted from org-increment-number-at-point
 (cl-defun inc-at-point (&key (inc 1) (line-number nil))
   "Increment the number at point.
