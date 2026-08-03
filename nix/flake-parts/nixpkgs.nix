@@ -17,6 +17,7 @@
               "firefox-devedition-bin"
               "firefox-developer-edition-bin-unwrapped"
               "open-webui"
+              "via" "vial"
             ];
       };
     };

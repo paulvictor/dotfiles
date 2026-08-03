@@ -129,20 +129,21 @@ in
         memory = {
 		      format = " 💾 {used:0.1f}G";
 	      };
-        battery =  {
+        battery = {
           bat =  lib.mkDefault "BAT0";
           interval = 15;
           states = {
-            good =  95;
-            warning =  30;
-            critical =  15;
-            };
+            good = 95;
+            warning = 30;
+            critical = 15;
+          };
           format = "{icon} {capacity}%";
+          # Use ⚡
           format-charging = "⚡ {capacity}%";
-          # "format-icons": {
-          # 		"default": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"];
-          # 		"charging": ["󰢟", "󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"];
-          # 	};
+          # format-icons = {
+#           	default = ["󰂎" "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹"];
+#           	charging = ["󰢟" "󰢜" "󰂆" "󰂇" "󰂈" "󰢝" "󰂉" "󰢞" "󰂊" "󰂋" "󰂅"];
+#           };
           format-icons =  ["" "" "" "" ""];
         };
         network = {
