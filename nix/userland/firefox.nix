@@ -18,14 +18,14 @@ let
     sha256 = "sha256-9nCmbDfhOfPUD+ljsOnXfU+ErJLgLx+XQ0SAojy4W5Q=";
     meta = {};
   };
-  tridactyl = pkgs.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {
+  tridactyl = pkgs.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon (rec {
     pname = "tridactyl";
-    version = "1.24.4pre7194";
+    version = "tridactyl2-1.25.0.7789";
     addonId = "tridactyl.vim.betas@cmcaine.co.uk";
-    url = "https://tridactyl.cmcaine.co.uk/betas/tridactyl2-1.24.3pre7189.xpi";
-    sha256 = "sha256-FMOvkEe5ruFLz8jUllitDrdPJMszgRvKez8i61CMB/w=";
+    url = "https://tridactyl.cmcaine.co.uk/betas/${version}.xpi";
+    sha256 = "sha256-7WBpr7pfEkqaIPaaJ5KlEoHFEXbMUKhHiQPBmt0jILw=";
     meta = {};
-  };
+  });
   tabfs = pkgs.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {
     pname = "tabfs";
     version = "1.0";

@@ -33,6 +33,21 @@ let
     };
     packageRequires = [ pkgs.emacsPackages.melpaPackages.agent-shell ];
   };
+  lean4-mode = pkgs.emacsPackages.trivialBuild {
+    pname = "lean4-mode";
+    version = "0-unstable-2025-01-01";
+    src = pkgs.fetchFromGitHub {
+      owner = "leanprover-community";
+      repo = "lean4-mode";
+      rev = "1388f9d1429e38a39ab913c6daae55f6ce799479";
+      hash = "sha256-6XFcyqSTx1CwNWqQvIc25cuQMwh3YXnbgr5cDiOCxBk=";
+    };
+    packageRequires = with pkgs.emacsPackages.melpaPackages; [ dash f s lsp-mode flycheck magit-section ];
+    postInstall = ''
+      mkdir -p $out/share/emacs/site-lisp/data
+      cp $src/data/abbreviations.json $out/share/emacs/site-lisp/data/
+    '';
+  };
   emacs-webkit-src = fetchFromGitHub {
     owner = "akirakyle";
     repo = "emacs-webkit";
@@ -102,12 +117,14 @@ let
             keyfreq
             kirigami
             linum-relative
-            lsp-haskell
-            lsp-mode
-            lsp-ui
+#             lsp-haskell
+#             lsp-mode
+#             lsp-ui
             macrostep
             macrostep-geiser
             magit
+            nael
+            nael-lsp
             nerd-icons
             nerd-icons-completion
             nerd-icons-corfu

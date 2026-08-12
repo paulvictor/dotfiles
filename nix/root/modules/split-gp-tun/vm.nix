@@ -77,6 +77,7 @@ in
       csd-wrapper = "${csdWrapper}/hipreport.sh";
       disable-ipv6 = true;
       local-hostname = "slash"; # Only works on this hostname
+      base-mtu = "1350";
     };
   };
   systemd.services."openconnect-${tunDevice}".serviceConfig = {

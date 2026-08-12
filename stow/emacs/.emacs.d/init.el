@@ -255,6 +255,10 @@
             cached-secret)))))
 
 (use-package doom-themes
+  :config
+  ;; Manually sever the 'gnus-group-news-low-empty' circular loop
+  (setcdr (assoc 'gnus-group-news-low-empty doom-themes-base-faces)
+          '(:inherit 'gnus-group-mail-1-empty :weight 'normal))
   :custom
   (doom-themes-enable-bold t)    ; if nil, bold is universally disbabled
   (doom-themes-enable-italic t)
@@ -716,8 +720,10 @@ Repeated invocations toggle between the two most recently open buffers."
 
 (use-package hydra)
 
-(use-package lean4-mode
-  :mode "\\.lean\\'")
+(use-package nael
+  :custom (nael-mode-hook '(eglot-ensure abbrev-mode))
+  ;; Or  (lean4-mode . eglot-ensure)
+   )
 
 (use-package purescript-mode
   :mode "\\.purs\\'")

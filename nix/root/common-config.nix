@@ -27,7 +27,8 @@ with lib;
       pkgs.stdenv.hostPlatform.system
       [ "x86_64-linux" "aarch64-linux" "armv7l-linux" "riscv64-linux" ];
 
-  boot.loader.grub.configurationLimit = mkDefault 20;
+  boot.loader.grub.configurationLimit = mkDefault 10;
+  boot.loader.systemd-boot.configurationLimit = mkDefault 10;
 
   imports =
     optionals isPhysicalDevice [
