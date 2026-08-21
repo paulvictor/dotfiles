@@ -1,4 +1,4 @@
-args@{ config, lib, pkgs, ... } :
+args@{ config, lib, pkgs, inputs, ... } :
 
 let
   inherit (args) isPhysicalDevice;
@@ -96,6 +96,7 @@ with pkgs;
       ../tailscale.nix
       ./ollama.nix
       ./syncthing
+      inputs.keyfreq.nixosModules.default
     ];
 
 }

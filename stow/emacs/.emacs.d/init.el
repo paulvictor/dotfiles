@@ -720,10 +720,10 @@ Repeated invocations toggle between the two most recently open buffers."
 
 (use-package hydra)
 
-(use-package nael
-  :custom (nael-mode-hook '(eglot-ensure abbrev-mode))
-  ;; Or  (lean4-mode . eglot-ensure)
-   )
+;; (use-package nael
+;;   :custom (nael-mode-hook '(eglot-ensure abbrev-mode))
+;;   ;; Or  (lean4-mode . eglot-ensure)
+;;    )
 
 (use-package purescript-mode
   :mode "\\.purs\\'")
@@ -894,6 +894,7 @@ Repeated invocations toggle between the two most recently open buffers."
 (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
 (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 (add-hook 'geiser-repl-mode-hook 'turn-on-smartparens-strict-mode)
+(add-hook 'cider-repl-mode-hook 'turn-on-smartparens-strict-mode)
 (add-hook 'ielm-mode-hook 'turn-on-smartparens-strict-mode)
 (add-hook 'sly-mrepl-hook 'turn-on-smartparens-strict-mode)
 

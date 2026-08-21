@@ -69,6 +69,11 @@
       flake = false;
     };
 
+    keyfreq = {
+      url = "github:paulvictor/keyfreq";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } {

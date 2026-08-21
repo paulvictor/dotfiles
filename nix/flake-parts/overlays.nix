@@ -35,6 +35,7 @@ let
         inputs.emacsOverlay.overlay
         rofi-theme-overlay
         warpd-overlay
+        inputs.keyfreq.overlays.default
       ];
 
 in {
