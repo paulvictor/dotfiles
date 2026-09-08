@@ -36,6 +36,7 @@ let
         rofi-theme-overlay
         warpd-overlay
         inputs.keyfreq.overlays.default
+        inputs.kanata-layer.overlays.default
       ];
 
 in {

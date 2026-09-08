@@ -5,6 +5,7 @@
     enable = true;
     keyboards.builtin = {
       config = builtins.readFile ./${config.networking.hostName}.lisp;
+      port = 1278;
       extraArgs = [ ];
       extraDefCfg = "
         process-unmapped-keys   yes

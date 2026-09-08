@@ -32,7 +32,6 @@ with pkgs;
     patchelf
     pciutils
     virt-manager
-    wally-cli
     wirelesstools
   ];
 

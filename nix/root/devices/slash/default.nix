@@ -11,7 +11,7 @@
       ../../modules/kanata/default.nix
       ../../modules/split-gp-tun/default.nix
       ../../modules/remote-builds/buildee.nix
-      ../../modules/via-keyboard.nix
+      ../../modules/keyboard-firmware.nix
       inputs.nixos-hardware.nixosModules.microsoft-surface-pro-9
     ];
 
