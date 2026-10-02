@@ -370,14 +370,37 @@ Also move to the next line, since that's the most frequent action after"
   :hook
   (dired-mode . nerd-icons-dired-mode))
 
-(defun pvr/rename-frame-on-project (&rest args)
-  (set-frame-name (format "emacs - *%s*" (project-name (project-current)))))
-
 (defun pvr/create-or-resume-activity (prj-dir)
   (require 'activities)
-  (if-let ((activity (activities-named prj-dir)))
-      (activities-resume activity)
-    (activities-new prj-dir)))
+  (let* ((dir-str (directory-file-name (expand-file-name prj-dir)))
+         (proj-name (file-name-nondirectory dir-str))
+         (_ (message "%s" proj-name))
+
+         ;; Look up activity by normalized string
+         (activity (or (activities-named dir-str)
+                       (activities-named proj-name)))
+         (_ (message "%s" (activities-activity-name activity)))
+         (cur-fr (selected-frame)))
+    (if activity
+        (progn
+          (dolist (frame (frame-list))
+            (unless (eq frame cur-fr)
+              (with-selected-frame frame
+                (when (equal (activities-current) activity)
+                  (activities-suspend activity)
+                  (switch-to-buffer "*scratch*")))))
+          (activities-resume activity))
+      (activities-new prj-dir))
+    (setq default-directory prj-dir)
+    (set-frame-name (format "emacs - *%s*" (file-name-nondirectory prj-dir)))))
+
+(defun pvr/around-project-switch-project (orig-fun &rest args)
+  "Run `project-switch-project` using project-prompt-project-dir directly."
+  (let ((project-prompter (lambda ()
+                            (when-let ((prj-dir (project-prompt-project-dir)))
+                              (pvr/create-or-resume-activity prj-dir)
+                              prj-dir))))
+    (apply orig-fun args)))
 
 (use-package project
   :custom
@@ -385,24 +408,12 @@ Also move to the next line, since that's the most frequent action after"
   (project-key-prompt-style 'brackets)
   :config
   (require 'activities)
-  (advice-add 'project-switch-project :after #'pvr/rename-frame-on-project)
-  (setopt project-prompter (lambda ()
-                             (let ((prj-dir (project-prompt-project-dir)))
-                               (pvr/create-or-resume-activity prj-dir)
-                               prj-dir)))
-;;   (advice-add 'project-prompt-project-dir :after #'pvr/create-or-resume-activity)
+  (advice-add 'project-switch-project :around #'pvr/around-project-switch-project)
   (general-define-key
    :keymaps 'project-prefix-map
    "b" 'consult-project-buffer
    "/" 'consult-ripgrep
    "g" 'magit))
-
-
-
-;; (use-package recentf
-;;   :config
-;;   (recentf-mode t)
-;;   (setq recentf-max-saved-items 500))
 
 (use-package isearch
   :bind
@@ -1198,7 +1209,6 @@ point reaches the beginning or end of the buffer, stop there."
 
 (use-package activities
   :custom
-  (activities-name-prefix "*emacs session α: ")
   (activities-always-persist nil)
   :config
   (defvar activities-prefix-keymap

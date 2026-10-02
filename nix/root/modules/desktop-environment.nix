@@ -80,12 +80,6 @@ in {
 
   services.journald.rateLimitInterval = "0";
   services.journald.rateLimitBurst = 0;
-  services.journald.extraConfig = ''
-    Storage=persistent
-    MaxRetentionSec=3600
-    SyncIntervalSec=10
-    LineMax=100K
-  '';
 
   programs.dconf.enable = true;
 
