@@ -135,7 +135,6 @@ let
             nix-sandbox
             no-littering
             ob-bqn
-
             org-bullets
             org-beautify-theme
             org-download
@@ -151,6 +150,7 @@ let
             pcmpl-args
             pdf-tools
             perspective
+            pilish
             popper
             popup
             prescient

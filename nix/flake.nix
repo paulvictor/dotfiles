@@ -79,6 +79,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nixpi = {
+      url = "github:mateusdcc/nixpi";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    pi-packages = {
+      url = "github:mateusdcc/pi-packages";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpi.follows = "nixpi";
+    };
+
   };
 
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } {

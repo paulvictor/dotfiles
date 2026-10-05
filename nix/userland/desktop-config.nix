@@ -24,12 +24,8 @@ with pkgs;
     brightnessctl
     dunst
     adwaita-icon-theme
-    nyxt4
-    pa_applet
-    paprefs
     passdo
     pavucontrol
-    pulseaudio-ctl
     rofiElectronAppsRunner
     vieb
     schemesh

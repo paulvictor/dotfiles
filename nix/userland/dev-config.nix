@@ -2,7 +2,7 @@
 
 with pkgs;
 let
-  inherit (pkg.stdenv) system isLinux;
+  inherit (pkg.stdenv) system;
 in
   {
     home.file.".ghc/ghci.conf".text = ''
@@ -54,12 +54,7 @@ in
         chez
         cbqn
         specialArgs.inputs.magix.packages.${system}.magix
-        claude-code
-        gemini-cli
 #         visidata # for visualizing data
-      ] ++
-      (lib.optionals isLinux [ bindfs ]);
-    programs.aider-chat = {
-      enable = true;
-    };
+      ];
+
   }

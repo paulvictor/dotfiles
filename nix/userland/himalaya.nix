@@ -99,7 +99,7 @@ in
     };
   };
   programs.himalaya = {
-    enable = true;
+    enable = false;
     package = pkgs.himalaya;
   };
 }

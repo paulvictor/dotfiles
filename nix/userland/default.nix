@@ -14,6 +14,8 @@ builtins.mapAttrs(n: attrs:
     extraSpecialArgs = {inherit inputs hostname;};
     modules = [
       inputs.nix-index-database.homeModules.nix-index
+      inputs.nixpi.homeModules.default
+      inputs.pi-packages.homeModules.default
       ./home-configuration.nix
       {
         home.username = lib.mkDefault "viktor";
