@@ -731,10 +731,10 @@ Repeated invocations toggle between the two most recently open buffers."
 
 (use-package hydra)
 
-;; (use-package nael
-;;   :custom (nael-mode-hook '(eglot-ensure abbrev-mode))
-;;   ;; Or  (lean4-mode . eglot-ensure)
-;;    )
+(use-package nael
+  :custom (nael-mode-hook '(eglot-ensure abbrev-mode))
+  ;; Or  (lean4-mode . eglot-ensure)
+   )
 
 (use-package purescript-mode
   :mode "\\.purs\\'")
@@ -1066,6 +1066,12 @@ point reaches the beginning or end of the buffer, stop there."
                  (window-parameters . ((no-other-window . t)
                                        (no-delete-other-windows . t))))
                 ("Claude .*"
+                 (display-buffer-in-side-window)
+                 (side . right)
+                 (slot . 1)
+                 (window-width . 0.33)
+                 (window-parameters . ((no-delete-other-windows . t))))
+                ("Pi Agent .*"
                  (display-buffer-in-side-window)
                  (side . right)
                  (slot . 1)
