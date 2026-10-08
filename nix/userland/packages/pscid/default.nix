@@ -16,7 +16,7 @@ let
   nodeEnv = import ./node-env.nix {
     inherit (pkgs) stdenv python2 utillinux runCommand writeTextFile;
     inherit nodejs;
-    libtool = if pkgs.stdenv.isDarwin then pkgs.darwin.cctools else null;
+    libtool = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.darwin.cctools else null;
   };
   pscidBowerDeps = import ./pscid-bower-deps.nix {
     inherit pkgs src;

@@ -23,12 +23,12 @@ in
         siji
         zathura # Crashing.
       ]
-      ++ (lib.optionals pkgs.stdenv.isx86_64
+      ++ (lib.optionals pkgs.stdenv.hostPlatform.isx86_64
         [
           google-chrome
         ]
       )
-      ++ (lib.optionals pkgs.stdenv.isLinux
+      ++ (lib.optionals pkgs.stdenv.hostPlatform.isLinux
         [
           menu-surfraw
           rofi

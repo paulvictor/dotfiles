@@ -79,8 +79,10 @@ in {
     powerOnBoot = true;
   };
 
-  services.journald.rateLimitInterval = "0";
-  services.journald.rateLimitBurst = 0;
+  services.journald.settings.Journal = {
+    RateLimitIntervalSec = "0";
+    RateLimitBurst = 0;
+  };
 
   programs.dconf.enable = true;
 

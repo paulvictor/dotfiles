@@ -67,15 +67,15 @@ with pkgs;
   '';
 
   # For SSD's
-  services.fstrim.enable = isPhysicalDevice && pkgs.stdenv.isx86_64;
+  services.fstrim.enable = isPhysicalDevice && pkgs.stdenv.hostPlatform.isx86_64;
 
   # For laptops
-  services.tlp.enable = isPhysicalDevice && pkgs.stdenv.isx86_64;
+  services.tlp.enable = isPhysicalDevice && pkgs.stdenv.hostPlatform.isx86_64;
 
   # Again, only for laptops
   # This will save you money and possibly your life!
   services.thermald.enable =
-    (isPhysicalDevice && pkgs.stdenv.isx86_64);
+    (isPhysicalDevice && pkgs.stdenv.hostPlatform.isx86_64);
 
   programs.firejail.enable = isPhysicalDevice;
 

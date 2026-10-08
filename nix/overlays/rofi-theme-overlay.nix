@@ -8,7 +8,6 @@ let
     sha256 = "w/AE1o8vIZdD0jAi7++gdlmApGjeyDv6CD4xxrD9Fsw=";
   };
 in
-prev.lib.optionalAttrs (prev.stdenv.isLinux)
 {
   rofi-themes = final.stdenv.mkDerivation {
     name = "rofi-themes";
