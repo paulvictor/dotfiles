@@ -8,9 +8,9 @@
   ];
 
   services.syncthing = {
-    user = "viktor";
+    user = config.me.username;
     openDefaultPorts = true;
-    configDir = "${config.users.users.viktor.home}/.config/syncthing";
+    configDir = "${config.users.users.${config.me.username}.home}/.config/syncthing";
     key = config.sops.secrets."syncthing/key.pem".path;
     cert = config.sops.secrets."syncthing/cert.pem".path;
     settings = {

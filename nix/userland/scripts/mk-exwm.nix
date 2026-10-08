@@ -4,7 +4,7 @@
 with pkgs;
 
 let
-  customizedEmacs = pkgs.callPackage ./packages/emax {};
+  customizedEmacs = pkgs.callPackage ../../flake-parts/emax/package.nix {};
 in
 
 writeShellScript "exwm-init.nix"

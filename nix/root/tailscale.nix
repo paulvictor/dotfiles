@@ -8,7 +8,7 @@
     enable = true;
     port = 12345;
     extraSetFlags = [
-      "--operator" "viktor"
+      "--operator" config.me.username
       "--ssh"
       "--accept-risk" "all"
       "--accept-routes"

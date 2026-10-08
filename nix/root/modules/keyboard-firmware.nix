@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   hardware.keyboard.qmk.enable = true;
@@ -9,7 +9,7 @@
     qmk-udev-rules
     qmk qmk_hid
   ];
-  users.users.viktor.extraGroups = [ "plugdev" ];
+  users.users.${config.me.username}.extraGroups = [ "plugdev" ];
   services.udev.extraRules = ''
     # Match RMK / pid.codes Vendor ID
     KERNEL=="hidraw*", ATTRS{idVendor}=="1209", MODE="0660", GROUP="plugdev", TAG+="uaccess"

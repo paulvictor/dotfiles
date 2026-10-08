@@ -9,7 +9,10 @@ in
     lib.mapAttrs
       (_: modules:
         inputs.nixpkgs.lib.nixosSystem {
-          modules = [{ nixpkgs.overlays = builtins.attrValues self.overlays; }] ++ modules;
+          modules = [
+            { nixpkgs.overlays = builtins.attrValues self.overlays; }
+            ../modules/me.nix
+          ] ++ modules;
           specialArgs = {
             inherit inputs;
             isPhysicalDevice = true; # HACK for now

@@ -2,7 +2,7 @@
 
 let
   shareLink = pkgs.callPackage ./scripts/shareLink.nix { inherit pkgs config; };
-  customizedEmacs = pkgs.callPackage ./packages/emax {};
+  customizedEmacs = pkgs.callPackage ../flake-parts/emax/package.nix {};
   inherit (pkgs.stdenv.hostPlatform) isLinux;
   gpg-agent-enabled = config.services.gpg-agent.enable;
   privKey = if gpg-agent-enabled then "~/.ssh/id_rsa.pub" else "~/.ssh/id_rsa";

@@ -8,15 +8,15 @@ mkIf (pathExists encryptedSyncthingSecretPath) {
   sops.secrets."syncthing/key.pem" = {
     sopsFile = encryptedSyncthingSecretPath;
     format = "yaml";
-    owner = config.users.users.viktor.name;
-    group = config.users.users.viktor.group;
+    owner = config.users.users.${config.me.username}.name;
+    group = config.users.users.${config.me.username}.group;
     restartUnits = [ "syncthing.service" ];
   };
   sops.secrets."syncthing/cert.pem" = {
     sopsFile = encryptedSyncthingSecretPath;
     format = "yaml";
-    owner = config.users.users.viktor.name;
-    group = config.users.users.viktor.group;
+    owner = config.users.users.${config.me.username}.name;
+    group = config.users.users.${config.me.username}.group;
     restartUnits = [ "syncthing.service" ];
   };
 }

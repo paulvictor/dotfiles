@@ -11,7 +11,7 @@
     qwen-code
   ];
   programs.pi = {
-    enable = true;
+    enable = false;
     # runtimePackages = with pkgs; [ git jq comma ];
 
     packages = [

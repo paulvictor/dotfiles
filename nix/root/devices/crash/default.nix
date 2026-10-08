@@ -31,7 +31,7 @@
 
   imports = [
 #     "${toString modulesPath}/profiles/headless.nix"
-    ../../modules/viktor.nix
+    ../../modules/primary-user.nix
     ../../modules/workstations.nix
   ];
 

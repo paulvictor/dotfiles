@@ -17,7 +17,7 @@ let
             (lib.getName pkg)
             (["prl-tools" "open-webui" "nvidia-x11" "nvidia-settings" "via" "vial"] ++ ["cuda_cudart" "libcublas" "cuda_cccl" "cuda_nvcc""cuda_cupti" "cuda_nvml_dev" "cuda_nvrtc" "cuda_nvtx" "libcufft" "libcufile" "libcurand" "libcusolver" "libnvjitlink" "libcusparse" "libcusparse_lt" "cudnn" "cuda_profiler_api" "cuda_cuobjdump" "cuda_nvdisasm" "cuda-merged" "cuda_gdb" "cuda_nvprune" "cuda_cuxxfilt" "cuda_sanitizer_api" "libnpp"]);
       })
-      ../modules/viktor.nix
+      ../modules/primary-user.nix
       ../modules/workstations.nix
       ../modules/ssh.nix
     ];

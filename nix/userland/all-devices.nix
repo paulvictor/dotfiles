@@ -1,5 +1,5 @@
 {
-  "viktor@sarge" = {
+  sarge = {
     additionalModules = [
       ({lib,...}:{
         home.stateVersion = "25.05";
@@ -11,7 +11,7 @@
       })
     ];
   };
-  "viktor@slash" = {
+  slash = {
     additionalModules = [
       ({
         home.stateVersion = "25.11";
@@ -23,7 +23,7 @@
       })
     ];
   };
-  "viktor@anarki" = {
+  anarki = {
     additionalModules = [
       ({
         home.stateVersion = "25.11";
@@ -31,7 +31,7 @@
       })
     ];
   };
-  "viktor@uriel" = {
+  uriel = {
     additionalModules = [
       ({
         home.stateVersion = "24.11";
@@ -39,7 +39,7 @@
       })
     ];
   };
-  "viktor@sorlag" = {
+  sorlag = {
     additionalModules = [
       ({lib,...}:{
         home.stateVersion = "25.11";
@@ -48,7 +48,7 @@
       })
     ];
   };
-  "viktor@bones" = {
+  bones = {
     additionalModules = [
       ({lib,...}:{
         home.stateVersion = "25.05";
@@ -64,15 +64,16 @@
       })
     ];
   };
-  "paul.victor@crash" = {
-    isDesktop = false; # Desktop environment setup. Roughly if any of the X related things should be enabled
-    additionalModules = [
-      {
-        home.username = "paul.victor";
-        home.homeDirectory = "/Users/paul.victor";
-        home.stateVersion = "25.05";
-        home.sessionPath = [ "/run/current-system/sw/bin" ];
-      }
-    ];
-  };
+  # Darwin machine, not in use
+  # "paul.victor@crash" = {
+  #   isDesktop = false; # Desktop environment setup. Roughly if any of the X related things should be enabled
+  #   additionalModules = [
+  #     {
+  #       home.username = "paul.victor";
+  #       home.homeDirectory = "/Users/paul.victor";
+  #       home.stateVersion = "25.05";
+  #       home.sessionPath = [ "/run/current-system/sw/bin" ];
+  #     }
+  #   ];
+  # };
 }

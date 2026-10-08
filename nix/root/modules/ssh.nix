@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
 {
   services.openssh = {
@@ -11,7 +11,7 @@
       KbdInteractiveAuthentication = false;
       StrictModes = false;
       UsePAM = false;
-      AllowUsers = [ "viktor" ];
+      AllowUsers = [ config.me.username ];
     };
   };
   programs.mosh.enable = true;

@@ -11,8 +11,8 @@
     enable = true;
     package = pkgs.gitFull;
     settings = {
-      user.email = "paulvictor@gmail.com";
-      user.name = "Paul Victor Raj";
+      user.email = config.me.email;
+      user.name = config.me.fullname;
 
       alias = {
         br = ''branch'';

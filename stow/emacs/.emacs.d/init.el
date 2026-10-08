@@ -49,9 +49,11 @@
   (setenv "HOST" (s-trim (shell-command-to-string "hostname"))))
 
 (defvar pvr/persist-dir
-  (let ((d (or (getenv "PERSIST_DIR") "~/plain")))
-    (unless (f-dir? d)
-      (error "PERSIST_DIR not set"))
+  ;; Fall back to XDG state dir when neither exists (e.g. `nix run' on another machine)
+  (let ((d (or (getenv "PERSIST_DIR")
+               (and (f-dir? "~/plain") "~/plain")
+               (f-join (or (getenv "XDG_STATE_HOME") "~/.local/state") "emacs"))))
+    (make-directory d t)
     d))
 
 (defvar pvr/emacs-persist-dir
@@ -1127,7 +1129,7 @@ point reaches the beginning or end of the buffer, stop there."
   (progn
     (require 'smartparens)
     (sp-with-modes '(bqn-mode)
-      (sp-local-pair "⟨" "⟩"))))
+      (sp-local-pair "\u27E8" "\u27E9"))))
 
 (use-package eat
   :custom
@@ -1237,7 +1239,7 @@ point reaches the beginning or end of the buffer, stop there."
 (use-package outline-indent
   :commands outline-indent-minor-mode
   :custom
-  (outline-indent-ellipsis " ▼"))
+  (outline-indent-ellipsis " \u25BC"))
 
 (use-package kirigami
   :bind (("C-c TAB" . kirigami-toggle-fold)))

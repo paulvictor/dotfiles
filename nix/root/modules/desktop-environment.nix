@@ -25,6 +25,12 @@ in {
     enable = true;
     settings = {
       default_session.command = ''${pkgs.tuigreet}/bin/tuigreet --time --user-menu --remember --cmd ${swayWithEnv}'';
+      # Autologin on boot; after logout greetd falls back to default_session.
+      # This is because the safe partition is anyway zfs encrypted and so would need a passphrase to mount
+      initial_session = {
+        command = "${swayWithEnv}";
+        user = config.me.username;
+      };
     };
   };
   environment.etc."greetd/environments".text = ''
@@ -33,11 +39,6 @@ in {
 
 
 #   services.displayManager.defaultSession = "xsession";
-  services.displayManager.autoLogin = {
-    # This is because the safe partition is anyway zfs encrypted and so would need a passphrase to mount
-    enable = true;
-    user = "viktor";
-  };
   services.xserver = {
     enable = false;
     displayManager = {

@@ -9,7 +9,7 @@
         inputs.microvm.nixosModules.microvm
         ./vm.nix
       ];
-      _module.args.hostAuthorizedKeysFiles = config.users.users.viktor.openssh.authorizedKeys.keyFiles;
+      _module.args.hostAuthorizedKeysFiles = config.users.users.${config.me.username}.openssh.authorizedKeys.keyFiles;
     };
   };
 }
