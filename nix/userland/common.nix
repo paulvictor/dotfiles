@@ -105,6 +105,11 @@ with pkgs;
 
   programs.gpg = {
     enable = isLinux;
+    # Imported (and trusted) on every activation; idempotent
+    publicKeys = lib.optional (config.me.gpgKey != null) {
+      source = config.me.gpgKey;
+      trust = "ultimate";
+    };
     settings = {
       default-key = "0xA96C9B89755DF7D2";
       default-recipient-self = true;

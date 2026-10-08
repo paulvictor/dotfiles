@@ -34,10 +34,10 @@ let
         '';
       };
       gpgKey = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
-          GPG key id / fingerprint
+          File with GPG public key(s), e.g. fetched from github.com/<user>.gpg
         '';
       };
       hashedPassword = lib.mkOption {
