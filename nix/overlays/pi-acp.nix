@@ -11,6 +11,11 @@ final: prev:
       hash = "sha256-QRwxOtTZOY+Np3PkAoy2o2PrUzEqjItM/372sCPlSMo=";
     };
     npmDepsHash = "sha256-BvLNtFfp1cMVjzWcMRSdhTqiJrTfbFoUbWkkPW9200o=";
+    # Advertise extension slash commands (e.g. /permission, /plan) to ACP clients
+    postPatch = ''
+      substituteInPlace src/acp/agent.ts \
+        --replace-fail "includeExtensionCommands: false" "includeExtensionCommands: true"
+    '';
     nativeBuildInputs = [ final.makeWrapper ];
     # pi-acp spawns `pi`; default to the nixpkgs pi-coding-agent binary
     postInstall = ''

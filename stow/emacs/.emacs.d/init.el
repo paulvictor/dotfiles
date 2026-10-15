@@ -733,10 +733,17 @@ Repeated invocations toggle between the two most recently open buffers."
 
 (use-package hydra)
 
+(use-package eglot
+  :custom
+  (eglot-sync-connect nil)       ; connect in the background, don't freeze while the server starts
+  (eglot-connect-timeout 60)     ; give slow servers time to start without failing
+  (eglot-autoshutdown t)         ; stop the server when its last buffer is killed
+  (eglot-events-buffer-config '(:size 0 :format full))
+  (eglot-documentation-renderer t)) ; disable the event log, which can grow large and slow Emacs down
+
 (use-package nael
-  :custom (nael-mode-hook '(eglot-ensure abbrev-mode))
-  ;; Or  (lean4-mode . eglot-ensure)
-   )
+  :hook ((nael-mode . abbrev-mode)
+         (nael-mode . eglot-ensure)))
 
 (use-package purescript-mode
   :mode "\\.purs\\'")

@@ -3,14 +3,14 @@ final: prev:
 {
   wuzapi = final.buildGoModule {
     pname = "wuzapi";
-    version = "unstable-2026-06-05";
+    version = "unstable-2026-10-09";
     src = final.fetchFromGitHub {
       owner = "asternic";
       repo = "wuzapi";
-      rev = "e6d58f895dfa85ab080c856b8625b1c8d2b6463f";
-      hash = "sha256-OsLl8WOuCqPJ+C+YdXRqTTScopvD1M1VY4uMPYLzsFo=";
+      rev = "67f894f166c37216dd45ddd493e1bef07404bb59";
+      hash = "sha256-jGde9jtesQ2FkKcAclOC5mvmNpKlxT/6E1dJr4/PoQY=";
     };
-    vendorHash = "sha256-nR7MwvGIJl1MGIZDGxE9vCoeUxzKpDGZn3fUEXECZ7I=";
+    vendorHash = "sha256-yVabUqo3tWkd9YE6+djYp1os3ji9weT3Xe8nAKfy744=";
     postInstall = ''
       cp -r $src/static $out/bin/
     '';
