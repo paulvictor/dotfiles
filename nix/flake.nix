@@ -2,16 +2,17 @@
   description = "Meta Config";
   nixConfig = {
     substituters =
-      "https://paulvictor.cachix.org https://nix-community.cachix.org https://cache.nixos.org https://cache.nixos-cuda.org https://cache.flox.dev";
+      "https://paulvictor.cachix.org https://nix-community.cachix.org https://cache.nixos.org https://cache.nixos-cuda.org https://cache.flox.dev https://cache.numtide.com";
     trusted-substituters =
-      "https://paulvictor.cachix.org https://nix-community.cachix.org https://cache.nixos.org https://cache.nixos-cuda.org https://cache.flox.dev";
+      "https://paulvictor.cachix.org https://nix-community.cachix.org https://cache.nixos.org https://cache.nixos-cuda.org https://cache.flox.dev https://cache.numtide.com";
     trusted-public-keys =
-      "paulvictor.cachix.org-1:tuOSw1NsHLZJUXZC9L0QdegOFqpLvcXdQyGKTU+Cic4= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M= flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs=";
+      "paulvictor.cachix.org-1:tuOSw1NsHLZJUXZC9L0QdegOFqpLvcXdQyGKTU+Cic4= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M= flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs= niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g=";
   };
 
   # https://elis.nu/blog/2022/10/outsourcing-nixos-compile-time-to-microsoft/
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # Directly pulling the tested Hydra channel release as a native flake input
+    nixpkgs.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst"; # using this instead of "github:NixOS/nixpkgs/nixos-unstable" to take advantage of cached exprs
     flake-utils.url = "github:numtide/flake-utils";
     flake-parts.url = "github:hercules-ci/flake-parts";
     homeManager.url = "github:nix-community/home-manager/master";
@@ -63,6 +64,8 @@
     microvm.inputs.nixpkgs.follows = "nixpkgs";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware";
+
+    llm-agents.url = "github:numtide/llm-agents.nix";
 
     schemesh = {
       url = "github:cosmos72/schemesh";

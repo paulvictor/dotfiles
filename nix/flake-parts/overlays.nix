@@ -10,7 +10,6 @@ let
   electron-apps = import ../overlays/electronApps;
   gp-vpn = import ../overlays/gp-vpn.nix;
   wuzapi = import ../overlays/wuzapi.nix;
-  pi-acp = import ../overlays/pi-acp.nix;
   rofi-theme-overlay = import ../overlays/rofi-theme-overlay.nix;
   warpd-overlay = import ../overlays/warpd.nix;
   passdo = import ../overlays/type-password/passdo.nix;
@@ -31,7 +30,6 @@ let
         electron-apps
         gp-vpn
         wuzapi
-        pi-acp
         wallpaper-overlay
         inputs.nur.overlays.default
         inputs.emacsOverlay.overlay
@@ -39,6 +37,7 @@ let
         warpd-overlay
         inputs.keyfreq.overlays.default
         inputs.kanata-layer.overlays.default
+        inputs.llm-agents.overlays.shared-nixpkgs
       ];
 
 in {

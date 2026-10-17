@@ -1,27 +1,14 @@
 {config, pkgs, ...}:
 
-let
-  # Point pi-acp at the nixpi-wrapped pi so ACP sessions get programs.pi settings
-  pi-acp = pkgs.symlinkJoin {
-    name = "pi-acp-wrapped";
-    paths = [ pkgs.pi-acp ];
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-    postBuild = ''
-      wrapProgram $out/bin/pi-acp \
-        --set PI_ACP_PI_COMMAND ${config.programs.pi.finalPackage}/bin/pi
-    '';
-  };
-in
 {
-  home.packages = with pkgs; [
+  home.packages = with pkgs.llm-agents; [
     # pi-coding-agent is provided by programs.pi (wrapped) below
     pi-acp
-    nodejs
     claude-code
     claude-agent-acp
     opencode
     qwen-code
-  ];
+  ] ++ [pkgs.nodejs];
   programs.pi = {
     enable = true;
     runtimePackages = with pkgs; [ git jq comma nodejs ];
