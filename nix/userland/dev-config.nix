@@ -2,7 +2,7 @@
 
 with pkgs;
 let
-  inherit (pkg.stdenv) system;
+  inherit (pkg.stdenv.hostPlatform) system;
 in
   {
     home.file.".ghc/ghci.conf".text = ''
