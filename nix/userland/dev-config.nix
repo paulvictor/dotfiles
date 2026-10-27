@@ -41,6 +41,7 @@ in
     };
     home.packages =
       [
+        awscli2
         axel
         cachix
         entr

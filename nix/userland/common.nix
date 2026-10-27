@@ -10,6 +10,7 @@ in
 with pkgs;
 {
   home.packages = [
+    dante
     ddgr
     doctl
     lsof
@@ -180,5 +181,16 @@ with pkgs;
       run mkdir -p $VERBOSE_ARG $HOME/.config/schemesh
     '';
   };
+
+  xdg.configFile."socks/socks.conf".text = ''
+      route {
+        from: 0.0.0.0/0 to: 0.0.0.0/0 via: 127.0.0.1 port = 1080
+        proxyprotocol: socks_v5
+      }
+      resolveprotocol: tcp
+    '';
+
+  home.sessionVariables.SOCKS_CONF =
+    "${config.xdg.configHome}/socks/socks.conf";
 
 }
