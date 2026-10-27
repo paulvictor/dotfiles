@@ -8,7 +8,6 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.systemd.enable = true;
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = ["intel_lpss_pci"];
   boot.kernelModules = [ "kvm-intel" "surface_gpe" # surface_gpe enables typecover wake support alongside acpi_mask_gpe

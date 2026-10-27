@@ -51,7 +51,13 @@ with pkgs;
   };
 
   users.groups.docker =  {};
-  services.udev.packages = lib.optionals isPhysicalDevice [yubikey-personalization];
+  services.udev.packages =
+    lib.optionals
+      isPhysicalDevice
+      [
+        yubikey-personalization
+        libu2f-host
+      ];
   services.pcscd.enable = isPhysicalDevice;
   users.groups.ykusers = { };
   security.polkit.extraConfig = ''
