@@ -21,7 +21,7 @@
 
   # Use latest kernel.
   # Latest kernel has issues with nvidia. Falling back to stable version
-  # boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_6_18;
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
