@@ -42,6 +42,7 @@ in
     home.packages =
       [
         awscli2
+        oci-cli
         axel
         cachix
         entr
