@@ -4,15 +4,24 @@
 
 { config, lib, pkgs, inputs, ... }:
 
+let
+  nixos-hardware-patched =
+    inputs.nixpkgs.legacyPackages.x86_64-linux.applyPatches {
+      name = "nixos-hardware-patched";
+      src = inputs.nixos-hardware;
+      patches = [ ../../../local-patches/nixos-hardware-1870.patch ];
+    };
+in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/kanata/default.nix
       ../../modules/split-gp-tun/default.nix
-      ../../modules/remote-builds/buildee.nix
+#       ../../modules/remote-builds/buildee.nix
       ../../modules/keyboard-firmware.nix
-      inputs.nixos-hardware.nixosModules.microsoft-surface-pro-9
+      "${nixos-hardware-patched}/microsoft/surface-pro/9"
+#                 inputs.nixos-hardware.nixosModules.microsoft-surface-pro-9
     ];
 
   nix.extraOptions = ''
@@ -30,13 +39,13 @@
 
   services.xserver.videoDrivers = [ "modesetting" ];
   hardware.graphics = {
-     enable = true;
-     extraPackages = with pkgs; [
-       intel-media-driver
-       intel-vaapi-driver
-       libvdpau-va-gl
-       intel-compute-runtime # Optional: adds OpenCL support for the Iris Xe GPU
-     ];
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+      intel-vaapi-driver
+      libvdpau-va-gl
+      intel-compute-runtime # Optional: adds OpenCL support for the Iris Xe GPU
+    ];
   };
 
   services.tlp.enable = lib.mkForce false;
