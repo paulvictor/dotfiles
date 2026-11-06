@@ -1,4 +1,4 @@
-{ config, pkgs, lib, isPhysicalDevice, ...}:
+{ config, pkgs, lib, inputs, isPhysicalDevice, ...}:
 
 with lib;
 {
@@ -31,6 +31,7 @@ with lib;
   boot.loader.systemd-boot.configurationLimit = mkDefault 10;
 
   imports =
+    [ inputs.entropy.nixosModules.default ] ++
     optionals isPhysicalDevice [
       ./modules/desktop-environment.nix
       ./modules/networking.nix

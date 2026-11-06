@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 
 {
+  programs.entropy.enable = true;
   hardware.keyboard.qmk.enable = true;
   environment.systemPackages = with pkgs; [via vial];
   services.udev.packages = with pkgs; [
@@ -9,7 +10,7 @@
     qmk-udev-rules
     qmk qmk_hid
   ];
-  users.users.${config.me.username}.extraGroups = [ "plugdev" ];
+  users.users.${config.me.username}.extraGroups = [ "plugdev" config.programs.entropy.group ];
   services.udev.extraRules = ''
     # Match RMK / pid.codes Vendor ID
     KERNEL=="hidraw*", ATTRS{idVendor}=="1209", MODE="0660", GROUP="plugdev", TAG+="uaccess"

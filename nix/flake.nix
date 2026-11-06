@@ -82,6 +82,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    entropy = {
+      url = "github:ergohaven/entropy/v0.5.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "homeManager";
+    };
+
     nixpi = {
       url = "github:mateusdcc/nixpi";
       inputs.nixpkgs.follows = "nixpkgs";

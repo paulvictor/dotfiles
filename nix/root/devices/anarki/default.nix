@@ -10,6 +10,7 @@
       ./hardware-configuration.nix
       ../../modules/local-ai-coding-nvidia.nix
       ../../modules/split-gp-tun/default.nix
+      ../../modules/keyboard-firmware.nix
       ../../modules/remote-builds/builder.nix
     ];
 
