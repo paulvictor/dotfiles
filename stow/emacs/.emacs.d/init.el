@@ -1309,3 +1309,6 @@ point reaches the beginning or end of the buffer, stop there."
      :full-and-display-names t
      :default t
      :subscribed-channels nil)))
+
+;; Associate ino arduino files with c++
+(add-to-list 'auto-mode-alist '("\\.ino\\'" . c++-mode))
