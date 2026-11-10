@@ -7,6 +7,8 @@
       package = pkgs.callPackage ./_package.nix { };
     in
     {
+      home.packages = let fonts = import ./_fonts.nix pkgs; in fonts.used ++ fonts.trial;
+
       services.emacs = {
         enable = pkgs.stdenv.hostPlatform.isLinux;
         inherit package;
@@ -31,6 +33,7 @@
     packages = lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
       emacs = pkgs.callPackage ./_standalone.nix {
         emacs = pkgs.callPackage ./_package.nix { };
+        fonts = (import ./_fonts.nix pkgs).used;
       };
     };
   };

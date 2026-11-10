@@ -1,33 +1,16 @@
+# Basic fonts for the system. Fonts a program needs are installed by that program's feature
+# (home-manager `home.packages`; the `fonts` home-manager half only turns fontconfig on for them).
 {
-  flake.modules.nixos.fonts =
-{config, pkgs, lib, ...}:
-
-{
-  fonts.fontconfig.enable = true;
-  fonts.packages = with pkgs;[
-    emacs-all-the-icons-fonts
-    dejavu_fonts.full-ttf
-    font-awesome
-    noto-fonts
-    ubuntu-classic
-    unifont
-  ] ++ (with pkgs.nerd-fonts;
-    [
-      #hack
-      victor-mono
-      jetbrains-mono
-      udev-gothic-nf
-      plemoljp-nf
-      iosevka-term
-      #iosevka
-      sauce-code-pro
-      dejavu-sans-mono
-      symbols-only
-      #fira-code
-      monoid
-    ]);
-}
-;
+  flake.modules.nixos.fonts = { pkgs, ... }: {
+    fonts.fontconfig.enable = true;
+    fonts.packages = with pkgs; [
+      dejavu_fonts.full-ttf
+      noto-fonts
+      ubuntu-classic
+      unifont
+      nerd-fonts.dejavu-sans-mono
+    ];
+  };
 
   flake.modules.homeManager.fonts.fonts.fontconfig.enable = true;
 }

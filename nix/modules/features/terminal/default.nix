@@ -1,6 +1,8 @@
 # Terminal emulators
 {
   flake.modules.homeManager.terminal = { pkgs, lib, ... }: {
+    home.packages = [ pkgs.nerd-fonts.victor-mono ]; # alacritty and kitty
+
   programs.alacritty = {
     enable = true;
     settings = {

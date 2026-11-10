@@ -3,7 +3,10 @@
   flake.overlays.rofi-fuzzy = import ./_overlay.nix;
 
   flake.modules.homeManager.rofi = { pkgs, ... }: {
-    home.packages = [ pkgs.rofi ];
+    home.packages = [
+      pkgs.rofi
+      pkgs.nerd-fonts.sauce-code-pro # the font in _config.nix
+    ];
     xdg.configFile.rofi = {
       recursive = true;
       source = pkgs.fetchFromGitHub {

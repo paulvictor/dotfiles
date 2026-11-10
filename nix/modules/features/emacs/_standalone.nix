@@ -1,16 +1,12 @@
 # Emacs bundled with its own config and fonts, for `nix run` on machines
 # without the stowed ~/.emacs.d
 { lib, stdenv, emacs, symlinkJoin, makeWrapper, makeFontsConf
-, nerd-fonts, emacs-all-the-icons-fonts, glibcLocales }:
+, fonts, glibcLocales }:
 
 let
   # Extends the host's fontconfig (/etc/fonts/conf.d, ~/.local/share/fonts, ...)
   fontsConf = makeFontsConf {
-    fontDirectories = [
-      nerd-fonts.jetbrains-mono
-      nerd-fonts.symbols-only
-      emacs-all-the-icons-fonts
-    ];
+    fontDirectories = fonts;
   };
   # builtins.path dereferences the emacs.d symlink; "${./emacs.d}" would copy the dangling link
   initDir = builtins.path { path = ./emacs.d; name = "emacs.d"; };

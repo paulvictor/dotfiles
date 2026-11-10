@@ -26,6 +26,7 @@
       pdftk
       siji
       zathura # Crashing.
+      nerd-fonts.sauce-code-pro # dunst (_dunstrc.nix)
     ]
     ++ lib.optionals pkgs.stdenv.hostPlatform.isx86_64 [ google-chrome ]
     ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [

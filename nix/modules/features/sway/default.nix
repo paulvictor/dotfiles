@@ -5,7 +5,7 @@
 
   flake.modules.nixos.sway = ./_nixos.nix;
 
-  flake.modules.homeManager.sway = { lib, ... }: {
+  flake.modules.homeManager.sway = { lib, pkgs, ... }: {
     imports = [
       ./_wayland.nix
       ./_sway.nix
@@ -19,6 +19,12 @@
       default = true;
       description = "Switch the displays off after being idle for a while";
     };
+
+    config.home.packages = [
+      pkgs.nerd-fonts.victor-mono # mako
+      pkgs.font-awesome # waybar icons
+      pkgs.roboto-mono # waybar text
+    ];
 
     config.home.sessionVariables = {
       NIXOS_OZONE_WL = "1"; # For Chromium/Electron apps
