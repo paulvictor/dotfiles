@@ -23,7 +23,6 @@
     config.home.packages = [
       pkgs.nerd-fonts.victor-mono # mako
       pkgs.font-awesome # waybar icons
-      pkgs.roboto-mono # waybar text
     ];
 
     config.home.sessionVariables = {

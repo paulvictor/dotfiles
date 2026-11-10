@@ -4,7 +4,7 @@
 {config, lib, pkgs, ...}:
 
 {
-  users.users.${config.me.username}.extraGroups = ["dialout"];
+  users.users.${config.me.username}.extraGroups = [ "dialout" "tty" ];
   services.udev.packages = with pkgs; [ arduino-ide ];
   services.udev.extraRules = ''
     SUBSYSTEM=="usb", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="0069", MODE="0660", GROUP="plugdev"

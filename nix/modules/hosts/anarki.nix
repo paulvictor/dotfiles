@@ -1,11 +1,17 @@
 # Desktop with an NVIDIA GPU, runs local models and is the remote builder
-{
+{ config, ... }: {
   hosts.anarki = {
-    profiles = [ "minimal" "graphical" "developer" "workstation" "work" ];
+    profiles = with config.profiles; [
+      minimal
+      graphical
+      developer
+      workstation
+      work
+    ];
+    stateVersion = "25.11";
 
     nixos = {
-      features = [ "local-ai-server" "keyboard-hacking" "remote-builder" "arduino" ];
-      stateVersion = "25.11";
+      features = with config.features.nixos; [ local-ai-server keyboard-hacking remote-builder arduino ];
       modules = [
         ./_anarki-hardware.nix
         ({ pkgs, ... }: {
@@ -20,7 +26,6 @@
     };
 
     home = {
-      stateVersion = "25.11";
       modules = [{
         programs.alacritty.settings.font.size = 16.0;
         custom.firefox.devPixelsPerPx = "1.50";

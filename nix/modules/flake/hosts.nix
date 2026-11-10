@@ -1,89 +1,57 @@
 # The host registry and the only place that builds NixOS / home-manager configurations.
 #
-# A host picks profiles (flat named groups of features, see modules/profiles) and adds features of its own
-# per class (`nixos.features`, `home.features`). Profiles are expanded and de-duplicated, so a host only
-# ever ends up with a set of feature names. Each name must exist as `flake.modules.<class>.<name>`,
-# otherwise evaluation fails.
+# A host picks profiles (see profiles.nix) and adds features of its own per class (`nixos.features`,
+# `home.features`). Both refer to features by attribute name, see features.nix; duplicates collapse because
+# the feature modules carry a key.
 { inputs, lib, config, self, ... }:
 let
   inherit (lib) mkOption types;
-  top = config; # `config` is shadowed inside the host submodule
-  flakeModules = config.flake.modules;
 
-  names = description: mkOption {
-    type = types.listOf types.str;
-    default = [ ];
-    apply = lib.unique;
-    inherit description;
-  };
-
-  profileType = types.submodule {
+  hostType = types.submodule {
     options = {
-      nixos = names "NixOS features, each needs a flake.modules.nixos.<name>";
-      home = names "home-manager features, each needs a flake.modules.homeManager.<name>";
-    };
-  };
-
-  hostType = types.submodule ({ config, ... }:
-    let
-      host = config;
-      # The features of the host's profiles for one class, then its own, without duplicates
-      resolve = class:
-        lib.unique
-          (lib.concatMap
-            (name: top.profiles.${name}.${class})
-            host.profiles
-          ++ host.${class}.features);
-    in
-    {
-      options = {
-        system = mkOption {
-          type = types.str;
-          default = "x86_64-linux";
+      system = mkOption {
+        type = types.str;
+        default = "x86_64-linux";
+      };
+      stateVersion = mkOption {
+        type = types.str;
+        description = "system.stateVersion and home.stateVersion; the release the machine was first installed with";
+      };
+      profiles = mkOption {
+        type = types.listOf (import ../_profile-type.nix { inherit lib; });
+        default = [ ];
+        description = "Profiles to take features from, from config.profiles";
+      };
+      nixos = {
+        enable = mkOption { type = types.bool; default = true; };
+        features = mkOption {
+          type = types.listOf types.deferredModule;
+          default = [ ];
+          description = "NixOS features on top of the profiles, from config.features.nixos";
         };
-        profiles = names "Profiles to take features from";
-        nixos = {
-          enable = mkOption { type = types.bool; default = true; };
-          stateVersion = mkOption { type = types.str; };
-          features = names "NixOS features on top of the profiles";
-          resolved = mkOption {
-            type = types.listOf types.str;
-            readOnly = true;
-            default = resolve "nixos";
-            description = "Every NixOS feature of this host, without duplicates";
-          };
-          modules = mkOption {
-            type = types.listOf types.deferredModule;
-            default = [ ];
-            description = "Host specific NixOS modules (hardware, overrides)";
-          };
-        };
-        home = {
-          enable = mkOption { type = types.bool; default = true; };
-          stateVersion = mkOption { type = types.str; };
-          features = names "home-manager features on top of the profiles";
-          resolved = mkOption {
-            type = types.listOf types.str;
-            readOnly = true;
-            default = resolve "home";
-            description = "Every home-manager feature of this host, without duplicates";
-          };
-          modules = mkOption {
-            type = types.listOf types.deferredModule;
-            default = [ ];
-            description = "Host specific home-manager modules (outputs, battery, ...)";
-          };
+        modules = mkOption {
+          type = types.listOf types.deferredModule;
+          default = [ ];
+          description = "Host specific NixOS modules (hardware, overrides)";
         };
       };
-    });
+      home = {
+        enable = mkOption { type = types.bool; default = true; };
+        features = mkOption {
+          type = types.listOf types.deferredModule;
+          default = [ ];
+          description = "home-manager features on top of the profiles, from config.features.home";
+        };
+        modules = mkOption {
+          type = types.listOf types.deferredModule;
+          default = [ ];
+          description = "Host specific home-manager modules (outputs, battery, ...)";
+        };
+      };
+    };
+  };
 in
 {
-  options.profiles = mkOption {
-    type = types.attrsOf profileType;
-    default = { };
-    description = "Named groups of features";
-  };
-
   options.hosts = mkOption {
     type = types.attrsOf hostType;
     default = { };
@@ -99,9 +67,10 @@ in
               [{
                 networking.hostName = name;
                 nixpkgs.hostPlatform = lib.mkDefault host.system;
-                system.stateVersion = host.nixos.stateVersion;
+                system.stateVersion = host.stateVersion;
               }]
-              ++ map (feature: flakeModules.nixos.${feature}) host.nixos.resolved
+              ++ lib.concatMap (profile: profile.nixos) host.profiles
+              ++ host.nixos.features
               ++ host.nixos.modules;
           })
         (lib.filterAttrs (_: host: host.nixos.enable) config.hosts);
@@ -125,8 +94,9 @@ in
                   inherit pkgs;
                   extraSpecialArgs = { inherit inputs; };
                   modules =
-                    [{ home.stateVersion = host.home.stateVersion; }]
-                    ++ map (feature: flakeModules.homeManager.${feature}) host.home.resolved
+                    [{ home.stateVersion = host.stateVersion; }]
+                    ++ lib.concatMap (profile: profile.home) host.profiles
+                    ++ host.home.features
                     ++ host.home.modules;
                 }))
             (lib.filterAttrs (_: host: host.home.enable && host.system == system) config.hosts);

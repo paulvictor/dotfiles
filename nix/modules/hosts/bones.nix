@@ -1,11 +1,11 @@
 # Chuwi MiniBook X
-{ inputs, ... }: {
+{ inputs, config, ... }: {
   hosts.bones = {
-    profiles = [ "minimal" "graphical" "developer" "workstation" "laptop" ];
+    profiles = with config.profiles; [ minimal graphical developer workstation laptop ];
+    stateVersion = "25.05";
 
     nixos = {
-      features = [ "arduino" ];
-      stateVersion = "25.05";
+      features = with config.features.nixos; [ arduino ];
       modules = [
         ./_bones-hardware.nix
         inputs.nixos-hardware.nixosModules.chuwi-minibook-x
@@ -19,7 +19,6 @@
     };
 
     home = {
-      stateVersion = "25.05";
       modules = [
         ({ lib, ... }: {
           services.batteryAlert.enable = true;

@@ -1,9 +1,15 @@
-# Keyboard tinkering: QMK/VIA firmware access, and software remapping (kanata, keyd)
-{
+# Keyboard tinkering: QMK/VIA firmware access, keystroke statistics, and software remapping (kanata, keyd)
+{ inputs, ... }: {
   allowedUnfree = [ "via" "vial" ];
 
-  # Firmware flashing and configuration: udev rules, groups, entropy
+  # Firmware flashing and configuration: udev rules, groups, entropy. Also brings the keyfreq module
+  # (a host enables it with services.keyfreq); like entropy it does nothing until enabled.
   flake.modules.nixos.keyboard-hacking = { config, pkgs, ... }: {
+    imports = [
+      inputs.keyfreq.nixosModules.default
+      inputs.entropy.nixosModules.default
+    ];
+
     programs.entropy.enable = true;
     hardware.keyboard.qmk.enable = true;
     environment.systemPackages = with pkgs; [via vial];
@@ -25,6 +31,8 @@
 
   # kanata with a per-host layout (_kanata-<hostname>.lisp); enabled on every host that has a layout file
   flake.modules.nixos.kanata = {lib, config, pkgs, ...}: {
+    users.users.${config.me.username}.extraGroups = [ "input" ]; # the keyboard devices
+
     services.kanata = {
       enable = lib.pathExists ./_kanata-${config.networking.hostName}.lisp;
       keyboards.builtin = {
@@ -51,6 +59,8 @@
       thisDeviceConfig = allKeyboardsConfigs.${config.networking.hostName} or null;
     in
       {
+        users.users.${config.me.username}.extraGroups = [ "input" ]; # the keyboard devices
+
         environment.systemPackages = [ pkgs.keyd ];
         #systemd.services.keyd.wantedBy = lib.mkForce [];
         services.keyd = {

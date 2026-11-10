@@ -25,6 +25,14 @@
 
   # Keeps build outputs around for development, newest nix, extra caches
   flake.modules.nixos.nix-dev = { pkgs, ... }: {
+    environment.systemPackages = with pkgs; [
+      home-manager
+      man-pages
+      man-pages-posix
+      manix
+      nix-prefetch-github
+    ];
+
     nix.extraOptions = ''
       keep-outputs = true
       keep-derivations = true

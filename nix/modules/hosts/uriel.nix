@@ -1,11 +1,11 @@
 # ThinkPad
-{
+{ config, ... }: {
   hosts.uriel = {
-    profiles = [ "minimal" "graphical" "developer" "workstation" "laptop" ];
+    profiles = with config.profiles; [ minimal graphical developer workstation laptop ];
+    stateVersion = "25.05";
 
     nixos = {
-      features = [ "arduino" ];
-      stateVersion = "25.05";
+      features = with config.features.nixos; [ arduino ];
       modules = [
         ./_uriel-hardware.nix
         ({ pkgs, ... }: {
@@ -18,7 +18,6 @@
     };
 
     home = {
-      stateVersion = "24.11";
       modules = [{
         services.batteryAlert.enable = true;
       }];

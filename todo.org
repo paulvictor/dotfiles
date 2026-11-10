@@ -1,5 +1,6 @@
 #+STARTUP: content
 
+* Unify tailscale's setup across hosts
 * Emacs
 * Nyxt
 ** fix search engine optimization

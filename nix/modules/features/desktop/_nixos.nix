@@ -2,6 +2,20 @@
 
 {
   services.libinput.enable = true;
+
+  # keep timezone updated to local time using geoclue
+  time.timeZone = null;
+  services.localtimed.enable = true;
+  services.geoclue2.enable = true;
+
+  environment.systemPackages = with pkgs; [
+    bluez
+    libnotify
+  ];
+
+  programs.firejail.enable = true;
+
+  users.users.${config.me.username}.extraGroups = [ "video" ]; # backlight
   hardware.graphics.enable = true;
 
   programs.chromium = {

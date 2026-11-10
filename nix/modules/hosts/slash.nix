@@ -1,11 +1,19 @@
 # Surface Pro 9
-{ inputs, ... }: {
+{ inputs, config, ... }: {
   hosts.slash = {
-    profiles = [ "minimal" "graphical" "developer" "workstation" "laptop" "work" ];
+    profiles =
+      with config.profiles; [
+        minimal
+        graphical
+        developer
+        workstation
+        laptop
+        work
+      ];
+    stateVersion = "25.11";
 
     nixos = {
-      features = [ "keyboard-hacking" "arduino" ];
-      stateVersion = "25.11";
+      features = with config.features.nixos; [ keyboard-hacking arduino ];
       modules = [
         ./_slash-hardware.nix
         ({ lib, pkgs, ... }:
@@ -56,7 +64,6 @@
     };
 
     home = {
-      stateVersion = "25.11";
       modules = [{
         wayland.windowManager.sway.config.output."eDP-1".scale = "1.8";
         programs.waybar.settings.bottomBar.battery.bat = "BAT1";

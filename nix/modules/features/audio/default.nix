@@ -4,6 +4,8 @@
 { config, lib, pkgs, ...}:
 
 {
+  users.users.${config.me.username}.extraGroups = [ "audio" "pipewire" ];
+
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;

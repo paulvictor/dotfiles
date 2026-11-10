@@ -14,6 +14,7 @@ in
 {
   security.pam.services.swaylock.text = "auth include login";
   programs.ydotool.enable = true;
+  users.users.${config.me.username}.extraGroups = [ "ydotool" ];
 
   services.greetd = {
     enable = true;

@@ -1,8 +1,8 @@
-# My personal and work extras, on top of the minimal, graphical and developer profiles.
+# My personal extras, on top of the minimal, graphical and developer profiles.
 # Hosts add the specialised bits (gp-vpn, keyboard-hacking, arduino, ...) on top.
-{
+{ config, ... }: {
   profiles.workstation = {
-    nixos = [ "secrets" "tailscale" "syncthing" "kanata" "keyd" ];
-    home = [ "electron-apps" "warpd" ];
+    nixos = with config.features.nixos; [ secrets tailscale syncthing kanata keyd ];
+    home = with config.features.home; [ electron-apps warpd ];
   };
 }

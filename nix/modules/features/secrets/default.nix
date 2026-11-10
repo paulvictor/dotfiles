@@ -5,6 +5,7 @@
     imports = [ inputs.sops-nix.nixosModules.sops ];
 
     sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+    users.users.${config.me.username}.extraGroups = [ "keys" ]; # reads the decrypted secrets
 
     sops.secrets."extra-nix-conf" = {
       sopsFile = ../../../secrets/nix-conf-extra.conf;

@@ -1,12 +1,15 @@
 # GPG with a YubiKey: smartcard daemon, udev/polkit access on NixOS; gpg and gpg-agent on home-manager
 {
-  flake.modules.nixos.gpg-yubikey = { pkgs, ... }: {
+  flake.modules.nixos.gpg-yubikey = { config, pkgs, ... }: {
+    environment.systemPackages = [ pkgs.gnupg ];
+
     services.udev.packages = with pkgs; [
       yubikey-personalization
       libu2f-host
     ];
     services.pcscd.enable = true;
     users.groups.ykusers = { };
+    users.users.${config.me.username}.extraGroups = [ "ykusers" ];
     security.polkit.extraConfig = ''
       polkit.addRule(function (action, subject) {
         if (
