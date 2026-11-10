@@ -4,7 +4,7 @@
   flake.modules.nixos.nix = { lib, ... }: {
     imports = [ inputs.flake-utils-plus.nixosModules.autoGenFromInputs ];
 
-    nixpkgs.overlays = [ self.overlays.default ];
+    nixpkgs.overlays = lib.attrValues self.overlays;
     nixpkgs.config.allowUnfreePredicate = pkg:
       builtins.elem (lib.getName pkg) config.allowedUnfree;
 

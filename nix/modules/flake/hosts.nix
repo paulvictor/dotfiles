@@ -17,12 +17,6 @@ let
     inherit description;
   };
 
-  profile = name: top.profiles.${name} or (throw "Unknown profile '${name}'");
-
-  # Feature names of the given profiles for one class
-  profileFeatures = class: profileNames:
-    lib.concatMap (name: (profile name).${class}) profileNames;
-
   profileType = types.submodule {
     options = {
       nixos = names "NixOS features, each needs a flake.modules.nixos.<name>";
@@ -33,7 +27,13 @@ let
   hostType = types.submodule ({ config, ... }:
     let
       host = config;
-      resolve = class: lib.unique (profileFeatures class host.profiles ++ host.${class}.features);
+      # The features of the host's profiles for one class, then its own, without duplicates
+      resolve = class:
+        lib.unique
+          (lib.concatMap
+            (name: top.profiles.${name}.${class})
+            host.profiles
+          ++ host.${class}.features);
     in
     {
       options = {
@@ -76,8 +76,6 @@ let
         };
       };
     });
-
-  hostsFor = pred: lib.filterAttrs (_: pred) config.hosts;
 in
 {
   options.profiles = mkOption {
@@ -106,7 +104,7 @@ in
               ++ map (feature: flakeModules.nixos.${feature}) host.nixos.resolved
               ++ host.nixos.modules;
           })
-        (hostsFor (host: host.nixos.enable));
+        (lib.filterAttrs (_: host: host.nixos.enable) config.hosts);
 
     # Under legacyPackages because of
     # https://github.com/nix-community/home-manager/issues/3075#issuecomment-3037360368
@@ -131,7 +129,7 @@ in
                     ++ map (feature: flakeModules.homeManager.${feature}) host.home.resolved
                     ++ host.home.modules;
                 }))
-            (hostsFor (host: host.home.enable && host.system == system));
+            (lib.filterAttrs (_: host: host.home.enable && host.system == system) config.hosts);
       };
   };
 }

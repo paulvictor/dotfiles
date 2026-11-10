@@ -10,7 +10,7 @@
   config.perSystem = { system, ... }: {
     _module.args.pkgs = import inputs.nixpkgs {
       inherit system;
-      overlays = [ self.overlays.default ];
+      overlays = lib.attrValues self.overlays;
       config.allowUnfreePredicate = pkg:
         builtins.elem (lib.getName pkg) config.allowedUnfree;
     };

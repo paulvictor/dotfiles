@@ -4,7 +4,7 @@ Every `.nix` file under `modules/` is a flake-parts module, loaded by `import-tr
 Files and directories starting with `_` are skipped; they are plain files that a module refers to
 (path modules, `callPackage` expressions, assets).
 
-- `flake/` – flake plumbing: `flake.modules` option, the shared `pkgs`, `overlays.default`, and
+- `flake/` – flake plumbing: `flake.modules` option, the shared `pkgs`, and
   `hosts.nix`, the only place that builds `nixosConfigurations` and `homeConfigurations`.
 - `features/<name>/` – one concern, with everything for it in one place: the NixOS half
   (`flake.modules.nixos.<name>`), the home-manager half (`flake.modules.homeManager.<name>`),

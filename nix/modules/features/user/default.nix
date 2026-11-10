@@ -1,7 +1,6 @@
 # The primary user account
 {
   flake.modules.nixos.user = { config, lib, pkgs, ... } : {
-    # Define a user account. Don't forget to set a password with ‘passwd’.
     users.mutableUsers = false;
     programs.zsh.enable = true; # the login shell of root and the user
     users.users.root = {
@@ -26,17 +25,15 @@
 
     nix.settings.trusted-users = [ "@wheel" config.me.username ];
 
-    environment.etc."fuse.conf" = {
-      text = ''
+    environment.etc."fuse.conf".text = ''
       user_allow_other
     '';
-    };
 
-    system.build.mkPrimaryUserHomeCryptPath = pkgs.runCommandLocal "mkPrimaryUserHomeCryptPath" {} ''
-    mkdir -pv $out/persist/home/${config.me.username}/
-    chown -R ${toString config.users.users.${config.me.username}.uid} $out/persist/home/${config.me.username}
+    system.build.mkPrimaryUserHomeCryptPath =
+      pkgs.runCommandLocal "mkPrimaryUserHomeCryptPath" {} ''
+        mkdir -pv $out/persist/home/${config.me.username}/
+        chown -R ${toString config.users.users.${config.me.username}.uid} $out/persist/home/${config.me.username}
   '';
-  }
-  ;
+  };
 
 }
