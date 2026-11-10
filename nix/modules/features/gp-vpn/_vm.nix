@@ -1,0 +1,134 @@
+{config, lib, pkgs, inputs, hostAuthorizedKeysFiles, ...}:
+
+let
+  shared = import ./_shared.nix;
+  inherit (shared) tunDevice;
+  csdWrapper =
+    with pkgs;
+    runCommandLocal "hipreport-with-hostid" {
+      nativeBuildInputs = [gnused coreutils];
+    } ''
+        mkdir $out
+        cat ${pkgs.openconnect}/libexec/openconnect/hipreport.sh | sed 's|^HOST_ID=.*|HOST_ID=''$(hostid)|' > $out/hipreport.sh
+        chmod a+x $out/hipreport.sh
+      '';
+in
+{
+  imports = [ shared.vm.secrets ];
+  systemd.network.enable = true;
+  networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
+  services.resolved = {
+    enable = true;
+    settings = {
+      Resolve.LLMNR = "true";
+      Resolve.FallbackDNS = [];
+    };
+  };
+  networking.hostId = "007f0200";
+  users.users.root = {
+    password = "";
+    openssh.authorizedKeys.keyFiles = hostAuthorizedKeysFiles;
+  };
+  services.openssh = {
+    enable = true;
+    settings.PermitRootLogin = "yes";
+    settings.PermitEmptyPasswords = "yes";
+  };
+  security.pam.services.sshd.allowNullPassword = true;
+  system.stateVersion = config.system.nixos.release;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+  programs.htop.enable = true;
+  programs.neovim = {
+    enable = true;
+    vimAlias = true;
+    viAlias = true;
+  };
+
+  programs.tmux = {
+    enable = true;
+    secureSocket = false;
+  };
+
+  nix.extraOptions = ''
+        keep-outputs = true
+        keep-derivations = true
+        experimental-features = nix-command flakes
+        accept-flake-config = true
+      '';
+
+  nix.package = pkgs.nixVersions.latest;
+
+  environment.systemPackages = with pkgs;[ jq bind ];
+  networking.firewall.enable = false;
+  networking.hostName = "patriot";
+  networking.openconnect.interfaces.${tunDevice} = {
+    user =
+      builtins.concatStringsSep
+        "."
+        [
+          "paul"
+          "victor@identity"
+          "juspay"
+          "net"
+        ];
+    protocol = "gp";
+    gateway = "pv-ext.connect.juspay.net";
+    extraOptions = {
+      csd-wrapper = "${csdWrapper}/hipreport.sh";
+      disable-ipv6 = true;
+      local-hostname = "slash"; # Only works on this hostname
+      base-mtu = "1350";
+    };
+  };
+  systemd.services."openconnect-${tunDevice}".serviceConfig = {
+    RestartSec = 5;
+    Restart = "always";
+    TimeoutStopSec= "10s";
+  };
+  services.dante = {
+    enable = true;
+    config = ''
+      internal: ${shared.vmLease} port = 1080
+      external: ${tunDevice}
+      clientmethod: none
+      socksmethod: none
+      client pass {
+        from: 0.0.0.0/0 to: 0.0.0.0/0
+	      log: error # connect disconnect
+      }
+      socks pass {
+        from: 0.0.0.0/0 to: 0.0.0.0/0
+        command: bind connect udpassociate
+        log: error # connect disconnect iooperation
+      }
+      socks pass {
+        from: 0.0.0.0/0 to: 0.0.0.0/0
+        command: bindreply udpreply
+        log: error # connect disconnect iooperation
+      }
+    '';
+  };
+  systemd.services.dante = {
+    requires = [
+      "sys-devices-virtual-net-${tunDevice}.device"
+      "openconnect-${tunDevice}.service"
+    ];
+    after = [
+      "sys-devices-virtual-net-${tunDevice}.device"
+      "openconnect-${tunDevice}.service"
+    ];
+    serviceConfig = {
+      RestartSec = 5;
+      Restart = lib.mkForce "always";
+    };
+  };
+
+  microvm.shares = [
+    {
+      tag = "ro-store";
+      source = "/nix/store";
+      mountPoint = "/nix/.ro-store";
+    }
+    # TODO share wg keys and password for gp
+  ];
+}

@@ -1,1 +1,0 @@
-../../../stow/emacs/.emacs.d

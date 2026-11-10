@@ -1,0 +1,22 @@
+{ config, lib, pkgs, ... } :
+with lib;
+let
+  encryptedSyncthingSecretPath = ../../../secrets/${config.networking.hostName}/syncthing.yaml;
+in
+mkIf (pathExists encryptedSyncthingSecretPath) {
+  services.syncthing.enable = true;
+  sops.secrets."syncthing/key.pem" = {
+    sopsFile = encryptedSyncthingSecretPath;
+    format = "yaml";
+    owner = config.users.users.${config.me.username}.name;
+    group = config.users.users.${config.me.username}.group;
+    restartUnits = [ "syncthing.service" ];
+  };
+  sops.secrets."syncthing/cert.pem" = {
+    sopsFile = encryptedSyncthingSecretPath;
+    format = "yaml";
+    owner = config.users.users.${config.me.username}.name;
+    group = config.users.users.${config.me.username}.group;
+    restartUnits = [ "syncthing.service" ];
+  };
+}

@@ -15,6 +15,7 @@
     nixpkgs.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst"; # using this instead of "github:NixOS/nixpkgs/nixos-unstable" to take advantage of cached exprs
     flake-utils.url = "github:numtide/flake-utils";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    import-tree.url = "github:vic/import-tree";
     homeManager.url = "github:nix-community/home-manager/master";
     homeManager.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.url = "github:Mic92/sops-nix";
@@ -101,13 +102,6 @@
 
   };
 
-  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-    systems = inputs.nixpkgs.lib.systems.flakeExposed;
-    imports =
-      [inputs.homeManager.flakeModules.home-manager] ++
-      (with builtins;
-        map
-          (fn: ./flake-parts/${fn})
-          (attrNames (readDir ./flake-parts)));
-  };
+  # Every .nix file under ./modules is a flake-parts module (files and dirs prefixed with _ are skipped)
+  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
 }

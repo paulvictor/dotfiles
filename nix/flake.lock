@@ -495,6 +495,21 @@
         "type": "github"
       }
     },
+    "import-tree": {
+      "locked": {
+        "lastModified": 1788467110,
+        "narHash": "sha256-ljEMTXP/rH0tOvDzc9gzwww6KcHRPRnEHzd9lK48V7s=",
+        "owner": "vic",
+        "repo": "import-tree",
+        "rev": "eb1b52eaecc57f7c136d07ae8a93e724dfecac46",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vic",
+        "repo": "import-tree",
+        "type": "github"
+      }
+    },
     "kanata-layer": {
       "inputs": {
         "clj-nix": "clj-nix",
@@ -1097,6 +1112,7 @@
         "flake-utils-plus": "flake-utils-plus",
         "goodbyeAds": "goodbyeAds",
         "homeManager": "homeManager",
+        "import-tree": "import-tree",
         "kanata-layer": "kanata-layer",
         "keyfreq": "keyfreq",
         "llm-agents": "llm-agents",

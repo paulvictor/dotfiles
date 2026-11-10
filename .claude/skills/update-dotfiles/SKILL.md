@@ -33,10 +33,7 @@ Build each host's toplevel with `--no-link` (pulls from cache where possible):
 ```bash
 nix build ~/dotfiles/nix#nixosConfigurations.anarki.config.system.build.toplevel --no-link
 nix build ~/dotfiles/nix#nixosConfigurations.bones.config.system.build.toplevel --no-link
-nix build ~/dotfiles/nix#nixosConfigurations.sarge.config.system.build.toplevel --no-link
-nix build ~/dotfiles/nix#nixosConfigurations.sorlag.config.system.build.toplevel --no-link
 nix build ~/dotfiles/nix#nixosConfigurations.uriel.config.system.build.toplevel --no-link
-nix build ~/dotfiles/nix#nixosConfigurations.orbb.config.system.build.toplevel --no-link
 ```
 
 Run these sequentially so errors are easy to attribute to a specific host.
@@ -44,10 +41,8 @@ Run these sequentially so errors are easy to attribute to a specific host.
 ### 3. Build home-manager configurations
 
 ```bash
-nix build '~/dotfiles/nix#legacyPackages.x86_64-linux.homeConfigurations."viktor@sarge".activationPackage' --no-link
 nix build '~/dotfiles/nix#legacyPackages.x86_64-linux.homeConfigurations."viktor@anarki".activationPackage' --no-link
 nix build '~/dotfiles/nix#legacyPackages.x86_64-linux.homeConfigurations."viktor@uriel".activationPackage' --no-link
-nix build '~/dotfiles/nix#legacyPackages.x86_64-linux.homeConfigurations."viktor@sorlag".activationPackage' --no-link
 nix build '~/dotfiles/nix#legacyPackages.x86_64-linux.homeConfigurations."viktor@bones".activationPackage' --no-link
 ```
 

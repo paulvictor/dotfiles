@@ -3,7 +3,6 @@
 *** Devices
 **** Thinkpad (uriel)
 **** XPS (cadaver)
-**** Desktop (sarge)
 **** DO proxy (bones-1)
 **** Raspberry pi at home
 **** Raspberry pi outside

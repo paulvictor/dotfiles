@@ -1,38 +1,23 @@
 keys:
   - &paul 2A4F0026730E0C45C031B3FA2BF9A72A4A1D161D!
   - &uriel age1f07tempfywuy6cjteuvcdepxytx0l3yjwfegsrwvjpcz0zzphdpqyy2lep
-  - &orbb age1ha8ruk96jkucr4dh3t6fs75yy06zq3apvwsmlca680vmsjay553qqtllkx
   - &bones age180rdqcp233km4e2x7kqgqsp52jyk2jqfhlwlc43da7hs0kenw98qtknmwa
-  - &sarge age1jd2yj2fyhfkppn5jaegqwrul0d4jt50ytg4nm0h85kacs3nphsgsju7vj6
-  - &sorlag age196hseqvu47nvytpv879u78jr0e5xecr2pea4n8z50r4dfqvpw3gscdqp56
   - &anarki age17z7amum8h67v2xpgdaga2p5zpqukzj32sh7mlnnn5wwfdgur4qcswujtlj
   - &slash age18nhms4ha3xkhdx6hzzkja34qzfdx0zvefhylpnxkesk6xe5qzpzq4s7tfs
 creation_rules:
-  - path_regex: root/devices/sarge/secrets/[^/]+\.(yaml|json|env|ini|conf)$
-    key_groups:
-    - pgp:
-      - *paul
-      age:
-      - *sarge
-  - path_regex: root/devices/sorlag/secrets/[^/]+\.(yaml|json|env|ini|conf)$
-    key_groups:
-    - pgp:
-      - *paul
-      age:
-      - *sorlag
-  - path_regex: root/devices/anarki/secrets/[^/]+\.(yaml|json|env|ini|conf)$
+  - path_regex: secrets/anarki/[^/]+\.(yaml|json|env|ini|conf)$
     key_groups:
     - pgp:
       - *paul
       age:
       - *anarki
-  - path_regex: root/devices/uriel/secrets/[^/]+\.(yaml|json|env|ini|conf)$
+  - path_regex: secrets/uriel/[^/]+\.(yaml|json|env|ini|conf)$
     key_groups:
     - pgp:
       - *paul
       age:
       - *uriel
-  - path_regex: root/devices/slash/secrets/[^/]+\.(yaml|json|env|ini|conf)$
+  - path_regex: secrets/slash/[^/]+\.(yaml|json|env|ini|conf)$
     key_groups:
     - pgp:
       - *paul
@@ -45,31 +30,11 @@ creation_rules:
       age:
       - *uriel
       - *bones
-      - *sarge
-      - *sorlag
       - *anarki
       - *slash
-  - path_regex: secrets/uriel/[^/]+\.(yaml|json|env|ini|conf)$
-    key_groups:
-    - pgp:
-      - *paul
-      age:
-      - *uriel
-  - path_regex: secrets/orbb/[^/]+\.(yaml|json|env|ini|conf)$
-    key_groups:
-    - pgp:
-      - *paul
-      age:
-      - *orbb
   - path_regex: secrets/bones/[^/]+\.(yaml|json|env|ini|conf)$
     key_groups:
     - pgp:
       - *paul
       age:
       - *bones
-  - path_regex: secrets/sarge/[^/]+\.(yaml|json|env|ini|conf)$
-    key_groups:
-    - pgp:
-      - *paul
-      age:
-      - *sarge
