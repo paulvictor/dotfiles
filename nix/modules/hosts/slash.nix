@@ -17,20 +17,8 @@
       modules = [
         ./_slash-hardware.nix
         ({ lib, pkgs, ... }:
-          let
-            nixos-hardware-patched =
-              inputs.nixpkgs.legacyPackages.x86_64-linux.applyPatches {
-                name = "nixos-hardware-patched";
-                src = inputs.nixos-hardware;
-                patches = [ ../../local-patches/nixos-hardware-1870.patch ];
-              };
-          in
           {
-            imports = [ "${nixos-hardware-patched}/microsoft/surface-pro/9" ];
-
-            nix.extraOptions = ''
-              !include /etc/nix/build-capacity.conf
-            '';
+            imports = [ inputs.nixos-hardware.nixosModules.microsoft-surface-pro-9 ];
 
             services.kanata.keyboards.builtin.devices = [ "/dev/input/by-path/platform-MSHW0343:00-event-kbd" ];
 

@@ -25,8 +25,11 @@
     };
 
     environment.etc."nix/build-capacity.conf".text = ''
-    max-jobs = 2
-  '';
+      max-jobs = 2
+    '';
+    nix.extraOptions = ''
+      !include /etc/nix/build-capacity.conf
+    '';
 
     nix.distributedBuilds = true;
     nix.settings.builders-use-substitutes = true;
