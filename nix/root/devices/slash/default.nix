@@ -1,17 +1,10 @@
+
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
 { config, lib, pkgs, inputs, ... }:
 
-let
-  nixos-hardware-patched =
-    inputs.nixpkgs.legacyPackages.x86_64-linux.applyPatches {
-      name = "nixos-hardware-patched";
-      src = inputs.nixos-hardware;
-      patches = [ ../../../local-patches/nixos-hardware-1870.patch ];
-    };
-in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -20,8 +13,7 @@ in
       ../../modules/split-gp-tun/default.nix
 #       ../../modules/remote-builds/buildee.nix
       ../../modules/keyboard-firmware.nix
-      "${nixos-hardware-patched}/microsoft/surface-pro/9"
-#                 inputs.nixos-hardware.nixosModules.microsoft-surface-pro-9
+      inputs.nixos-hardware.nixosModules.microsoft-surface-pro-9
     ];
 
   nix.extraOptions = ''
