@@ -3,11 +3,12 @@
   flake.modules.nixos.basics = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       file
-      git
-      htop
       psmisc
       wget
     ];
+
+    programs.git.enable = true;
+    programs.htop.enable = true;
 
     programs.neovim = {
       enable = true;
