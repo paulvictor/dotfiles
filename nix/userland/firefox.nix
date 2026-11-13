@@ -46,7 +46,7 @@ let
         name = "tabfs-fuse";
         src = tabfs-src;
         phases = [ "buildPhase" "installPhase" ];
-        buildInputs = [ fuse ];
+        buildInputs = [ fuse3 ];
         nativeBuildInputs = [ makeWrapper ];
         buildPhase = ''
           mkdir -pv $out/bin
@@ -118,7 +118,7 @@ let
       #             nur.repos.rycee.firefox-addons.bypass-paywalls-clean
       brotab-extension
       edit-with-emacs-extension
-      tabfs
+#       tabfs
       tridactyl
     ];
   };
@@ -200,7 +200,7 @@ in
     "${brotab.out}/config/firefox_mediator.json";
   home.file.".mozilla/native-messaging-hosts/tridactyl.json".source =
     "${tridactyl-native}/lib/mozilla/native-messaging-hosts/tridactyl.json";
-  home.file.".mozilla/native-messaging-hosts/com.paulvictor.tabfs.json".text = tabfs-native-manifest;
+#   home.file.".mozilla/native-messaging-hosts/com.paulvictor.tabfs.json".text = tabfs-native-manifest;
 
   xdg.configFile."tridactyl/tridactylrc".text =
     import ./config/tridactylrc.nix { inherit pkgs; };
