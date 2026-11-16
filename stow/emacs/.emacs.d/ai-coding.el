@@ -57,6 +57,7 @@
 
 (use-package agent-shell
   :config
+  (setq agent-shell-elicitation--experimental-feature-enabled t)
   (defvar pvr/agent-shell-frame nil
     "The frame in which agent-shell was most recently launched.
 Used by the `emax' Claude skill to target elisp eval at the right frame.")
