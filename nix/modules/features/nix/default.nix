@@ -2,16 +2,17 @@
 # machines that build things.
 { inputs, self, config, ... }: {
   flake.modules.nixos.nix = { lib, ... }: {
-    imports = [ inputs.flake-utils-plus.nixosModules.autoGenFromInputs ];
-
     nixpkgs.overlays = lib.attrValues self.overlays;
     nixpkgs.config.allowUnfreePredicate = pkg:
       builtins.elem (lib.getName pkg) config.allowedUnfree;
 
     system.configurationRevision = lib.mkIf (self ? rev) self.rev;
-    nix.generateNixPathFromInputs = true;
-    nix.generateRegistryFromInputs = true;
-    nix.linkInputs = true;
+
+    # No copy of nixpkgs, channels or flake inputs is baked into the system (they add hundreds of MB to the
+    # closure). NIX_PATH is empty; when needed, `export NIX_PATH=nixpkgs=<dir>` or use the global flake registry.
+    nix.channel.enable = false;
+    nixpkgs.flake.setNixPath = false;
+    nixpkgs.flake.setFlakeRegistry = false;
 
     nix.settings.auto-optimise-store = true;
     nix.extraOptions = ''

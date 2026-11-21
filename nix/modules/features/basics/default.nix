@@ -1,4 +1,4 @@
-# Command line tools and the editor that any host wants
+# Command line tools and the editor (vim) that any host wants
 {
   flake.modules.nixos.basics = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
@@ -10,10 +10,9 @@
     programs.git.enable = true;
     programs.htop.enable = true;
 
-    programs.neovim = {
+    programs.vim = {
       enable = true;
-      vimAlias = true;
-      viAlias = true;
+      defaultEditor = true;
     };
   };
 }

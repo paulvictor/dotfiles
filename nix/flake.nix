@@ -53,13 +53,12 @@
 
     magix.url = "github:dschrempf/magix";
 
-    flake-utils-plus = {
-      url = "github:gytis-ivaskevicius/flake-utils-plus";
-      inputs.flake-utils.follows = "flake-utils";
-    };
 
     vieb-nix.url = "github:tejing1/vieb-nix";
     vieb-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    srvos.url = "github:nix-community/srvos";
+    srvos.inputs.nixpkgs.follows = "nixpkgs";
 
     microvm.url = "github:microvm-nix/microvm.nix";
     microvm.inputs.nixpkgs.follows = "nixpkgs";
@@ -103,5 +102,8 @@
   };
 
   # Every .nix file under ./modules is a flake-parts module (files and dirs prefixed with _ are skipped)
-  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake
+      { inherit inputs; }
+      (inputs.import-tree ./modules);
 }

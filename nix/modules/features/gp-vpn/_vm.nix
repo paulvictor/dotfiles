@@ -48,10 +48,9 @@ in
   system.stateVersion = config.system.nixos.release;
   boot.kernelPackages = pkgs.linuxPackages_latest;
   programs.htop.enable = true;
-  programs.neovim = {
+  programs.vim = {
     enable = true;
-    vimAlias = true;
-    viAlias = true;
+    defaultEditor = true;
   };
 
   programs.tmux = {

@@ -2,6 +2,14 @@
 { inputs, ... }: {
   allowedUnfree = [ "claude-code" "consul" "nomad" "terraform" ];
 
+  # On development machines nixpkgs is pinned to the one the system was built from: `nix run nixpkgs#x` and
+  # `<nixpkgs>` use it. Other hosts have no copy of nixpkgs (see features/nix); `export NIX_PATH=nixpkgs=<dir>`
+  # still overrides the default.
+  flake.modules.nixos.dev = {
+    nix.registry.nixpkgs.flake = inputs.nixpkgs;
+    nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+  };
+
   flake.modules.homeManager.dev = { config, pkgs, lib, ... }: {
     imports = [
       inputs.nixpi.homeModules.default

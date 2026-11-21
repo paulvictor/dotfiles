@@ -341,26 +341,6 @@
         "type": "github"
       }
     },
-    "flake-utils-plus": {
-      "inputs": {
-        "flake-utils": [
-          "flake-utils"
-        ]
-      },
-      "locked": {
-        "lastModified": 1738591040,
-        "narHash": "sha256-4WNeriUToshQ/L5J+dTSWC5OJIwT39SEP7V7oylndi8=",
-        "owner": "gytis-ivaskevicius",
-        "repo": "flake-utils-plus",
-        "rev": "afcb15b845e74ac5e998358709b2b5fe42a948d1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "gytis-ivaskevicius",
-        "repo": "flake-utils-plus",
-        "type": "github"
-      }
-    },
     "flake-utils_2": {
       "inputs": {
         "systems": "systems_2"
@@ -1109,7 +1089,6 @@
         "entropy": "entropy",
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
-        "flake-utils-plus": "flake-utils-plus",
         "goodbyeAds": "goodbyeAds",
         "homeManager": "homeManager",
         "import-tree": "import-tree",
@@ -1127,6 +1106,7 @@
         "pi-packages": "pi-packages",
         "schemesh": "schemesh",
         "sops-nix": "sops-nix",
+        "srvos": "srvos",
         "vieb-nix": "vieb-nix"
       }
     },
@@ -1194,6 +1174,26 @@
       "original": {
         "type": "git",
         "url": "https://spectrum-os.org/git/spectrum"
+      }
+    },
+    "srvos": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1795055354,
+        "narHash": "sha256-LduOFL9JWJL3zHuJ/J7kjr0d2m1wPUpd3aAybxaTdu0=",
+        "owner": "nix-community",
+        "repo": "srvos",
+        "rev": "92bb5f6764b4fc24e03a63b82d77b8bb30689f78",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "srvos",
+        "type": "github"
       }
     },
     "systems": {
