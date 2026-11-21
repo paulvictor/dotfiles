@@ -35,6 +35,16 @@ in
     settings.PermitEmptyPasswords = "yes";
   };
   security.pam.services.sshd.allowNullPassword = true;
+
+  # ssh run inside the VM reuses connections for a while, as on the host (features/ssh)
+  programs.ssh.extraConfig = ''
+    Host *
+      ControlMaster auto
+      ControlPath /tmp/ssh_mux_%h_%p_%r
+      ControlPersist 24h
+      ServerAliveInterval 30
+      ServerAliveCountMax 5
+  '';
   system.stateVersion = config.system.nixos.release;
   boot.kernelPackages = pkgs.linuxPackages_latest;
   programs.htop.enable = true;
