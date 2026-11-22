@@ -35,6 +35,11 @@ let
           description = "Host specific NixOS modules (hardware, overrides)";
         };
       };
+      deploy.hostname = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Address deploy-rs connects to; null means the host is not deployed with deploy-rs";
+      };
       home = {
         enable = mkOption { type = types.bool; default = true; };
         features = mkOption {
@@ -74,6 +79,24 @@ in
               ++ host.nixos.modules;
           })
         (lib.filterAttrs (_: host: host.nixos.enable) config.hosts);
+
+    # deploy-rs: `deploy .#<host>` builds here, copies the closure and activates it (with rollback if the host
+    # becomes unreachable). The login user is the primary user, activation runs as root through sudo.
+    flake.deploy.nodes =
+      lib.pipe
+        config.hosts
+        [
+          (lib.filterAttrs (_: host:
+            host.nixos.enable && host.deploy.hostname != null))
+          (lib.mapAttrs (name: host: {
+            inherit (host.deploy) hostname;
+            sshUser = self.nixosConfigurations.${name}.config.me.username;
+            user = "root";
+            profiles.system.path =
+              inputs.deploy-rs.lib.${host.system}.activate.nixos
+                self.nixosConfigurations.${name};
+          }))
+        ];
 
     # Under legacyPackages because of
     # https://github.com/nix-community/home-manager/issues/3075#issuecomment-3037360368

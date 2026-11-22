@@ -1,4 +1,9 @@
 # sshd + mosh on the NixOS side, the ssh client on the home-manager side
+{ config, lib, ... }:
+let
+  # Hosts deploy-rs can reach, as `ssh <name>` too
+  deployed = lib.filterAttrs (_: host: host.deploy.hostname != null) config.hosts;
+in
 {
   flake.modules.nixos.ssh = { config, lib, ... }: {
     services.openssh = {
@@ -28,7 +33,13 @@
     config.programs.ssh = {
       enable = true;
       enableDefaultConfig = false;
-      settings = {
+      settings = lib.mapAttrs
+        (_: host: {
+          HostName = host.deploy.hostname;
+          User = config.home.username;
+        })
+        deployed
+      // {
         "github" = {
           HostName = "github.com";
           User = "git";
@@ -39,7 +50,7 @@
           User = "git";
           IdentityFile = config.custom.ssh.identityFile;
         };
-        "*" = lib.hm.dag.entryAfter [ "github" "bitbucket" ] {
+        "*" = lib.hm.dag.entryAfter ([ "github" "bitbucket" ] ++ lib.attrNames deployed) {
           Compression = true;
           ControlMaster = "auto";
           ControlPath = "/tmp/ssh_mux_%h_%p_%r";

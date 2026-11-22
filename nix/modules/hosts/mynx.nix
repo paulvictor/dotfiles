@@ -6,6 +6,11 @@
     profiles = with config.profiles; [ minimal ];
     stateVersion = "26.11";
 
+    # deploy-rs connects here; the DNS record is created by modules/infra/mynx.nix
+    deploy.hostname = "mynx.paulvictor.foo";
+
+    nixos.features = with config.features.nixos; [ netbird-server ];
+
     nixos.modules = [
       inputs.srvos.nixosModules.server
 
@@ -22,6 +27,8 @@
 
         # 2 GB of RAM: compressed swap in memory as a cheap safeguard
         zramSwap.enable = true;
+
+        services.netbird.server.domain = "vpn.mynx.paulvictor.foo";
       })
     ];
 
