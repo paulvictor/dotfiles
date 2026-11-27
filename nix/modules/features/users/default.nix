@@ -4,6 +4,8 @@
   flake.modules.nixos.users = { config, pkgs, ... }: {
     users.mutableUsers = false;
     programs.zsh.enable = true; # the login shell of root and the primary user
+    # zsh starts in vi mode when $EDITOR is vim (see features/basics) and there is no ~/.zshrc to say otherwise
+    programs.zsh.interactiveShellInit = "bindkey -e";
 
     users.users.root = {
       shell = pkgs.zsh;
